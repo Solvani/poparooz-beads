@@ -18,7 +18,7 @@ Deliverable: documentation only. No production generator runtime.
 
 ## Phase 1 — application foundation and color engine
 
-- P1-A01: frontend baseline and engineering checks.
+- [x] P1-A01: frontend baseline and engineering checks.
 - P1-A02: domain schemas and runtime validation.
 - P1-A03: clearly labeled MARD test fixture and import validation.
 - P1-A04: image decode, orientation, transparency, fit, and scaling pipeline.

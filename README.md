@@ -9,4 +9,36 @@
 
 This repository is reserved for the Poparooz fuse bead pattern generator and its related Shopify page integration.
 
-The repository is currently in Phase 0: business baseline and development preparation. No production generator implementation is present yet.
+The repository now contains the Phase 1 frontend engineering baseline. It does
+not yet contain the production pattern generator, color engine, or workspace UI.
+
+## Prerequisites
+
+- Node.js 22 or newer
+- npm 11
+
+## Install
+
+```sh
+npm install
+```
+
+## Run the development server
+
+```sh
+npm run dev
+```
+
+## Engineering checks
+
+```sh
+npm run build
+npm run typecheck
+npm run lint
+npm run format:check
+npm run test:run
+```
+
+Use `npm test` for the interactive Vitest watch mode. Product decisions and
+implementation boundaries remain governed by the Source of Truth and its linked
+documents under [`docs/`](docs/).

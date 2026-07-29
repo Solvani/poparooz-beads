@@ -1,0 +1,479 @@
+import { describe, expect, it, vi } from "vitest";
+
+import { MAX_FILE_BYTES } from "../../domain/image/image-limits";
+import {
+  createExifJpeg,
+  MINIMAL_PNG_BYTES,
+} from "../../domain/image/image-test.fixture";
+import type {
+  NormalizeImageOptions,
+  RgbaImage,
+} from "../../domain/image/image.types";
+import {
+  decodeAndNormalizeImage,
+  type BrowserImageNormalizerDependencies,
+} from "./browser-image-normalizer";
+import {
+  decodeBrowserImage,
+  type BitmapLike,
+  type BrowserImageDecoderDependencies,
+  type BrowserRasterSource,
+  type ImageElementLike,
+} from "./browser-image-decoder";
+import {
+  rasterizeBrowserImage,
+  type CanvasContextLike,
+  type CanvasLike,
+} from "./canvas-rasterizer";
+
+const options: NormalizeImageOptions = {
+  targetWidth: 2,
+  targetHeight: 1,
+  preserveAspectRatio: true,
+  fit: "contain",
+  background: "transparent",
+  allowUpscale: false,
+};
+
+describe("browser decoder resources", () => {
+  it("requests browser-applied EXIF orientation and closes ImageBitmap once", async () => {
+    const close = vi.fn();
+    const createBitmap = vi.fn(
+      async (_input: Blob, bitmapOptions: ImageBitmapOptions) => {
+        expect(bitmapOptions).toMatchObject({
+          imageOrientation: "from-image",
+          premultiplyAlpha: "none",
+          colorSpaceConversion: "none",
+        });
+        return { width: 2, height: 1, close };
+      },
+    );
+    const decoded = await decodeBrowserImage(blob(), undefined, {
+      ...unusedUrlDependencies(),
+      createBitmap,
+    });
+
+    decoded.release();
+    decoded.release();
+    expect(close).toHaveBeenCalledTimes(1);
+  });
+
+  it("closes a bitmap that resolves after cancellation", async () => {
+    const close = vi.fn();
+    let resolveBitmap!: (bitmap: BitmapLike) => void;
+    const bitmapPromise = new Promise<BitmapLike>((resolve) => {
+      resolveBitmap = resolve;
+    });
+    const controller = new AbortController();
+    const pending = decodeBrowserImage(blob(), controller.signal, {
+      ...unusedUrlDependencies(),
+      createBitmap: () => bitmapPromise,
+    });
+    controller.abort();
+    await expect(pending).rejects.toMatchObject({ code: "ABORTED" });
+    resolveBitmap({ width: 1, height: 1, close });
+    await Promise.resolve();
+    expect(close).toHaveBeenCalledOnce();
+  });
+
+  it("maps raw decoder failures to a safe code", async () => {
+    await expect(
+      decodeBrowserImage(blob(), undefined, {
+        ...unusedUrlDependencies(),
+        createBitmap: () => Promise.reject(new Error("secret-name.png")),
+      }),
+    ).rejects.toMatchObject({
+      code: "IMAGE_DECODE_FAILED",
+      message: "The browser could not decode the image content.",
+    });
+  });
+
+  it("revokes an Object URL after fallback success and releases the image", async () => {
+    const image = fakeImageElement();
+    const revokeObjectUrl = vi.fn();
+    const decoded = await decodeBrowserImage(blob(), undefined, {
+      createBitmap: undefined,
+      createImageElement: () => image,
+      createObjectUrl: () => "blob:test-only",
+      revokeObjectUrl,
+    });
+
+    expect(revokeObjectUrl).toHaveBeenCalledWith("blob:test-only");
+    decoded.release();
+    expect(image.src).toBe("");
+  });
+
+  it("revokes an Object URL after fallback failure", async () => {
+    const image = fakeImageElement(() => Promise.reject(new Error("decode")));
+    const revokeObjectUrl = vi.fn();
+    await expect(
+      decodeBrowserImage(blob(), undefined, {
+        createBitmap: undefined,
+        createImageElement: () => image,
+        createObjectUrl: () => "blob:test-only",
+        revokeObjectUrl,
+      }),
+    ).rejects.toMatchObject({ code: "IMAGE_DECODE_FAILED" });
+    expect(revokeObjectUrl).toHaveBeenCalledOnce();
+    expect(image.src).toBe("");
+  });
+});
+
+describe("temporary Canvas rasterizer", () => {
+  it("copies unpremultiplied RGBA data and releases the temporary surface", async () => {
+    const pixels = new Uint8ClampedArray([1, 2, 3, 4]);
+    const { canvas, context } = fakeCanvas(pixels);
+    const result = await rasterizeBrowserImage(decodedSource(), {
+      createCanvas: () => canvas,
+    });
+
+    expect(result.data).toEqual(pixels);
+    expect(result.data).not.toBe(pixels);
+    expect(context.drawImage).toHaveBeenCalledOnce();
+    expect(canvas.width).toBe(0);
+    expect(canvas.height).toBe(0);
+  });
+
+  it("reports an unavailable context and still releases the surface", async () => {
+    const canvas: CanvasLike = { width: 9, height: 9, getContext: () => null };
+    await expect(
+      rasterizeBrowserImage(decodedSource(), { createCanvas: () => canvas }),
+    ).rejects.toMatchObject({ code: "CANVAS_UNAVAILABLE" });
+    expect(canvas).toMatchObject({ width: 0, height: 0 });
+  });
+
+  it("maps pixel-read failures and still releases the surface", async () => {
+    const { canvas, context } = fakeCanvas(new Uint8ClampedArray(4));
+    vi.mocked(context.getImageData).mockImplementation(() => {
+      throw new Error("tainted path and file.png");
+    });
+    await expect(
+      rasterizeBrowserImage(decodedSource(), { createCanvas: () => canvas }),
+    ).rejects.toMatchObject({
+      code: "PIXEL_READ_FAILED",
+      message: "Decoded image pixels could not be read safely.",
+    });
+    expect(canvas).toMatchObject({ width: 0, height: 0 });
+  });
+});
+
+describe("decodeAndNormalizeImage service", () => {
+  it("returns safe metadata and normalized pixels", async () => {
+    const release = vi.fn();
+    const result = await decodeAndNormalizeImage(
+      blob(),
+      options,
+      undefined,
+      normalizerDependencies({ release }),
+    );
+    expect(result.source).toEqual({
+      format: "png",
+      originalWidth: 2,
+      originalHeight: 1,
+      orientedWidth: 2,
+      orientedHeight: 1,
+      exifOrientation: 1,
+      hasAlpha: true,
+    });
+    expect([...result.image.data]).toEqual([255, 0, 0, 255, 0, 0, 0, 0]);
+    expect(JSON.stringify(result)).not.toContain("name");
+    expect(release).toHaveBeenCalledOnce();
+  });
+
+  it("allows an empty MIME when the signature is valid", async () => {
+    await expect(
+      decodeAndNormalizeImage(
+        blob(""),
+        options,
+        undefined,
+        normalizerDependencies(),
+      ),
+    ).resolves.toBeDefined();
+  });
+
+  it("rejects a MIME conflict before browser decode", async () => {
+    const dependencies = normalizerDependencies();
+    await expect(
+      decodeAndNormalizeImage(
+        blob("image/jpeg"),
+        options,
+        undefined,
+        dependencies,
+      ),
+    ).rejects.toMatchObject({ code: "MIME_SIGNATURE_MISMATCH" });
+    expect(dependencies.decode).not.toHaveBeenCalled();
+  });
+
+  it("rejects an empty file before reading", async () => {
+    const dependencies = normalizerDependencies();
+    await expect(
+      decodeAndNormalizeImage(new Blob(), options, undefined, dependencies),
+    ).rejects.toMatchObject({ code: "EMPTY_FILE" });
+    expect(dependencies.readBytes).not.toHaveBeenCalled();
+  });
+
+  it("rejects an oversized file before reading", async () => {
+    const dependencies = normalizerDependencies();
+    const oversized = { size: MAX_FILE_BYTES + 1, type: "image/png" } as Blob;
+    await expect(
+      decodeAndNormalizeImage(oversized, options, undefined, dependencies),
+    ).rejects.toMatchObject({ code: "FILE_TOO_LARGE" });
+    expect(dependencies.readBytes).not.toHaveBeenCalled();
+  });
+
+  it("rejects invalid target dimensions before reading", async () => {
+    const dependencies = normalizerDependencies();
+    await expect(
+      decodeAndNormalizeImage(
+        blob(),
+        { ...options, targetWidth: 0 },
+        undefined,
+        dependencies,
+      ),
+    ).rejects.toMatchObject({ code: "INVALID_TARGET_DIMENSIONS" });
+    expect(dependencies.readBytes).not.toHaveBeenCalled();
+  });
+
+  it("checks decoded pixel limits before rasterization and releases", async () => {
+    const release = vi.fn();
+    const dependencies = normalizerDependencies({
+      decoded: { source: {}, width: 40_000_001, height: 1, release },
+    });
+    await expect(
+      decodeAndNormalizeImage(blob(), options, undefined, dependencies),
+    ).rejects.toMatchObject({ code: "DECODED_PIXEL_LIMIT_EXCEEDED" });
+    expect(dependencies.rasterize).not.toHaveBeenCalled();
+    expect(release).toHaveBeenCalledOnce();
+  });
+
+  it("falls back from invalid EXIF to 1 with a safe diagnostic", async () => {
+    const bytes = createExifJpeg(6).subarray(0, 20);
+    const diagnostic = vi.fn();
+    const dependencies = normalizerDependencies({
+      bytes,
+      onDiagnostic: diagnostic,
+    });
+    await decodeAndNormalizeImage(
+      new Blob([copyArrayBuffer(bytes)], { type: "image/jpeg" }),
+      options,
+      undefined,
+      dependencies,
+    );
+    expect(diagnostic).toHaveBeenCalledWith(
+      expect.objectContaining({ code: "INVALID_EXIF_DATA" }),
+    );
+  });
+
+  it("rejects cancellation before any work", async () => {
+    const controller = new AbortController();
+    controller.abort();
+    const dependencies = normalizerDependencies();
+    await expect(
+      decodeAndNormalizeImage(blob(), options, controller.signal, dependencies),
+    ).rejects.toMatchObject({ code: "ABORTED" });
+    expect(dependencies.readBytes).not.toHaveBeenCalled();
+  });
+
+  it("releases a late decoder result after cancellation", async () => {
+    const controller = new AbortController();
+    const release = vi.fn();
+    let resolveDecoded!: (value: BrowserRasterSource) => void;
+    const dependencies = normalizerDependencies({
+      decode: () =>
+        new Promise((resolve) => {
+          resolveDecoded = resolve;
+        }),
+    });
+    const pending = decodeAndNormalizeImage(
+      blob(),
+      options,
+      controller.signal,
+      dependencies,
+    );
+    await vi.waitFor(() => expect(resolveDecoded).toBeTypeOf("function"));
+    controller.abort();
+    await expect(pending).rejects.toMatchObject({ code: "ABORTED" });
+    resolveDecoded(decodedSource(release));
+    await Promise.resolve();
+    expect(release).toHaveBeenCalledOnce();
+  });
+
+  it("releases decoded resources when rasterization fails", async () => {
+    const release = vi.fn();
+    const dependencies = normalizerDependencies({
+      release,
+      rasterize: () => Promise.reject(new Error("private.png")),
+    });
+    await expect(
+      decodeAndNormalizeImage(blob(), options, undefined, dependencies),
+    ).rejects.toMatchObject({
+      code: "PIXEL_READ_FAILED",
+      message: "Decoded image pixels could not be read safely.",
+    });
+    expect(release).toHaveBeenCalledOnce();
+  });
+
+  it("cancels during rasterization without returning a partial result", async () => {
+    const controller = new AbortController();
+    const release = vi.fn();
+    let resolvePixels!: (value: RgbaImage) => void;
+    const dependencies = normalizerDependencies({
+      release,
+      rasterize: () =>
+        new Promise((resolve) => {
+          resolvePixels = resolve;
+        }),
+    });
+    const pending = decodeAndNormalizeImage(
+      blob(),
+      options,
+      controller.signal,
+      dependencies,
+    );
+    await vi.waitFor(() => expect(resolvePixels).toBeTypeOf("function"));
+    controller.abort();
+    await expect(pending).rejects.toMatchObject({ code: "ABORTED" });
+    resolvePixels({
+      width: 2,
+      height: 1,
+      data: new Uint8ClampedArray(8),
+    });
+    await Promise.resolve();
+    expect(release).toHaveBeenCalledOnce();
+  });
+
+  it("uses browser-oriented pixels for EXIF 6 without rotating twice", async () => {
+    const bytes = createExifJpeg(6);
+    const dependencies = normalizerDependencies({
+      bytes,
+      decoded: { source: {}, width: 1, height: 2, release: vi.fn() },
+      rasterize: async () => ({
+        width: 1,
+        height: 2,
+        data: new Uint8ClampedArray([1, 2, 3, 255, 4, 5, 6, 255]),
+      }),
+    });
+    const result = await decodeAndNormalizeImage(
+      new Blob([copyArrayBuffer(bytes)], { type: "image/jpeg" }),
+      { ...options, targetWidth: 1, targetHeight: 2 },
+      undefined,
+      dependencies,
+    );
+
+    expect(result.source).toMatchObject({
+      originalWidth: 2,
+      originalHeight: 1,
+      orientedWidth: 1,
+      orientedHeight: 2,
+      exifOrientation: 6,
+    });
+    expect([...result.image.data]).toEqual([1, 2, 3, 255, 4, 5, 6, 255]);
+  });
+
+  it("releases decoded resources when upscaling is rejected", async () => {
+    const release = vi.fn();
+    await expect(
+      decodeAndNormalizeImage(
+        blob(),
+        { ...options, targetWidth: 4, targetHeight: 2 },
+        undefined,
+        normalizerDependencies({ release }),
+      ),
+    ).rejects.toMatchObject({ code: "UPSCALE_NOT_ALLOWED" });
+    expect(release).toHaveBeenCalledOnce();
+  });
+
+  it("does not expose browser exception text through the default service boundary", async () => {
+    const dependencies = normalizerDependencies({
+      decode: () => Promise.reject(new Error("sensitive-file-name.jpg")),
+    });
+    await expect(
+      decodeAndNormalizeImage(blob(), options, undefined, dependencies),
+    ).rejects.toMatchObject({
+      code: "IMAGE_DECODE_FAILED",
+      message: "The browser could not decode the image content.",
+    });
+  });
+});
+
+function blob(type = "image/png"): Blob {
+  return new Blob([copyArrayBuffer(MINIMAL_PNG_BYTES)], { type });
+}
+
+function copyArrayBuffer(bytes: Uint8Array): ArrayBuffer {
+  const copy = new Uint8Array(bytes.byteLength);
+  copy.set(bytes);
+  return copy.buffer;
+}
+
+function unusedUrlDependencies(): Omit<
+  BrowserImageDecoderDependencies,
+  "createBitmap"
+> {
+  return {
+    createImageElement: () => fakeImageElement(),
+    createObjectUrl: () => "blob:unused",
+    revokeObjectUrl: vi.fn(),
+  };
+}
+
+function fakeImageElement(
+  decode: () => Promise<void> = () => Promise.resolve(),
+): ImageElementLike {
+  return {
+    decoding: "auto",
+    naturalWidth: 2,
+    naturalHeight: 1,
+    src: "",
+    decode,
+  };
+}
+
+function decodedSource(release = vi.fn()): BrowserRasterSource {
+  return { source: {}, width: 1, height: 1, release };
+}
+
+function fakeCanvas(pixels: Uint8ClampedArray): {
+  canvas: CanvasLike;
+  context: CanvasContextLike;
+} {
+  const context: CanvasContextLike = {
+    drawImage: vi.fn(),
+    getImageData: vi.fn(() => ({ data: pixels }) as ImageData),
+  };
+  return {
+    canvas: { width: 9, height: 9, getContext: () => context },
+    context,
+  };
+}
+
+function normalizerDependencies(
+  overrides: {
+    bytes?: Uint8Array;
+    decode?: BrowserImageNormalizerDependencies["decode"];
+    decoded?: BrowserRasterSource;
+    onDiagnostic?: BrowserImageNormalizerDependencies["onDiagnostic"];
+    rasterize?: BrowserImageNormalizerDependencies["rasterize"];
+    release?: () => void;
+  } = {},
+): BrowserImageNormalizerDependencies {
+  const decoded = overrides.decoded ?? {
+    source: {},
+    width: 2,
+    height: 1,
+    release: overrides.release ?? vi.fn(),
+  };
+  const pixels: RgbaImage = {
+    width: 2,
+    height: 1,
+    data: new Uint8ClampedArray([255, 0, 0, 255, 9, 8, 7, 0]),
+  };
+  return {
+    readBytes: vi.fn(async () =>
+      copyArrayBuffer(overrides.bytes ?? MINIMAL_PNG_BYTES),
+    ),
+    decode: vi.fn(overrides.decode ?? (async () => decoded)),
+    rasterize: vi.fn(overrides.rasterize ?? (async () => pixels)),
+    onDiagnostic: overrides.onDiagnostic,
+  };
+}

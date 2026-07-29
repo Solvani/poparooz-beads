@@ -35,6 +35,8 @@ Phase 1 requires a configured React/TypeScript/Vite baseline, reproducible depen
 
 P1-A03 palette-import acceptance requires a frozen exact header with explicit order/case policy, separate strict metadata, standards-compliant BOM/LF/CRLF/quoted-field parsing, unambiguous primitive conversion, final reuse of both Domain schemas, actual row/column errors, distinguishable duplicate-code errors, multi-error aggregation, synthetic non-production fixtures outside the frontend bundle, a read-only offline CLI with tested exit codes, and explicit rejection of visual charts as production data sources.
 
+P1-A04 image-normalization acceptance requires content signatures plus MIME conflict handling, pre/post-decode limits, bounded EXIF Orientation 1–8 parsing and transforms, an explicit no-double-rotation browser strategy, exact deterministic contain geometry, default upscale rejection, alpha-aware deterministic resize with pixel golden tests, transparent/white output rules, stable safe errors, AbortSignal coverage, complete ImageBitmap/Object URL/temporary Canvas cleanup, synthetic fixtures only, no persistence/network behavior, and an explicit real-browser validation follow-up.
+
 Production data is not required to test the algorithm core, but fixture boundaries must be visible in file names, code, and UI paths. No fixture may ship as a production palette or board default.
 
 ## Phase 2 gate

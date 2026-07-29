@@ -101,6 +101,8 @@ interface MaterialRequirement {
 
 ### Input and safety
 
+[`POPAROOZ_IMAGE_INPUT_AND_NORMALIZATION_CONTRACT.md`](POPAROOZ_IMAGE_INPUT_AND_NORMALIZATION_CONTRACT.md) is the implementation authority for P1-A04 signatures, MIME policy, provisional limits, EXIF strategy, contain geometry, deterministic RGBA sampling, alpha/background behavior, browser resources, cancellation, safe errors, and deferred real-browser validation.
+
 - Initial formats: JPEG, PNG, and WebP after both content/MIME validation and successful decode; extensions are not trusted.
 - Initial engineering candidates are a 20 MB encoded file and 40 million decoded pixels. They are provisional guards that must be confirmed through target-device tests before becoming a release rule.
 - Decode failure, corrupt data, extreme dimensions/aspect ratios, allocation failure, rapid reselection, stale Worker results, and unsupported formats produce typed recoverable errors.
@@ -109,10 +111,10 @@ interface MaterialRequirement {
 
 ### Deterministic pipeline
 
-1. Validate and decode locally in the browser.
-2. Normalize orientation and RGBA representation.
-3. Fit with `contain`, centered, preserving aspect ratio by default; uncovered cells follow the transparency/background rule. There is no automatic subject detection, crop, or AI background removal.
-4. Resample once to the target bead grid using a versioned, explicitly tested sampling rule.
+1. Validate signatures/MIME/limits and decode locally in the browser. P1-A04 explicitly requests browser-applied EXIF orientation and does not rotate decoded pixels twice.
+2. Normalize to unpremultiplied RGBA and validate orientation-corrected dimensions.
+3. Fit with deterministic centered `contain`, preserving aspect ratio; uncovered cells are transparent or white by explicit option. There is no crop, subject detection, or AI removal.
+4. Resample once with alpha-aware area averaging when reducing. Upscale is rejected by default; an explicitly allowed upscale uses the documented deterministic bilinear path.
 5. If transparency is enabled, samples below the versioned `alphaThreshold` become `null`; other samples are composited over the configured default white background before color work. If transparency is disabled, all samples are composited over that background.
 6. Apply deterministic maximum-color quantization to eligible 8-bit sRGB grid samples before palette mapping. The Phase 1 implementation decision must name and fixture-test the exact quantizer; the baseline candidate is stable median-cut. `maxColors` limits quantizer buckets, while palette collisions may make the final internal reference-color count smaller.
 7. Linearize sRGB, convert to XYZ D65 and Lab, match enabled internal palette colors, and emit a row-major `referenceCode` matrix. Customer-visible consumers separately map results to the Public Presentation Model.

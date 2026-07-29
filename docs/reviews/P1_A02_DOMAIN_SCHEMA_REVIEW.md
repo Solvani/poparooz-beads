@@ -4,6 +4,11 @@ Review date: **2026-07-29**
 
 Result: **Accepted with follow-up**
 
+Superseded field note: P1-A02.1 replaces the original ambiguous
+`brand`/`code`/`name`/`series` PaletteColor fields with explicit internal
+reference and Poparooz display fields. See
+[`P1_A02_1_PUBLIC_BRANDING_BOUNDARY_REVIEW.md`](P1_A02_1_PUBLIC_BRANDING_BOUNDARY_REVIEW.md).
+
 ## Scope
 
 P1-A02 adds framework-independent palette and board contracts, runtime parsing,
@@ -43,9 +48,10 @@ and are excluded from the production TypeScript project.
 
 ## Invariants implemented
 
-- MARD is the only accepted palette/color brand.
-- Codes are trimmed, uppercased, safely formatted, and compared after
-  normalization.
+- MARD is the only accepted internal `referenceSystem`; Poparooz is the only
+  accepted `displayBrand` and public brand.
+- Internal `referenceCode` and public `displayCode` are separately trimmed,
+  uppercased, safely formatted, and checked for uniqueness.
 - HEX is canonical uppercase `#RRGGBB` and must equal the RGB tuple.
 - RGB contains three integer channels from 0 through 255.
 - Lab contains three finite values; L is 0 through 100 without invented narrow
@@ -53,8 +59,9 @@ and are excluded from the production TypeScript project.
 - Automatic matching requires both active and sellable status.
 - Special finishes require an allowed finish type; plain colors reject it.
 - Optional pack size is a positive integer; absent commerce values stay absent.
-- Palette color count, normalized code uniqueness, brand, source version, and
-  verified provenance are checked with field/index-specific issues.
+- Palette color count, both normalized code systems, reference-system
+  consistency, source version, and verified provenance are checked with
+  field/index-specific issues.
 - Empty palettes are rejected.
 - Board rows/columns are positive integers, bead size is positive and finite,
   and identifiers/names are non-empty.
@@ -62,7 +69,8 @@ and are excluded from the production TypeScript project.
 ## Fixture boundary
 
 Palette fixture identifiers contain `FIXTURE` or `NOT-PRODUCTION`, use only
-three synthetic colors, and set the special finish to automatic matching off.
+three synthetic colors with intentionally different `TEST-REF-*` and
+`POP-TEST-*` codes, and set the special finish to automatic matching off.
 The board fixture is named `Non-Production Test Fixture Board`. None represents
 a real MARD code, complete 221/291 range, official board, Poparooz sellable
 range, physical verification, Shopify mapping, or product default.

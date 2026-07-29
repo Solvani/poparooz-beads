@@ -2,16 +2,48 @@ import { z } from "zod";
 
 const paletteCodePattern = /^[A-Z0-9][A-Z0-9._-]*$/;
 const hexPattern = /^#[0-9A-F]{6}$/;
+const internalReferenceTermPattern = /MARD/i;
 
 const nonEmptyString = (fieldName: string) =>
   z.string().trim().min(1, `${fieldName} must not be empty.`);
+
+const customerVisibleString = (fieldName: string) =>
+  nonEmptyString(fieldName).refine(
+    (value) => !internalReferenceTermPattern.test(value),
+    `${fieldName} must not contain an internal reference-system name.`,
+  );
 
 const FiniteLabNumberSchema = z.custom<number>(
   (value) => typeof value === "number" && Number.isFinite(value),
   "Lab channels must be finite.",
 );
 
-export const PaletteBrandSchema = z.literal("MARD");
+export const PaletteReferenceSystemSchema = z.literal("MARD");
+export const PaletteDisplayBrandSchema = z.literal("Poparooz");
+
+export const ReferenceCodeSchema = nonEmptyString("referenceCode")
+  .transform((code) => code.toUpperCase())
+  .pipe(
+    z
+      .string()
+      .regex(
+        paletteCodePattern,
+        "referenceCode may contain only letters, numbers, dots, underscores, and hyphens.",
+      ),
+  );
+
+export const DisplayCodeSchema = customerVisibleString("displayCode")
+  .transform((code) => code.toUpperCase())
+  .pipe(
+    z
+      .string()
+      .regex(
+        paletteCodePattern,
+        "displayCode may contain only letters, numbers, dots, underscores, and hyphens.",
+      ),
+  );
+
+export const DisplayNameSchema = customerVisibleString("displayName");
 
 export const PaletteFinishTypeSchema = z.enum([
   "transparent",
@@ -71,19 +103,12 @@ function rgbToHex(rgb: readonly [number, number, number]): string {
 
 export const PaletteColorSchema = z
   .object({
-    brand: PaletteBrandSchema,
-    code: nonEmptyString("code")
-      .transform((code) => code.toUpperCase())
-      .pipe(
-        z
-          .string()
-          .regex(
-            paletteCodePattern,
-            "code may contain only letters, numbers, dots, underscores, and hyphens.",
-          ),
-      ),
-    name: nonEmptyString("name"),
-    series: nonEmptyString("series"),
+    referenceSystem: PaletteReferenceSystemSchema,
+    referenceCode: ReferenceCodeSchema,
+    referenceName: nonEmptyString("referenceName").optional(),
+    referenceSeries: nonEmptyString("referenceSeries").optional(),
+    displayCode: DisplayCodeSchema,
+    displayName: DisplayNameSchema,
     hex: nonEmptyString("hex")
       .transform((hex) => hex.toUpperCase())
       .pipe(
@@ -158,8 +183,9 @@ export const PaletteColorSchema = z
 export const PaletteDefinitionSchema = z
   .object({
     id: nonEmptyString("id"),
-    brand: PaletteBrandSchema,
-    name: nonEmptyString("name"),
+    referenceSystem: PaletteReferenceSystemSchema,
+    displayBrand: PaletteDisplayBrandSchema,
+    name: customerVisibleString("name"),
     version: nonEmptyString("version"),
     colorCount: z
       .number()
@@ -189,26 +215,39 @@ export const PaletteDefinitionSchema = z
       });
     }
 
-    const codeIndexes = new Map<string, number>();
+    const referenceCodeIndexes = new Map<string, number>();
+    const displayCodeIndexes = new Map<string, number>();
 
     palette.colors.forEach((color, index) => {
-      const firstIndex = codeIndexes.get(color.code);
+      const firstReferenceIndex = referenceCodeIndexes.get(color.referenceCode);
+      const firstDisplayIndex = displayCodeIndexes.get(color.displayCode);
 
-      if (firstIndex !== undefined) {
+      if (firstReferenceIndex !== undefined) {
         context.addIssue({
           code: "custom",
-          path: ["colors", index, "code"],
-          message: `Duplicate normalized color code "${color.code}"; first used at colors.${firstIndex}.code.`,
+          path: ["colors", index, "referenceCode"],
+          message: `Duplicate normalized internal referenceCode; first used at colors.${firstReferenceIndex}.referenceCode.`,
         });
       } else {
-        codeIndexes.set(color.code, index);
+        referenceCodeIndexes.set(color.referenceCode, index);
       }
 
-      if (color.brand !== palette.brand) {
+      if (firstDisplayIndex !== undefined) {
         context.addIssue({
           code: "custom",
-          path: ["colors", index, "brand"],
-          message: "Color brand must match the palette brand.",
+          path: ["colors", index, "displayCode"],
+          message: `Duplicate normalized Poparooz displayCode; first used at colors.${firstDisplayIndex}.displayCode.`,
+        });
+      } else {
+        displayCodeIndexes.set(color.displayCode, index);
+      }
+
+      if (color.referenceSystem !== palette.referenceSystem) {
+        context.addIssue({
+          code: "custom",
+          path: ["colors", index, "referenceSystem"],
+          message:
+            "Color referenceSystem must match the palette referenceSystem.",
         });
       }
 

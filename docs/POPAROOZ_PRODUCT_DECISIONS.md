@@ -6,9 +6,16 @@ Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SO
 
 ## Positioning and business loop
 
-Poparooz Generator serves US-market visitors to the Poparooz Shopify store. It turns a locally selected image into a practical fuse bead plan, identifies MARD colors and bead counts, estimates board layout, provides downloads, and links the user to Poparooz materials.
+Poparooz Generator serves US-market visitors to the Poparooz Shopify store. It turns a locally selected image into a practical fuse bead plan, identifies Poparooz display colors and bead counts, estimates board layout, provides downloads, and links the user to Poparooz materials.
 
-Poparooz owns the shopping and website experience. MARD color codes remain the material reference. Pindoo is a competitor reference only.
+Poparooz owns the shopping, website, and customer-visible color presentation. MARD may remain in internal source mapping and audits only; it is never displayed as a customer brand or color-code prefix. Pindoo is a competitor reference only.
+
+## Customer-visible branding
+
+- Poparooz is the only brand in UI, mobile layouts, accessibility text, errors, empty/loading states, materials, Canvas labels, PNG, customer CSV, filenames, downloads, Shopify content/messages, SEO, metadata, public responses, and customer-copyable diagnostics.
+- Customer colors use approved Poparooz `displayCode` and ordinary English `displayName` fields. They never read internal `referenceSystem`, `referenceCode`, `referenceName`, `referenceSeries`, provenance, or Shopify mapping fields.
+- Every customer-visible color object is produced by the strict Public Presentation Model and whitelist mapper; UI code must not render or serialize an internal palette record.
+- Internal audit, supplier mapping, source/version evidence, and license records retain truthful third-party names where required.
 
 ## MVP-A included scope
 
@@ -31,7 +38,7 @@ Poparooz owns the shopping and website experience. MARD color codes remain the m
 
 ### Materials and summary
 
-- Swatch, MARD code, English color name, bead count per color, total beads, colors used, pattern dimensions, horizontal boards, vertical boards, and estimated total boards.
+- Swatch, Poparooz display code, ordinary English display name, bead count per color, total beads, colors used, pattern dimensions, horizontal boards, vertical boards, and estimated total boards.
 - Material counts reflect exact generated cells. Commerce-only values stay blank until verified.
 
 ### Export and conversion
@@ -87,7 +94,7 @@ Accounts, cloud projects, publishing, galleries, search, favorites, comments, au
 - The generator is independently deployed to Vercel and embedded on `https://www.poparooz.com/pages/fuse-bead-pattern-maker`.
 - The production generator URL is `https://generator.poparooz.com` and must also provide the full core experience when opened directly.
 - Shopify remains responsible for the theme, SEO content, navigation, FAQ, privacy copy, collection entry, cart, iframe container, height updates, and full-screen fallback.
-- The generator remains responsible for local upload/processing, pattern generation, Canvas, MARD/material calculations, downloads, and allowlisted messages.
+- The generator remains responsible for local upload/processing, pattern generation, Canvas, internal reference-based color/material calculations, Public Presentation mapping, downloads, and allowlisted messages.
 - MVP-A does not create a Shopify App, Embedded/Admin App, App Proxy, Shopify CLI project, deep theme integration, or Cart API bridge.
 - Configuration is centralized. Candidate names are `VITE_SHOP_URL`, `VITE_BEADS_COLLECTION_URL`, `VITE_ALLOWED_PARENT_ORIGINS`, and `VITE_GENERATOR_PUBLIC_URL`; final names may follow the Phase 1 project convention without weakening the contract.
 - Vercel preview addresses are for validation only. Production Shopify references the custom generator domain, and preview origins are excluded from the production allowlist by default.

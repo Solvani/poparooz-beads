@@ -43,15 +43,58 @@ function expectIssue(
 }
 
 describe("PaletteColor", () => {
-  it("parses a valid plain fixture and applies canonical casing", () => {
+  it("parses separated internal and display fields and normalizes them", () => {
     const color = parsePaletteColor({
       ...TEST_PLAIN_PALETTE_COLOR,
-      code: " fixture-plain ",
-      hex: "#336699",
+      referenceCode: " test-ref-plain ",
+      referenceName: " Fixture Internal Plain Name ",
+      displayCode: " pop-test-plain ",
+      displayName: " Test Plain Color ",
     });
 
-    expect(color.code).toBe("FIXTURE-PLAIN");
-    expect(color.hex).toBe("#336699");
+    expect(color.referenceCode).toBe("TEST-REF-PLAIN");
+    expect(color.referenceName).toBe("Fixture Internal Plain Name");
+    expect(color.displayCode).toBe("POP-TEST-PLAIN");
+    expect(color.displayName).toBe("Test Plain Color");
+  });
+
+  it.each(["brand", "code", "name", "series"] as const)(
+    "strictly rejects the removed %s field",
+    (field) => {
+      expectIssue(
+        safeParsePaletteColor({
+          ...TEST_PLAIN_PALETTE_COLOR,
+          [field]: "legacy-value",
+        }),
+        [],
+        field,
+      );
+    },
+  );
+
+  it("rejects an empty displayName", () => {
+    expectIssue(
+      safeParsePaletteColor({
+        ...TEST_PLAIN_PALETTE_COLOR,
+        displayName: "   ",
+      }),
+      ["displayName"],
+      "must not be empty",
+    );
+  });
+
+  it.each([
+    ["displayCode", "MARDTEST001"],
+    ["displayName", "MARD Test Color"],
+  ] as const)("rejects internal reference branding in %s", (field, value) => {
+    expectIssue(
+      safeParsePaletteColor({
+        ...TEST_PLAIN_PALETTE_COLOR,
+        [field]: value,
+      }),
+      [field],
+      "internal reference-system name",
+    );
   });
 
   it("rejects an invalid HEX value with a field-specific reason", () => {
@@ -178,9 +221,31 @@ describe("PaletteColor", () => {
 });
 
 describe("PaletteDefinition", () => {
-  it("parses the valid non-production test fixture", () => {
+  it("parses the valid internal and public field combination", () => {
     expect(parsePaletteDefinition(TEST_PALETTE_DEFINITION)).toEqual(
       TEST_PALETTE_DEFINITION,
+    );
+  });
+
+  it("accepts only MARD as the internal referenceSystem", () => {
+    expectIssue(
+      safeParsePaletteDefinition({
+        ...TEST_PALETTE_DEFINITION,
+        referenceSystem: "OTHER",
+      }),
+      ["referenceSystem"],
+      "MARD",
+    );
+  });
+
+  it("accepts only Poparooz as displayBrand", () => {
+    expectIssue(
+      safeParsePaletteDefinition({
+        ...TEST_PALETTE_DEFINITION,
+        displayBrand: "MARD",
+      }),
+      ["displayBrand"],
+      "Poparooz",
     );
   });
 
@@ -195,7 +260,7 @@ describe("PaletteDefinition", () => {
     );
   });
 
-  it("rejects color codes duplicated after trimming and case normalization", () => {
+  it("rejects duplicate normalized internal referenceCode values", () => {
     expectIssue(
       safeParsePaletteDefinition({
         ...TEST_PALETTE_DEFINITION,
@@ -204,17 +269,38 @@ describe("PaletteDefinition", () => {
           TEST_PLAIN_PALETTE_COLOR,
           {
             ...TEST_PLAIN_PALETTE_COLOR,
-            code: " fixture-plain ",
+            referenceCode: " test-ref-plain ",
+            displayCode: "POP-TEST-SECOND",
             sortOrder: 2,
           },
         ],
       }),
-      ["colors", 1, "code"],
-      "Duplicate normalized color code",
+      ["colors", 1, "referenceCode"],
+      "internal referenceCode",
     );
   });
 
-  it("rejects a color brand outside the MARD palette contract", () => {
+  it("rejects duplicate normalized Poparooz displayCode values", () => {
+    expectIssue(
+      safeParsePaletteDefinition({
+        ...TEST_PALETTE_DEFINITION,
+        colorCount: 2,
+        colors: [
+          TEST_PLAIN_PALETTE_COLOR,
+          {
+            ...TEST_PLAIN_PALETTE_COLOR,
+            referenceCode: "TEST-REF-SECOND",
+            displayCode: " pop-test-plain ",
+            sortOrder: 2,
+          },
+        ],
+      }),
+      ["colors", 1, "displayCode"],
+      "Poparooz displayCode",
+    );
+  });
+
+  it("rejects a color referenceSystem outside the palette contract", () => {
     expectIssue(
       safeParsePaletteDefinition({
         ...TEST_PALETTE_DEFINITION,
@@ -222,11 +308,11 @@ describe("PaletteDefinition", () => {
         colors: [
           {
             ...TEST_PLAIN_PALETTE_COLOR,
-            brand: "OTHER",
+            referenceSystem: "OTHER",
           },
         ],
       }),
-      ["colors", 0, "brand"],
+      ["colors", 0, "referenceSystem"],
       "MARD",
     );
   });

@@ -13,11 +13,13 @@ Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SO
 - Algorithm behavior has a `generatorVersion`/algorithm version. Identical image bytes and settings, palette version, board profile, schema version, and algorithm version must produce identical results.
 - Consumers reject unsupported major versions and ignore documented optional fields they do not understand.
 
-## MARD palette
+## Internal reference palette and public presentation
 
-[`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md) is the authority for `PaletteDefinition`, `PaletteColor`, provenance levels, normalization, uniqueness, special finishes, automatic-match eligibility, optional Shopify mappings, fixtures, and production-data entry conditions. Runtime schemas and inferred types live under `src/domain/palette/` and do not depend on React or the DOM.
+[`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md) is the internal authority for `PaletteDefinition`, `PaletteColor`, reference-system provenance, normalization, dual uniqueness, special finishes, automatic-match eligibility, optional Shopify mappings, fixtures, and production-data entry conditions. Runtime schemas and inferred types live under `src/domain/palette/` and do not depend on React or the DOM.
 
-MARD codes remain canonical; Poparooz creates no substitute color codes. A future auditable master source may live at `data-source/mard-palette.csv`, while versioned runtime artifacts may live under `src/data/palettes/`. Source/runtime separation and provenance remain mandatory. P1-A02 contains only a small, unmistakable test fixture and no production 221/291 table, sellable range, commerce mapping, or physical-color claim.
+[`POPAROOZ_PUBLIC_BRANDING_CONTRACT.md`](POPAROOZ_PUBLIC_BRANDING_CONTRACT.md) governs all customer-visible presentation. Internal calculation may use `referenceSystem` and `referenceCode`, but UI, accessibility text, materials, Canvas labels, PNG, customer CSV, filenames, downloads, Shopify presentation, SEO, metadata, analytics labels, and public responses must use the strict Public Palette Model produced by `toPublicPaletteColor`. An internal `PaletteColor` must never be rendered or serialized directly.
+
+A future auditable master source may live at `data-source/mard-palette.csv`, while versioned runtime artifacts may live under `src/data/palettes/`. Source/runtime separation and truthful provenance remain mandatory. P1-A02.1 contains only small, unmistakable test fixtures and no production 221/291 table, Poparooz display-code list, sellable range, commerce mapping, or physical-color claim.
 
 ## Board profiles and board calculation
 
@@ -69,7 +71,7 @@ interface PatternProject {
 interface PatternCell {
   x: number;
   y: number;
-  colorCode: string | null;
+  referenceCode: string | null;
 }
 ```
 
@@ -79,8 +81,9 @@ Width/height are positive bead-grid dimensions; `cells` contains exactly `width 
 
 ```ts
 interface MaterialRequirement {
-  colorCode: string;
-  colorName: string;
+  referenceCode: string;
+  displayCode: string;
+  displayName: string;
   hex: string;
   beadCount: number;
   reserveCount: number;
@@ -92,7 +95,7 @@ interface MaterialRequirement {
 }
 ```
 
-`beadCount` exactly equals non-null pattern cells of that code. MVP-A guarantees code, name, swatch/HEX, and exact bead count. Reserve policy is explicit and defaults to zero until approved. Pack size, required packs, handles, variant IDs, inventory, and purchasability remain absent until verified; an absent value is not `0` or `false`.
+`beadCount` exactly equals non-null pattern cells of the internal `referenceCode`. Customer materials map each requirement through its palette color and expose only Poparooz `displayCode`, `displayName`, swatch/HEX, and exact bead count. Reserve policy is explicit and defaults to zero until approved. Pack size, required packs, handles, variant IDs, inventory, and purchasability remain absent until verified; internal handles and IDs never enter the public model or customer CSV.
 
 ## Image input and processing
 
@@ -111,8 +114,8 @@ interface MaterialRequirement {
 3. Fit with `contain`, centered, preserving aspect ratio by default; uncovered cells follow the transparency/background rule. There is no automatic subject detection, crop, or AI background removal.
 4. Resample once to the target bead grid using a versioned, explicitly tested sampling rule.
 5. If transparency is enabled, samples below the versioned `alphaThreshold` become `null`; other samples are composited over the configured default white background before color work. If transparency is disabled, all samples are composited over that background.
-6. Apply deterministic maximum-color quantization to eligible 8-bit sRGB grid samples before palette mapping. The Phase 1 implementation decision must name and fixture-test the exact quantizer; the baseline candidate is stable median-cut. `maxColors` limits quantizer buckets, while palette collisions may make the final MARD color count smaller.
-7. Linearize sRGB, convert to XYZ D65 and Lab, match enabled palette colors, and emit a row-major MARD code matrix.
+6. Apply deterministic maximum-color quantization to eligible 8-bit sRGB grid samples before palette mapping. The Phase 1 implementation decision must name and fixture-test the exact quantizer; the baseline candidate is stable median-cut. `maxColors` limits quantizer buckets, while palette collisions may make the final internal reference-color count smaller.
+7. Linearize sRGB, convert to XYZ D65 and Lab, match enabled internal palette colors, and emit a row-major `referenceCode` matrix. Customer-visible consumers separately map results to the Public Presentation Model.
 8. Count colors/beads and calculate the two-dimensional board layout.
 
 Changing fit, sampling, alpha, background, quantization, or matching behavior requires an algorithm-version change.
@@ -145,7 +148,7 @@ a* = 500 [f(X/Xn) - f(Y/Yn)]
 b* = 200 [f(Y/Yn) - f(Z/Zn)]
 ```
 
-Palette matching uses CIEDE2000 (`Delta E 00`) with `kL = kC = kH = 1`. The implementation must be covered by published reference vectors. JavaScript double precision is used without intermediate rounding. Comparisons within `1e-12` are ties; ties resolve by lower `sortOrder`, then lexicographically smaller MARD `code`. Display rounding never affects selection.
+Palette matching uses CIEDE2000 (`Delta E 00`) with `kL = kC = kH = 1`. The implementation must be covered by published reference vectors. JavaScript double precision is used without intermediate rounding. Comparisons within `1e-12` are ties; ties resolve by lower `sortOrder`, then lexicographically smaller internal `referenceCode`. Display rounding and public code/name mapping never affect selection.
 
 Dithering is off by default in MVP-A because it creates scattered colors, increases material variety, and complicates physical assembly. Any later optional dithering is a versioned MVP-B decision.
 
@@ -159,21 +162,21 @@ Pattern names are Unicode-normalized, path separators/control characters removed
 
 ### PNG
 
-The default PNG contains the pattern grid, readable MARD codes, legend, material counts, pattern dimensions, palette/version, board profile/layout, total beads, generator version, and UTC generation time. Empty cells follow the project's transparency choice; non-transparent export uses white. A large-pattern layout may paginate or scale labels only through a separately accepted Phase 3 decision; it may not silently omit data.
+The default PNG contains the pattern grid, readable Poparooz display codes, ordinary English display names, legend, material counts, pattern dimensions, board profile/layout, total beads, generator version, and UTC generation time. It contains no internal reference-system name, code, logo, source version, supplier/audit field, or Shopify mapping. Empty cells follow the project's transparency choice; non-transparent export uses white. A large-pattern layout may paginate or scale labels only through a separately accepted Phase 3 decision; it may not silently omit data.
 
 ### CSV
 
-CSV is UTF-8, RFC 4180 quoted, and deterministic. Rows follow palette `sortOrder` then code. Required columns are:
+The customer CSV is UTF-8, RFC 4180 quoted, and deterministic. Rows follow palette `sortOrder` then `displayCode`, after explicit Public Presentation mapping. Required columns are:
 
 ```text
-palette_brand,palette_version,color_code,color_name,hex,bead_count,
-reserve_count,pack_size,packs_required,product_handle,variant_id,
+display_brand,display_code,display_name,hex,bead_count,
+reserve_count,pack_size,packs_required,
 pattern_name,pattern_width,pattern_height,board_profile_id,
 horizontal_boards,vertical_boards,estimated_boards,total_beads,
 generator_version,generated_at
 ```
 
-Unavailable optional commerce values are empty, not fabricated. Pattern-level metadata repeats per material row so the file remains tabular and self-describing. An empty pattern still exports the header and requires a separately specified metadata representation before implementation acceptance.
+Unavailable optional material values are empty, not fabricated. Internal reference/source fields, product handles, variant IDs, supplier/audit fields, and third-party brand names are prohibited. Pattern-level public metadata repeats per material row so the file remains tabular and self-describing. An empty pattern still exports the header and requires a separately specified metadata representation before implementation acceptance.
 
 ## Analytics and privacy
 

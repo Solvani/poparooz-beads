@@ -6,7 +6,7 @@ Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SO
 
 ## Universal gate
 
-Every task must stay within one roadmap item, preserve accepted decisions, contain no unrelated changes or sensitive/local data, run every check configured at that point, document unavailable checks honestly, and receive a separate acceptance decision before the next phase.
+Every task must stay within one roadmap item, preserve accepted decisions, contain no unrelated changes or sensitive/local data, run every check configured at that point, document unavailable checks honestly, and receive a separate acceptance decision before the next phase. Poparooz is the only customer-visible brand: public models and customer content must not expose internal reference-system names, fields, codes, logos, provenance, or commerce mappings, while internal audit and license evidence must retain truthful sources.
 
 ## Phase 0 acceptance
 
@@ -17,7 +17,7 @@ Every task must stay within one roadmap item, preserve accepted decisions, conta
 - [x] A single Source of Truth and referenced product, contract, roadmap, acceptance, and audit documents established.
 - [x] README points to the Source of Truth. No `AGENTS.md` was created because none existed.
 - [x] Product positioning, MVP-A, MVP-B, deferred cart, community, mobile, and iframe strategy are non-conflicting.
-- [x] MARD identity, sellable filter, provenance, special finishes, fixtures, and truth-label rules are frozen without creating a fake palette.
+- [x] Internal MARD reference identity, sellable filter, provenance, special finishes, fixtures, and truth-label rules are frozen without creating a fake palette or making MARD a customer-visible brand.
 - [x] Board schema and two-dimensional board formula are frozen without inventing a production board.
 - [x] Pattern and material structures and version strategy are defined.
 - [x] Image input, orientation, containment, transparency, quantization, color conversion, CIEDE2000, tie-break, determinism, and no-dither baseline are defined.
@@ -31,17 +31,17 @@ Phase 0 is **Accepted with follow-up** because externally verified Remote state,
 
 ## Phase 1 gate
 
-Phase 1 requires a configured React/TypeScript/Vite baseline, reproducible dependency installation, build/type/lint/unit checks, runtime-validated domain schemas, labeled fixtures, palette import validation, deterministic image/color pipeline, CIEDE2000 reference tests, stable tie tests, Worker cancellation and parity tests, exact counts/layout tests, performance/memory evidence on representative devices, and no full workspace UI.
+Phase 1 requires a configured React/TypeScript/Vite baseline, reproducible dependency installation, build/type/lint/unit checks, runtime-validated domain schemas, labeled fixtures, palette import validation, deterministic image/color pipeline, CIEDE2000 reference tests, stable tie tests, Worker cancellation and parity tests, exact counts/layout tests, performance/memory evidence on representative devices, and no full workspace UI. Palette acceptance also requires strict separation of internal reference fields from Poparooz display fields, independent normalized uniqueness for both code systems, a strict Public Palette Schema, an explicit whitelist mapper, and serialization tests proving no internal reference name or field reaches the public model.
 
 Production data is not required to test the algorithm core, but fixture boundaries must be visible in file names, code, and UI paths. No fixture may ship as a production palette or board default.
 
 ## Phase 2 gate
 
-Phase 2 requires the accepted Phase 1 core; accessible upload/settings/result/material/summary flows; desktop and true canvas-first mobile layouts; pointer, keyboard, and touch operation; loading/cancel/error/memory states; component tests; and no export, deployment, or Cart API work pulled forward.
+Phase 2 requires the accepted Phase 1 core; accessible upload/settings/result/material/summary flows; desktop and true canvas-first mobile layouts; pointer, keyboard, and touch operation; loading/cancel/error/memory states; component tests; and no export, deployment, or Cart API work pulled forward. UI, Canvas labels, materials, accessibility text, errors, empty/loading states, and customer-copyable diagnostics must consume only Public Presentation models and contain no third-party brand name, logo, icon, or internal reference field.
 
 ## Phase 3 / MVP-A gate
 
-Phase 3 requires deterministic and metadata-complete PNG/CSV output; tested download failures/limits; exact iframe origin/window/message validation; secure CSP/sandbox; Shopify content/fallback/full-screen flow; configured Vercel and custom domain; privacy-safe analytics; E2E and target mobile-browser evidence; verified production palette/sellable range and physical board; and final MVP-A acceptance.
+Phase 3 requires deterministic and metadata-complete PNG/CSV output; tested download failures/limits; exact iframe origin/window/message validation; secure CSP/sandbox; Shopify content/fallback/full-screen flow; configured Vercel and custom domain; privacy-safe analytics; E2E and target mobile-browser evidence; verified production palette/sellable range and physical board; and final MVP-A acceptance. PNG, customer CSV, file names, legends, downloads, Shopify pages/messages, SEO, titles/descriptions, page metadata, public analytics labels, and public responses must use Poparooz display fields and contain no third-party brand/name/logo, internal reference field/code, source version, supplier/audit field, product handle, or variant ID.
 
 ### Desktop iframe acceptance
 

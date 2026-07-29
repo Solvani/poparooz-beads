@@ -11,8 +11,8 @@ Last reviewed: **2026-07-29**
 This document is the single governing baseline for the current Poparooz Generator. If a requirement, prototype, screenshot, task, or older document conflicts with this baseline, this document and the formal decision documents it references take precedence.
 
 - Pindoo Creator Hub is competitor and workflow reference only. Its pages, code, copy, branding, images, and complete feature set must not be copied.
-- MARD is the color reference system; original MARD color codes remain visible and are not rebranded as Poparooz codes.
-- Poparooz is the product sales and website brand.
+- MARD is retained only as an internal color reference system for truthful source mapping and audit.
+- Poparooz is the only customer-visible product, color-display, sales, and website brand. Customer content never displays MARD or another third-party brand name, logo, or icon.
 - Scope may not expand without an explicit product decision and a corresponding update to this baseline.
 - Every phase is implemented and accepted independently. Passing one phase is required before entering the next.
 - MVP-A has no account, database, cloud project storage, community system, or Shopify Cart API.
@@ -23,7 +23,7 @@ Poparooz Generator is a browser-based fuse bead pattern generation and material-
 
 1. Select an image locally.
 2. Generate a buildable bead pattern.
-3. Label the pattern using eligible MARD color codes.
+3. Label the pattern using eligible Poparooz display color codes backed by internally traced reference data.
 4. Calculate bead and board requirements.
 5. Download the pattern and material list.
 6. Continue to the configured Poparooz bead collection.
@@ -62,6 +62,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 ## Formal decision set
 
 - [`POPAROOZ_PRODUCT_DECISIONS.md`](POPAROOZ_PRODUCT_DECISIONS.md): product positioning, MVP boundaries, page structure, mobile behavior, and Shopify journey.
+- [`POPAROOZ_PUBLIC_BRANDING_CONTRACT.md`](POPAROOZ_PUBLIC_BRANDING_CONTRACT.md): authoritative separation between internal reference data and all customer-visible Poparooz presentation.
 - [`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md): authoritative MARD palette fields, runtime validation, provenance levels, fixture rules, and production-data entry conditions.
 - [`POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md`](POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md): palette, board, pattern, materials, image, color, export, privacy, analytics, and message data contracts.
 - [`POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md`](POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md): deployment boundary, iframe lifecycle, origins, resize, CSP, sandbox, full-screen fallback, and deferred cart bridge.
@@ -84,7 +85,7 @@ Phase 0 explicitly excludes implementation of image upload, a Canvas workspace, 
 
 ## Data truth boundary
 
-No production MARD palette or Poparooz sellable range is defined. Publicly available color values may later be used only as clearly labeled reference values. They must not be presented as exact physical matches or as verified Poparooz inventory. Palette fields and validation are governed by [`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md).
+No production internal reference palette, Poparooz display-code list, or sellable range is defined. Publicly available color values may later be used internally only as clearly labeled reference values; they must not be presented as exact physical matches or verified Poparooz inventory. Internal palette fields are governed by [`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md), while every customer-visible consumer is governed by [`POPAROOZ_PUBLIC_BRANDING_CONTRACT.md`](POPAROOZ_PUBLIC_BRANDING_CONTRACT.md).
 
 Only colors satisfying all three flags may enter production automatic matching:
 

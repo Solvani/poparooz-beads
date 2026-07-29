@@ -19,7 +19,7 @@ Deliverable: documentation only. No production generator runtime.
 ## Phase 1 — application foundation and color engine
 
 - [x] P1-A01: frontend baseline and engineering checks.
-- P1-A02: domain schemas and runtime validation.
+- [x] P1-A02: domain schemas and runtime validation.
 - P1-A03: clearly labeled MARD test fixture and import validation.
 - P1-A04: image decode, orientation, transparency, fit, and scaling pipeline.
 - P1-A05: sRGB, XYZ D65, and Lab conversion.
@@ -93,4 +93,4 @@ Phase 1 algorithm foundation may proceed without real palette or board data only
 
 ## Recommended next task
 
-After Phase 0 acceptance, perform P1-A01 only: create the frontend engineering baseline and its build/type/lint/test checks without implementing the color engine or full UI. Before choosing production defaults, request the supplier, inventory, board, Shopify, browser, Vercel, and domain facts listed above.
+After P1-A02 acceptance, perform P1-A03 only: create the clearly labeled MARD import test fixture and import validation without introducing a production palette, color algorithms, image processing, Worker, Canvas, or full UI. Before choosing production defaults, request the supplier, inventory, board, Shopify, browser, Vercel, and domain facts listed above.

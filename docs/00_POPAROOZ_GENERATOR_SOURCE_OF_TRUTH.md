@@ -62,6 +62,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 ## Formal decision set
 
 - [`POPAROOZ_PRODUCT_DECISIONS.md`](POPAROOZ_PRODUCT_DECISIONS.md): product positioning, MVP boundaries, page structure, mobile behavior, and Shopify journey.
+- [`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md): authoritative MARD palette fields, runtime validation, provenance levels, fixture rules, and production-data entry conditions.
 - [`POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md`](POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md): palette, board, pattern, materials, image, color, export, privacy, analytics, and message data contracts.
 - [`POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md`](POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md): deployment boundary, iframe lifecycle, origins, resize, CSP, sandbox, full-screen fallback, and deferred cart bridge.
 - [`POPAROOZ_DEVELOPMENT_ROADMAP.md`](POPAROOZ_DEVELOPMENT_ROADMAP.md): phased delivery plan and entry dependencies.
@@ -83,7 +84,7 @@ Phase 0 explicitly excludes implementation of image upload, a Canvas workspace, 
 
 ## Data truth boundary
 
-No production MARD palette or Poparooz sellable range is defined in Phase 0. Publicly available color values may later be used only as clearly labeled reference values. They must not be presented as exact physical matches or as verified Poparooz inventory.
+No production MARD palette or Poparooz sellable range is defined. Publicly available color values may later be used only as clearly labeled reference values. They must not be presented as exact physical matches or as verified Poparooz inventory. Palette fields and validation are governed by [`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md).
 
 Only colors satisfying all three flags may enter production automatic matching:
 

@@ -15,44 +15,9 @@ Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SO
 
 ## MARD palette
 
-MARD codes are canonical. Poparooz does not create substitute color codes. A future auditable master source may live at `data-source/mard-palette.csv`; versioned runtime artifacts may live under `src/data/palettes/`. The final paths are selected when the application structure is created, while source/runtime separation and provenance are mandatory.
+[`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md) is the authority for `PaletteDefinition`, `PaletteColor`, provenance levels, normalization, uniqueness, special finishes, automatic-match eligibility, optional Shopify mappings, fixtures, and production-data entry conditions. Runtime schemas and inferred types live under `src/domain/palette/` and do not depend on React or the DOM.
 
-```ts
-interface PaletteColor {
-  brand: "MARD";
-  code: string;
-  name: string;
-  series: string;
-  hex: string;
-  rgb: [number, number, number];
-  lab: [number, number, number];
-  isActive: boolean;
-  isSellable: boolean;
-  isSpecialFinish: boolean;
-  finishType?: string;
-  isAutoMatchEnabled: boolean;
-  productHandle?: string;
-  variantId?: string;
-  packSize?: number;
-  sortOrder: number;
-  sourceVersion: string;
-  verifiedAt?: string;
-}
-```
-
-| Field | Contract |
-| --- | --- |
-| `brand` | Always `MARD`; it identifies the reference system. |
-| `code`, `name`, `series` | Supplier code, display name, and supplier series; code is unique within a palette version. |
-| `hex`, `rgb`, `lab` | Validated software reference values. RGB components are integers 0–255; HEX is normalized `#RRGGBB`; Lab uses the specified D65 conversion. |
-| availability flags | `isActive` is not retired, `isSellable` is confirmed in Poparooz scope, and `isAutoMatchEnabled` allows matching. All three must be true for automatic matching. |
-| finish fields | `isSpecialFinish` marks non-plain appearances; `finishType` names the verified finish. Special finishes default to automatic matching off. |
-| commerce fields | Optional verified Shopify mapping and positive integer pack size. Absence is represented by absence, never invented values. |
-| ordering/provenance | `sortOrder` is a stable deterministic order. `sourceVersion` is required; `verifiedAt` is an ISO-8601 verification timestamp when verified. |
-
-Import validation rejects duplicate codes, required-field omissions, invalid flags, invalid/contradictory finish data, malformed codes, non-finite Lab values, illegal RGB/HEX, invalid pack sizes, and missing provenance.
-
-MARD 221 and 291 structures may be supported, but neither is claimed as Poparooz's sellable range until supplier and inventory review. Until then every value is labeled **Reference color values**, never **Exact physical color match**. A minimal test fixture may be used only under tests/fixtures and must not masquerade as a production palette or feed a production UI.
+MARD codes remain canonical; Poparooz creates no substitute color codes. A future auditable master source may live at `data-source/mard-palette.csv`, while versioned runtime artifacts may live under `src/data/palettes/`. Source/runtime separation and provenance remain mandatory. P1-A02 contains only a small, unmistakable test fixture and no production 221/291 table, sellable range, commerce mapping, or physical-color claim.
 
 ## Board profiles and board calculation
 

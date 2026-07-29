@@ -23,7 +23,7 @@ Deliverable: documentation only. No production generator runtime.
 - [x] P1-A02.1: internal reference-system and Poparooz customer-visible branding isolation.
 - [x] P1-A03: canonical offline palette files, clearly labeled synthetic fixtures, and import validation.
 - [x] P1-A04: browser-local image signatures, decode boundary, orientation, transparency, contain, and deterministic RGBA scaling.
-- P1-A05: sRGB, XYZ D65, and Lab conversion.
+- [x] P1-A05: sRGB, XYZ D65, and Lab conversion.
 - P1-A06: CIEDE2000 and deterministic tie-breaker.
 - P1-A07: deterministic quantization and maximum colors.
 - P1-A08: versioned Web Worker protocol and cancellation.
@@ -94,4 +94,4 @@ Phase 1 algorithm foundation may proceed without real palette or board data only
 
 ## Recommended next task
 
-After P1-A04 acceptance, perform P1-A05 only: implement deterministic sRGB, XYZ D65, and Lab conversion with published reference vectors. Do not pull forward CIEDE2000, palette matching, quantization, Worker, Canvas workspace, full UI, export, Shopify, or deployment. Keep the P1-A04 provisional image limits and browser-conformance items open until representative-device evidence exists.
+After P1-A05 acceptance, perform P1-A06 only: implement color distance, deterministic nearest-color matching, and the frozen tie-breaker using the accepted Lab conversion primitives. Do not import the formal palette, quantize images, add dithering, Worker, Canvas workspace, full UI, export, Shopify, or deployment. Keep the P1-A04 provisional image limits and browser-conformance items open until representative-device evidence exists.

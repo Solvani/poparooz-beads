@@ -124,6 +124,8 @@ Changing fit, sampling, alpha, background, quantization, or matching behavior re
 
 ## Color mathematics and matching
 
+[`POPAROOZ_COLOR_SPACE_CONVERSION_CONTRACT.md`](POPAROOZ_COLOR_SPACE_CONVERSION_CONTRACT.md) is the implementation authority for P1-A05 types, units, validation, errors, frozen constants, precision, golden references, and the Alpha boundary. The pure implementation lives under `src/domain/color/` and performs only single-color conversion. Color distance, palette matching, quantization, image batching, and Worker execution remain later tasks.
+
 For normalized sRGB component `c` in 0–1:
 
 ```text

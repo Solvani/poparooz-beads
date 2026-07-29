@@ -37,6 +37,8 @@ P1-A03 palette-import acceptance requires a frozen exact header with explicit or
 
 P1-A04 image-normalization acceptance requires content signatures plus MIME conflict handling, pre/post-decode limits, bounded EXIF Orientation 1–8 parsing and transforms, an explicit no-double-rotation browser strategy, exact deterministic contain geometry, default upscale rejection, alpha-aware deterministic resize with pixel golden tests, transparent/white output rules, stable safe errors, AbortSignal coverage, complete ImageBitmap/Object URL/temporary Canvas cleanup, synthetic fixtures only, no persistence/network behavior, and an explicit real-browser validation follow-up.
 
+P1-A05 color-space-conversion acceptance requires strict RGB8 and intermediate runtime validation, explicit 0-through-255 and 0-through-1 units, the standard sRGB inverse transfer branches, the frozen sRGB-to-XYZ D65 matrix, D65 2-degree CIELAB constants and branches, JavaScript double precision without intermediate rounding, exact negative-zero canonicalization only, stable safe errors, golden and property tests, composition through shared primitives, and no Delta E, matching, palette, image-batch, Worker, Canvas, or UI work.
+
 Production data is not required to test the algorithm core, but fixture boundaries must be visible in file names, code, and UI paths. No fixture may ship as a production palette or board default.
 
 ## Phase 2 gate

@@ -23,6 +23,8 @@ Every task must stay within one roadmap item, preserve accepted decisions, conta
 - [x] Image input, orientation, containment, transparency, quantization, color conversion, CIEDE2000, tie-break, determinism, and no-dither baseline are defined.
 - [x] PNG, CSV, metadata, privacy, analytics denylist, and iframe protocol/security contracts are defined.
 - [x] Phases 1–5, Community Backlog, Phase 1 dependencies, and next task are defined.
+- [x] Independent Vercel deployment, Shopify parent/generator responsibility split, production domains, centralized URL/origin configuration, resize, and full-screen architecture are frozen.
+- [x] Upstream/Fork/license evidence is audited as absent; unknown licensing is a hard gate against importing external production code.
 - [x] No image generator, production color engine/palette, Canvas workspace, Worker runtime, PNG/CSV runtime, account, database, Cart API, deployment, or community implementation was added.
 
 Phase 0 is **Accepted with follow-up** because externally verified Remote state, production palette/inventory, physical board, Shopify, Vercel/domain, and target-browser facts remain unresolved. These are recorded dependencies and do not invalidate the documentation baseline.
@@ -40,6 +42,26 @@ Phase 2 requires the accepted Phase 1 core; accessible upload/settings/result/ma
 ## Phase 3 / MVP-A gate
 
 Phase 3 requires deterministic and metadata-complete PNG/CSV output; tested download failures/limits; exact iframe origin/window/message validation; secure CSP/sandbox; Shopify content/fallback/full-screen flow; configured Vercel and custom domain; privacy-safe analytics; E2E and target mobile-browser evidence; verified production palette/sellable range and physical board; and final MVP-A acceptance.
+
+### Desktop iframe acceptance
+
+- Shopify page, header, navigation, SEO content, and generator load normally without a horizontal scrollbar or avoidable double scrolling.
+- Upload, generation, Canvas, PNG, CSV, configured collection navigation, dynamic height, and full-screen entry work.
+- Initial load, generation, error, Settings, Materials, and viewport changes update height without clipping.
+
+### Mobile iframe acceptance
+
+- iPhone Safari and Android Chrome complete upload and generation on supported versions.
+- Canvas zoom/pan, Settings, Materials, downloads or documented fallback, collection navigation, and full-screen entry work with usable target sizes.
+- The UI is genuinely responsive, not a scaled desktop layout, and Shopify fixed chrome does not cover critical actions.
+
+### Security and deployment acceptance
+
+- Shopify production references `https://generator.poparooz.com`; custom-domain HTTPS succeeds and `vercel.app` is not the lasting user entry.
+- Production never uses `targetOrigin="*"`; parent and child reject unknown origins, windows, versions, types, and invalid payloads.
+- Resize height is a bounded finite integer; arbitrary URLs/code and image/file-name data cannot cross the protocol.
+- CSP, `frame-ancestors`, sandbox, download/new-window/full-screen capabilities, preview/development origin separation, load failure, canonical, and indexing decisions have test evidence.
+- MVP-A contains no Shopify Cart API or direct iframe cart operation.
 
 ## Phase 4 and Phase 5 gates
 

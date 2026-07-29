@@ -12,6 +12,7 @@ No phase starts until the previous phase's acceptance gate passes. Tasks do not 
 - P0-A02: product baseline and scope freeze.
 - P0-A03: data, algorithm, export, privacy, analytics, and iframe contracts.
 - P0-A04: roadmap and acceptance gates.
+- P0-A05: Vercel/Shopify iframe architecture and upstream-license supplement.
 
 Deliverable: documentation only. No production generator runtime.
 
@@ -50,17 +51,18 @@ Phase 1 does not build the complete workspace UI. Missing real palette/board dat
 - P3-A01: PNG export.
 - P3-A02: CSV export.
 - P3-A03: iframe message implementation.
-- P3-A04: Vercel deployment configuration.
-- P3-A05: `generator.poparooz.com` setup.
-- P3-A06: Shopify Custom Liquid parent page and content.
-- P3-A07: CSP, exact origins, sandbox, and iframe security.
-- P3-A08: full-screen entry and failure fallback.
-- P3-A09: privacy-safe analytics events.
-- P3-A10: Playwright end-to-end tests.
-- P3-A11: target mobile-device/browser tests.
-- P3-A12: final MVP-A acceptance.
+- P3-A04: resize observer, throttled height messages, parent bounds, and cleanup.
+- P3-A05: Vercel deployment configuration and independent version/rollback evidence.
+- P3-A06: `generator.poparooz.com`, HTTPS, and production/preview separation.
+- P3-A07: Shopify Custom Liquid parent page, SEO content, and collection navigation.
+- P3-A08: CSP, exact origins, sandbox, capabilities, and iframe security.
+- P3-A09: full-screen entry, loading failure, and download fallback.
+- P3-A10: privacy-safe analytics events.
+- P3-A11: Playwright end-to-end tests.
+- P3-A12: iPhone Safari and Android Chrome device tests.
+- P3-A13: final MVP-A acceptance.
 
-MVP-A is complete only after P3-A12.
+MVP-A is complete only after P3-A13.
 
 ## Phase 4 — MVP-B basic editing
 
@@ -68,7 +70,7 @@ Brush, eraser, eyedropper, rectangle fill, replace color, undo/redo, local proje
 
 ## Phase 5 — Shopify one-click cart
 
-Verified MARD-to-product/variant mapping, handles, variant IDs, pack sizes, reserve/waste policy, pack conversion, inventory and unavailable states, parent-page Cart API, partial-add behavior, feedback, cart navigation, and conversion funnel.
+Verified MARD-to-product/variant mapping, handles, variant IDs, pack sizes, reserve/waste policy, pack conversion, inventory and unavailable states, a versioned material-requirement message, explicit user gesture, parent-side validation/mapping, same-origin Shopify Cart API, partial-add behavior, bounded feedback, cart navigation, and conversion funnel. The iframe never operates the cart directly.
 
 ## Community Backlog — unscheduled
 
@@ -85,6 +87,7 @@ Track and resolve as early as possible:
 - Shopify collection URL, official store domain, and allowed parent origins;
 - Vercel project/domain access and readiness of `generator.poparooz.com`;
 - target mobile browsers and minimum supported versions.
+- any proposed upstream repository URL/commit, actual license, notices, source-publication duties, commercial-use permission, same-license duties, and third-party dependency licenses before code reuse.
 
 Phase 1 algorithm foundation may proceed without real palette or board data only with labeled test fixtures. Supplier values, sellable colors, commerce mappings, physical board defaults, and physical-color claims block production release, not isolated fixture-based engineering.
 

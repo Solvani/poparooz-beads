@@ -73,3 +73,25 @@ No repository-external Pindoo screenshot, legacy plan, or other reference asset 
 4. Documentation must not turn these unknowns into production defaults.
 
 Conclusion: it is safe to create only the requested Phase 0 documentation and README as the repository's initial commit. There is no existing implementation to overwrite, no user work to mix, and no basis for application development within Phase 0.
+
+## Supplemental snapshot after the initial Phase 0 commit
+
+The initial documentation commit is `52208a89685857552c72ac3af3a7849056aa3996`. At the start of the Vercel/Shopify supplement, `main` was clean and still had no application code, package manifest, lock file, build configuration, deployment configuration, Shopify code, or generated assets. The only configured Remote remained `origin`; no separate `upstream` Remote or remote-tracking branch existed.
+
+## Upstream Repository and License Audit
+
+| Audit item | Evidence-based conclusion |
+| --- | --- |
+| Upstream repository name | Not identified. No repository metadata or source file names an upstream project. |
+| Upstream repository URL | Not present. Only the Poparooz `origin` Remote is configured. |
+| Fork status | Not established. This repository contains a Poparooz root documentation commit, not imported history or source code. |
+| Current audited commit | `52208a89685857552c72ac3af3a7849056aa3996`. |
+| LICENSE/COPYING/NOTICE | None present. |
+| License type | Undetermined; AGPL, GPL, MIT, Apache-2.0, or any other license must not be assumed. |
+| Commercial use | No external code is present to assess. Permission for any future upstream must be verified before use. |
+| Source publication/network obligations | Undetermined until an actual upstream license is reviewed. If an upstream is AGPL, its network deployment and source-offer duties apply as written. |
+| Same-license obligation | Undetermined until the actual license is known. |
+| Copyright notices | None from external code are present. Future author notices must be preserved and never removed without a verified legal basis. |
+| Third-party dependencies | None; there is no package manifest or lock file. Dependency-license review begins when dependencies are proposed. |
+
+License audit conclusion: no evidence supports calling the current repository a Fork of Omamori or any other project, and no license conclusion can be inherited from an unidentified source. Code, pages, assets, or copy from Omamori or any source of unclear provenance must not be imported. If an upstream foundation is proposed later, record its exact URL and commit, retain its license and copyright notices, inventory dependency licenses, and document commercial-use, redistribution, source-disclosure, network-use, and same-license obligations before implementation. Missing or ambiguous permission blocks production adoption.

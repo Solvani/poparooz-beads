@@ -2,7 +2,7 @@
 
 Status: **Phase 0 frozen baseline**
 
-Baseline version: **1.0**
+Baseline version: **1.1**
 
 Last reviewed: **2026-07-29**
 
@@ -34,11 +34,24 @@ The generator is not a general image editor, AI image platform, bead-art communi
 
 ## Frozen architecture direction
 
-The intended MVP direction is React, TypeScript, Vite, Canvas, Web Worker, browser-local image processing, Vercel, and a standalone `generator.poparooz.com` origin embedded by a Shopify Custom Liquid parent page. This is a Phase 0 direction, not an assertion that these technologies currently exist in the repository.
+The formal MVP deployment architecture is **an independently deployed Vercel generator embedded in a Shopify page by iframe**:
+
+```text
+https://www.poparooz.com/pages/fuse-bead-pattern-maker
+└── Shopify content and iframe container
+    └── https://generator.poparooz.com
+        └── Poparooz Fuse Bead Pattern Generator
+```
+
+The generator remains a standalone application with its complete core generation flow when opened directly at `https://generator.poparooz.com`. The intended implementation direction is React, TypeScript, Vite, Canvas, Web Worker, and browser-local image processing. This is a Phase 0 architecture decision, not an assertion that those technologies currently exist in the repository.
+
+Shopify owns its header, navigation, SEO and explanatory copy, FAQ, privacy explanation, product entry points, cart, iframe container, resize handling, full-screen fallback, and any future same-origin Cart API bridge. Vercel owns upload, local image processing, MARD matching, pattern generation, the Canvas workspace, bead/board statistics, PNG/CSV downloads, and controlled messages to the parent.
 
 The generator and Shopify parent communicate through a versioned `postMessage` protocol with exact origin validation. Images and image-derived content never cross that boundary.
 
-MVP-A does not require Docker, WSL, Shopify CLI, server-side image processing, authentication, a database, or Cart API integration.
+MVP-A does not use a Shopify App, Embedded App, Admin App, App Proxy, Shopify CLI project, deep theme customization, Docker, WSL, server-side image processing, authentication, a database, or Cart API integration. Shopify integration does not change this repository into a Shopify App.
+
+Production uses `https://generator.poparooz.com`; a `vercel.app` deployment is limited to development or deployment verification and is not the long-term public entry. Preview origins are not automatically trusted by production.
 
 ## Phase 0 repository finding
 
@@ -49,7 +62,8 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 ## Formal decision set
 
 - [`POPAROOZ_PRODUCT_DECISIONS.md`](POPAROOZ_PRODUCT_DECISIONS.md): product positioning, MVP boundaries, page structure, mobile behavior, and Shopify journey.
-- [`POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md`](POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md): palette, board, pattern, materials, image, color, export, privacy, analytics, and iframe contracts.
+- [`POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md`](POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md): palette, board, pattern, materials, image, color, export, privacy, analytics, and message data contracts.
+- [`POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md`](POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md): deployment boundary, iframe lifecycle, origins, resize, CSP, sandbox, full-screen fallback, and deferred cart bridge.
 - [`POPAROOZ_DEVELOPMENT_ROADMAP.md`](POPAROOZ_DEVELOPMENT_ROADMAP.md): phased delivery plan and entry dependencies.
 - [`POPAROOZ_ACCEPTANCE_CRITERIA.md`](POPAROOZ_ACCEPTANCE_CRITERIA.md): acceptance gates for Phase 0 and later phases.
 
@@ -63,6 +77,7 @@ Phase 0 includes only:
 - P0-A02 product scope and business decision freeze;
 - P0-A03 data, algorithm, export, privacy, analytics, and iframe contract freeze;
 - P0-A04 roadmap and acceptance-gate freeze.
+- P0-A05 Vercel deployment, Shopify iframe, and upstream-license supplement.
 
 Phase 0 explicitly excludes implementation of image upload, a Canvas workspace, image generation, a production palette, quantization or color matching runtime, Web Workers, PNG/CSV export runtime, deployment, Shopify integration, accounts, databases, Cart API, community features, AI extraction, and advanced editing.
 
@@ -86,6 +101,10 @@ Special-finish colors are excluded from normal-photo automatic matching by defau
 - Original image data is not persisted to LocalStorage and is discarded on refresh or unload.
 - Production messaging never uses `*` as `targetOrigin`; both child and parent validate the versioned protocol.
 - Shop navigation must arise from an explicit user action and from a configured collection key, never an arbitrary message URL.
+
+## Source and license boundary
+
+No upstream project, Fork relationship, LICENSE, or third-party dependency is present or evidenced in the audited repository. No license family—including AGPL—may be assumed. Before external code is used, its repository URL, exact commit, license text, copyright notices, commercial-use terms, network/source-disclosure obligations, same-license requirements, and dependency licenses must be recorded. Missing or unclear permission blocks that code from becoming a production basis. Existing author notices must never be removed.
 
 ## Change control
 

@@ -220,6 +220,8 @@ Forbidden everywhere: original images, names, paths, pixels, thumbnails, Base64,
 
 ## Iframe protocol and security
 
+The message envelope and privacy rules below are data contracts. Deployment, lifecycle, origin, resize, CSP, sandbox, and fallback requirements are governed by [`POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md`](POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md).
+
 ```ts
 interface GeneratorMessage<T = unknown> {
   source: "poparooz-generator";

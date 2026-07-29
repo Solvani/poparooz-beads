@@ -37,7 +37,7 @@ Poparooz owns the shopping and website experience. MARD color codes remain the m
 ### Export and conversion
 
 - PNG pattern and CSV material list with sanitized file names, palette/generator versions, pattern metadata, color counts, and board information.
-- `Get Beads for This Pattern` navigates to a configured Poparooz Shopify collection and records only non-image conversion telemetry.
+- `Get Beads for This Pattern` navigates only to a centrally configured Poparooz Shopify collection and records only non-image conversion telemetry. React components must not hard-code test, temporary, or local URLs.
 - Users do not log in and MVP-A does not add variants to the cart automatically.
 
 ### Mobile and accessibility
@@ -70,7 +70,7 @@ MVP-B may add brush, eraser, eyedropper, rectangle fill, color replacement, undo
 
 ## Deferred commerce and community
 
-Shopify one-click cart integration is Phase 5 and requires verified handles, variant IDs, pack sizes, waste policy, inventory behavior, partial-add behavior, parent-page Cart API, and conversion measurement.
+Shopify one-click cart integration is Phase 5 and requires verified handles, variant IDs, pack sizes, waste policy, inventory behavior, partial-add behavior, parent-page Cart API, and conversion measurement. The external iframe never controls the cart directly: it sends a versioned material-requirement message after an explicit user click; the same-origin Shopify parent validates it, performs product/inventory mapping and Cart API operations, and returns a bounded result.
 
 Accounts, cloud projects, publishing, galleries, search, favorites, comments, author pages, moderation, and copyright complaint handling remain an unscheduled Community Backlog.
 
@@ -81,3 +81,14 @@ Accounts, cloud projects, publishing, galleries, search, favorites, comments, au
 - A full-screen entry is always available for constrained embeds.
 - The child reports a debounced content height; the parent verifies the child window and origin before applying it.
 - The configured standalone origin and Shopify origins are dependencies. Preview origins are denied by default unless explicitly allowlisted for a non-production environment.
+
+## Deployment and Shopify integration
+
+- The generator is independently deployed to Vercel and embedded on `https://www.poparooz.com/pages/fuse-bead-pattern-maker`.
+- The production generator URL is `https://generator.poparooz.com` and must also provide the full core experience when opened directly.
+- Shopify remains responsible for the theme, SEO content, navigation, FAQ, privacy copy, collection entry, cart, iframe container, height updates, and full-screen fallback.
+- The generator remains responsible for local upload/processing, pattern generation, Canvas, MARD/material calculations, downloads, and allowlisted messages.
+- MVP-A does not create a Shopify App, Embedded/Admin App, App Proxy, Shopify CLI project, deep theme integration, or Cart API bridge.
+- Configuration is centralized. Candidate names are `VITE_SHOP_URL`, `VITE_BEADS_COLLECTION_URL`, `VITE_ALLOWED_PARENT_ORIGINS`, and `VITE_GENERATOR_PUBLIC_URL`; final names may follow the Phase 1 project convention without weakening the contract.
+- Vercel preview addresses are for validation only. Production Shopify references the custom generator domain, and preview origins are excluded from the production allowlist by default.
+- Mobile always exposes `Open Pattern Maker Full Screen` to avoid nested-scroll, upload, download, virtual-keyboard, fixed-header, and Canvas gesture failures.

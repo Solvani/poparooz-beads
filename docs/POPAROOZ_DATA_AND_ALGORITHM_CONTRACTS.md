@@ -126,6 +126,8 @@ Changing fit, sampling, alpha, background, quantization, or matching behavior re
 
 [`POPAROOZ_COLOR_SPACE_CONVERSION_CONTRACT.md`](POPAROOZ_COLOR_SPACE_CONVERSION_CONTRACT.md) is the implementation authority for P1-A05 types, units, validation, errors, frozen constants, precision, golden references, and the Alpha boundary. The pure implementation lives under `src/domain/color/` and performs only single-color conversion. Color distance, palette matching, quantization, image batching, and Worker execution remain later tasks.
 
+[`POPAROOZ_COLOR_MATCHING_CONTRACT.md`](POPAROOZ_COLOR_MATCHING_CONTRACT.md) is the implementation authority for P1-A06 CIEDE2000, diagnostic Delta E 76, candidate eligibility, errors, deterministic tie-breaking, single-target matching, and the Public Presentation boundary. Quantization, image batching, dithering, and Worker execution remain later tasks.
+
 For normalized sRGB component `c` in 0–1:
 
 ```text
@@ -152,7 +154,7 @@ a* = 500 [f(X/Xn) - f(Y/Yn)]
 b* = 200 [f(Y/Yn) - f(Z/Zn)]
 ```
 
-Palette matching uses CIEDE2000 (`Delta E 00`) with `kL = kC = kH = 1`. The implementation must be covered by published reference vectors. JavaScript double precision is used without intermediate rounding. Comparisons within `1e-12` are ties; ties resolve by lower `sortOrder`, then lexicographically smaller internal `referenceCode`. Display rounding and public code/name mapping never affect selection.
+Palette matching uses CIEDE2000 (`Delta E 00`) with `kL = kC = kH = 1`. The implementation is covered by the complete Sharma/Wu/Dalal supplementary reference set. JavaScript double precision is used without intermediate rounding. After finding the true minimum, candidates within `1e-12` resolve by lower `sortOrder`, then binary normalized `displayCode`, then binary normalized internal `referenceCode`. Display rounding and public mapping never affect distance calculation.
 
 Dithering is off by default in MVP-A because it creates scattered colors, increases material variety, and complicates physical assembly. Any later optional dithering is a versioned MVP-B decision.
 

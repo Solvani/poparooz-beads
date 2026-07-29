@@ -97,6 +97,8 @@ AND isActive === true
 AND isSellable === true
 ```
 
+P1-A06 enforces this eligibility through `preparePaletteCandidates` after reusing the strict `PaletteDefinitionSchema`. Empty palettes and nonempty palettes with no eligible colors are separate errors; matching never falls back to inactive, unsellable, manually excluded, or special-finish colors. A special finish participates only when `isAutoMatchEnabled` is explicitly true on an otherwise eligible schema-valid record. Candidate Lab comes from the validated `PaletteColor.lab` tuple and is never overwritten from HEX or RGB by the matcher.
+
 Finish types are `transparent`, `glow`, `pearl`, `metallic`, `fluorescent`,
 `glitter`, and `other`. A special finish requires a type; a plain color rejects
 one. P1-A02 fixtures keep special finishes out of automatic matching.

@@ -39,6 +39,8 @@ P1-A04 image-normalization acceptance requires content signatures plus MIME conf
 
 P1-A05 color-space-conversion acceptance requires strict RGB8 and intermediate runtime validation, explicit 0-through-255 and 0-through-1 units, the standard sRGB inverse transfer branches, the frozen sRGB-to-XYZ D65 matrix, D65 2-degree CIELAB constants and branches, JavaScript double precision without intermediate rounding, exact negative-zero canonicalization only, stable safe errors, golden and property tests, composition through shared primitives, and no Delta E, matching, palette, image-batch, Worker, Canvas, or UI work.
 
+P1-A06 color-matching acceptance requires strict Lab validation, complete CIEDE2000 with fixed unit parametric factors, the independent full Sharma/Wu/Dalal reference set, zero/small-chroma and hue-wrap coverage, active/sellable/auto-match candidate filtering through existing schemas, distinct empty/no-eligible errors, actual-distance results, the frozen `1e-12` minimum-first tie set, locale-independent `sortOrder`/`displayCode`/`referenceCode` resolution, input-order independence, unchanged Public Mapper isolation, and no production palette, quantization, image batching, Worker, Canvas, or UI work.
+
 Production data is not required to test the algorithm core, but fixture boundaries must be visible in file names, code, and UI paths. No fixture may ship as a production palette or board default.
 
 ## Phase 2 gate

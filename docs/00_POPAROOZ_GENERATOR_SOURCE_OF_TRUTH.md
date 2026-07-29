@@ -67,6 +67,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_PALETTE_IMPORT_CONTRACT.md`](POPAROOZ_PALETTE_IMPORT_CONTRACT.md): authoritative offline CSV/metadata format, conversion, source, error-reporting, and import-tool boundary.
 - [`POPAROOZ_IMAGE_INPUT_AND_NORMALIZATION_CONTRACT.md`](POPAROOZ_IMAGE_INPUT_AND_NORMALIZATION_CONTRACT.md): authoritative browser-local image signatures, limits, orientation, contain, RGBA normalization, cleanup, cancellation, and privacy boundary.
 - [`POPAROOZ_COLOR_SPACE_CONVERSION_CONTRACT.md`](POPAROOZ_COLOR_SPACE_CONVERSION_CONTRACT.md): authoritative RGB8, normalized sRGB, linear RGB, XYZ D65, and CIELAB D65 units, formulas, validation, precision, and Alpha boundary.
+- [`POPAROOZ_COLOR_MATCHING_CONTRACT.md`](POPAROOZ_COLOR_MATCHING_CONTRACT.md): authoritative CIEDE2000, eligible-candidate filtering, deterministic nearest-color tie-breaking, errors, and internal/public result boundary.
 - [`POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md`](POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md): palette, board, pattern, materials, image, color, export, privacy, analytics, and message data contracts.
 - [`POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md`](POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md): deployment boundary, iframe lifecycle, origins, resize, CSP, sandbox, full-screen fallback, and deferred cart bridge.
 - [`POPAROOZ_DEVELOPMENT_ROADMAP.md`](POPAROOZ_DEVELOPMENT_ROADMAP.md): phased delivery plan and entry dependencies.

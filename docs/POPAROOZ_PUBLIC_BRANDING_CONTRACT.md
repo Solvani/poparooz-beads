@@ -111,6 +111,8 @@ structured source files, but its success output remains internal. Import
 validation never makes a palette customer-visible and never bypasses the Public
 Presentation API.
 
+P1-A06 nearest-color matching returns an internal `PaletteColor` and its numeric distance. That result is not a Public Model and must not be serialized directly. Future customer-visible consumers must pass `PaletteMatchResult.color` through the existing `toPublicPaletteColor` allowlist; distance calculation and tie-breaking do not add fields to or bypass the public mapper.
+
 ## Leakage tests
 
 The public mapper and schema tests must prove:

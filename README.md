@@ -39,6 +39,12 @@ npm run format:check
 npm run test:run
 ```
 
+Validate the synthetic, non-production palette import fixture:
+
+```sh
+npm run palette:validate -- --csv data-source/fixtures/valid-test-palette.csv --metadata data-source/fixtures/test-palette-metadata.json
+```
+
 Use `npm test` for the interactive Vitest watch mode. Product decisions and
 implementation boundaries remain governed by the Source of Truth and its linked
 documents under [`docs/`](docs/).

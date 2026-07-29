@@ -19,7 +19,7 @@ Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SO
 
 [`POPAROOZ_PUBLIC_BRANDING_CONTRACT.md`](POPAROOZ_PUBLIC_BRANDING_CONTRACT.md) governs all customer-visible presentation. Internal calculation may use `referenceSystem` and `referenceCode`, but UI, accessibility text, materials, Canvas labels, PNG, customer CSV, filenames, downloads, Shopify presentation, SEO, metadata, analytics labels, and public responses must use the strict Public Palette Model produced by `toPublicPaletteColor`. An internal `PaletteColor` must never be rendered or serialized directly.
 
-A future auditable master source may live at `data-source/mard-palette.csv`, while versioned runtime artifacts may live under `src/data/palettes/`. Source/runtime separation and truthful provenance remain mandatory. P1-A02.1 contains only small, unmistakable test fixtures and no production 221/291 table, Poparooz display-code list, sellable range, commerce mapping, or physical-color claim.
+[`POPAROOZ_PALETTE_IMPORT_CONTRACT.md`](POPAROOZ_PALETTE_IMPORT_CONTRACT.md) governs the canonical offline CSV/metadata boundary and row-aware validation into `PaletteDefinition`. Auditable source files remain separate from any later versioned runtime artifacts. P1-A03 contains only small, unmistakable test fixtures and no production 221/291 table, Poparooz display-code list, sellable range, commerce mapping, or physical-color claim.
 
 ## Board profiles and board calculation
 

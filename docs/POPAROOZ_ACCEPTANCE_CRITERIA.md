@@ -33,6 +33,8 @@ Phase 0 is **Accepted with follow-up** because externally verified Remote state,
 
 Phase 1 requires a configured React/TypeScript/Vite baseline, reproducible dependency installation, build/type/lint/unit checks, runtime-validated domain schemas, labeled fixtures, palette import validation, deterministic image/color pipeline, CIEDE2000 reference tests, stable tie tests, Worker cancellation and parity tests, exact counts/layout tests, performance/memory evidence on representative devices, and no full workspace UI. Palette acceptance also requires strict separation of internal reference fields from Poparooz display fields, independent normalized uniqueness for both code systems, a strict Public Palette Schema, an explicit whitelist mapper, and serialization tests proving no internal reference name or field reaches the public model.
 
+P1-A03 palette-import acceptance requires a frozen exact header with explicit order/case policy, separate strict metadata, standards-compliant BOM/LF/CRLF/quoted-field parsing, unambiguous primitive conversion, final reuse of both Domain schemas, actual row/column errors, distinguishable duplicate-code errors, multi-error aggregation, synthetic non-production fixtures outside the frontend bundle, a read-only offline CLI with tested exit codes, and explicit rejection of visual charts as production data sources.
+
 Production data is not required to test the algorithm core, but fixture boundaries must be visible in file names, code, and UI paths. No fixture may ship as a production palette or board default.
 
 ## Phase 2 gate

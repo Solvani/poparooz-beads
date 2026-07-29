@@ -8,6 +8,8 @@ Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SO
 
 Public presentation authority: [`POPAROOZ_PUBLIC_BRANDING_CONTRACT.md`](POPAROOZ_PUBLIC_BRANDING_CONTRACT.md)
 
+Offline import authority: [`POPAROOZ_PALETTE_IMPORT_CONTRACT.md`](POPAROOZ_PALETTE_IMPORT_CONTRACT.md)
+
 Runtime implementation: [`../src/domain/palette/`](../src/domain/palette/)
 
 ## Internal-only purpose
@@ -129,3 +131,7 @@ physical, and public-brand claims distinct.
 
 Until those conditions pass, neither internal reference values nor the test
 display fields are production palette data.
+
+Canonical CSV parsing, metadata envelopes, primitive conversions, file-row
+errors, and the validation CLI are owned by the Palette Import Contract. The
+Import Tool must call these Domain schemas and may not duplicate their rules.

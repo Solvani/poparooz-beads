@@ -1,0 +1,3 @@
+reference_system,reference_code,reference_name,reference_series,display_code,display_name,hex,rgb_r,rgb_g,rgb_b,lab_l,lab_a,lab_b,is_active,is_sellable,is_special_finish,finish_type,is_auto_match_enabled,product_handle,variant_id,pack_size,sort_order,source_version,verified_at
+MARD,TEST-REF-DISPLAY-A,Internal One,FIXTURE,POP-TEST-DUP,Test Red,#FF0000,255,0,0,53.24,80.09,67.20,true,true,false,,true,,,,0,test-v1,
+MARD,TEST-REF-DISPLAY-B,Internal Two,FIXTURE," pop-test-dup ",Test Green,#008000,0,128,0,46.23,-51.70,49.90,true,true,false,,true,,,,1,test-v1,

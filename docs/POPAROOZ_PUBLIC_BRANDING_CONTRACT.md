@@ -8,6 +8,8 @@ Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SO
 
 Internal palette authority: [`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md)
 
+Offline import authority: [`POPAROOZ_PALETTE_IMPORT_CONTRACT.md`](POPAROOZ_PALETTE_IMPORT_CONTRACT.md)
+
 ## Public brand rule
 
 Poparooz is the only customer-visible brand for the generator. Customer-facing
@@ -103,6 +105,11 @@ The palette barrel exposes two explicit namespaces: `internalPalette` for
 import/matching/audit work and `publicPalette` for customer presentation. Future
 customer modules import `publicPalette`; fixtures are exported by neither
 namespace.
+
+The offline palette importer may construct the internal model from canonical
+structured source files, but its success output remains internal. Import
+validation never makes a palette customer-visible and never bypasses the Public
+Presentation API.
 
 ## Leakage tests
 

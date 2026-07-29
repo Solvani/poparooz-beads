@@ -21,7 +21,7 @@ Deliverable: documentation only. No production generator runtime.
 - [x] P1-A01: frontend baseline and engineering checks.
 - [x] P1-A02: domain schemas and runtime validation.
 - [x] P1-A02.1: internal reference-system and Poparooz customer-visible branding isolation.
-- P1-A03: clearly labeled MARD test fixture and import validation.
+- [x] P1-A03: canonical offline palette files, clearly labeled synthetic fixtures, and import validation.
 - P1-A04: image decode, orientation, transparency, fit, and scaling pipeline.
 - P1-A05: sRGB, XYZ D65, and Lab conversion.
 - P1-A06: CIEDE2000 and deterministic tie-breaker.
@@ -94,4 +94,4 @@ Phase 1 algorithm foundation may proceed without real palette or board data only
 
 ## Recommended next task
 
-After P1-A02.1 acceptance, perform P1-A03 only: create the clearly labeled internal-reference import test fixture and import validation without introducing a production palette, production Poparooz display-code list, color algorithms, image processing, Worker, Canvas, or full UI. All future customer-visible consumers must use the Public Presentation Model. Before choosing production defaults, request the supplier, inventory, board, Shopify, browser, Vercel, and domain facts listed above.
+After P1-A03 acceptance, perform P1-A04 only: implement image input/decode, orientation, transparency, fit, and scaling with synthetic fixtures. Do not pull forward RGB/XYZ/Lab conversion, color distance, quantization, Worker, Canvas, full UI, export, Shopify, or deployment. Before choosing production defaults, request the supplier, inventory, board, Shopify, browser, Vercel, and domain facts listed above.

@@ -1,0 +1,9 @@
+{
+  "id": "test-palette-not-production",
+  "referenceSystem": "MARD",
+  "displayBrand": "Poparooz",
+  "name": "Synthetic Test Palette Not Production",
+  "version": "test-v1",
+  "sourceType": "reference",
+  "verifiedAt": null
+}

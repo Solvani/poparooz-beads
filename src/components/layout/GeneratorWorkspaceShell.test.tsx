@@ -52,4 +52,17 @@ describe("GeneratorWorkspaceShell", () => {
       view.getByText("Your pattern details will appear here."),
     ).toBeInTheDocument();
   });
+
+  it("replaces only the Canvas empty state with supplied preview content", () => {
+    const view = render(
+      <GeneratorWorkspaceShell canvasContent={<p>Public pattern preview</p>} />,
+    );
+    expect(view.getByText("Public pattern preview")).toBeInTheDocument();
+    expect(
+      view.queryByText("Upload an image and generate a pattern to begin."),
+    ).toBeNull();
+    expect(
+      view.getByText("Your pattern details will appear here."),
+    ).toBeInTheDocument();
+  });
 });

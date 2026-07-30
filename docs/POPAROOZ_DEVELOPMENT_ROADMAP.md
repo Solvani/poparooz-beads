@@ -42,7 +42,7 @@ UI direction: **Poparooz Guided Canvas Commerce**. Design system: **Poparooz Cra
 - [x] P2-I02: Design Tokens, semantic App Shell, and responsive layout skeleton.
 - [x] P2-I03: local upload, original-image preview, Object URL lifecycle, and settings panel.
 - [x] P2-I04: generation, Abort, error, dirty, and regeneration state flow.
-- [ ] P2-I05: Pattern Canvas, zoom, grid, and fit.
+- [x] P2-I05: Pattern Canvas, zoom, grid, and fit.
 - [ ] P2-I06: public color, bead-count, summary, and board-layout results.
 - [ ] P2-I07: disabled-to-accepted action flow and customer journey completion.
 - [ ] P2-I08: mobile Bottom Sheet and tablet layout.
@@ -109,6 +109,10 @@ Track and resolve as early as possible:
 Phase 1 algorithm foundation may proceed without real palette or board data only with labeled test fixtures. Supplier values, sellable colors, commerce mappings, physical board defaults, and physical-color claims block production release, not isolated fixture-based engineering.
 
 ## Recommended next task
+
+Current recommendation after accepted P2-I05: perform P2-I06 only—render customer-safe public color and bead-count results, material summary, and board-layout results from `PublicPatternResult`. Do not add downloads, Shopify/Get Beads behavior, Bottom Sheet, Original/Pattern comparison, editing, production data, or later tasks.
+
+P2-I05 completed the Public Pattern-only Canvas, raster/cache path, Fit/Zoom/Grid controls, bounded pointer/wheel pan, resize response, DPR clamp, accessible semantics, and last-success lifecycle integration. Automated structural/performance coverage is complete for this task; real browser visual/performance validation remains pending P2-I09. The production runtime remains unavailable.
 
 Current recommendation after accepted P2-I04: perform P2-I05 only—render the accepted Public Pattern matrix in a Pattern Canvas and add zoom, grid, and fit controls. It must not pull color/material summaries, board-layout results, downloads, Shopify, production data, or later mobile Bottom Sheet work forward. Earlier recommendations below remain historical entry records.
 

@@ -4,9 +4,30 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PublicPatternResult } from "../domain/pattern/public-pattern.types";
 import type { GenerationRuntime } from "../features/generator/generation.types";
+import { createPublicPattern } from "../features/pattern-canvas/test/pattern-result";
 import { App } from "./App";
 
-const PUBLIC_RESULT = { marker: "ready" } as unknown as PublicPatternResult;
+const PUBLIC_RESULT = createPublicPattern();
+
+function canvasContext() {
+  return {
+    createImageData: vi.fn((width: number, height: number) => ({
+      width,
+      height,
+      data: new Uint8ClampedArray(width * height * 4),
+      colorSpace: "srgb",
+    })),
+    putImageData: vi.fn(),
+    setTransform: vi.fn(),
+    clearRect: vi.fn(),
+    fillRect: vi.fn(),
+    drawImage: vi.fn(),
+    beginPath: vi.fn(),
+    moveTo: vi.fn(),
+    lineTo: vi.fn(),
+    stroke: vi.fn(),
+  } as unknown as CanvasRenderingContext2D;
+}
 
 function availableRuntime(
   tasks: readonly Promise<PublicPatternResult>[],
@@ -38,6 +59,20 @@ beforeEach(() => {
     configurable: true,
     value: vi.fn(),
   });
+  vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockImplementation(() =>
+    canvasContext(),
+  );
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({
+    x: 0,
+    y: 0,
+    top: 0,
+    left: 0,
+    right: 600,
+    bottom: 420,
+    width: 600,
+    height: 420,
+    toJSON: () => ({}),
+  } as DOMRect);
 });
 
 afterEach(() => {
@@ -155,14 +190,24 @@ describe("App", () => {
     await userEvent.click(generate);
     expect(screen.getByText("Creating your pattern…")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Abort" })).toBeEnabled();
+    expect(
+      screen.queryByRole("img", { name: /Bead pattern preview/ }),
+    ).toBeNull();
 
     await act(async () => resolveFirst(PUBLIC_RESULT));
     expect(screen.getByText("Pattern data is ready.")).toBeInTheDocument();
-    expect(document.querySelector("canvas")).toBeNull();
+    expect(
+      screen.getByRole("img", {
+        name: "Bead pattern preview, 2 columns by 2 rows.",
+      }),
+    ).toBeInTheDocument();
 
     await userEvent.clear(screen.getByLabelText("Maximum Colors"));
     await userEvent.type(screen.getByLabelText("Maximum Colors"), "20");
     expect(screen.getByText("Settings changed")).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: /Bead pattern preview/ }),
+    ).toBeInTheDocument();
     const regenerate = screen.getByRole("button", {
       name: "Regenerate Pattern",
     });
@@ -172,6 +217,9 @@ describe("App", () => {
     expect(
       screen.getByText("Your previous pattern is still available."),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: /Bead pattern preview/ }),
+    ).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "Abort" }));
     expect(
@@ -179,8 +227,74 @@ describe("App", () => {
         "Pattern update stopped. Your previous pattern is still available.",
       ),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: /Bead pattern preview/ }),
+    ).toBeInTheDocument();
     await act(async () => resolveSecond(PUBLIC_RESULT));
     expect(screen.queryByText("Pattern data is ready.")).toBeNull();
+
+    await userEvent.click(screen.getByRole("button", { name: "Remove Image" }));
+    expect(
+      screen.queryByRole("img", { name: /Bead pattern preview/ }),
+    ).toBeNull();
+  });
+
+  it("fits a replacement result and retains it after a later regeneration error", async () => {
+    let resolveFirst!: (value: PublicPatternResult) => void;
+    let resolveSecond!: (value: PublicPatternResult) => void;
+    let rejectThird!: (reason: Error) => void;
+    const first = new Promise<PublicPatternResult>(
+      (resolve) => void (resolveFirst = resolve),
+    );
+    const second = new Promise<PublicPatternResult>(
+      (resolve) => void (resolveSecond = resolve),
+    );
+    const third = new Promise<PublicPatternResult>(
+      (_, reject) => void (rejectThird = reject),
+    );
+    render(
+      <App generationRuntime={availableRuntime([first, second, third])} />,
+    );
+    await completeInputs();
+
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await act(async () =>
+      resolveFirst(createPublicPattern(20, 20, new Uint16Array(400))),
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Zoom in" }));
+    expect(screen.getByText("125%")).toBeInTheDocument();
+
+    await userEvent.clear(screen.getByLabelText("Maximum Colors"));
+    await userEvent.type(screen.getByLabelText("Maximum Colors"), "20");
+    await userEvent.click(
+      screen.getByRole("button", { name: "Regenerate Pattern" }),
+    );
+    await act(async () =>
+      resolveSecond(createPublicPattern(10, 5, new Uint16Array(50))),
+    );
+    expect(
+      screen.getByRole("img", {
+        name: "Bead pattern preview, 10 columns by 5 rows.",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("100%")).toBeInTheDocument();
+
+    await userEvent.clear(screen.getByLabelText("Maximum Colors"));
+    await userEvent.type(screen.getByLabelText("Maximum Colors"), "24");
+    await userEvent.click(
+      screen.getByRole("button", { name: "Regenerate Pattern" }),
+    );
+    await act(async () =>
+      rejectThird(new Error("private regeneration detail")),
+    );
+    expect(
+      screen.getByRole("img", {
+        name: "Bead pattern preview, 10 columns by 5 rows.",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("private regeneration detail")).toBeNull();
   });
 
   it("never renders a raw injected service exception", async () => {
@@ -205,5 +319,8 @@ describe("App", () => {
     ).toBeInTheDocument();
     expect(container).not.toHaveTextContent("private");
     expect(container).not.toHaveTextContent("internal stack");
+    expect(
+      screen.queryByRole("img", { name: /Bead pattern preview/ }),
+    ).toBeNull();
   });
 });

@@ -3,11 +3,13 @@ import { useState } from "react";
 import { AppHeader } from "../components/layout/AppHeader";
 import { GeneratorWorkspaceShell } from "../components/layout/GeneratorWorkspaceShell";
 import { GenerationStatus } from "../features/generator/GenerationStatus";
+import { getLastSuccess } from "../features/generator/generator-state";
 import {
   UNAVAILABLE_GENERATION_RUNTIME,
   type GenerationRuntime,
 } from "../features/generator/generation.types";
 import { useGeneratorController } from "../features/generator/use-generator-controller";
+import { PatternCanvas } from "../features/pattern-canvas/PatternCanvas";
 import { PatternSettings } from "../features/settings/PatternSettings";
 import {
   EMPTY_PATTERN_SETTINGS,
@@ -34,6 +36,8 @@ export function App({
     settings,
     runtime: generationRuntime,
   });
+  const lastSuccess = getLastSuccess(generator.state);
+  const visiblePattern = lastSuccess?.result;
 
   const removeImage = () => {
     generator.reset();
@@ -46,6 +50,14 @@ export function App({
       <div className="page-frame">
         <GeneratorWorkspaceShell
           imageReady={image.source !== null}
+          canvasContent={
+            visiblePattern === undefined ? undefined : (
+              <PatternCanvas
+                key={lastSuccess?.snapshot.jobId}
+                pattern={visiblePattern}
+              />
+            )
+          }
           settingsContent={
             <div className="settings-region-content">
               {image.source === null ? (

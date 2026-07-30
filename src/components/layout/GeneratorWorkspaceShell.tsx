@@ -5,11 +5,13 @@ import { Panel } from "../ui/Panel";
 
 export interface GeneratorWorkspaceShellProps {
   readonly settingsContent?: ReactNode;
+  readonly canvasContent?: ReactNode;
   readonly imageReady?: boolean;
 }
 
 export function GeneratorWorkspaceShell({
   settingsContent,
+  canvasContent,
   imageReady = false,
 }: GeneratorWorkspaceShellProps) {
   return (
@@ -31,13 +33,15 @@ export function GeneratorWorkspaceShell({
         eyebrow="Pattern Canvas"
         className="workspace-shell__canvas panel--canvas"
       >
-        <div className="empty-state">
-          <p>
-            {imageReady
-              ? "Your image is ready. Generate the pattern in the next step."
-              : "Upload an image and generate a pattern to begin."}
-          </p>
-        </div>
+        {canvasContent ?? (
+          <div className="empty-state">
+            <p>
+              {imageReady
+                ? "Your image is ready. Generate the pattern in the next step."
+                : "Upload an image and generate a pattern to begin."}
+            </p>
+          </div>
+        )}
       </Panel>
 
       <Panel

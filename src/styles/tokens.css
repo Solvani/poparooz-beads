@@ -1,0 +1,67 @@
+:root {
+  --brand-50: #f1f8f6;
+  --brand-100: #e1f0ec;
+  --brand-200: #c5e1da;
+  --brand-300: #9bcbc0;
+  --brand-400: #68aa9c;
+  --brand-500: #43877a;
+  --brand-600: #2f6f64;
+  --brand-700: #245a52;
+  --brand-800: #204942;
+  --brand-900: #1d3d38;
+
+  --page-background: #f7f6f2;
+  --surface-primary: #ffffff;
+  --surface-secondary: #f3f4f1;
+  --surface-tertiary: #ecefea;
+
+  --text-primary: #1f2926;
+  --text-secondary: #56615d;
+  --text-tertiary: #77817d;
+  --text-disabled: #a1aaa6;
+
+  --border-default: #d9deda;
+  --border-strong: #bbc4bf;
+  --border-subtle: #e8ebe8;
+
+  --success: #247451;
+  --success-background: #e9f6ef;
+  --warning: #9a6700;
+  --warning-background: #fff4d6;
+  --danger: #b42318;
+  --danger-background: #fdecea;
+  --info: #3567a8;
+  --info-background: #ebf3fc;
+  --accent: #e9785c;
+  --accent-soft: #fcece7;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  --radius-small: 8px;
+  --radius-medium: 12px;
+  --radius-large: 16px;
+  --radius-extra-large: 20px;
+  --radius-pill: 999px;
+
+  --shadow-small: 0 1px 2px rgba(31, 41, 38, 0.06);
+  --shadow-medium: 0 6px 20px rgba(31, 41, 38, 0.08);
+  --shadow-large: 0 18px 50px rgba(31, 41, 38, 0.12);
+
+  --duration-fast: 120ms;
+  --duration-standard: 180ms;
+  --duration-panel: 240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  --control-height-desktop: 44px;
+  --control-height-mobile: 48px;
+  --minimum-touch-target: 44px;
+}

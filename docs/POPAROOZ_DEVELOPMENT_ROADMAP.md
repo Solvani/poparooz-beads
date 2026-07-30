@@ -28,11 +28,28 @@ Deliverable: documentation only. No production generator runtime.
 - [x] P1-A07: deterministic quantization and maximum colors.
 - [x] P1-A08: versioned Web Worker protocol, Transferable ownership, cancellation, supersede, and stale-result rejection.
 - [x] P1-A09: eligible-palette mapping, merged pattern matrix, exact material/package counts, and complete-matrix board layout.
-- P1-A10: end-to-end performance benchmark, real-browser evidence, and Phase 1 final audit/freeze.
+- [x] P1-A10: end-to-end performance benchmark, browser evidence preparation, and Phase 1 final audit/freeze.
 
 Phase 1 does not build the complete workspace UI. Missing real palette/board data may be represented only by unmistakable test fixtures.
 
 ## Phase 2 — MVP workspace
+
+UI direction: **Poparooz Guided Canvas Commerce**. Design system: **Poparooz Craft UI v1**.
+
+- [x] P2-D01: desktop and mobile UI direction selection.
+- [x] P2-D02: design-system and responsive-layout freeze.
+- [x] P2-I01: repository baseline and UI implementation plan.
+- [x] P2-I02: Design Tokens, semantic App Shell, and responsive layout skeleton.
+- [ ] P2-I03: upload, original-image preview, and settings panel.
+- [ ] P2-I04: generation, Abort, error, dirty, and regeneration state flow.
+- [ ] P2-I05: Pattern Canvas, zoom, grid, and fit.
+- [ ] P2-I06: public color, bead-count, summary, and board-layout results.
+- [ ] P2-I07: disabled-to-accepted action flow and customer journey completion.
+- [ ] P2-I08: mobile Bottom Sheet and tablet layout.
+- [ ] P2-I09: accessibility, compatibility, performance, and full regression.
+- [ ] P2-I10: Phase 2 final audit and freeze.
+
+The older capability list below remains a product-scope crosswalk. The P2-I task sequence above controls implementation order.
 
 - P2-A01: upload/start page.
 - P2-A02: settings panel and validation.
@@ -92,5 +109,7 @@ Track and resolve as early as possible:
 Phase 1 algorithm foundation may proceed without real palette or board data only with labeled test fixtures. Supplier values, sellable colors, commerce mappings, physical board defaults, and physical-color claims block production release, not isolated fixture-based engineering.
 
 ## Recommended next task
+
+Current recommendation after accepted P2-I02: perform P2-I03 only—upload, original preview, and settings. Do not pull generation, Worker orchestration, Canvas, results, export, Shopify, or production data forward. The historical recommendation below records the earlier Phase 2 entry gate.
 
 P1-A10 is complete and Phase 1 is frozen. Real browser/mobile validation remains documented follow-up, not a passed claim. Before Phase 2 implementation, present 3–5 distinct desktop/mobile UI approaches with trade-offs and obtain explicit user selection. Formal palette and physical-board production acceptance remain blocked until verified data is supplied.

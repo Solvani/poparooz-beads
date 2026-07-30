@@ -1,0 +1,272 @@
+.app-root {
+  min-height: 100vh;
+  container-name: poparooz-app;
+  container-type: inline-size;
+}
+
+.app-header {
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface-primary);
+}
+
+.app-header__inner,
+.page-frame {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+.app-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  align-items: center;
+  justify-content: space-between;
+  min-height: 72px;
+  padding-block: var(--space-3);
+}
+
+.app-header__identity {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+}
+
+.app-header__wordmark {
+  color: var(--brand-800);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.app-header__product {
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+.app-header__privacy {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.page-frame {
+  padding-block: var(--space-4) var(--space-8);
+}
+
+.workspace-shell {
+  display: grid;
+  grid-template-areas:
+    "settings"
+    "canvas"
+    "results"
+    "mobile-entry";
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.workspace-shell__settings {
+  grid-area: settings;
+}
+
+.workspace-shell__canvas {
+  grid-area: canvas;
+  min-width: 0;
+}
+
+.workspace-shell__results {
+  grid-area: results;
+}
+
+.workspace-shell__mobile-entry {
+  grid-area: mobile-entry;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.panel {
+  min-width: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-large);
+  background: var(--surface-primary);
+  box-shadow: var(--shadow-small);
+}
+
+.panel--canvas {
+  min-height: 420px;
+}
+
+.panel__eyebrow {
+  margin: 0 0 var(--space-2);
+  color: var(--brand-700);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.panel__title {
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.3;
+}
+
+.panel__body {
+  margin-top: var(--space-4);
+  color: var(--text-secondary);
+}
+
+.panel__body > :first-child {
+  margin-top: 0;
+}
+
+.panel__body > :last-child {
+  margin-bottom: 0;
+}
+
+.empty-state {
+  display: grid;
+  min-height: 240px;
+  place-content: center;
+  padding: var(--space-6);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-medium);
+  background: var(--surface-secondary);
+  text-align: center;
+}
+
+.summary-section + .summary-section {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.summary-section h3 {
+  margin: 0 0 var(--space-2);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+}
+
+.summary-section p {
+  margin: 0;
+}
+
+.action-placeholder {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.action-placeholder__note {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.button {
+  display: inline-flex;
+  min-width: var(--minimum-touch-target);
+  min-height: var(--control-height-mobile);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-medium);
+  font-weight: 700;
+  transition:
+    background-color var(--duration-standard) var(--ease-standard),
+    border-color var(--duration-standard) var(--ease-standard),
+    color var(--duration-standard) var(--ease-standard);
+}
+
+.button--primary {
+  color: white;
+  background: var(--brand-600);
+}
+
+.button--secondary {
+  color: var(--brand-800);
+  border-color: var(--brand-300);
+  background: var(--brand-50);
+}
+
+.button--tertiary {
+  color: var(--brand-700);
+  background: transparent;
+}
+
+.button:disabled {
+  color: var(--text-disabled);
+  border-color: var(--border-default);
+  background: var(--surface-tertiary);
+  cursor: not-allowed;
+}
+
+@container poparooz-app (min-width: 768px) {
+  .app-header__inner,
+  .page-frame {
+    padding-inline: var(--space-6);
+  }
+
+  .workspace-shell {
+    gap: var(--space-5);
+  }
+
+  .button {
+    min-height: var(--control-height-desktop);
+  }
+}
+
+@container poparooz-app (min-width: 1100px) {
+  .workspace-shell {
+    grid-template-areas: "settings canvas results";
+    grid-template-columns: 280px minmax(0, 1fr) 300px;
+    gap: 16px;
+  }
+
+  .workspace-shell__mobile-entry {
+    display: none;
+  }
+}
+
+@container poparooz-app (min-width: 1440px) {
+  .workspace-shell {
+    grid-template-columns: 320px minmax(560px, 1fr) 340px;
+    gap: 20px;
+  }
+}
+
+@supports not (container-type: inline-size) {
+  @media (min-width: 768px) {
+    .app-header__inner,
+    .page-frame {
+      padding-inline: var(--space-6);
+    }
+
+    .button {
+      min-height: var(--control-height-desktop);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .workspace-shell {
+      grid-template-areas: "settings canvas results";
+      grid-template-columns: 280px minmax(0, 1fr) 300px;
+      gap: 16px;
+    }
+
+    .workspace-shell__mobile-entry {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .workspace-shell {
+      grid-template-columns: 320px minmax(560px, 1fr) 340px;
+      gap: 20px;
+    }
+  }
+}

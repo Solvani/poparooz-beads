@@ -2,9 +2,9 @@
 
 Status: **Phase 0 frozen baseline**
 
-Baseline version: **1.3**
+Baseline version: **1.4**
 
-Last reviewed: **2026-07-29**
+Last reviewed: **2026-07-30**
 
 ## Authority
 
@@ -75,6 +75,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md`](POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md): deployment boundary, iframe lifecycle, origins, resize, CSP, sandbox, full-screen fallback, and deferred cart bridge.
 - [`POPAROOZ_DEVELOPMENT_ROADMAP.md`](POPAROOZ_DEVELOPMENT_ROADMAP.md): phased delivery plan and entry dependencies.
 - [`POPAROOZ_ACCEPTANCE_CRITERIA.md`](POPAROOZ_ACCEPTANCE_CRITERIA.md): acceptance gates for Phase 0 and later phases.
+- [`POPAROOZ_CRAFT_UI_V1_CONTRACT.md`](POPAROOZ_CRAFT_UI_V1_CONTRACT.md): authoritative Phase 2 Design Tokens, responsive layout, semantic shell, accessibility, and customer-visible UI boundary.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
 
@@ -92,9 +93,9 @@ Phase 0 explicitly excludes implementation of image upload, a Canvas workspace, 
 
 ## Current implementation status
 
-Phase 1 tasks P1-A01 through P1-A09 are implemented and independently reviewed. P1-A08 runs the accepted P1-A07 whole-image quantizer only in a native module Worker through protocol version 1. P1-A09 synchronously maps that result through accepted palette matching into a merged pattern matrix, exact materials, complete-matrix board tiles, and a Poparooz-only public result. There is no synchronous main-thread re-quantization, Worker protocol extension, or fake progress.
+Phase 1 tasks P1-A01 through P1-A10 are implemented, reviewed, and frozen. P1-A08 runs the accepted P1-A07 whole-image quantizer only in a native module Worker through protocol version 1. P1-A09 synchronously maps that result through accepted palette matching into a merged pattern matrix, exact materials, complete-matrix board tiles, and a Poparooz-only public result. P1-A10 records the Yellow performance classification, Worker Decision C, full regression, and final audit. There is no synchronous main-thread re-quantization, Worker protocol extension, or fake progress.
 
-P1-A10 and later work remain unimplemented: no performance/device acceptance, production palette, verified physical board, Canvas workspace, customer UI, export, Shopify integration, or deployment is present. Production palette and board truth remain unresolved dependencies.
+P2-D01 and P2-D02 selected **Poparooz Guided Canvas Commerce** and froze **Poparooz Craft UI v1**. P2-I01 completed the repository and UI implementation plan. P2-I02 establishes only the Design Tokens, semantic App Header, empty three-region workspace, and responsive shell. It adds no upload, generation, Canvas drawing, production palette, verified physical board, export, Shopify integration, or deployment. Production palette and board truth remain unresolved dependencies.
 
 ## Data truth boundary
 
@@ -126,5 +127,9 @@ No upstream project, Fork relationship, LICENSE, or third-party dependency is pr
 Before implementation begins, read this file and every formal document relevant to the task. A task must remain within one accepted roadmap stage, include tests proportionate to its risk, and pass that stage's acceptance gate. Unknown supplier, board, Shopify, browser-support, domain, or deployment facts remain tracked dependencies rather than guessed defaults.
 
 ## Phase 1 freeze
+
+Current status: P2-D01/P2-D02 selected the UI direction and design system, P2-I01 completed planning, and P2-I02 establishes only the accepted static UI shell. Later Phase 2 behavior remains gated by its individual tasks.
+
+Historical Phase 2 entry condition recorded at the Phase 1 freeze:
 
 P1-A01 through P1-A10 are complete and the Phase 1 computation foundation is frozen under [`POPAROOZ_PHASE_1_COMPLETION_AND_FREEZE.md`](POPAROOZ_PHASE_1_COMPLETION_AND_FREEZE.md). Overall performance is Yellow and Pattern Assembly Worker Decision is C pending representative browser/mobile evidence. Phase 2 is not started; before any UI implementation, 3–5 desktop/mobile approaches must be presented and the user must explicitly select one.

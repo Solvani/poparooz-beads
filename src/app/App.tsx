@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { AppHeader } from "../components/layout/AppHeader";
 import { GeneratorWorkspaceShell } from "../components/layout/GeneratorWorkspaceShell";
+import { PatternActions } from "../features/actions/PatternActions";
+import { toPatternActionState } from "../features/actions/pattern-action-state";
 import { GenerationStatus } from "../features/generator/GenerationStatus";
 import { getLastSuccess } from "../features/generator/generator-state";
 import {
@@ -39,6 +41,7 @@ export function App({
   });
   const lastSuccess = getLastSuccess(generator.state);
   const visiblePattern = lastSuccess?.result;
+  const patternActionState = toPatternActionState(generator.state);
 
   const removeImage = () => {
     generator.reset();
@@ -51,6 +54,7 @@ export function App({
       <div className="page-frame">
         <GeneratorWorkspaceShell
           imageReady={image.source !== null}
+          actionsContent={<PatternActions state={patternActionState} />}
           canvasContent={
             visiblePattern === undefined ? undefined : (
               <PatternCanvas

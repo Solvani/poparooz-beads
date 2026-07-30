@@ -97,6 +97,17 @@ describe("App", () => {
     expect(
       screen.getByText("Your pattern details will appear here."),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("region", { name: "Pattern Options" }),
+    ).toHaveTextContent(
+      "Create a pattern to access download and bead options.",
+    );
+    expect(
+      screen.getByRole("button", { name: "Download Pattern" }),
+    ).toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: "Get Beads for This Pattern" }),
+    ).toBeDisabled();
   });
 
   it("contains no synthetic pattern values or internal customer-forbidden fields", () => {
@@ -193,6 +204,14 @@ describe("App", () => {
     expect(
       screen.queryByRole("img", { name: /Bead pattern preview/ }),
     ).toBeNull();
+    expect(
+      screen.getByRole("region", { name: "Pattern Options" }),
+    ).toHaveTextContent(
+      "Create a pattern to access download and bead options.",
+    );
+    expect(
+      screen.queryByText("These actions apply to your previous pattern."),
+    ).toBeNull();
 
     await act(async () => resolveFirst(PUBLIC_RESULT));
     expect(screen.getByText("Pattern data is ready.")).toBeInTheDocument();
@@ -207,12 +226,20 @@ describe("App", () => {
     expect(screen.getByText("2 × 2")).toBeInTheDocument();
     expect(screen.getByText("3")).toBeInTheDocument();
     expect(screen.getAllByText("1 board")).toHaveLength(2);
+    expect(
+      screen.getByRole("region", { name: "Pattern Options" }),
+    ).toHaveTextContent(
+      "Download and bead options are not available in this preview.",
+    );
 
     await userEvent.clear(screen.getByLabelText("Maximum Colors"));
     await userEvent.type(screen.getByLabelText("Maximum Colors"), "20");
     expect(screen.getByText("Settings changed")).toBeInTheDocument();
     expect(
       screen.getByText("These details belong to your previous pattern."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("These actions apply to your previous pattern."),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("img", { name: /Bead pattern preview/ }),
@@ -232,6 +259,11 @@ describe("App", () => {
       ),
     ).toBeInTheDocument();
     expect(
+      screen.getByText(
+        "Your previous pattern remains available while the update is processing.",
+      ),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("img", { name: /Bead pattern preview/ }),
     ).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Abort" }));
@@ -243,6 +275,11 @@ describe("App", () => {
     expect(
       screen.getByText(
         "Pattern update stopped. These previous pattern details remain available.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Pattern update stopped. These actions still apply to your previous pattern.",
       ),
     ).toBeInTheDocument();
     expect(
@@ -258,6 +295,12 @@ describe("App", () => {
     expect(
       screen.queryByRole("heading", { name: "Pattern Summary" }),
     ).toBeNull();
+    expect(
+      screen.getByRole("region", { name: "Pattern Options" }),
+    ).toHaveTextContent(
+      "Create a pattern to access download and bead options.",
+    );
+    expect(screen.queryByText(/These actions (apply|still apply)/)).toBeNull();
   });
 
   it("fits a replacement result and retains it after a later regeneration error", async () => {
@@ -323,6 +366,11 @@ describe("App", () => {
         "Pattern update failed. These previous pattern details remain available.",
       ),
     ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Pattern update failed. These actions still apply to your previous pattern.",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("never renders a raw injected service exception", async () => {
@@ -353,6 +401,11 @@ describe("App", () => {
     expect(
       screen.queryByRole("heading", { name: "Pattern Summary" }),
     ).toBeNull();
+    expect(
+      screen.getByRole("region", { name: "Pattern Options" }),
+    ).toHaveTextContent(
+      "Create a pattern to access download and bead options.",
+    );
   });
 
   it("never shows packaging, pricing, Shopify, or internal result fields", async () => {
@@ -394,6 +447,41 @@ describe("App", () => {
     ).toBeDisabled();
   });
 
+  it("keeps both pattern actions inert after a successful customer flow", async () => {
+    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    const storageSpy = vi.spyOn(Storage.prototype, "setItem");
+    const anchorClickSpy = vi.spyOn(HTMLAnchorElement.prototype, "click");
+    const openSpy = vi.spyOn(window, "open");
+    const pushStateSpy = vi.spyOn(history, "pushState");
+    const replaceStateSpy = vi.spyOn(history, "replaceState");
+    render(
+      <App
+        generationRuntime={availableRuntime([Promise.resolve(PUBLIC_RESULT)])}
+      />,
+    );
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await screen.findByRole("heading", { name: "Pattern Summary" });
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Download Pattern" }),
+    );
+    await userEvent.click(
+      screen.getByRole("button", { name: "Get Beads for This Pattern" }),
+    );
+
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(storageSpy).not.toHaveBeenCalled();
+    expect(anchorClickSpy).not.toHaveBeenCalled();
+    expect(openSpy).not.toHaveBeenCalled();
+    expect(pushStateSpy).not.toHaveBeenCalled();
+    expect(replaceStateSpy).not.toHaveBeenCalled();
+    expect(URL.createObjectURL).toHaveBeenCalledTimes(1);
+    expect(document.querySelector("a[download]")).toBeNull();
+  });
+
   it("keeps a valid Canvas and Generator success when only the results view is invalid", async () => {
     const result = createPublicPattern();
     const runtime = availableRuntime([
@@ -433,5 +521,10 @@ describe("App", () => {
       screen.queryByRole("heading", { name: "Pattern Summary" }),
     ).toBeNull();
     expect(screen.queryByText("POP-RED")).toBeNull();
+    expect(
+      screen.getByRole("region", { name: "Pattern Options" }),
+    ).toHaveTextContent(
+      "Create a pattern to access download and bead options.",
+    );
   });
 });

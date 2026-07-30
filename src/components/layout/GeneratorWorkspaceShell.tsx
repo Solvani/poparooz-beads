@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 
-import { Button } from "../ui/Button";
 import { Panel } from "../ui/Panel";
 
 export interface GeneratorWorkspaceShellProps {
   readonly settingsContent?: ReactNode;
   readonly canvasContent?: ReactNode;
   readonly resultsContent?: ReactNode;
+  readonly actionsContent?: ReactNode;
   readonly imageReady?: boolean;
 }
 
@@ -14,6 +14,7 @@ export function GeneratorWorkspaceShell({
   settingsContent,
   canvasContent,
   resultsContent,
+  actionsContent,
   imageReady = false,
 }: GeneratorWorkspaceShellProps) {
   return (
@@ -75,16 +76,7 @@ export function GeneratorWorkspaceShell({
             </section>
           </>
         )}
-        <section
-          className="summary-section action-placeholder"
-          aria-label="Future actions"
-        >
-          <Button disabled>Download Pattern</Button>
-          <Button disabled variant="secondary">
-            Get Beads for This Pattern
-          </Button>
-          <p className="action-placeholder__note">Coming later</p>
-        </section>
+        {actionsContent}
       </Panel>
 
       <div className="workspace-shell__mobile-entry" aria-hidden="true">

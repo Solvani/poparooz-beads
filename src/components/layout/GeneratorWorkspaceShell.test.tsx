@@ -22,16 +22,16 @@ describe("GeneratorWorkspaceShell", () => {
     ).toHaveClass("workspace-shell__results");
   });
 
-  it("keeps future actions natively disabled", () => {
-    const view = render(<GeneratorWorkspaceShell />);
+  it("accepts a dedicated actions region without owning action behavior", () => {
+    const view = render(
+      <GeneratorWorkspaceShell
+        actionsContent={<section aria-label="Pattern Options">Actions</section>}
+      />,
+    );
 
     expect(
-      view.getByRole("button", { name: "Download Pattern" }),
-    ).toBeDisabled();
-    expect(
-      view.getByRole("button", { name: "Get Beads for This Pattern" }),
-    ).toBeDisabled();
-    expect(view.getByText("Coming later")).toBeInTheDocument();
+      view.getByRole("region", { name: "Pattern Options" }),
+    ).toHaveTextContent("Actions");
   });
 
   it("accepts Settings content and reports only image readiness to the empty Canvas", () => {
@@ -66,9 +66,12 @@ describe("GeneratorWorkspaceShell", () => {
     ).toBeInTheDocument();
   });
 
-  it("replaces result placeholders while keeping future actions disabled", () => {
+  it("replaces result placeholders while retaining supplied actions", () => {
     const view = render(
-      <GeneratorWorkspaceShell resultsContent={<p>Public result details</p>} />,
+      <GeneratorWorkspaceShell
+        resultsContent={<p>Public result details</p>}
+        actionsContent={<p>Stable actions</p>}
+      />,
     );
     expect(view.getByText("Public result details")).toBeInTheDocument();
     expect(
@@ -77,11 +80,6 @@ describe("GeneratorWorkspaceShell", () => {
     expect(
       view.queryByText("Color quantities will appear after generation."),
     ).toBeNull();
-    expect(
-      view.getByRole("button", { name: "Download Pattern" }),
-    ).toBeDisabled();
-    expect(
-      view.getByRole("button", { name: "Get Beads for This Pattern" }),
-    ).toBeDisabled();
+    expect(view.getByText("Stable actions")).toBeInTheDocument();
   });
 });

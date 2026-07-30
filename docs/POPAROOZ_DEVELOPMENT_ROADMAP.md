@@ -44,7 +44,7 @@ UI direction: **Poparooz Guided Canvas Commerce**. Design system: **Poparooz Cra
 - [x] P2-I04: generation, Abort, error, dirty, and regeneration state flow.
 - [x] P2-I05: Pattern Canvas, zoom, grid, and fit.
 - [x] P2-I06: public color, bead-count, summary, and board-layout results.
-- [ ] P2-I07: disabled-to-accepted action flow and customer journey completion.
+- [x] P2-I07: disabled action contract, result identity, and customer journey completion.
 - [ ] P2-I08: mobile Bottom Sheet and tablet layout.
 - [ ] P2-I09: accessibility, compatibility, performance, and full regression.
 - [ ] P2-I10: Phase 2 final audit and freeze.
@@ -110,7 +110,11 @@ Phase 1 algorithm foundation may proceed without real palette or board data only
 
 ## Recommended next task
 
-Current recommendation after accepted P2-I06: define and perform P2-I07 only—the disabled-to-accepted action flow and remaining customer-journey completion for the existing Download Pattern and Get Beads placeholders. Before enabling either action, freeze its exact output/navigation contract and supply every required verified production input. Do not introduce Shopify cart behavior, unverified package conversion, price/inventory claims, Bottom Sheet, editing, production Palette/BoardProfile assumptions, or P2-I08 work.
+Current recommendation after accepted P2-I07: perform P2-I08 only—implement the accepted mobile Bottom Sheet and tablet workspace layout around the existing flow. Preserve P2-I07 native-disabled action semantics and result identity; do not enable download or commerce, add a sticky mobile action bar, introduce pinch zoom or editing, assume production Palette/BoardProfile/package data, or pull P2-I09 validation work forward.
+
+P2-I07 completed the stable Pattern Options region, native-disabled Download Pattern and Get Beads placeholders, production capability defaults, lifecycle/result-identity mapping, responsive action layout, and the continuous local customer flow. It added no export, navigation, commerce adapter, package calculation, production data, or Bottom Sheet. The production generation runtime remains unavailable.
+
+Historical recommendation after accepted P2-I06: define and perform P2-I07 only—the disabled action contract and remaining customer-journey completion for the existing Download Pattern and Get Beads placeholders. Before enabling either action, freeze its exact output/navigation contract and supply every required verified production input. Do not introduce Shopify cart behavior, unverified package conversion, price/inventory claims, Bottom Sheet, editing, production Palette/BoardProfile assumptions, or P2-I08 work.
 
 P2-I06 completed customer-safe Pattern Summary, stable public color/bead quantities, bounded color expansion, exact small Board layouts, compressed large Board previews, responsive Results presentation, retained-result lifecycle messaging, and isolated result-view errors. Production generation remains unavailable; pack size and physical BoardProfile remain unverified.
 

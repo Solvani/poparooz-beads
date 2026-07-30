@@ -37,7 +37,7 @@ interface BoardProfile {
 
 Dimensions and bead size are positive; IDs are stable; at most one active profile is default. No competitor board size becomes a Poparooz production default. Until actual specifications are confirmed, only clearly labeled test fixtures are allowed.
 
-Board count is based on two-dimensional occupied pattern bounds, never total beads divided by board capacity:
+Board count is based on the complete two-dimensional Pattern Matrix dimensions, including transparent edge positions, never total beads divided by board capacity or an automatically cropped occupied bounding box:
 
 ```text
 horizontalBoards = ceil(patternWidth / boardColumns)
@@ -95,7 +95,7 @@ interface MaterialRequirement {
 }
 ```
 
-`beadCount` exactly equals non-null pattern cells of the internal `referenceCode`. Customer materials map each requirement through its palette color and expose only Poparooz `displayCode`, `displayName`, swatch/HEX, and exact bead count. Reserve policy is explicit and defaults to zero until approved. Pack size, required packs, handles, variant IDs, inventory, and purchasability remain absent until verified; internal handles and IDs never enter the public model or customer CSV.
+`beadCount` exactly equals non-null pattern cells of the internal `referenceCode`. Customer materials map each requirement through its palette color and expose only Poparooz display fields and exact bead count. Reserve policy is zero until separately approved. P1-A09 calculates `packsRequired = ceil(beadCount / packSize)` only when strict input data supplies a positive pack size; it invents no default. Handles, variant IDs, inventory, and purchasability remain absent; internal handles and IDs never enter the public model or customer CSV.
 
 ## Image input and processing
 
@@ -131,6 +131,8 @@ Changing fit, sampling, alpha, background, quantization, or matching behavior re
 [`POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md`](POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md) is the implementation authority for P1-A07 RGBA/options validation, Alpha empties, the 512 engineering guard, exact RGB Histogram, weighted CIELAB Median Cut, actual-entry CIEDE2000 Medoids, stable cluster/index output, invariant checks, and the no-dither baseline. Formal palette mapping and pattern/material/board output remain later tasks; Worker execution is governed separately below.
 
 [`POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md`](POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md) is the implementation authority for P1-A08 protocol version 1, strict request/response validation, exact input-copy and output-Transferable ownership, hard-terminate Abort/supersede behavior, request ID plus Worker-generation stale rejection, lazy reuse/rebuild/dispose lifecycle, and safe errors. Its Runtime is the only Worker-side caller of P1-A07; the main-thread Client performs validation/orchestration but no synchronous quantization or palette work.
+
+[`POPAROOZ_PATTERN_MATERIAL_AND_BOARD_CONTRACT.md`](POPAROOZ_PATTERN_MATERIAL_AND_BOARD_CONTRACT.md) is the implementation authority for P1-A09 explicit quantized-index mapping through P1-A06, same-reference merge, stable Pattern Color indices, full-size matrix, exact materials/packages, complete-matrix row-major board tiles, aggregate invariants, and internal-to-public whitelist mapping. It is synchronous pending P1-A10 performance evidence and does not modify the Worker protocol.
 
 For normalized sRGB component `c` in 0–1:
 

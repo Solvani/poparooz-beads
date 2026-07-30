@@ -2,7 +2,7 @@
 
 Status: **Phase 0 frozen baseline**
 
-Baseline version: **1.2**
+Baseline version: **1.3**
 
 Last reviewed: **2026-07-29**
 
@@ -70,6 +70,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_COLOR_MATCHING_CONTRACT.md`](POPAROOZ_COLOR_MATCHING_CONTRACT.md): authoritative CIEDE2000, eligible-candidate filtering, deterministic nearest-color tie-breaking, errors, and internal/public result boundary.
 - [`POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md`](POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md): authoritative Alpha threshold, exact RGB Histogram, weighted Lab Median Cut, actual-entry Medoid, no-dither, indices, counts, and deterministic output boundary.
 - [`POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md`](POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md): authoritative module Worker protocol, Transferable ownership, cancellation, supersede, stale-result rejection, lifecycle, and safe-error boundary.
+- [`POPAROOZ_PATTERN_MATERIAL_AND_BOARD_CONTRACT.md`](POPAROOZ_PATTERN_MATERIAL_AND_BOARD_CONTRACT.md): authoritative quantized-to-palette mapping, merged pattern matrix, exact materials, complete-matrix board layout, internal/public result, and invariant boundary.
 - [`POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md`](POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md): palette, board, pattern, materials, image, color, export, privacy, analytics, and message data contracts.
 - [`POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md`](POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md): deployment boundary, iframe lifecycle, origins, resize, CSP, sandbox, full-screen fallback, and deferred cart bridge.
 - [`POPAROOZ_DEVELOPMENT_ROADMAP.md`](POPAROOZ_DEVELOPMENT_ROADMAP.md): phased delivery plan and entry dependencies.
@@ -91,9 +92,9 @@ Phase 0 explicitly excludes implementation of image upload, a Canvas workspace, 
 
 ## Current implementation status
 
-Phase 1 tasks P1-A01 through P1-A08 are implemented and independently reviewed. P1-A08 runs the accepted P1-A07 whole-image quantizer only in a native module Worker through protocol version 1, explicit copied-input/output-Transferable ownership, hard terminate cancellation, last-request-wins supersede, request/generation stale-result rejection, and safe lifecycle errors. There is no synchronous main-thread quantization fallback or fake progress.
+Phase 1 tasks P1-A01 through P1-A09 are implemented and independently reviewed. P1-A08 runs the accepted P1-A07 whole-image quantizer only in a native module Worker through protocol version 1. P1-A09 synchronously maps that result through accepted palette matching into a merged pattern matrix, exact materials, complete-matrix board tiles, and a Poparooz-only public result. There is no synchronous main-thread re-quantization, Worker protocol extension, or fake progress.
 
-P1-A09 and later work remain unimplemented: no production palette import, batch palette mapping, pattern matrix, material/board totals, Canvas workspace, customer UI, export, Shopify integration, or deployment is present. Production palette and board truth remain unresolved dependencies.
+P1-A10 and later work remain unimplemented: no performance/device acceptance, production palette, verified physical board, Canvas workspace, customer UI, export, Shopify integration, or deployment is present. Production palette and board truth remain unresolved dependencies.
 
 ## Data truth boundary
 

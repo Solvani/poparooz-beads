@@ -253,4 +253,4 @@ P1-A07 QuantizedColor.lab
 
 Formal palette data and customer display codes remain unavailable and are not invented here.
 
-P1-A08 wraps this pure synchronous function under [`POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md`](POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md), with the Runtime as its only algorithm caller. P1-A09 may later combine accepted quantization and palette matching into a pattern pipeline. Neither behavior changes P1-A07's algorithm.
+P1-A08 wraps this pure synchronous function under [`POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md`](POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md), with the Runtime as its only algorithm caller. P1-A09 now consumes the returned `QuantizedImage` under [`POPAROOZ_PATTERN_MATERIAL_AND_BOARD_CONTRACT.md`](POPAROOZ_PATTERN_MATERIAL_AND_BOARD_CONTRACT.md). Pattern assembly resolves explicit color indices independently of the `colors` array order and does not change P1-A07's algorithm or output ownership.

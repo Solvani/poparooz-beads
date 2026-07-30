@@ -82,4 +82,6 @@ Worker and Client code has no fetch, XHR, WebSocket, sendBeacon, storage, analyt
 
 Vitest uses only tiny generated RGBA data and an injected Fake Worker to verify protocol, Runtime, transfer lists, byte-offset copies, hard cancellation, supersede, stale callbacks, error events, rebuilding, disposal, and output invariants. Vite must emit a separate `quantization.worker-*.js` asset; `dist` is never committed.
 
-Real Chrome, Firefox, Safari, Chrome Android, and Safari iOS remain P1-A10/P1-A11 follow-up for module loading, actual buffer detachment, termination, rapid settings changes, large-image cancellation, memory reclamation, and representative-device performance. P1-A08 does not implement palette mapping, pattern matrices, material/board totals, Canvas/UI, export, Shopify, or deployment. Those boundaries remain closed before P1-A09 acceptance.
+Real Chrome, Firefox, Safari, Chrome Android, and Safari iOS remain P1-A10 follow-up for module loading, actual buffer detachment, termination, rapid settings changes, large-image cancellation, memory reclamation, and representative-device performance.
+
+P1-A09 consumes the resolved `QuantizedImage` synchronously after the Worker Client Promise. Protocol version 1 still contains no Palette or Pattern data and adds no `GENERATE_PATTERN` message. P1-A10 performance evidence must precede any decision to move pattern assembly into a separately versioned Worker contract.

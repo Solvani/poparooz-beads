@@ -156,6 +156,8 @@ matchNearestPaletteColor
 
 The existing mapper remains the authority. It emits the fixed Poparooz brand and explicit display allowlist while excluding internal reference, source, product-handle, and variant fields. P1-A06 does not modify the mapper or add presentation fields to the matching result.
 
-## P1-A07 reuse boundary
+## P1-A07 and P1-A09 reuse boundary
 
-P1-A07 is governed by [`POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md`](POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md). It reuses `deltaE2000` only to select a real input Medoid within each quantization box; it does not call `matchNearestPaletteColor` or map representatives to a formal palette. Batch palette matching, pattern output, performance baselines, and Worker execution remain later stages.
+P1-A07 is governed by [`POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md`](POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md). It reuses `deltaE2000` only to select a real input Medoid within each quantization box.
+
+P1-A09 is governed by [`POPAROOZ_PATTERN_MATERIAL_AND_BOARD_CONTRACT.md`](POPAROOZ_PATTERN_MATERIAL_AND_BOARD_CONTRACT.md). It prepares one candidate set and calls `matchNearestPaletteColor` once for each explicit Quantized Color index, then merges winners by normalized reference key. It does not recalculate Palette Lab, duplicate CIEDE2000, broaden candidate eligibility, or expose match distance publicly.

@@ -113,6 +113,8 @@ Presentation API.
 
 P1-A06 nearest-color matching returns an internal `PaletteColor` and its numeric distance. That result is not a Public Model and must not be serialized directly. Future customer-visible consumers must pass `PaletteMatchResult.color` through the existing `toPublicPaletteColor` allowlist; distance calculation and tie-breaking do not add fields to or bypass the public mapper.
 
+P1-A09 adds `toPublicPatternResult` as a second explicit allowlist boundary. It maps internal Pattern Colors and materials through `toPublicPaletteColor`, copies only customer-useful board counts/tile geometry, and allocates an independent matrix buffer. It excludes reference/source fields, source mappings, Delta E statistics, board profile identity, supplier/commerce fields, and any third-party brand. Internal Pattern results remain non-public.
+
 ## Leakage tests
 
 The public mapper and schema tests must prove:

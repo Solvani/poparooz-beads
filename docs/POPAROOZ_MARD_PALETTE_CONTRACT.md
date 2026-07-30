@@ -115,6 +115,8 @@ The public model excludes `referenceSystem`, `referenceCode`, `referenceName`,
 Shopify variant IDs. See the Public Branding Contract for all required
 consumers and leakage tests.
 
+P1-A09 uses normalized `referenceCode` only as the internal unique merge key after strict validation. Internal Pattern Colors may retain it for calculation and audit, but `toPublicPatternResult` maps every color through `toPublicPaletteColor` and omits reference keys, source mappings, and match distances. Material and board public results therefore do not widen this boundary.
+
 ## Fixture rules
 
 P1-A02.1 fixtures use intentionally different `TEST-REF-*` internal codes and

@@ -27,9 +27,8 @@ Deliverable: documentation only. No production generator runtime.
 - [x] P1-A06: CIEDE2000 and deterministic tie-breaker.
 - [x] P1-A07: deterministic quantization and maximum colors.
 - [x] P1-A08: versioned Web Worker protocol, Transferable ownership, cancellation, supersede, and stale-result rejection.
-- P1-A09: pattern matrix and material counts.
-- P1-A10: two-dimensional board calculation.
-- P1-A11: algorithm tests, main/Worker parity, performance baseline, and phase acceptance.
+- [x] P1-A09: eligible-palette mapping, merged pattern matrix, exact material/package counts, and complete-matrix board layout.
+- P1-A10: end-to-end performance benchmark, real-browser evidence, and Phase 1 final audit/freeze.
 
 Phase 1 does not build the complete workspace UI. Missing real palette/board data may be represented only by unmistakable test fixtures.
 
@@ -94,4 +93,4 @@ Phase 1 algorithm foundation may proceed without real palette or board data only
 
 ## Recommended next task
 
-After P1-A08 total-control acceptance, perform P1-A09 only: map accepted quantized colors to eligible palette colors and produce the pattern matrix and exact material counts. Do not add board calculations, Canvas workspace, full UI, export, Shopify, or deployment. Formal palette acceptance remains blocked until verified production data is supplied; unmistakable synthetic fixtures may continue to prove engineering behavior.
+After P1-A09 total-control acceptance, perform P1-A10 only: benchmark the complete Phase 1 pipeline on representative inputs/devices, gather real Chrome/Firefox/Safari and Android/iOS evidence, decide the Pattern Assembly Worker boundary from measurements, and complete the Phase 1 audit/freeze. Do not add Canvas workspace, full UI, export, Shopify, or deployment. Formal palette and physical-board production acceptance remain blocked until verified data is supplied.

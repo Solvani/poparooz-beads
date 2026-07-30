@@ -78,3 +78,7 @@ Tests use only generated `TEST-REF-*` / `POP-TEST-*` non-production colors and a
 The allowed base complexity is `O(Q * P)` matching plus `O(N)` matrix remapping and board statistics. This synchronous pure Domain implementation is not evidence that all target devices can run it on the main thread within an acceptable budget. P1-A10 must benchmark representative sizes and decide whether a new Worker protocol version is warranted. P1-A09 does not change P1-A08 protocol version 1 or send palettes into the Worker.
 
 No formal supplier palette, Poparooz production display codes, verified physical board, UI, Canvas, PNG/CSV/PDF, Shopify, Vercel, or real-browser acceptance is implemented here.
+
+## P1-A10 freeze note
+
+Pattern Assembly remains synchronous under Worker Decision C. Its measured time includes Palette Matching and tracks that dominant cost. Exact totals, transparent positions, board layout, deterministic ordering, public mapping, and independent typed-array ownership are covered by the final integration regression.

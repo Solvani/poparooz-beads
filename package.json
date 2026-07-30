@@ -14,6 +14,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "benchmark": "node scripts/benchmarks/run-benchmark.mjs --write",
     "palette:validate": "node --experimental-strip-types scripts/palette/validate-palette.ts",
     "test": "vitest",
     "test:run": "vitest run"

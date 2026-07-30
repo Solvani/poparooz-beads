@@ -232,3 +232,7 @@ Parent requirements:
 - never execute message content as code or navigate to a message-provided URL.
 
 Production CSP `frame-ancestors` lists only the verified Shopify parent origins. Preview origins are denied by default and may be separately allowlisted only in non-production. The iframe uses the minimum sandbox tokens initially expected to be `allow-scripts allow-same-origin allow-downloads`; additions require a security decision. Fullscreen uses a deliberate `allow="fullscreen"`/full-screen attribute. Popup/new-window permission is not granted unless a later accepted flow needs it. The parent provides a full-screen fallback when embedding fails.
+
+## Phase 1 computation freeze
+
+The implemented Phase 1 chain is frozen by [`POPAROOZ_PHASE_1_COMPLETION_AND_FREEZE.md`](POPAROOZ_PHASE_1_COMPLETION_AND_FREEZE.md). P1-A10 changes no algorithm or schema. Node evidence classifies performance Yellow and selects Worker Decision C; the current quantization Worker protocol remains unchanged until representative browser/device evidence justifies a separately versioned expansion.

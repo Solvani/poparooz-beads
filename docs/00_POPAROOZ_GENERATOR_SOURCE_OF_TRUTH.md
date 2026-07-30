@@ -124,3 +124,7 @@ No upstream project, Fork relationship, LICENSE, or third-party dependency is pr
 ## Change control
 
 Before implementation begins, read this file and every formal document relevant to the task. A task must remain within one accepted roadmap stage, include tests proportionate to its risk, and pass that stage's acceptance gate. Unknown supplier, board, Shopify, browser-support, domain, or deployment facts remain tracked dependencies rather than guessed defaults.
+
+## Phase 1 freeze
+
+P1-A01 through P1-A10 are complete and the Phase 1 computation foundation is frozen under [`POPAROOZ_PHASE_1_COMPLETION_AND_FREEZE.md`](POPAROOZ_PHASE_1_COMPLETION_AND_FREEZE.md). Overall performance is Yellow and Pattern Assembly Worker Decision is C pending representative browser/mobile evidence. Phase 2 is not started; before any UI implementation, 3–5 desktop/mobile approaches must be presented and the user must explicitly select one.

@@ -85,3 +85,7 @@ Vitest uses only tiny generated RGBA data and an injected Fake Worker to verify 
 Real Chrome, Firefox, Safari, Chrome Android, and Safari iOS remain P1-A10 follow-up for module loading, actual buffer detachment, termination, rapid settings changes, large-image cancellation, memory reclamation, and representative-device performance.
 
 P1-A09 consumes the resolved `QuantizedImage` synchronously after the Worker Client Promise. Protocol version 1 still contains no Palette or Pattern data and adds no `GENERATE_PATTERN` message. P1-A10 performance evidence must precede any decision to move pattern assembly into a separately versioned Worker contract.
+
+## P1-A10 decision
+
+Worker Decision C is frozen for Phase 1: keep Pattern Assembly synchronous temporarily and retain protocol version 1. Node Large/Stress results show matching growth, but actual browser/mobile Worker, cancellation, detachment, blocking, and memory evidence is Not executed. A later Decision B requires representative user-visible blocking evidence and a separate protocol-design task.

@@ -80,3 +80,7 @@ Phase 3 requires deterministic and metadata-complete PNG/CSV output; tested down
 ## Phase 4 and Phase 5 gates
 
 Phase 4 begins only after MVP-A acceptance and keeps edits deterministic, reversible, performant, and locally private. Phase 5 begins only with verified Shopify mappings, pack and reserve policy, inventory behavior, parent-page Cart API design, partial failure behavior, and explicit commerce/privacy acceptance.
+
+## Phase 1 final acceptance
+
+P1-A01 through P1-A10 pass repository checks and are frozen. Synthetic Node benchmark evidence is reproducible; it yields overall Yellow and Pattern Assembly Worker Decision C. Browser/device rows remain Not executed and therefore do not satisfy later real-browser gates. Phase 2 cannot begin implementation until 3–5 desktop/mobile UI approaches are presented and one is explicitly selected.

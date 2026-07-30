@@ -138,3 +138,7 @@ download tasks must demonstrate that they consume the public model and contain
 no third-party brand names or icons in customer-visible output. Internal audit
 and license records remain truthful and are not constrained by presentation
 branding.
+
+## P1-A10 freeze note
+
+The final integration regression serializes the complete public result and rejects MARD, internal reference/source fields, product handles, and variant IDs. Internal reference data remains permitted only behind the mapper boundary; no customer UI, export, file name, SEO, or external response was added by P1-A10.

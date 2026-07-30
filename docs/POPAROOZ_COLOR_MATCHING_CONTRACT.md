@@ -161,3 +161,7 @@ The existing mapper remains the authority. It emits the fixed Poparooz brand and
 P1-A07 is governed by [`POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md`](POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md). It reuses `deltaE2000` only to select a real input Medoid within each quantization box.
 
 P1-A09 is governed by [`POPAROOZ_PATTERN_MATERIAL_AND_BOARD_CONTRACT.md`](POPAROOZ_PATTERN_MATERIAL_AND_BOARD_CONTRACT.md). It prepares one candidate set and calls `matchNearestPaletteColor` once for each explicit Quantized Color index, then merges winners by normalized reference key. It does not recalculate Palette Lab, duplicate CIEDE2000, broaden candidate eligibility, or expose match distance publicly.
+
+## P1-A10 freeze note
+
+Representative Node evidence confirms Palette Matching is the dominant Large/Stress computation and follows the accepted `O(Q × P)` boundary. No shortcut or cache is added. Performance remains Yellow and any Worker expansion requires later browser evidence and a separately versioned protocol.

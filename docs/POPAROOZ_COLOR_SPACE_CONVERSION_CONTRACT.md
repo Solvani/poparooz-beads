@@ -156,3 +156,7 @@ The formulas, types, errors, tests, and public API are independent of any palett
 ## P1-A06 reuse boundary
 
 P1-A06 may consume `LabColor` and `rgb8ToLab` to implement separately reviewed color-distance and deterministic nearest-color rules. It must not duplicate or silently alter this conversion chain. P1-A06 remains outside this contract and may begin only after P1-A05 acceptance.
+
+## P1-A10 freeze note
+
+The conversion implementation is unchanged and frozen for Phase 1. Deterministic Node timings for 8–256 synthetic unique colors are recorded in the P1-A10 performance evidence; they are measurements, not an SLA or browser claim.

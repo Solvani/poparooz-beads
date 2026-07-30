@@ -183,3 +183,7 @@ does not install Playwright or a native Canvas/image package. Real codec output,
 ImageBitmap orientation behavior, image-element fallback behavior, mobile
 memory, and repeated-use resource behavior remain mandatory later tests in
 target Chrome, Safari, Firefox, iOS, and Android environments.
+
+## P1-A10 evidence status
+
+The browser matrix is prepared, but all real-browser/device rows are Not executed. The P1-A10 benchmark starts from generated RGBA and therefore does not validate decoding, EXIF, Canvas, Blob URL lifecycle, or browser memory. Those requirements remain open rather than inferred from Node results.

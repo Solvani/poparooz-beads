@@ -93,4 +93,4 @@ Phase 1 algorithm foundation may proceed without real palette or board data only
 
 ## Recommended next task
 
-After P1-A09 total-control acceptance, perform P1-A10 only: benchmark the complete Phase 1 pipeline on representative inputs/devices, gather real Chrome/Firefox/Safari and Android/iOS evidence, decide the Pattern Assembly Worker boundary from measurements, and complete the Phase 1 audit/freeze. Do not add Canvas workspace, full UI, export, Shopify, or deployment. Formal palette and physical-board production acceptance remain blocked until verified data is supplied.
+P1-A10 is complete and Phase 1 is frozen. Real browser/mobile validation remains documented follow-up, not a passed claim. Before Phase 2 implementation, present 3–5 distinct desktop/mobile UI approaches with trade-offs and obtain explicit user selection. Formal palette and physical-board production acceptance remain blocked until verified data is supplied.

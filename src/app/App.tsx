@@ -2,6 +2,12 @@ import { useState } from "react";
 
 import { AppHeader } from "../components/layout/AppHeader";
 import { GeneratorWorkspaceShell } from "../components/layout/GeneratorWorkspaceShell";
+import { GenerationStatus } from "../features/generator/GenerationStatus";
+import {
+  UNAVAILABLE_GENERATION_RUNTIME,
+  type GenerationRuntime,
+} from "../features/generator/generation.types";
+import { useGeneratorController } from "../features/generator/use-generator-controller";
 import { PatternSettings } from "../features/settings/PatternSettings";
 import {
   EMPTY_PATTERN_SETTINGS,
@@ -11,11 +17,28 @@ import { ImagePreview } from "../features/upload/ImagePreview";
 import { ImageUpload } from "../features/upload/ImageUpload";
 import { useImageSource } from "../features/upload/use-image-source";
 
-export function App() {
+export interface AppProps {
+  readonly generationRuntime?: GenerationRuntime;
+}
+
+export function App({
+  generationRuntime = UNAVAILABLE_GENERATION_RUNTIME,
+}: AppProps) {
   const image = useImageSource();
   const [settings, setSettings] = useState<PatternSettingsDraft>(
     EMPTY_PATTERN_SETTINGS,
   );
+  const generator = useGeneratorController({
+    file: image.source?.file ?? null,
+    imageVersion: image.revision,
+    settings,
+    runtime: generationRuntime,
+  });
+
+  const removeImage = () => {
+    generator.reset();
+    image.removeImage();
+  };
 
   return (
     <div className="app-root">
@@ -35,7 +58,7 @@ export function App() {
                   <ImagePreview
                     source={image.source}
                     onReplace={image.selectFiles}
-                    onRemove={image.removeImage}
+                    onRemove={removeImage}
                   />
                   {image.error ? (
                     <p className="form-error" role="alert" aria-live="polite">
@@ -44,7 +67,20 @@ export function App() {
                   ) : null}
                 </>
               )}
-              <PatternSettings value={settings} onChange={setSettings} />
+              <PatternSettings
+                value={settings}
+                onChange={setSettings}
+                generationControls={
+                  <GenerationStatus
+                    state={generator.state}
+                    availability={generator.availability}
+                    canGenerate={generator.canGenerate}
+                    canRegenerate={generator.canRegenerate}
+                    onGenerate={generator.generate}
+                    onAbort={generator.abort}
+                  />
+                }
+              />
             </div>
           }
         />

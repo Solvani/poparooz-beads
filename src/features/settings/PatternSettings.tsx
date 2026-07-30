@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import { Button } from "../../components/ui/Button";
 import { MAX_TARGET_DIMENSION, MIN_TARGET_DIMENSION } from "../../domain/image";
 import { MAX_QUANTIZATION_COLORS } from "../../domain/quantization/quantization-options";
@@ -7,9 +9,14 @@ import { validatePatternSettings } from "./settings-validation";
 export interface PatternSettingsProps {
   readonly value: PatternSettingsDraft;
   readonly onChange: (value: PatternSettingsDraft) => void;
+  readonly generationControls?: ReactNode;
 }
 
-export function PatternSettings({ value, onChange }: PatternSettingsProps) {
+export function PatternSettings({
+  value,
+  onChange,
+  generationControls,
+}: PatternSettingsProps) {
   const validation = validatePatternSettings(value);
   const errors = validation.valid ? {} : validation.errors;
 
@@ -78,12 +85,16 @@ export function PatternSettings({ value, onChange }: PatternSettingsProps) {
           Transparent
         </label>
       </fieldset>
-      <Button className="generate-placeholder" disabled>
-        Generate Pattern
-      </Button>
-      <p className="form-help">
-        Generation will be enabled in the next implementation stage.
-      </p>
+      {generationControls ?? (
+        <>
+          <Button className="generate-placeholder" disabled>
+            Generate Pattern
+          </Button>
+          <p className="form-help">
+            Pattern generation is not available in this preview.
+          </p>
+        </>
+      )}
     </section>
   );
 }

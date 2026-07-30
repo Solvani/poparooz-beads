@@ -23,16 +23,19 @@ describe("useImageSource", () => {
 
     act(() => void result.current.selectFiles([image()]));
     expect(result.current.source?.objectUrl).toBe("blob:preview-1");
+    expect(result.current.revision).toBe(1);
     expect(urls.createObjectURL).toHaveBeenCalledTimes(1);
 
     act(
       () => void result.current.selectFiles([image("next.webp", "image/webp")]),
     );
     expect(result.current.source?.objectUrl).toBe("blob:preview-2");
+    expect(result.current.revision).toBe(2);
     expect(urls.revokeObjectURL).toHaveBeenCalledWith("blob:preview-1");
 
     act(() => result.current.removeImage());
     expect(result.current.source).toBeNull();
+    expect(result.current.revision).toBe(3);
     expect(urls.revokeObjectURL).toHaveBeenCalledWith("blob:preview-2");
     unmount();
     expect(urls.revokeObjectURL).toHaveBeenCalledTimes(2);

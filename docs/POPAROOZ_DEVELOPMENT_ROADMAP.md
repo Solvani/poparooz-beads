@@ -41,7 +41,7 @@ UI direction: **Poparooz Guided Canvas Commerce**. Design system: **Poparooz Cra
 - [x] P2-I01: repository baseline and UI implementation plan.
 - [x] P2-I02: Design Tokens, semantic App Shell, and responsive layout skeleton.
 - [x] P2-I03: local upload, original-image preview, Object URL lifecycle, and settings panel.
-- [ ] P2-I04: generation, Abort, error, dirty, and regeneration state flow.
+- [x] P2-I04: generation, Abort, error, dirty, and regeneration state flow.
 - [ ] P2-I05: Pattern Canvas, zoom, grid, and fit.
 - [ ] P2-I06: public color, bead-count, summary, and board-layout results.
 - [ ] P2-I07: disabled-to-accepted action flow and customer journey completion.
@@ -110,7 +110,9 @@ Phase 1 algorithm foundation may proceed without real palette or board data only
 
 ## Recommended next task
 
-Current recommendation after accepted P2-I03: perform P2-I04 only—generation orchestration, lifecycle states, Abort, supersede, errors, dirty, and regeneration. It must preserve the existing local image/settings contracts and must not pull Canvas drawing, result panels, downloads, Shopify, or production data forward. Earlier recommendations below remain historical entry records.
+Current recommendation after accepted P2-I04: perform P2-I05 only—render the accepted Public Pattern matrix in a Pattern Canvas and add zoom, grid, and fit controls. It must not pull color/material summaries, board-layout results, downloads, Shopify, production data, or later mobile Bottom Sheet work forward. Earlier recommendations below remain historical entry records.
+
+Current recommendation after accepted P2-I03: perform P2-I04 only—generation orchestration, lifecycle states, Abort, supersede, errors, dirty, and regeneration. It must preserve the existing local image/settings contracts and must not pull Canvas drawing, result panels, downloads, Shopify, or production data forward.
 
 Current recommendation after accepted P2-I02: perform P2-I03 only—upload, original preview, and settings. Do not pull generation, Worker orchestration, Canvas, results, export, Shopify, or production data forward. The historical recommendation below records the earlier Phase 2 entry gate.
 

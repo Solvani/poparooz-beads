@@ -66,3 +66,19 @@ Pattern Settings is controlled through immutable draft values and does not trigg
 - Background: White or Transparent only.
 
 No preset size, Palette-derived value, BoardProfile, Keep Original option, or fixture default is shown. Settings remain when the image is removed. Generate Pattern is present only as a native disabled layout placeholder; Worker, generation state, Pattern Assembly, Canvas, and results remain outside P2-I03.
+
+## P2-I04 generation orchestration boundary
+
+Generation is a service boundary outside React. It receives an immutable File/settings/job snapshot, calls the accepted Phase 1 chain in this order—image decode and normalization, cancellable Worker quantization, Pattern Assembly, then Public Pattern mapping—and returns only `PublicPatternResult`. The service receives the approved Palette, BoardProfile, processing policy, and Worker Client factory through runtime dependency injection. Each request owns one Worker Client and disposes it after success, cancellation, or failure. The service performs no rendering, persistence, network request, or customer messaging.
+
+Production does not yet have the complete approved Palette, BoardProfile, and processing-policy runtime dependency set. The default App runtime is therefore unavailable and cannot call the generation service. Its disabled control uses only the safe explanation “Pattern generation is not available in this preview.” Test-only runtime resources and services may be injected by tests but may not enter the production App entry or bundle.
+
+## Generator lifecycle model
+
+The controller and pure reducer use the mutually exclusive states `idle`, `image-loaded`, `processing`, `success`, `dirty`, `regenerating`, `aborted`, and `error`. A task receives a monotonic Job ID and a frozen snapshot containing the File, image revision, validated width, height, Maximum Colors, Background, and stable input key. Settings edits cannot mutate an active snapshot. Completion events are accepted only for the active Job ID; superseded, cancelled, late, and post-unmount outcomes are ignored.
+
+Starting a new request cancels any active different-input request before assigning the new Job ID. Abort is idempotent and is not mapped to an error. Remove cancels the active request, clears generation state and any active public result, returns to `idle`, and preserves the P2-I03 settings draft. AbortController and Worker resources live in the controller/service lifecycle, never in reducer state.
+
+After a successful result, any image or setting change produces `dirty` while retaining the previous public result. Regeneration retains that result during work and after cancellation or failure. Safe status copy distinguishes first generation from updates. Raw exceptions, stacks, file paths, Worker messages, internal Palette data, and internal reference fields never enter reducer errors or customer DOM.
+
+P2-I04 success displays only “Pattern data is ready.” Public Pattern data remains in state for later accepted tasks. P2-I04 adds no Pattern Canvas, SVG pattern, color/material/board detail, counts, downloads, Shopify behavior, production data, or P2-I05 interaction.

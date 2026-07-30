@@ -14,6 +14,7 @@ export interface ObjectUrlApi {
 
 export interface UseImageSourceResult {
   readonly source: ImageSource | null;
+  readonly revision: number;
   readonly error: ImageUploadError | null;
   readonly selectFiles: (
     files: FileList | readonly File[],
@@ -26,6 +27,7 @@ export function useImageSource(
   objectUrls: ObjectUrlApi = URL,
 ): UseImageSourceResult {
   const [source, setSource] = useState<ImageSource | null>(null);
+  const [revision, setRevision] = useState(0);
   const [error, setError] = useState<ImageUploadError | null>(null);
   const currentSource = useRef<ImageSource | null>(null);
 
@@ -60,6 +62,7 @@ export function useImageSource(
       };
       currentSource.current = next;
       setSource(next);
+      setRevision((current) => current + 1);
       setError(null);
       if (previous !== null) objectUrls.revokeObjectURL(previous.objectUrl);
       return { status: "selected" };
@@ -72,6 +75,7 @@ export function useImageSource(
     if (current !== null) objectUrls.revokeObjectURL(current.objectUrl);
     currentSource.current = null;
     setSource(null);
+    setRevision((current) => current + 1);
     setError(null);
   }, [objectUrls]);
 
@@ -86,5 +90,5 @@ export function useImageSource(
     [objectUrls],
   );
 
-  return { source, error, selectFiles, removeImage, clearError };
+  return { source, revision, error, selectFiles, removeImage, clearError };
 }

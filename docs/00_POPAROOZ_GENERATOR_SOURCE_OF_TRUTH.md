@@ -95,7 +95,7 @@ Phase 0 explicitly excludes implementation of image upload, a Canvas workspace, 
 
 Phase 1 tasks P1-A01 through P1-A10 are implemented, reviewed, and frozen. P1-A08 runs the accepted P1-A07 whole-image quantizer only in a native module Worker through protocol version 1. P1-A09 synchronously maps that result through accepted palette matching into a merged pattern matrix, exact materials, complete-matrix board tiles, and a Poparooz-only public result. P1-A10 records the Yellow performance classification, Worker Decision C, full regression, and final audit. There is no synchronous main-thread re-quantization, Worker protocol extension, or fake progress.
 
-P2-D01 and P2-D02 selected **Poparooz Guided Canvas Commerce** and froze **Poparooz Craft UI v1**. P2-I01 completed the repository and UI implementation plan. P2-I02 established the Design Tokens, semantic App Header, empty three-region workspace, and responsive shell. P2-I03 adds local single-image selection, drag and drop, ephemeral original preview, Replace/Remove, and controlled Pattern Settings. It adds no decoding/generation orchestration, Worker call, Pattern Assembly, Canvas drawing, production palette, verified physical board, export, Shopify integration, or deployment. Production palette and board truth remain unresolved dependencies.
+P2-D01 and P2-D02 selected **Poparooz Guided Canvas Commerce** and froze **Poparooz Craft UI v1**. P2-I01 completed the repository and UI implementation plan. P2-I02 established the Design Tokens, semantic App Header, empty three-region workspace, and responsive shell. P2-I03 added local single-image selection, drag and drop, ephemeral original preview, Replace/Remove, and controlled Pattern Settings. P2-I04 adds dependency-injected Phase 1 generation orchestration, a pure lifecycle reducer, immutable job snapshots, Abort/Supersede/stale-result protection, dirty/regenerating behavior, and safe status UI. The production App remains generation-unavailable until approved Palette, BoardProfile, and processing policy inputs exist. It adds no Canvas drawing, result details, production palette, verified physical board, export, Shopify integration, or deployment.
 
 ## Data truth boundary
 
@@ -128,7 +128,7 @@ Before implementation begins, read this file and every formal document relevant 
 
 ## Phase 1 freeze
 
-Current status: P2-D01/P2-D02 selected the UI direction and design system, P2-I01 completed planning, P2-I02 established the static UI shell, and P2-I03 adds only local upload/preview/settings behavior. Later Phase 2 behavior remains gated by its individual tasks.
+Current status: P2-D01/P2-D02 selected the UI direction and design system, P2-I01 completed planning, P2-I02 established the static UI shell, P2-I03 added local upload/preview/settings, and P2-I04 adds gated generation orchestration and lifecycle behavior without rendering Pattern details. Later Phase 2 behavior remains gated by its individual tasks.
 
 Historical Phase 2 entry condition recorded at the Phase 1 freeze:
 

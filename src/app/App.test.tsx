@@ -1,8 +1,33 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { PublicPatternResult } from "../domain/pattern/public-pattern.types";
+import type { GenerationRuntime } from "../features/generator/generation.types";
 import { App } from "./App";
+
+const PUBLIC_RESULT = { marker: "ready" } as unknown as PublicPatternResult;
+
+function availableRuntime(
+  tasks: readonly Promise<PublicPatternResult>[],
+): GenerationRuntime {
+  let index = 0;
+  return {
+    availability: { available: true },
+    service: { generate: vi.fn(() => tasks[index++]!) },
+  };
+}
+
+async function completeInputs() {
+  await userEvent.upload(
+    screen.getByLabelText("Choose an Image"),
+    new File(["image"], "photo.png", { type: "image/png" }),
+  );
+  await userEvent.type(screen.getByLabelText("Pattern Width"), "32");
+  await userEvent.type(screen.getByLabelText("Pattern Height"), "24");
+  await userEvent.type(screen.getByLabelText("Maximum Colors"), "16");
+  await userEvent.click(screen.getByRole("radio", { name: "White" }));
+}
 
 beforeEach(() => {
   Object.defineProperty(URL, "createObjectURL", {
@@ -96,5 +121,89 @@ describe("App", () => {
 
     expect(fetchSpy).not.toHaveBeenCalled();
     expect(storageSpy).not.toHaveBeenCalled();
+  });
+
+  it("keeps Generate unavailable without approved runtime dependencies", async () => {
+    render(<App />);
+    await completeInputs();
+
+    expect(
+      screen.getByRole("button", { name: "Generate Pattern" }),
+    ).toBeDisabled();
+    expect(
+      screen.getByText("Pattern generation is not available in this preview."),
+    ).toBeInTheDocument();
+  });
+
+  it("drives processing, success, dirty, regeneration, and abort through an injected service", async () => {
+    let resolveFirst!: (value: PublicPatternResult) => void;
+    let resolveSecond!: (value: PublicPatternResult) => void;
+    const first = new Promise<PublicPatternResult>(
+      (resolve) => void (resolveFirst = resolve),
+    );
+    const second = new Promise<PublicPatternResult>(
+      (resolve) => void (resolveSecond = resolve),
+    );
+    const runtime = availableRuntime([first, second]);
+    render(<App generationRuntime={runtime} />);
+    await completeInputs();
+
+    const generate = await screen.findByRole("button", {
+      name: "Generate Pattern",
+    });
+    await waitFor(() => expect(generate).toBeEnabled());
+    await userEvent.click(generate);
+    expect(screen.getByText("Creating your pattern…")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Abort" })).toBeEnabled();
+
+    await act(async () => resolveFirst(PUBLIC_RESULT));
+    expect(screen.getByText("Pattern data is ready.")).toBeInTheDocument();
+    expect(document.querySelector("canvas")).toBeNull();
+
+    await userEvent.clear(screen.getByLabelText("Maximum Colors"));
+    await userEvent.type(screen.getByLabelText("Maximum Colors"), "20");
+    expect(screen.getByText("Settings changed")).toBeInTheDocument();
+    const regenerate = screen.getByRole("button", {
+      name: "Regenerate Pattern",
+    });
+    expect(regenerate).toBeEnabled();
+    await userEvent.click(regenerate);
+    expect(screen.getByText("Updating your pattern…")).toBeInTheDocument();
+    expect(
+      screen.getByText("Your previous pattern is still available."),
+    ).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "Abort" }));
+    expect(
+      screen.getByText(
+        "Pattern update stopped. Your previous pattern is still available.",
+      ),
+    ).toBeInTheDocument();
+    await act(async () => resolveSecond(PUBLIC_RESULT));
+    expect(screen.queryByText("Pattern data is ready.")).toBeNull();
+  });
+
+  it("never renders a raw injected service exception", async () => {
+    const runtime: GenerationRuntime = {
+      availability: { available: true },
+      service: {
+        generate: vi.fn(async () => {
+          throw new Error("C:\\private\\photo.png internal stack");
+        }),
+      },
+    };
+    const { container } = render(<App generationRuntime={runtime} />);
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+
+    expect(
+      await screen.findByText(
+        "We couldn’t create this pattern. Your image and settings are still available.",
+      ),
+    ).toBeInTheDocument();
+    expect(container).not.toHaveTextContent("private");
+    expect(container).not.toHaveTextContent("internal stack");
   });
 });

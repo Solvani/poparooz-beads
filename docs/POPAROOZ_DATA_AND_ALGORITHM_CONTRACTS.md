@@ -116,7 +116,7 @@ interface MaterialRequirement {
 3. Fit with deterministic centered `contain`, preserving aspect ratio; uncovered cells are transparent or white by explicit option. There is no crop, subject detection, or AI removal.
 4. Resample once with alpha-aware area averaging when reducing. Upscale is rejected by default; an explicitly allowed upscale uses the documented deterministic bilinear path.
 5. If transparency is enabled, samples below the versioned `alphaThreshold` become `null`; other samples are composited over the configured default white background before color work. If transparency is disabled, all samples are composited over that background.
-6. Apply deterministic maximum-color quantization to eligible 8-bit sRGB grid samples before palette mapping. The Phase 1 implementation decision must name and fixture-test the exact quantizer; the baseline candidate is stable median-cut. `maxColors` limits quantizer buckets, while palette collisions may make the final internal reference-color count smaller.
+6. Apply the P1-A07 deterministic weighted Lab Median Cut quantizer to eligible 8-bit sRGB grid samples before later palette mapping. Each box uses an actual input RGB/Lab Medoid selected by CIEDE2000, and dithering remains off. `maxColors` limits quantizer clusters, while later palette collisions may make the final internal reference-color count smaller.
 7. Linearize sRGB, convert to XYZ D65 and Lab, match enabled internal palette colors, and emit a row-major `referenceCode` matrix. Customer-visible consumers separately map results to the Public Presentation Model.
 8. Count colors/beads and calculate the two-dimensional board layout.
 
@@ -127,6 +127,8 @@ Changing fit, sampling, alpha, background, quantization, or matching behavior re
 [`POPAROOZ_COLOR_SPACE_CONVERSION_CONTRACT.md`](POPAROOZ_COLOR_SPACE_CONVERSION_CONTRACT.md) is the implementation authority for P1-A05 types, units, validation, errors, frozen constants, precision, golden references, and the Alpha boundary. The pure implementation lives under `src/domain/color/` and performs only single-color conversion. Color distance, palette matching, quantization, image batching, and Worker execution remain later tasks.
 
 [`POPAROOZ_COLOR_MATCHING_CONTRACT.md`](POPAROOZ_COLOR_MATCHING_CONTRACT.md) is the implementation authority for P1-A06 CIEDE2000, diagnostic Delta E 76, candidate eligibility, errors, deterministic tie-breaking, single-target matching, and the Public Presentation boundary. Quantization, image batching, dithering, and Worker execution remain later tasks.
+
+[`POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md`](POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md) is the implementation authority for P1-A07 RGBA/options validation, Alpha empties, the 512 engineering guard, exact RGB Histogram, weighted CIELAB Median Cut, actual-entry CIEDE2000 Medoids, stable cluster/index output, invariant checks, and the no-dither baseline. Formal palette mapping, pattern/material/board output, and Worker execution remain later tasks.
 
 For normalized sRGB component `c` in 0–1:
 

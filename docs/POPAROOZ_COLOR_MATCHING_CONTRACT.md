@@ -158,4 +158,4 @@ The existing mapper remains the authority. It emits the fixed Poparooz brand and
 
 ## P1-A07 reuse boundary
 
-P1-A07 may call this single-target matcher while implementing separately reviewed deterministic quantization, maximum-color limits, and the no-dither baseline. It must reuse the distance and tie rules without duplicating or weakening them. Batch image matching, performance baselines, and Worker execution remain later stages.
+P1-A07 is governed by [`POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md`](POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md). It reuses `deltaE2000` only to select a real input Medoid within each quantization box; it does not call `matchNearestPaletteColor` or map representatives to a formal palette. Batch palette matching, pattern output, performance baselines, and Worker execution remain later stages.

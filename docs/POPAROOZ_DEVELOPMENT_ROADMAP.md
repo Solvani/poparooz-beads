@@ -25,7 +25,7 @@ Deliverable: documentation only. No production generator runtime.
 - [x] P1-A04: browser-local image signatures, decode boundary, orientation, transparency, contain, and deterministic RGBA scaling.
 - [x] P1-A05: sRGB, XYZ D65, and Lab conversion.
 - [x] P1-A06: CIEDE2000 and deterministic tie-breaker.
-- P1-A07: deterministic quantization and maximum colors.
+- [x] P1-A07: deterministic quantization and maximum colors.
 - P1-A08: versioned Web Worker protocol and cancellation.
 - P1-A09: pattern matrix and material counts.
 - P1-A10: two-dimensional board calculation.
@@ -94,4 +94,4 @@ Phase 1 algorithm foundation may proceed without real palette or board data only
 
 ## Recommended next task
 
-After P1-A06 acceptance, perform P1-A07 only: implement deterministic color quantization, maximum-color limits, and the no-dither baseline using the accepted conversion and single-target matching primitives. Do not import the formal palette, add optional dithering, Worker, Canvas workspace, full UI, export, Shopify, or deployment. Keep the P1-A04 provisional image limits and browser-conformance items open until representative-device evidence exists.
+After P1-A07 acceptance, perform P1-A08 only: implement the versioned Web Worker protocol, cancellation, Transferable ownership, stale-result rejection, and background whole-image processing around the accepted pure image/color/quantization cores. Do not import the formal palette, build the pattern/material pipeline, add dithering, Canvas workspace, full UI, export, Shopify, or deployment. Keep the P1-A04 provisional image limits and browser-conformance items open until representative-device evidence exists.

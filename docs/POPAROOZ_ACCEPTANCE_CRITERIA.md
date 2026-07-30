@@ -41,6 +41,8 @@ P1-A05 color-space-conversion acceptance requires strict RGB8 and intermediate r
 
 P1-A06 color-matching acceptance requires strict Lab validation, complete CIEDE2000 with fixed unit parametric factors, the independent full Sharma/Wu/Dalal reference set, zero/small-chroma and hue-wrap coverage, active/sellable/auto-match candidate filtering through existing schemas, distinct empty/no-eligible errors, actual-distance results, the frozen `1e-12` minimum-first tie set, locale-independent `sortOrder`/`displayCode`/`referenceCode` resolution, input-order independence, unchanged Public Mapper isolation, and no production palette, quantization, image batching, Worker, Canvas, or UI work.
 
+P1-A07 color-quantization acceptance requires strict normalized RGBA and explicit `maxColors`/Alpha validation, the 512 engineering guard, exact sorted RGB Histogram counts using accepted Lab conversion, deterministic weighted Lab Median Cut with frozen box/axis/order/boundary rules, no empty boxes, actual-entry CIEDE2000 Medoids, stable representative/index order, the `65535` transparent sentinel, exact count/index/buffer invariants, repeat and rearrangement tests, no negative-zero/finite-value leakage, no dithering/neighbor reads, and no formal palette mapping, Worker, Canvas, UI, export, or commerce work.
+
 Production data is not required to test the algorithm core, but fixture boundaries must be visible in file names, code, and UI paths. No fixture may ship as a production palette or board default.
 
 ## Phase 2 gate

@@ -45,7 +45,7 @@ UI direction: **Poparooz Guided Canvas Commerce**. Design system: **Poparooz Cra
 - [x] P2-I05: Pattern Canvas, zoom, grid, and fit.
 - [x] P2-I06: public color, bead-count, summary, and board-layout results.
 - [x] P2-I07: disabled action contract, result identity, and customer journey completion.
-- [ ] P2-I08: mobile Bottom Sheet and tablet layout.
+- [x] P2-I08: mobile Bottom Sheet and tablet workspace layout.
 - [ ] P2-I09: accessibility, compatibility, performance, and full regression.
 - [ ] P2-I10: Phase 2 final audit and freeze.
 
@@ -110,7 +110,11 @@ Phase 1 algorithm foundation may proceed without real palette or board data only
 
 ## Recommended next task
 
-Current recommendation after accepted P2-I07: perform P2-I08 only—implement the accepted mobile Bottom Sheet and tablet workspace layout around the existing flow. Preserve P2-I07 native-disabled action semantics and result identity; do not enable download or commerce, add a sticky mobile action bar, introduce pinch zoom or editing, assume production Palette/BoardProfile/package data, or pull P2-I09 validation work forward.
+Current recommendation after accepted P2-I08: perform P2-I09 only—execute final accessibility, keyboard/screen-reader, browser compatibility, real iPhone Safari and Android Chrome layout/gesture, tablet/desktop visual, memory/performance, and complete regression acceptance against the frozen P2-I02–P2-I08 implementation. P2-I09 should fix evidence-backed defects only; it must not add pinch zoom, editing, sticky actions, real download, commerce/navigation, production Palette/BoardProfile/package data, or redesign the accepted workflow.
+
+P2-I08 completed container-width Workspace Modes, Compact result-first information architecture, compact public summary, four panel launchers, a dependency-free modal Bottom Sheet with focus/background/scroll/close cleanup, unique responsive mounting of existing business components, and the Medium tablet layout. Automated DOM, lifecycle, cleanup, responsive, and boundary coverage is complete for this task; final real-browser/device acceptance remains P2-I09. Download and Get Beads remain disabled, and production generation remains unavailable.
+
+Historical recommendation after accepted P2-I07: perform P2-I08 only—implement the accepted mobile Bottom Sheet and tablet workspace layout around the existing flow. Preserve P2-I07 native-disabled action semantics and result identity; do not enable download or commerce, add a sticky mobile action bar, introduce pinch zoom or editing, assume production Palette/BoardProfile/package data, or pull P2-I09 validation work forward.
 
 P2-I07 completed the stable Pattern Options region, native-disabled Download Pattern and Get Beads placeholders, production capability defaults, lifecycle/result-identity mapping, responsive action layout, and the continuous local customer flow. It added no export, navigation, commerce adapter, package calculation, production data, or Bottom Sheet. The production generation runtime remains unavailable.
 

@@ -85,7 +85,7 @@ export function PatternSettings({
           Transparent
         </label>
       </fieldset>
-      {generationControls ?? (
+      {generationControls === undefined ? (
         <>
           <Button className="generate-placeholder" disabled>
             Generate Pattern
@@ -94,6 +94,8 @@ export function PatternSettings({
             Pattern generation is not available in this preview.
           </p>
         </>
+      ) : (
+        generationControls
       )}
     </section>
   );

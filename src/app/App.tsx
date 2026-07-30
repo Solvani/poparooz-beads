@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { AppHeader } from "../components/layout/AppHeader";
 import { GeneratorWorkspaceShell } from "../components/layout/GeneratorWorkspaceShell";
+import { BottomSheet } from "../components/mobile/BottomSheet";
+import { MobilePanelLaunchers } from "../components/mobile/MobilePanelLaunchers";
+import type { MobilePanel } from "../components/mobile/mobile-panel.types";
+import { useBottomSheet } from "../components/mobile/use-bottom-sheet";
+import { useWorkspaceMode } from "../components/responsive/use-workspace-mode";
 import { PatternActions } from "../features/actions/PatternActions";
 import { toPatternActionState } from "../features/actions/pattern-action-state";
 import { GenerationStatus } from "../features/generator/GenerationStatus";
@@ -12,7 +17,14 @@ import {
 } from "../features/generator/generation.types";
 import { useGeneratorController } from "../features/generator/use-generator-controller";
 import { PatternCanvas } from "../features/pattern-canvas/PatternCanvas";
-import { PatternResults } from "../features/results/PatternResults";
+import {
+  PatternResults,
+  ResultRetentionStatus,
+} from "../features/results/PatternResults";
+import { BoardLayoutSummary } from "../features/results/BoardLayoutSummary";
+import { ColorList } from "../features/results/ColorList";
+import { PatternSummary } from "../features/results/PatternSummary";
+import { toPatternResultView } from "../features/results/pattern-result-view";
 import { PatternSettings } from "../features/settings/PatternSettings";
 import {
   EMPTY_PATTERN_SETTINGS,
@@ -30,6 +42,13 @@ export function App({
   generationRuntime = UNAVAILABLE_GENERATION_RUNTIME,
 }: AppProps) {
   const image = useImageSource();
+  const { containerRef, mode: workspaceMode } = useWorkspaceMode();
+  const {
+    activePanel,
+    open: openSheet,
+    close: closeSheet,
+    setActivePanel,
+  } = useBottomSheet();
   const [settings, setSettings] = useState<PatternSettingsDraft>(
     EMPTY_PATTERN_SETTINGS,
   );
@@ -42,19 +61,145 @@ export function App({
   const lastSuccess = getLastSuccess(generator.state);
   const visiblePattern = lastSuccess?.result;
   const patternActionState = toPatternActionState(generator.state);
+  const compactResultMode =
+    workspaceMode === "compact" && visiblePattern !== undefined;
+  const compactResult = useMemo(
+    () =>
+      compactResultMode && visiblePattern
+        ? toPatternResultView(visiblePattern)
+        : null,
+    [compactResultMode, visiblePattern],
+  );
+
+  useEffect(() => {
+    if (!compactResultMode) closeSheet();
+  }, [closeSheet, compactResultMode]);
 
   const removeImage = () => {
+    closeSheet();
     generator.reset();
     image.removeImage();
   };
 
+  const generationStatus = (closeAfterGenerate = false) => (
+    <GenerationStatus
+      state={generator.state}
+      availability={generator.availability}
+      canGenerate={generator.canGenerate}
+      canRegenerate={generator.canRegenerate}
+      onGenerate={() => {
+        generator.generate();
+        if (closeAfterGenerate) closeSheet();
+      }}
+      onAbort={generator.abort}
+    />
+  );
+
+  const imagePreview = (closeAfterChange = false) =>
+    image.source ? (
+      <ImagePreview
+        source={image.source}
+        onReplace={(files) => {
+          const result = image.selectFiles(files);
+          if (closeAfterChange) closeSheet();
+          return result;
+        }}
+        onRemove={removeImage}
+      />
+    ) : (
+      <ImageUpload error={image.error} onSelectFiles={image.selectFiles} />
+    );
+
+  const settingsPanel = (
+    insideSheet = false,
+    omitGenerationControls = false,
+  ) => (
+    <PatternSettings
+      value={settings}
+      onChange={setSettings}
+      generationControls={
+        omitGenerationControls ? null : generationStatus(insideSheet)
+      }
+    />
+  );
+
+  const sheetContent = (panel: MobilePanel) => {
+    switch (panel) {
+      case "settings":
+        return settingsPanel(true);
+      case "colors":
+        return compactResult?.ok ? (
+          <ColorList
+            key={lastSuccess?.snapshot.jobId}
+            colors={compactResult.view.colors}
+          />
+        ) : (
+          <ResultViewError />
+        );
+      case "boards":
+        return compactResult?.ok ? (
+          <BoardLayoutSummary
+            key={lastSuccess?.snapshot.jobId}
+            layout={compactResult.view.boardLayout}
+          />
+        ) : (
+          <ResultViewError />
+        );
+      case "original":
+        return imagePreview(true);
+    }
+  };
+
+  const inlineSettings = (
+    <div className="settings-region-content">
+      {imagePreview()}
+      {image.error && image.source ? (
+        <p className="form-error" role="alert" aria-live="polite">
+          {image.error.message}
+        </p>
+      ) : null}
+      {settingsPanel(false, workspaceMode === "medium")}
+    </div>
+  );
+
+  const compactResults = compactResult?.ok ? (
+    <div className="compact-result-content">
+      <PatternSummary summary={compactResult.view.summary} variant="compact" />
+      <MobilePanelLaunchers onOpen={openSheet} />
+      <PatternActions state={patternActionState} />
+    </div>
+  ) : (
+    <div className="compact-result-content">
+      <ResultViewError />
+      <MobilePanelLaunchers onOpen={openSheet} />
+      <PatternActions state={patternActionState} />
+    </div>
+  );
+
   return (
-    <div className="app-root">
+    <div ref={containerRef} className="app-root">
       <AppHeader />
       <div className="page-frame">
         <GeneratorWorkspaceShell
+          workspaceMode={workspaceMode}
           imageReady={image.source !== null}
-          actionsContent={<PatternActions state={patternActionState} />}
+          showSettingsRegion={!compactResultMode}
+          lifecycleContent={
+            compactResultMode ? (
+              <>
+                {generationStatus()}
+                <ResultRetentionStatus status={generator.state.status} />
+              </>
+            ) : undefined
+          }
+          canvasStatusContent={
+            workspaceMode === "medium" ? generationStatus() : undefined
+          }
+          actionsContent={
+            compactResultMode ? undefined : (
+              <PatternActions state={patternActionState} />
+            )
+          }
           canvasContent={
             visiblePattern === undefined ? undefined : (
               <PatternCanvas
@@ -64,7 +209,9 @@ export function App({
             )
           }
           resultsContent={
-            visiblePattern === undefined ? undefined : (
+            compactResultMode ? (
+              compactResults
+            ) : visiblePattern === undefined ? undefined : (
               <PatternResults
                 key={lastSuccess?.snapshot.jobId}
                 pattern={visiblePattern}
@@ -72,45 +219,26 @@ export function App({
               />
             )
           }
-          settingsContent={
-            <div className="settings-region-content">
-              {image.source === null ? (
-                <ImageUpload
-                  error={image.error}
-                  onSelectFiles={image.selectFiles}
-                />
-              ) : (
-                <>
-                  <ImagePreview
-                    source={image.source}
-                    onReplace={image.selectFiles}
-                    onRemove={removeImage}
-                  />
-                  {image.error ? (
-                    <p className="form-error" role="alert" aria-live="polite">
-                      {image.error.message}
-                    </p>
-                  ) : null}
-                </>
-              )}
-              <PatternSettings
-                value={settings}
-                onChange={setSettings}
-                generationControls={
-                  <GenerationStatus
-                    state={generator.state}
-                    availability={generator.availability}
-                    canGenerate={generator.canGenerate}
-                    canRegenerate={generator.canRegenerate}
-                    onGenerate={generator.generate}
-                    onAbort={generator.abort}
-                  />
-                }
-              />
-            </div>
-          }
+          settingsContent={compactResultMode ? undefined : inlineSettings}
         />
       </div>
+      {compactResultMode && activePanel ? (
+        <BottomSheet
+          activePanel={activePanel}
+          onPanelChange={setActivePanel}
+          onClose={closeSheet}
+        >
+          {sheetContent(activePanel)}
+        </BottomSheet>
+      ) : null}
     </div>
+  );
+}
+
+function ResultViewError() {
+  return (
+    <p className="result-view-error" role="status">
+      We couldn’t display these pattern details.
+    </p>
   );
 }

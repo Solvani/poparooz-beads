@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import type { WorkspaceMode } from "../responsive/workspace-mode";
 import { Panel } from "../ui/Panel";
 
 export interface GeneratorWorkspaceShellProps {
@@ -7,7 +8,11 @@ export interface GeneratorWorkspaceShellProps {
   readonly canvasContent?: ReactNode;
   readonly resultsContent?: ReactNode;
   readonly actionsContent?: ReactNode;
+  readonly lifecycleContent?: ReactNode;
+  readonly canvasStatusContent?: ReactNode;
   readonly imageReady?: boolean;
+  readonly showSettingsRegion?: boolean;
+  readonly workspaceMode?: WorkspaceMode;
 }
 
 export function GeneratorWorkspaceShell({
@@ -15,20 +20,39 @@ export function GeneratorWorkspaceShell({
   canvasContent,
   resultsContent,
   actionsContent,
+  lifecycleContent,
+  canvasStatusContent,
   imageReady = false,
+  showSettingsRegion = true,
+  workspaceMode = "desktop",
 }: GeneratorWorkspaceShellProps) {
   return (
-    <main className="workspace-shell" aria-label="Pattern maker workspace">
-      <Panel
-        title="Start with an image"
-        titleId="create-heading"
-        eyebrow="Create"
-        className="workspace-shell__settings"
-      >
-        {settingsContent ?? (
-          <p>Upload and pattern controls will appear here.</p>
-        )}
-      </Panel>
+    <main
+      className={`workspace-shell workspace-shell--${workspaceMode}`}
+      aria-label="Pattern maker workspace"
+      data-workspace-mode={workspaceMode}
+    >
+      {lifecycleContent ? (
+        <section
+          className="workspace-shell__lifecycle"
+          aria-label="Pattern status"
+        >
+          {lifecycleContent}
+        </section>
+      ) : null}
+
+      {showSettingsRegion ? (
+        <Panel
+          title="Start with an image"
+          titleId="create-heading"
+          eyebrow="Create"
+          className="workspace-shell__settings"
+        >
+          {settingsContent ?? (
+            <p>Upload and pattern controls will appear here.</p>
+          )}
+        </Panel>
+      ) : null}
 
       <Panel
         title="Your pattern will appear here."
@@ -36,6 +60,7 @@ export function GeneratorWorkspaceShell({
         eyebrow="Pattern Canvas"
         className="workspace-shell__canvas panel--canvas"
       >
+        {canvasStatusContent}
         {canvasContent ?? (
           <div className="empty-state">
             <p>
@@ -78,10 +103,6 @@ export function GeneratorWorkspaceShell({
         )}
         {actionsContent}
       </Panel>
-
-      <div className="workspace-shell__mobile-entry" aria-hidden="true">
-        Mobile workspace controls will appear here later.
-      </div>
     </main>
   );
 }

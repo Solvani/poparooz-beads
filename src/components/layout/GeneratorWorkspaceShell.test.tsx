@@ -82,4 +82,47 @@ describe("GeneratorWorkspaceShell", () => {
     ).toBeNull();
     expect(view.getByText("Stable actions")).toBeInTheDocument();
   });
+
+  it("supports compact result-first placement without mounting Settings", () => {
+    const view = render(
+      <GeneratorWorkspaceShell
+        workspaceMode="compact"
+        showSettingsRegion={false}
+        lifecycleContent={<p>Updating result</p>}
+        canvasContent={<p>Pattern Canvas content</p>}
+        resultsContent={<p>Compact result content</p>}
+      />,
+    );
+
+    expect(view.getByRole("main")).toHaveAttribute(
+      "data-workspace-mode",
+      "compact",
+    );
+    expect(view.queryByText("Start with an image")).toBeNull();
+    expect(
+      view.getByRole("region", { name: "Pattern status" }),
+    ).toHaveTextContent("Updating result");
+    expect(view.getByText("Pattern Canvas content")).toBeInTheDocument();
+    expect(view.getByText("Compact result content")).toBeInTheDocument();
+  });
+
+  it("places Medium generation status inside the full-width Canvas region", () => {
+    const view = render(
+      <GeneratorWorkspaceShell
+        workspaceMode="medium"
+        canvasStatusContent={<p>Medium generation status</p>}
+        canvasContent={<p>Medium Canvas</p>}
+      />,
+    );
+    const canvas = view.getByRole("region", {
+      name: "Your pattern will appear here.",
+    });
+
+    expect(view.getByRole("main")).toHaveAttribute(
+      "data-workspace-mode",
+      "medium",
+    );
+    expect(canvas).toHaveTextContent("Medium generation status");
+    expect(canvas).toHaveTextContent("Medium Canvas");
+  });
 });

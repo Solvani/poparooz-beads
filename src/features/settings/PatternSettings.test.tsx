@@ -49,4 +49,17 @@ describe("PatternSettings", () => {
     expect(view.getByLabelText("Pattern Height")).toHaveAttribute("step", "1");
     expect(view.getByLabelText("Maximum Colors")).toHaveAttribute("max", "512");
   });
+
+  it("can omit generation controls when the responsive shell owns their placement", () => {
+    const view = render(
+      <PatternSettings
+        value={EMPTY_PATTERN_SETTINGS}
+        onChange={() => {}}
+        generationControls={null}
+      />,
+    );
+
+    expect(view.queryByRole("button", { name: "Generate Pattern" })).toBeNull();
+    expect(view.getByLabelText("Pattern Width")).toBeInTheDocument();
+  });
 });

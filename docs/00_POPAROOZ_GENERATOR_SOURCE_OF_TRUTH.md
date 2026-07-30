@@ -109,6 +109,10 @@ P2-I06 adds customer-safe Pattern Summary, public color/bead quantities, and abs
 
 P2-I07 replaces the generic action placeholder with a stable Pattern Options region and a pure lifecycle/result-identity mapper. Download Pattern and Get Beads for This Pattern remain native disabled actions with readable “Coming later” and unavailable explanations; both production capability flags are frozen to false. Actions follow the exact last successful result displayed by Canvas and Results through Success, Dirty, Regenerating, update Abort/Error, replacement Success, and Remove. The full local customer flow is now continuous, but no export, download, navigation, commerce adapter, package calculation, price/inventory behavior, Bottom Sheet, production data, or new dependency is implemented. The production generation runtime remains unavailable.
 
+## P2-I08 acceptance update
+
+P2-I08 adds container-width Workspace Modes, a Compact result-first structure, four Settings/Colors/Boards/Original launchers, and a dependency-free Portal Bottom Sheet with modal semantics, tabs, focus containment/restore, background isolation, body scroll restoration, Escape/Close/Backdrop/96px handle-drag closure, and complete resource cleanup. Compact mounts each stateful business component in exactly one location and shares the displayed successful result identity across Canvas, Summary, detail panels, and Actions. Medium remains full-width through the Canvas and uses one column at 768–899px with internal two-column detail groups allowed at 900–1099px. Desktop/Wide remains three-column. P2-I08 adds no pinch zoom, sticky action bar, download, navigation, commerce, production data, dependency, or P2-I09 final browser/device acceptance. Production generation remains unavailable.
+
 ## Data truth boundary
 
 No production internal reference palette, Poparooz display-code list, or sellable range is defined. Publicly available color values may later be used internally only as clearly labeled reference values; they must not be presented as exact physical matches or verified Poparooz inventory. Internal palette fields are governed by [`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md), canonical file ingestion by [`POPAROOZ_PALETTE_IMPORT_CONTRACT.md`](POPAROOZ_PALETTE_IMPORT_CONTRACT.md), and every customer-visible consumer by [`POPAROOZ_PUBLIC_BRANDING_CONTRACT.md`](POPAROOZ_PUBLIC_BRANDING_CONTRACT.md). Visual reference charts are not valid production palette sources.
@@ -140,7 +144,7 @@ Before implementation begins, read this file and every formal document relevant 
 
 ## Phase 1 freeze
 
-Current accepted status through P2-I07: the Public Pattern Canvas, customer-safe result summary, public color/bead quantities, abstract Board Layout, stable Pattern Options, and complete local customer flow are implemented. Download and Get Beads remain disabled placeholders without behavior. P2-I08 and later work remain gated; the production runtime remains unavailable, and the Phase 1 frozen contracts are unchanged.
+Current accepted status through P2-I08: the Public Pattern Canvas, customer-safe Results and Pattern Options, Compact result-first Bottom Sheet flow, and Medium tablet workspace are implemented. Download and Get Beads remain disabled placeholders without behavior. P2-I09 final accessibility, compatibility, performance, browser, device, and full-regression acceptance remains gated; the production runtime remains unavailable, and the Phase 1 frozen contracts are unchanged.
 
 Current status: P2-D01/P2-D02 selected the UI direction and design system, P2-I01 completed planning, P2-I02 established the static UI shell, P2-I03 added local upload/preview/settings, and P2-I04 adds gated generation orchestration and lifecycle behavior without rendering Pattern details. Later Phase 2 behavior remains gated by its individual tasks.
 

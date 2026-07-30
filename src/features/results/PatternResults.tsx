@@ -40,7 +40,7 @@ export function PatternResults({ pattern, status }: PatternResultsProps) {
   );
 }
 
-function ResultRetentionStatus({
+export function ResultRetentionStatus({
   status,
 }: {
   readonly status: ResultLifecycleStatus;

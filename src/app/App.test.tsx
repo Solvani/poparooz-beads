@@ -1,4 +1,11 @@
-import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -80,6 +87,11 @@ afterEach(() => {
   vi.restoreAllMocks();
   Reflect.deleteProperty(URL, "createObjectURL");
   Reflect.deleteProperty(URL, "revokeObjectURL");
+  Object.defineProperty(window, "innerWidth", {
+    configurable: true,
+    value: 1024,
+  });
+  document.body.removeAttribute("style");
 });
 
 describe("App", () => {
@@ -374,6 +386,10 @@ describe("App", () => {
   });
 
   it("never renders a raw injected service exception", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 600,
+    });
     const runtime: GenerationRuntime = {
       availability: { available: true },
       service: {
@@ -400,6 +416,12 @@ describe("App", () => {
     ).toBeNull();
     expect(
       screen.queryByRole("heading", { name: "Pattern Summary" }),
+    ).toBeNull();
+    expect(
+      screen.getByRole("region", { name: "Start with an image" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("navigation", { name: "Pattern detail panels" }),
     ).toBeNull();
     expect(
       screen.getByRole("region", { name: "Pattern Options" }),
@@ -508,6 +530,10 @@ describe("App", () => {
   });
 
   it("shows no result data after a first-generation abort", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 600,
+    });
     const pending = new Promise<PublicPatternResult>(() => undefined);
     render(<App generationRuntime={availableRuntime([pending])} />);
     await completeInputs();
@@ -522,9 +548,184 @@ describe("App", () => {
     ).toBeNull();
     expect(screen.queryByText("POP-RED")).toBeNull();
     expect(
+      screen.getByRole("region", { name: "Start with an image" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("navigation", { name: "Pattern detail panels" }),
+    ).toBeNull();
+    expect(
       screen.getByRole("region", { name: "Pattern Options" }),
     ).toHaveTextContent(
       "Create a pattern to access download and bead options.",
     );
+  });
+
+  it("runs the compact result-first flow through all four sheet panels", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 600,
+    });
+    Object.defineProperty(window, "scrollTo", {
+      configurable: true,
+      value: vi.fn(),
+    });
+    let resolveFirst!: (value: PublicPatternResult) => void;
+    let resolveSecond!: (value: PublicPatternResult) => void;
+    const first = new Promise<PublicPatternResult>(
+      (resolve) => void (resolveFirst = resolve),
+    );
+    const second = new Promise<PublicPatternResult>(
+      (resolve) => void (resolveSecond = resolve),
+    );
+    render(<App generationRuntime={availableRuntime([first, second])} />);
+    await completeInputs();
+
+    expect(
+      screen.getByRole("region", { name: "Start with an image" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("navigation", { name: "Pattern detail panels" }),
+    ).toBeNull();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await act(async () => resolveFirst(PUBLIC_RESULT));
+
+    expect(
+      screen.queryByRole("region", { name: "Start with an image" }),
+    ).toBeNull();
+    expect(
+      screen.getByRole("region", { name: "Pattern status" }),
+    ).toHaveTextContent("Pattern data is ready.");
+    expect(
+      screen.getByRole("img", { name: /Bead pattern preview/ }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("2 × 2")).toBeInTheDocument();
+    expect(screen.getByText("Actual Colors")).toBeInTheDocument();
+    expect(screen.getByText("3")).toBeInTheDocument();
+    expect(screen.getByText("1 board")).toBeInTheDocument();
+    const launchers = screen.getByRole("navigation", {
+      name: "Pattern detail panels",
+    });
+    expect(
+      Array.from(launchers.querySelectorAll("button")).map((button) =>
+        button.textContent?.replace("›", ""),
+      ),
+    ).toEqual(["Settings", "Colors", "Boards", "Original"]);
+
+    const colorsLauncher = screen.getByRole("button", { name: "Colors" });
+    await userEvent.click(colorsLauncher);
+    expect(screen.getByRole("dialog", { name: "Colors" })).toBeInTheDocument();
+    expect(screen.getByText("POP-RED")).toBeInTheDocument();
+    expect(document.querySelector(".app-root")).toHaveAttribute("inert");
+
+    await userEvent.click(screen.getByRole("tab", { name: "Boards" }));
+    expect(screen.getByRole("dialog", { name: "Boards" })).toBeInTheDocument();
+    expect(screen.getByText("Board Layout")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("tab", { name: "Original" }));
+    expect(
+      screen.getByRole("img", { name: "Preview of the selected image" }),
+    ).toHaveAttribute("src", "blob:app-preview");
+    expect(URL.createObjectURL).toHaveBeenCalledTimes(1);
+    await userEvent.click(screen.getByRole("button", { name: "Close" }));
+    await new Promise(requestAnimationFrame);
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(document.querySelector(".app-root")).not.toHaveAttribute("inert");
+    expect(colorsLauncher).toHaveFocus();
+
+    await userEvent.click(screen.getByRole("button", { name: "Settings" }));
+    await userEvent.clear(screen.getByLabelText("Maximum Colors"));
+    await userEvent.type(screen.getByLabelText("Maximum Colors"), "20");
+    expect(
+      within(screen.getByRole("dialog", { name: "Settings" })).getByText(
+        "Settings changed",
+      ),
+    ).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Regenerate Pattern" }),
+    );
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(screen.getByText("Updating your pattern…")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "Colors" }));
+    expect(screen.getByText("POP-RED")).toBeInTheDocument();
+    await act(async () =>
+      resolveSecond(createPublicPattern(2, 2, [1, 1, 65535, 1])),
+    );
+    expect(screen.getByText("POP-BLUE")).toBeInTheDocument();
+    expect(screen.queryByText("POP-RED")).toBeNull();
+
+    await userEvent.click(screen.getByRole("tab", { name: "Original" }));
+    await userEvent.upload(
+      screen.getByLabelText("Replace Image"),
+      new File(["next"], "next.webp", { type: "image/webp" }),
+    );
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(URL.createObjectURL).toHaveBeenCalledTimes(2);
+    await userEvent.click(screen.getByRole("button", { name: "Original" }));
+    await userEvent.click(screen.getByRole("button", { name: "Remove Image" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(
+      screen.getByRole("region", { name: "Start with an image" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("navigation", { name: "Pattern detail panels" }),
+    ).toBeNull();
+    expect(
+      screen.queryByRole("img", { name: /Bead pattern preview/ }),
+    ).toBeNull();
+    const ids = Array.from(
+      document.querySelectorAll("[id]"),
+      (node) => node.id,
+    );
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("closes the compact sheet and preserves Canvas state when entering medium mode", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 600,
+    });
+    Object.defineProperty(window, "scrollTo", {
+      configurable: true,
+      value: vi.fn(),
+    });
+    render(
+      <App
+        generationRuntime={availableRuntime([
+          Promise.resolve(createPublicPattern(20, 20, new Uint16Array(400))),
+        ])}
+      />,
+    );
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await screen.findByText("Actual Colors");
+    await userEvent.click(screen.getByRole("button", { name: "Zoom in" }));
+    expect(screen.getByText("125%")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Colors" }));
+    expect(screen.getByRole("dialog", { name: "Colors" })).toBeInTheDocument();
+
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 900,
+    });
+    act(() => window.dispatchEvent(new Event("resize")));
+
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(document.querySelector(".app-root")).not.toHaveAttribute("inert");
+    expect(document.body.style.position).toBe("");
+    expect(
+      screen.getByRole("main", { name: "Pattern maker workspace" }),
+    ).toHaveAttribute("data-workspace-mode", "medium");
+    expect(
+      screen.getByRole("region", { name: "Start with an image" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("navigation", { name: "Pattern detail panels" }),
+    ).toBeNull();
+    expect(screen.getByText("125%")).toBeInTheDocument();
+    expect(screen.getByText("Board Layout")).toBeInTheDocument();
   });
 });

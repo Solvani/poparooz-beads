@@ -1,6 +1,7 @@
 @import "./styles/tokens.css";
 @import "./styles/foundations.css";
 @import "./styles/workspace.css";
+@import "./styles/mobile-workspace.css";
 
 .error-shell {
   width: min(42rem, calc(100% - 2rem));

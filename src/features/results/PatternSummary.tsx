@@ -2,8 +2,10 @@ import type { PatternSummaryView } from "./result.types";
 
 export function PatternSummary({
   summary,
+  variant = "full",
 }: {
   readonly summary: PatternSummaryView;
+  readonly variant?: "full" | "compact";
 }) {
   return (
     <section
@@ -17,7 +19,7 @@ export function PatternSummary({
           <dd>{summary.patternSize}</dd>
         </div>
         <div>
-          <dt>Colors</dt>
+          <dt>{variant === "compact" ? "Actual Colors" : "Colors"}</dt>
           <dd>{summary.actualColorsLabel}</dd>
         </div>
         <div>

@@ -65,4 +65,23 @@ describe("GeneratorWorkspaceShell", () => {
       view.getByText("Your pattern details will appear here."),
     ).toBeInTheDocument();
   });
+
+  it("replaces result placeholders while keeping future actions disabled", () => {
+    const view = render(
+      <GeneratorWorkspaceShell resultsContent={<p>Public result details</p>} />,
+    );
+    expect(view.getByText("Public result details")).toBeInTheDocument();
+    expect(
+      view.getByRole("complementary", { name: "Pattern details" }),
+    ).toBeInTheDocument();
+    expect(
+      view.queryByText("Color quantities will appear after generation."),
+    ).toBeNull();
+    expect(
+      view.getByRole("button", { name: "Download Pattern" }),
+    ).toBeDisabled();
+    expect(
+      view.getByRole("button", { name: "Get Beads for This Pattern" }),
+    ).toBeDisabled();
+  });
 });

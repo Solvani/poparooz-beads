@@ -10,6 +10,7 @@ import {
 } from "../features/generator/generation.types";
 import { useGeneratorController } from "../features/generator/use-generator-controller";
 import { PatternCanvas } from "../features/pattern-canvas/PatternCanvas";
+import { PatternResults } from "../features/results/PatternResults";
 import { PatternSettings } from "../features/settings/PatternSettings";
 import {
   EMPTY_PATTERN_SETTINGS,
@@ -55,6 +56,15 @@ export function App({
               <PatternCanvas
                 key={lastSuccess?.snapshot.jobId}
                 pattern={visiblePattern}
+              />
+            )
+          }
+          resultsContent={
+            visiblePattern === undefined ? undefined : (
+              <PatternResults
+                key={lastSuccess?.snapshot.jobId}
+                pattern={visiblePattern}
+                status={generator.state.status}
               />
             )
           }

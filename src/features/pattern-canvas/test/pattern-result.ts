@@ -6,6 +6,37 @@ export function createPublicPattern(
   indexes: readonly number[] | Uint16Array = [0, 1, 65535, 0],
 ): PublicPatternResult {
   const values = Array.from(indexes);
+  const beadCount = values.filter((index) => index !== 65535).length;
+  const transparentPositions = values.filter((index) => index === 65535).length;
+  const colorDefinitions = [
+    {
+      index: 0,
+      color: {
+        brand: "Poparooz" as const,
+        code: "POP-RED",
+        name: "Red",
+        hex: "#FF0000",
+        isSpecialFinish: false,
+      },
+    },
+    {
+      index: 1,
+      color: {
+        brand: "Poparooz" as const,
+        code: "POP-BLUE",
+        name: "Blue",
+        hex: "#0000FF",
+        isSpecialFinish: false,
+      },
+    },
+  ];
+  const colors = colorDefinitions
+    .map((definition) => ({
+      ...definition,
+      beadCount: values.filter((index) => index === definition.index).length,
+    }))
+    .filter((definition) => definition.beadCount > 0)
+    .map((definition) => Object.freeze(definition));
   return Object.freeze({
     matrix: Object.freeze({
       width,
@@ -13,38 +44,23 @@ export function createPublicPattern(
       colorIndices: new Uint16Array(indexes),
       transparentIndex: 65535,
     }),
-    colors: Object.freeze([
-      Object.freeze({
-        index: 0,
-        color: Object.freeze({
-          brand: "Poparooz" as const,
-          code: "POP-RED",
-          name: "Red",
-          hex: "#FF0000",
-          isSpecialFinish: false,
+    colors: Object.freeze(colors),
+    materials: Object.freeze(
+      colors.map((entry) =>
+        Object.freeze({
+          patternColorIndex: entry.index,
+          color: entry.color,
+          beadCount: entry.beadCount,
         }),
-        beadCount: values.filter((index) => index === 0).length,
-      }),
-      Object.freeze({
-        index: 1,
-        color: Object.freeze({
-          brand: "Poparooz" as const,
-          code: "POP-BLUE",
-          name: "Blue",
-          hex: "#0000FF",
-          isSpecialFinish: false,
-        }),
-        beadCount: values.filter((index) => index === 1).length,
-      }),
-    ]),
-    materials: Object.freeze([]),
+      ),
+    ),
     totals: Object.freeze({
       width,
       height,
       totalPositions: width * height,
-      totalBeads: values.filter((index) => index !== 65535).length,
-      transparentPositions: values.filter((index) => index === 65535).length,
-      colorCount: 2,
+      totalBeads: beadCount,
+      transparentPositions,
+      colorCount: colors.length,
     }),
     boardLayout: Object.freeze({
       boardColumns: 1,
@@ -53,12 +69,24 @@ export function createPublicPattern(
       boardWidthInBeads: width,
       boardHeightInBeads: height,
       totalPegCapacity: width * height,
-      usedBeadCount: values.filter((index) => index !== 65535).length,
-      transparentPatternPositions: values.filter((index) => index === 65535)
-        .length,
+      usedBeadCount: beadCount,
+      transparentPatternPositions: transparentPositions,
       outsidePatternPegCount: 0,
-      unusedPegCount: values.filter((index) => index === 65535).length,
-      tiles: Object.freeze([]),
+      unusedPegCount: transparentPositions,
+      tiles: Object.freeze([
+        Object.freeze({
+          index: 0,
+          row: 0,
+          column: 0,
+          originX: 0,
+          originY: 0,
+          coveredWidth: width,
+          coveredHeight: height,
+          beadCount,
+          transparentPatternPositions: transparentPositions,
+          outsidePatternPegCount: 0,
+        }),
+      ]),
     }),
   });
 }

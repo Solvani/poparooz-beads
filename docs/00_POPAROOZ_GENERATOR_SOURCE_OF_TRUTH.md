@@ -101,6 +101,10 @@ P2-D01 and P2-D02 selected **Poparooz Guided Canvas Commerce** and froze **Popar
 
 P2-I04 is complete. P2-I05 adds a `PublicPatternResult`-only Canvas with cached raster rendering, visible-region cropping, Fit/Zoom/Grid controls, bounded pointer and wheel pan, resize handling, DPR clamping, accessible semantics, and retention of the last successful Canvas and viewport through Dirty and regeneration states. It adds no public result summary, production palette, verified board data, export, Shopify behavior, or deployment. The production App remains generation-unavailable until approved Palette, BoardProfile, and processing policy inputs exist.
 
+## P2-I06 acceptance update
+
+P2-I06 adds customer-safe Pattern Summary, public color/bead quantities, and abstract Board Layout results from the last successful `PublicPatternResult`. It uses authoritative public totals, a stable count/index/code color order, an eight-row collapsed list with a 512-row ceiling, exact CSS board tiles through 100 boards, and a single compressed preview above that threshold. It excludes unverified package quantities, price, inventory, Shopify, downloads, Bottom Sheet, editing, production Palette, and verified physical-board claims. Result view errors remain separate from Generator success and preserve a valid Canvas. The production runtime remains unavailable.
+
 ## Data truth boundary
 
 No production internal reference palette, Poparooz display-code list, or sellable range is defined. Publicly available color values may later be used internally only as clearly labeled reference values; they must not be presented as exact physical matches or verified Poparooz inventory. Internal palette fields are governed by [`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md), canonical file ingestion by [`POPAROOZ_PALETTE_IMPORT_CONTRACT.md`](POPAROOZ_PALETTE_IMPORT_CONTRACT.md), and every customer-visible consumer by [`POPAROOZ_PUBLIC_BRANDING_CONTRACT.md`](POPAROOZ_PUBLIC_BRANDING_CONTRACT.md). Visual reference charts are not valid production palette sources.
@@ -132,7 +136,7 @@ Before implementation begins, read this file and every formal document relevant 
 
 ## Phase 1 freeze
 
-Current accepted status through P2-I05: the Public Pattern Canvas viewport and controls are implemented. Public color, bead-count, material, and board-layout result summaries remain gated to P2-I06. The production runtime remains unavailable, and the Phase 1 frozen contracts are unchanged.
+Current accepted status through P2-I06: the Public Pattern Canvas, customer-safe result summary, public color/bead quantities, and abstract Board Layout are implemented. Download and Get Beads remain disabled placeholders. P2-I07 and later work remain gated; the production runtime remains unavailable, and the Phase 1 frozen contracts are unchanged.
 
 Current status: P2-D01/P2-D02 selected the UI direction and design system, P2-I01 completed planning, P2-I02 established the static UI shell, P2-I03 added local upload/preview/settings, and P2-I04 adds gated generation orchestration and lifecycle behavior without rendering Pattern details. Later Phase 2 behavior remains gated by its individual tasks.
 

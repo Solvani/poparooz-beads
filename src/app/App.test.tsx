@@ -201,10 +201,19 @@ describe("App", () => {
         name: "Bead pattern preview, 2 columns by 2 rows.",
       }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Pattern Summary" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("2 × 2")).toBeInTheDocument();
+    expect(screen.getByText("3")).toBeInTheDocument();
+    expect(screen.getAllByText("1 board")).toHaveLength(2);
 
     await userEvent.clear(screen.getByLabelText("Maximum Colors"));
     await userEvent.type(screen.getByLabelText("Maximum Colors"), "20");
     expect(screen.getByText("Settings changed")).toBeInTheDocument();
+    expect(
+      screen.getByText("These details belong to your previous pattern."),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole("img", { name: /Bead pattern preview/ }),
     ).toBeInTheDocument();
@@ -218,13 +227,22 @@ describe("App", () => {
       screen.getByText("Your previous pattern is still available."),
     ).toBeInTheDocument();
     expect(
+      screen.getByText(
+        "Previous pattern details remain visible until the update is ready.",
+      ),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("img", { name: /Bead pattern preview/ }),
     ).toBeInTheDocument();
-
     await userEvent.click(screen.getByRole("button", { name: "Abort" }));
     expect(
       screen.getByText(
         "Pattern update stopped. Your previous pattern is still available.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Pattern update stopped. These previous pattern details remain available.",
       ),
     ).toBeInTheDocument();
     expect(
@@ -236,6 +254,9 @@ describe("App", () => {
     await userEvent.click(screen.getByRole("button", { name: "Remove Image" }));
     expect(
       screen.queryByRole("img", { name: /Bead pattern preview/ }),
+    ).toBeNull();
+    expect(
+      screen.queryByRole("heading", { name: "Pattern Summary" }),
     ).toBeNull();
   });
 
@@ -280,6 +301,8 @@ describe("App", () => {
       }),
     ).toBeInTheDocument();
     expect(screen.getByText("100%")).toBeInTheDocument();
+    expect(screen.getByText("10 × 5")).toBeInTheDocument();
+    expect(screen.getByText("50")).toBeInTheDocument();
 
     await userEvent.clear(screen.getByLabelText("Maximum Colors"));
     await userEvent.type(screen.getByLabelText("Maximum Colors"), "24");
@@ -295,6 +318,11 @@ describe("App", () => {
       }),
     ).toBeInTheDocument();
     expect(screen.queryByText("private regeneration detail")).toBeNull();
+    expect(
+      screen.getByText(
+        "Pattern update failed. These previous pattern details remain available.",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("never renders a raw injected service exception", async () => {
@@ -322,5 +350,88 @@ describe("App", () => {
     expect(
       screen.queryByRole("img", { name: /Bead pattern preview/ }),
     ).toBeNull();
+    expect(
+      screen.queryByRole("heading", { name: "Pattern Summary" }),
+    ).toBeNull();
+  });
+
+  it("never shows packaging, pricing, Shopify, or internal result fields", async () => {
+    const result = createPublicPattern();
+    const runtime = availableRuntime([
+      Promise.resolve({
+        ...result,
+        materials: result.materials.map((material) => ({
+          ...material,
+          packSize: 1000,
+          packsRequired: 1,
+        })),
+      }),
+    ]);
+    const { container } = render(<App generationRuntime={runtime} />);
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await screen.findByRole("heading", { name: "Pattern Summary" });
+
+    const visible = container.textContent ?? "";
+    for (const forbidden of [
+      "packSize",
+      "packsRequired",
+      "price",
+      "inventory",
+      "referenceCode",
+      "variantId",
+      "Shopify",
+    ]) {
+      expect(visible).not.toContain(forbidden);
+    }
+    expect(
+      screen.getByRole("button", { name: "Download Pattern" }),
+    ).toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: "Get Beads for This Pattern" }),
+    ).toBeDisabled();
+  });
+
+  it("keeps a valid Canvas and Generator success when only the results view is invalid", async () => {
+    const result = createPublicPattern();
+    const runtime = availableRuntime([
+      Promise.resolve({
+        ...result,
+        totals: { ...result.totals, totalBeads: -1 },
+      }),
+    ]);
+    render(<App generationRuntime={runtime} />);
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+
+    expect(
+      await screen.findByText("Pattern data is ready."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: /Bead pattern preview/ }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("We couldn’t display these pattern details."),
+    ).toHaveAttribute("role", "status");
+  });
+
+  it("shows no result data after a first-generation abort", async () => {
+    const pending = new Promise<PublicPatternResult>(() => undefined);
+    render(<App generationRuntime={availableRuntime([pending])} />);
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Abort" }));
+
+    expect(screen.getByText("Pattern generation stopped.")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Pattern Summary" }),
+    ).toBeNull();
+    expect(screen.queryByText("POP-RED")).toBeNull();
   });
 });

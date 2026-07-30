@@ -6,12 +6,14 @@ import { Panel } from "../ui/Panel";
 export interface GeneratorWorkspaceShellProps {
   readonly settingsContent?: ReactNode;
   readonly canvasContent?: ReactNode;
+  readonly resultsContent?: ReactNode;
   readonly imageReady?: boolean;
 }
 
 export function GeneratorWorkspaceShell({
   settingsContent,
   canvasContent,
+  resultsContent,
   imageReady = false,
 }: GeneratorWorkspaceShellProps) {
   return (
@@ -46,19 +48,33 @@ export function GeneratorWorkspaceShell({
 
       <Panel
         as="aside"
-        title="Your pattern details will appear here."
+        title={
+          resultsContent === undefined
+            ? "Your pattern details will appear here."
+            : "Pattern details"
+        }
         titleId="summary-heading"
         eyebrow="Pattern Summary"
         className="workspace-shell__results"
       >
-        <section className="summary-section" aria-labelledby="colors-heading">
-          <h3 id="colors-heading">Colors</h3>
-          <p>Color quantities will appear after generation.</p>
-        </section>
-        <section className="summary-section" aria-labelledby="boards-heading">
-          <h3 id="boards-heading">Board Layout</h3>
-          <p>Board placement will appear after generation.</p>
-        </section>
+        {resultsContent ?? (
+          <>
+            <section
+              className="summary-section"
+              aria-labelledby="colors-heading"
+            >
+              <h3 id="colors-heading">Colors</h3>
+              <p>Color quantities will appear after generation.</p>
+            </section>
+            <section
+              className="summary-section"
+              aria-labelledby="boards-heading"
+            >
+              <h3 id="boards-heading">Board Layout</h3>
+              <p>Board placement will appear after generation.</p>
+            </section>
+          </>
+        )}
         <section
           className="summary-section action-placeholder"
           aria-label="Future actions"

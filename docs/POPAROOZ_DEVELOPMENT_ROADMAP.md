@@ -43,7 +43,7 @@ UI direction: **Poparooz Guided Canvas Commerce**. Design system: **Poparooz Cra
 - [x] P2-I03: local upload, original-image preview, Object URL lifecycle, and settings panel.
 - [x] P2-I04: generation, Abort, error, dirty, and regeneration state flow.
 - [x] P2-I05: Pattern Canvas, zoom, grid, and fit.
-- [ ] P2-I06: public color, bead-count, summary, and board-layout results.
+- [x] P2-I06: public color, bead-count, summary, and board-layout results.
 - [ ] P2-I07: disabled-to-accepted action flow and customer journey completion.
 - [ ] P2-I08: mobile Bottom Sheet and tablet layout.
 - [ ] P2-I09: accessibility, compatibility, performance, and full regression.
@@ -109,6 +109,10 @@ Track and resolve as early as possible:
 Phase 1 algorithm foundation may proceed without real palette or board data only with labeled test fixtures. Supplier values, sellable colors, commerce mappings, physical board defaults, and physical-color claims block production release, not isolated fixture-based engineering.
 
 ## Recommended next task
+
+Current recommendation after accepted P2-I06: define and perform P2-I07 only—the disabled-to-accepted action flow and remaining customer-journey completion for the existing Download Pattern and Get Beads placeholders. Before enabling either action, freeze its exact output/navigation contract and supply every required verified production input. Do not introduce Shopify cart behavior, unverified package conversion, price/inventory claims, Bottom Sheet, editing, production Palette/BoardProfile assumptions, or P2-I08 work.
+
+P2-I06 completed customer-safe Pattern Summary, stable public color/bead quantities, bounded color expansion, exact small Board layouts, compressed large Board previews, responsive Results presentation, retained-result lifecycle messaging, and isolated result-view errors. Production generation remains unavailable; pack size and physical BoardProfile remain unverified.
 
 Current recommendation after accepted P2-I05: perform P2-I06 only—render customer-safe public color and bead-count results, material summary, and board-layout results from `PublicPatternResult`. Do not add downloads, Shopify/Get Beads behavior, Bottom Sheet, Original/Pattern comparison, editing, production data, or later tasks.
 

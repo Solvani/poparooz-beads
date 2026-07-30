@@ -1,0 +1,93 @@
+import { cleanup, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { afterEach, describe, expect, it } from "vitest";
+
+import { PatternResults } from "./PatternResults";
+import { createManyColors, createResultFixture } from "./test/result-fixture";
+
+afterEach(cleanup);
+
+describe("PatternResults", () => {
+  it("renders summary, colors, and board layout from one public result", () => {
+    render(<PatternResults pattern={createResultFixture()} status="success" />);
+    expect(
+      screen.getByRole("heading", { name: "Pattern Summary" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Colors" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Board Layout" }),
+    ).toBeInTheDocument();
+  });
+
+  it.each([
+    ["dirty", "These details belong to your previous pattern."],
+    [
+      "regenerating",
+      "Previous pattern details remain visible until the update is ready.",
+    ],
+    [
+      "aborted",
+      "Pattern update stopped. These previous pattern details remain available.",
+    ],
+    [
+      "error",
+      "Pattern update failed. These previous pattern details remain available.",
+    ],
+  ] as const)("announces retained details while %s", (status, message) => {
+    render(<PatternResults pattern={createResultFixture()} status={status} />);
+    expect(screen.getByRole("status")).toHaveTextContent(message);
+  });
+
+  it("keeps expansion for the same result and resets when a new keyed result mounts", async () => {
+    const first = createResultFixture({
+      width: 10,
+      height: 1,
+      transparentPositions: 0,
+      colors: createManyColors(10),
+    });
+    const second = createResultFixture({
+      width: 9,
+      height: 1,
+      transparentPositions: 0,
+      colors: createManyColors(9),
+    });
+    const view = render(
+      <PatternResults key="first" pattern={first} status="success" />,
+    );
+    await userEvent.click(
+      screen.getByRole("button", { name: "Show all colors" }),
+    );
+    expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
+      10,
+    );
+    view.rerender(
+      <PatternResults key="first" pattern={first} status="dirty" />,
+    );
+    expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
+      10,
+    );
+    view.rerender(
+      <PatternResults key="second" pattern={second} status="success" />,
+    );
+    expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
+      8,
+    );
+  });
+
+  it("shows a safe view error without exposing invalid result fields", () => {
+    const pattern = createResultFixture();
+    render(
+      <PatternResults
+        pattern={{
+          ...pattern,
+          totals: { ...pattern.totals, totalBeads: -1 },
+        }}
+        status="success"
+      />,
+    );
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "We couldn’t display these pattern details.",
+    );
+    expect(screen.queryByText("P01")).toBeNull();
+  });
+});

@@ -1,8 +1,8 @@
 # Poparooz Generator Source of Truth
 
-Status: **Phase 0 frozen baseline**
+Status: **Phase 2 completed and frozen**
 
-Baseline version: **1.4**
+Baseline version: **2.0**
 
 Last reviewed: **2026-07-30**
 
@@ -76,6 +76,8 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_DEVELOPMENT_ROADMAP.md`](POPAROOZ_DEVELOPMENT_ROADMAP.md): phased delivery plan and entry dependencies.
 - [`POPAROOZ_ACCEPTANCE_CRITERIA.md`](POPAROOZ_ACCEPTANCE_CRITERIA.md): acceptance gates for Phase 0 and later phases.
 - [`POPAROOZ_CRAFT_UI_V1_CONTRACT.md`](POPAROOZ_CRAFT_UI_V1_CONTRACT.md): authoritative Phase 2 Design Tokens, responsive layout, semantic shell, accessibility, and customer-visible UI boundary.
+- [`POPAROOZ_PHASE_2_COMPLETION_AND_FREEZE.md`](POPAROOZ_PHASE_2_COMPLETION_AND_FREEZE.md): Phase 2 completion record, frozen contracts, open gates, and Phase 3 entry boundary.
+- [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
 
@@ -113,6 +115,10 @@ P2-I07 replaces the generic action placeholder with a stable Pattern Options reg
 
 P2-I08 adds container-width Workspace Modes, a Compact result-first structure, four Settings/Colors/Boards/Original launchers, and a dependency-free Portal Bottom Sheet with modal semantics, tabs, focus containment/restore, background isolation, body scroll restoration, Escape/Close/Backdrop/96px handle-drag closure, and complete resource cleanup. Compact mounts each stateful business component in exactly one location and shares the displayed successful result identity across Canvas, Summary, detail panels, and Actions. Medium remains full-width through the Canvas and uses one column at 768–899px with internal two-column detail groups allowed at 900–1099px. Desktop/Wide remains three-column. P2-I08 adds no pinch zoom, sticky action bar, download, navigation, commerce, production data, dependency, or P2-I09 final browser/device acceptance. Production generation remains unavailable.
 
+## P2-I09 acceptance update
+
+P2-I09 completed automated regression, responsive boundary, controlled-Chromium, accessibility-tree, contrast, lifecycle, resource-cleanup, and stress validation. The evidence-backed visible-focus defect was fixed. Phase 2 UI code validation is **Passed with external device gates open**; rows without direct environment evidence remain `Not verified` and continue to block production launch. No production palette, runtime, export, commerce, persistence, Shopify behavior, or deployment was added.
+
 ## Data truth boundary
 
 No production internal reference palette, Poparooz display-code list, or sellable range is defined. Publicly available color values may later be used internally only as clearly labeled reference values; they must not be presented as exact physical matches or verified Poparooz inventory. Internal palette fields are governed by [`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md), canonical file ingestion by [`POPAROOZ_PALETTE_IMPORT_CONTRACT.md`](POPAROOZ_PALETTE_IMPORT_CONTRACT.md), and every customer-visible consumer by [`POPAROOZ_PUBLIC_BRANDING_CONTRACT.md`](POPAROOZ_PUBLIC_BRANDING_CONTRACT.md). Visual reference charts are not valid production palette sources.
@@ -142,12 +148,17 @@ No upstream project, Fork relationship, LICENSE, or third-party dependency is pr
 
 Before implementation begins, read this file and every formal document relevant to the task. A task must remain within one accepted roadmap stage, include tests proportionate to its risk, and pass that stage's acceptance gate. Unknown supplier, board, Shopify, browser-support, domain, or deployment facts remain tracked dependencies rather than guessed defaults.
 
-## Phase 1 freeze
+## Phase 1 and Phase 2 freeze
 
-Current accepted status through P2-I08: the Public Pattern Canvas, customer-safe Results and Pattern Options, Compact result-first Bottom Sheet flow, and Medium tablet workspace are implemented. Download and Get Beads remain disabled placeholders without behavior. P2-I09 final accessibility, compatibility, performance, browser, device, and full-regression acceptance remains gated; the production runtime remains unavailable, and the Phase 1 frozen contracts are unchanged.
+- Phase 2 UI Implementation: **Completed and Frozen**
+- Phase 2 Code Validation: **Passed with external device gates open**
+- Production Launch Readiness: **Blocked**
+- Production Generation Runtime: **Unavailable**
 
-Current status: P2-D01/P2-D02 selected the UI direction and design system, P2-I01 completed planning, P2-I02 established the static UI shell, P2-I03 added local upload/preview/settings, and P2-I04 adds gated generation orchestration and lifecycle behavior without rendering Pattern details. Later Phase 2 behavior remains gated by its individual tasks.
+P2-D01/P2-D02 and P2-I01 through P2-I10 are complete. The accepted experience includes the responsive shell, local upload and preview, settings, generation lifecycle, `PublicPatternResult` Canvas and results, disabled Pattern Options, Compact Bottom Sheet, Medium tablet workspace, and P2-I09 hardening. Download and Get Beads remain disabled placeholders without behavior. External browser/device/accessibility evidence, verified production data, the production generation runtime, export, commerce, Shopify, and deployment remain outside this freeze and must not be inferred as accepted.
+
+The Phase 1 computation, domain, Worker, algorithm, assembly, and public-result contracts remain frozen and unchanged by Phase 2. Any future change to a frozen Phase 2 contract requires a separately accepted task, an updated governing contract and regression evidence, and a new explicit freeze record.
 
 Historical Phase 2 entry condition recorded at the Phase 1 freeze:
 
-P1-A01 through P1-A10 are complete and the Phase 1 computation foundation is frozen under [`POPAROOZ_PHASE_1_COMPLETION_AND_FREEZE.md`](POPAROOZ_PHASE_1_COMPLETION_AND_FREEZE.md). Overall performance is Yellow and Pattern Assembly Worker Decision is C pending representative browser/mobile evidence. Phase 2 is not started; before any UI implementation, 3–5 desktop/mobile approaches must be presented and the user must explicitly select one.
+P1-A01 through P1-A10 were complete and the Phase 1 computation foundation was frozen under [`POPAROOZ_PHASE_1_COMPLETION_AND_FREEZE.md`](POPAROOZ_PHASE_1_COMPLETION_AND_FREEZE.md). Overall performance was Yellow and Pattern Assembly Worker Decision was C pending representative browser/mobile evidence. At that historical point Phase 2 had not started, and the required UI-direction selection gate was still open; it was subsequently satisfied by P2-D01/P2-D02.

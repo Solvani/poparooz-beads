@@ -1,6 +1,6 @@
 # Poparooz Development Roadmap
 
-Status: **Phase 0 frozen roadmap**
+Status: **Phase 2 completed and frozen roadmap**
 
 Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md)
 
@@ -36,6 +36,11 @@ Phase 1 does not build the complete workspace UI. Missing real palette/board dat
 
 UI direction: **Poparooz Guided Canvas Commerce**. Design system: **Poparooz Craft UI v1**.
 
+- Phase 2 UI Implementation: **Completed and Frozen**
+- Phase 2 Code Validation: **Passed with external device gates open**
+- Production Launch Readiness: **Blocked**
+- Production Generation Runtime: **Unavailable**
+
 - [x] P2-D01: desktop and mobile UI direction selection.
 - [x] P2-D02: design-system and responsive-layout freeze.
 - [x] P2-I01: repository baseline and UI implementation plan.
@@ -46,8 +51,8 @@ UI direction: **Poparooz Guided Canvas Commerce**. Design system: **Poparooz Cra
 - [x] P2-I06: public color, bead-count, summary, and board-layout results.
 - [x] P2-I07: disabled action contract, result identity, and customer journey completion.
 - [x] P2-I08: mobile Bottom Sheet and tablet workspace layout.
-- [ ] P2-I09: accessibility, compatibility, performance, and full regression.
-- [ ] P2-I10: Phase 2 final audit and freeze.
+- [x] P2-I09: accessibility, compatibility, performance, and full regression.
+- [x] P2-I10: Phase 2 final audit and freeze.
 
 The older capability list below remains a product-scope crosswalk. The P2-I task sequence above controls implementation order.
 
@@ -110,9 +115,9 @@ Phase 1 algorithm foundation may proceed without real palette or board data only
 
 ## Recommended next task
 
-Current recommendation after accepted P2-I08: perform P2-I09 only—execute final accessibility, keyboard/screen-reader, browser compatibility, real iPhone Safari and Android Chrome layout/gesture, tablet/desktop visual, memory/performance, and complete regression acceptance against the frozen P2-I02–P2-I08 implementation. P2-I09 should fix evidence-backed defects only; it must not add pinch zoom, editing, sticky actions, real download, commerce/navigation, production Palette/BoardProfile/package data, or redesign the accepted workflow.
+Phase 2 is complete and frozen. The recommended next entry is a separately scoped Phase 3 planning and acceptance task that first resolves the verified production palette/runtime, export, deployment, and Shopify boundary prerequisites. No Phase 3 implementation is authorized by this roadmap update. External device/browser/accessibility gates from P2-I09 remain production-launch blockers, not failed Phase 2 code validation.
 
-P2-I08 completed container-width Workspace Modes, Compact result-first information architecture, compact public summary, four panel launchers, a dependency-free modal Bottom Sheet with focus/background/scroll/close cleanup, unique responsive mounting of existing business components, and the Medium tablet layout. Automated DOM, lifecycle, cleanup, responsive, and boundary coverage is complete for this task; final real-browser/device acceptance remains P2-I09. Download and Get Beads remain disabled, and production generation remains unavailable.
+P2-I10 audited and froze the accepted P2-I01–P2-I09 implementation without changing feature code. Phase 2 code validation passed with external device gates open. Download and Get Beads remain disabled, production generation remains unavailable, and production launch readiness is blocked.
 
 Historical recommendation after accepted P2-I07: perform P2-I08 only—implement the accepted mobile Bottom Sheet and tablet workspace layout around the existing flow. Preserve P2-I07 native-disabled action semantics and result identity; do not enable download or commerce, add a sticky mobile action bar, introduce pinch zoom or editing, assume production Palette/BoardProfile/package data, or pull P2-I09 validation work forward.
 

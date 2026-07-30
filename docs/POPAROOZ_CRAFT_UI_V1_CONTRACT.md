@@ -1,5 +1,7 @@
 # Poparooz Craft UI v1 Contract
 
+Status: **Phase 2 Completed and Frozen**
+
 ## Authority and direction
 
 The Phase 2 UI direction is **Poparooz Guided Canvas Commerce**. Its design system is **Poparooz Craft UI v1**. This contract governs customer-facing generator UI from P2-I02 onward. Later components may extend it only through an accepted task; they may not bypass or silently redefine it.
@@ -160,3 +162,16 @@ Compact never simultaneously mounts inline and Sheet copies of PatternSettings, 
 Medium never mounts the Bottom Sheet or uses the desktop three-column grid. From 768px through 899px, Settings, full-width Canvas with Generation Status, Summary, Colors, Boards, and Actions remain in one primary column. From 900px through 1099px, Original/Settings and Colors/Boards may form internal two-column grids while Canvas, Summary, and Actions remain full-row. CSS Container Queries own visual placement; the JavaScript mode only controls unique component location.
 
 Desktop and Wide retain the accepted three-column and width contracts, Results order, Canvas viewport identity, Header, and disabled Pattern Actions. P2-I08 does not add pinch or multi-pointer zoom, sticky actions, Original/Pattern comparison, editing, real download/export/print, commerce or navigation, production Palette/BoardProfile/package data, persistence, Router, dependency changes, or P2-I09 browser/device acceptance. The production runtime remains unavailable.
+
+## Phase 2 freeze status
+
+- Phase 2 UI Implementation: **Completed and Frozen**
+- Phase 2 Code Validation: **Passed with external device gates open**
+- Production Launch Readiness: **Blocked**
+- Production Generation Runtime: **Unavailable**
+
+P2-I09 validated the frozen UI through the full automated suite (64 test files, 676 tests), production build and static checks, controlled-Chromium responsive and interaction evidence, accessibility-tree inspection, contrast checks, lifecycle/resource cycles, and bounded stress cases. The evidence matrix intentionally retains `Not verified` for unavailable external environments; those rows block production launch without reclassifying the Phase 2 code as failed.
+
+The Design Tokens, responsive modes and breakpoints, result-first Compact information architecture, unique component mounting, generation lifecycle presentation, `PublicPatternResult`-only customer boundary, Canvas viewport behavior, Results ordering, disabled action semantics, Bottom Sheet modal behavior, browser-local privacy rules, and Poparooz-only customer branding are frozen at P2-I10. A future change requires a separately accepted task, simultaneous updates to affected governing contracts, proportionate regression and environment evidence, and a new explicit acceptance record.
+
+Evidence: [`P2_I09_VALIDATION_MATRIX.md`](evidence/P2_I09_VALIDATION_MATRIX.md), [`POPAROOZ_PHASE_2_COMPLETION_AND_FREEZE.md`](POPAROOZ_PHASE_2_COMPLETION_AND_FREEZE.md), and [`P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md).

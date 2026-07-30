@@ -9,11 +9,11 @@ Operating system: Windows 10 x64, build 19045
 
 ## Outcome
 
-- Phase 2 UI code validation: **Blocked**. The automated, responsive, pointer, lifecycle, contrast, and available Chromium gates pass, but this environment could not complete the required end-to-end hardware-keyboard Tab/Shift+Tab walkthrough. It must not be inferred from automated coverage.
+- Phase 2 UI code validation: **Passed with external device gates open**. The automated, responsive, pointer, lifecycle, contrast, and available controlled-Chromium gates passed, and the defect found during P2-I09 was corrected. No unresolved blocking Phase 2 code defect remains. External-device rows below retain their evidence-based status.
 - Production launch readiness: **Blocked**.
 - Production generation runtime remains unavailable by contract.
 - No production palette, board profile, pack size, download, commerce, persistence, or Shopify behavior was added.
-- P2-I10 was not performed.
+- P2-I10 uses this accepted matrix as its validation source; it adds no new browser or device evidence.
 
 ## Environment and evidence rules
 
@@ -144,6 +144,6 @@ node node_modules/prettier/bin/prettier.cjs --check .
 git diff --check
 ```
 
-## Open production gates and P2-I10 recommendation
+## Open production gates
 
-P2-I10 should remain narrowly focused on the final audit/freeze after the following evidence exists: a manual hardware-keyboard walkthrough; controlled Chrome and Edge sessions; Firefox; macOS Safari; physical iPhone/iPad and Android; a real screen reader/browser pairing; official Poparooz palette/code/name data; physical color and BoardProfile validation; pack size; production generation runtime; and separately approved download, commerce, and Shopify boundaries. These remain open gates, not inferred passes.
+The following evidence remains required for production launch: a manual hardware-keyboard walkthrough; controlled Chrome and Edge sessions; Firefox; macOS Safari; physical iPhone/iPad and Android; a real screen reader/browser pairing; official Poparooz palette/code/name data; physical color and BoardProfile validation; pack size; production generation runtime; and separately approved download, commerce, and Shopify boundaries. These remain open gates, not inferred passes.

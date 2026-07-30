@@ -16,7 +16,7 @@ The font stack is Inter, system UI sans-serif, Apple and Windows system fonts, R
 
 ## Spacing, shape, shadow, and motion
 
-Spacing uses 4, 8, 12, 16, 20, 24, 32, 40, 48, and 64px. Shape uses 8, 12, 16, and 20px plus pill radii. Small, medium, and large shadows communicate elevation without replacing borders or focus. Motion uses the frozen durations/easing and honors `prefers-reduced-motion`.
+Spacing uses 4, 8, 12, 16, 20, 24, 32, 40, 48, and 64px. Shape uses 8, 12, 16, and 20px plus pill radii. Small, medium, and large shadows communicate elevation without replacing borders or focus. Keyboard focus uses a 3px `brand-600` outline with a 2px offset so the indicator maintains at least 3:1 contrast on primary surfaces. Motion uses the frozen durations/easing and honors `prefers-reduced-motion`.
 
 ## Responsive contract
 

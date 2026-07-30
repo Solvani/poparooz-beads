@@ -44,6 +44,7 @@ describe("ImagePreview", () => {
     );
 
     const input = view.getByLabelText("Replace Image") as HTMLInputElement;
+    expect(input.nextElementSibling).toBe(view.getByText("Replace Image"));
     await userEvent.upload(
       input,
       new File(["next"], "next.webp", { type: "image/webp" }),

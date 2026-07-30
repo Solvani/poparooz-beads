@@ -517,9 +517,9 @@
   cursor: pointer;
 }
 
-.image-upload__button:focus-within,
-.image-preview__actions label:focus-within {
-  outline: 3px solid var(--brand-300);
+.image-upload input:focus-visible + .image-upload__button,
+.image-preview__actions input:focus-visible + label {
+  outline: 3px solid var(--brand-600);
   outline-offset: 2px;
 }
 

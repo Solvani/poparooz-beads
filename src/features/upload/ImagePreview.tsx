@@ -30,9 +30,6 @@ export function ImagePreview({
         {source.mimeType} | {formatFileSize(source.size)}
       </p>
       <div className="image-preview__actions">
-        <label className="button button--secondary" htmlFor={inputId}>
-          Replace Image
-        </label>
         <input
           id={inputId}
           className="visually-hidden"
@@ -43,6 +40,9 @@ export function ImagePreview({
             event.currentTarget.value = "";
           }}
         />
+        <label className="button button--secondary" htmlFor={inputId}>
+          Replace Image
+        </label>
         <Button variant="tertiary" onClick={onRemove}>
           Remove Image
         </Button>

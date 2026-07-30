@@ -47,7 +47,7 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid var(--brand-300);
+  outline: 3px solid var(--brand-600);
   outline-offset: 2px;
 }
 

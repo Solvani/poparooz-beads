@@ -44,12 +44,6 @@ export function ImageUpload({ error, onSelectFiles }: ImageUploadProps) {
         Drag and drop a JPEG, PNG, or WebP image here, or choose an image from
         your device.
       </p>
-      <label
-        className="button button--primary image-upload__button"
-        htmlFor={inputId}
-      >
-        Choose an Image
-      </label>
       <input
         id={inputId}
         className="visually-hidden"
@@ -62,6 +56,12 @@ export function ImageUpload({ error, onSelectFiles }: ImageUploadProps) {
           event.currentTarget.value = "";
         }}
       />
+      <label
+        className="button button--primary image-upload__button"
+        htmlFor={inputId}
+      >
+        Choose an Image
+      </label>
       {error ? (
         <p id={errorId} className="form-error" role="alert" aria-live="polite">
           {error.message}

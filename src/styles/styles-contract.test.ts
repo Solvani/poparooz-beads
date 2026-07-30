@@ -28,6 +28,11 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
   it("keeps 16px body text, visible focus, and reduced-motion support", () => {
     expect(foundations).toContain("font-size: 16px");
     expect(foundations).toContain(":focus-visible");
+    expect(foundations).toContain("outline: 3px solid var(--brand-600)");
+    expect(workspace).toContain(
+      ".image-upload input:focus-visible + .image-upload__button",
+    );
+    expect(workspace).toContain("outline: 3px solid var(--brand-600)");
     expect(foundations).toContain("prefers-reduced-motion: reduce");
   });
 

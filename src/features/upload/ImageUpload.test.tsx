@@ -16,8 +16,10 @@ describe("ImageUpload", () => {
       <ImageUpload error={null} onSelectFiles={onSelectFiles} />,
     );
     const input = view.getByLabelText("Choose an Image") as HTMLInputElement;
+    const visibleLabel = view.getByText("Choose an Image");
     const file = new File(["image"], "photo.png", { type: "image/png" });
 
+    expect(input.nextElementSibling).toBe(visibleLabel);
     await userEvent.upload(input, file);
 
     expect(onSelectFiles).toHaveBeenCalledTimes(1);

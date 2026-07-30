@@ -33,4 +33,23 @@ describe("GeneratorWorkspaceShell", () => {
     ).toBeDisabled();
     expect(view.getByText("Coming later")).toBeInTheDocument();
   });
+
+  it("accepts Settings content and reports only image readiness to the empty Canvas", () => {
+    const view = render(
+      <GeneratorWorkspaceShell
+        imageReady
+        settingsContent={<p>Local settings</p>}
+      />,
+    );
+
+    expect(view.getByText("Local settings")).toBeInTheDocument();
+    expect(
+      view.getByText(
+        "Your image is ready. Generate the pattern in the next step.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      view.getByText("Your pattern details will appear here."),
+    ).toBeInTheDocument();
+  });
 });

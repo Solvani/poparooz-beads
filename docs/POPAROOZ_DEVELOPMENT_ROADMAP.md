@@ -40,7 +40,7 @@ UI direction: **Poparooz Guided Canvas Commerce**. Design system: **Poparooz Cra
 - [x] P2-D02: design-system and responsive-layout freeze.
 - [x] P2-I01: repository baseline and UI implementation plan.
 - [x] P2-I02: Design Tokens, semantic App Shell, and responsive layout skeleton.
-- [ ] P2-I03: upload, original-image preview, and settings panel.
+- [x] P2-I03: local upload, original-image preview, Object URL lifecycle, and settings panel.
 - [ ] P2-I04: generation, Abort, error, dirty, and regeneration state flow.
 - [ ] P2-I05: Pattern Canvas, zoom, grid, and fit.
 - [ ] P2-I06: public color, bead-count, summary, and board-layout results.
@@ -109,6 +109,8 @@ Track and resolve as early as possible:
 Phase 1 algorithm foundation may proceed without real palette or board data only with labeled test fixtures. Supplier values, sellable colors, commerce mappings, physical board defaults, and physical-color claims block production release, not isolated fixture-based engineering.
 
 ## Recommended next task
+
+Current recommendation after accepted P2-I03: perform P2-I04 only—generation orchestration, lifecycle states, Abort, supersede, errors, dirty, and regeneration. It must preserve the existing local image/settings contracts and must not pull Canvas drawing, result panels, downloads, Shopify, or production data forward. Earlier recommendations below remain historical entry records.
 
 Current recommendation after accepted P2-I02: perform P2-I03 only—upload, original preview, and settings. Do not pull generation, Worker orchestration, Canvas, results, export, Shopify, or production data forward. The historical recommendation below records the earlier Phase 2 entry gate.
 

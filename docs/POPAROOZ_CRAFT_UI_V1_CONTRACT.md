@@ -44,3 +44,25 @@ Later result components may consume only the strict Public Pattern model. They m
 ## P2-I02 exclusions
 
 P2-I02 contains no File API, upload/preview behavior, normalization, Worker call, Pattern Assembly, Public Pattern mapping, Canvas drawing, zoom/grid/fit behavior, generation state, Abort, Bottom Sheet interaction, download, Shopify, Router, state library, component library, icon library, production palette, BoardProfile, or mock Pattern values.
+
+## P2-I03 local image input contract
+
+The Settings Region accepts exactly one JPEG, PNG, or WebP through a native file input or drag and drop. The input advertises approved MIME types and extensions, while application validation requires an approved MIME/extension pairing, the existing non-empty rule, and the Phase 1 20 MiB file-size limit. This is lightweight selection validation; authoritative content-signature validation and decoding remain in the accepted Phase 1 image pipeline for the later generation stage.
+
+Cancellation is not an error. Multiple files are rejected without selecting one. Invalid replacement leaves the current valid image intact. Customer errors contain no local path, raw browser exception, image bytes, or internal diagnostic details.
+
+## Original preview and Object URL lifecycle
+
+The original preview uses a browser-local Object URL and `object-fit: contain`; it does not normalize or read pixels. A new valid preview is created before the old URL is revoked. Replace, Remove, and unmount revoke the active URL exactly once. Invalid files do not create a URL. Native input values are cleared after each attempt so the same file may be selected again.
+
+The selected File and Object URL remain ephemeral React/Hook resources. They are not uploaded, encoded into a URL, logged, serialized, or written to LocalStorage, SessionStorage, IndexedDB, Cache Storage, a database, or analytics.
+
+## Pattern Settings control contract
+
+Pattern Settings is controlled through immutable draft values and does not trigger generation. Because no production defaults are approved, width, height, Maximum Colors, and Background begin empty. The formal boundaries are:
+
+- width and height: integer 1–4096, with the Phase 1 total target limit of 16,777,216 pixels;
+- Maximum Colors: integer 1–512;
+- Background: White or Transparent only.
+
+No preset size, Palette-derived value, BoardProfile, Keep Original option, or fixture default is shown. Settings remain when the image is removed. Generate Pattern is present only as a native disabled layout placeholder; Worker, generation state, Pattern Assembly, Canvas, and results remain outside P2-I03.

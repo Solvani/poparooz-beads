@@ -1,7 +1,17 @@
+import type { ReactNode } from "react";
+
 import { Button } from "../ui/Button";
 import { Panel } from "../ui/Panel";
 
-export function GeneratorWorkspaceShell() {
+export interface GeneratorWorkspaceShellProps {
+  readonly settingsContent?: ReactNode;
+  readonly imageReady?: boolean;
+}
+
+export function GeneratorWorkspaceShell({
+  settingsContent,
+  imageReady = false,
+}: GeneratorWorkspaceShellProps) {
   return (
     <main className="workspace-shell" aria-label="Pattern maker workspace">
       <Panel
@@ -10,7 +20,9 @@ export function GeneratorWorkspaceShell() {
         eyebrow="Create"
         className="workspace-shell__settings"
       >
-        <p>Upload and pattern controls will appear here.</p>
+        {settingsContent ?? (
+          <p>Upload and pattern controls will appear here.</p>
+        )}
       </Panel>
 
       <Panel
@@ -20,7 +32,11 @@ export function GeneratorWorkspaceShell() {
         className="workspace-shell__canvas panel--canvas"
       >
         <div className="empty-state">
-          <p>Upload an image and generate a pattern to begin.</p>
+          <p>
+            {imageReady
+              ? "Your image is ready. Generate the pattern in the next step."
+              : "Upload an image and generate a pattern to begin."}
+          </p>
         </div>
       </Panel>
 

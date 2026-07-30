@@ -235,7 +235,7 @@ Identical input bytes and options produce identical color count, representatives
 
 The implementation prioritizes correctness and explainability. It uses an exact RGB histogram, unique-entry Median Cut, and box-local Medoid scans within the accepted `O(U log U * K)` engineering range, where `U` is the number of unique participating RGB values and `K` is the output color count.
 
-P1-A07 introduces no Worker, multithreading, SIMD, WASM, GPU, KD tree, cache, streaming, or fixed-millisecond unit gate. Representative image-scale performance belongs to P1-A08 and later phase acceptance.
+P1-A07 itself introduces no Worker, multithreading, SIMD, WASM, GPU, KD tree, cache, streaming, or fixed-millisecond unit gate. P1-A08 now wraps this unchanged synchronous core in the separate native module Worker contract; representative image-scale performance remains a later device-acceptance item.
 
 ## Palette and phase boundaries
 
@@ -253,4 +253,4 @@ P1-A07 QuantizedColor.lab
 
 Formal palette data and customer display codes remain unavailable and are not invented here.
 
-P1-A08 may wrap this pure synchronous function in a separately reviewed Worker protocol with cancellation and Transferable ownership rules. P1-A09 may later combine accepted quantization and palette matching into a pattern pipeline. Neither behavior is part of P1-A07.
+P1-A08 wraps this pure synchronous function under [`POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md`](POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md), with the Runtime as its only algorithm caller. P1-A09 may later combine accepted quantization and palette matching into a pattern pipeline. Neither behavior changes P1-A07's algorithm.

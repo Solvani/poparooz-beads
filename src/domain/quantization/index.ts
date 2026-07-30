@@ -10,6 +10,7 @@ export {
   validateQuantizationOptions,
 } from "./quantization-options";
 export { quantizeImage } from "./quantize-image";
+export { validateQuantizedResult } from "./quantized-result-validation";
 export type {
   QuantizationOptions,
   QuantizedColor,

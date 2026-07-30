@@ -139,6 +139,13 @@ decoded source that resolves after cancellation is immediately released. No
 cancelled task returns a partial success object. Input is never uploaded or
 written to LocalStorage/IndexedDB.
 
+P1-A08 consumes the normalized RGBA result through the separate
+[`POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md`](POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md).
+Its Client copies exactly the normalized typed-array view before transfer, so
+this contract's caller-owned RGBA buffer is never detached. Worker cancellation
+is a separate hard-termination lifecycle and does not change P1-A04 decoding or
+resource-cleanup semantics.
+
 ## Stable error model
 
 Errors are `ImagePipelineError` objects with a stable `code`, safe `message`,

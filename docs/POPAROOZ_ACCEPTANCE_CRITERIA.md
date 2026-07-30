@@ -43,6 +43,8 @@ P1-A06 color-matching acceptance requires strict Lab validation, complete CIEDE2
 
 P1-A07 color-quantization acceptance requires strict normalized RGBA and explicit `maxColors`/Alpha validation, the 512 engineering guard, exact sorted RGB Histogram counts using accepted Lab conversion, deterministic weighted Lab Median Cut with frozen box/axis/order/boundary rules, no empty boxes, actual-entry CIEDE2000 Medoids, stable representative/index order, the `65535` transparent sentinel, exact count/index/buffer invariants, repeat and rearrangement tests, no negative-zero/finite-value leakage, no dithering/neighbor reads, and no formal palette mapping, Worker, Canvas, UI, export, or commerce work.
 
+P1-A08 Worker-processing acceptance requires a native lazy module Worker and version 1 strict protocol; monotonically increasing request IDs plus Worker generations; exact copied-view input transfer that never detaches caller RGBA; direct transferred-output reconstruction plus shared P1-A07 invariant validation; hard-terminate Abort and last-request-wins supersede; stale callback rejection; idle reuse and failure rebuild; idempotent permanent dispose; safe stable errors; no synchronous main-thread fallback or fake progress; Fake Worker/Runtime tests; and a distinct Vite Worker asset. Real target-browser detachment, termination, memory, and large-image performance evidence remains a P1-A10/P1-A11 follow-up.
+
 Production data is not required to test the algorithm core, but fixture boundaries must be visible in file names, code, and UI paths. No fixture may ship as a production palette or board default.
 
 ## Phase 2 gate

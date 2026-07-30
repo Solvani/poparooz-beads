@@ -26,7 +26,7 @@ Deliverable: documentation only. No production generator runtime.
 - [x] P1-A05: sRGB, XYZ D65, and Lab conversion.
 - [x] P1-A06: CIEDE2000 and deterministic tie-breaker.
 - [x] P1-A07: deterministic quantization and maximum colors.
-- P1-A08: versioned Web Worker protocol and cancellation.
+- [x] P1-A08: versioned Web Worker protocol, Transferable ownership, cancellation, supersede, and stale-result rejection.
 - P1-A09: pattern matrix and material counts.
 - P1-A10: two-dimensional board calculation.
 - P1-A11: algorithm tests, main/Worker parity, performance baseline, and phase acceptance.
@@ -94,4 +94,4 @@ Phase 1 algorithm foundation may proceed without real palette or board data only
 
 ## Recommended next task
 
-After P1-A07 acceptance, perform P1-A08 only: implement the versioned Web Worker protocol, cancellation, Transferable ownership, stale-result rejection, and background whole-image processing around the accepted pure image/color/quantization cores. Do not import the formal palette, build the pattern/material pipeline, add dithering, Canvas workspace, full UI, export, Shopify, or deployment. Keep the P1-A04 provisional image limits and browser-conformance items open until representative-device evidence exists.
+After P1-A08 total-control acceptance, perform P1-A09 only: map accepted quantized colors to eligible palette colors and produce the pattern matrix and exact material counts. Do not add board calculations, Canvas workspace, full UI, export, Shopify, or deployment. Formal palette acceptance remains blocked until verified production data is supplied; unmistakable synthetic fixtures may continue to prove engineering behavior.

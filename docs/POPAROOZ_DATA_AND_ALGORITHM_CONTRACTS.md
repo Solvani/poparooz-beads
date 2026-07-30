@@ -128,7 +128,9 @@ Changing fit, sampling, alpha, background, quantization, or matching behavior re
 
 [`POPAROOZ_COLOR_MATCHING_CONTRACT.md`](POPAROOZ_COLOR_MATCHING_CONTRACT.md) is the implementation authority for P1-A06 CIEDE2000, diagnostic Delta E 76, candidate eligibility, errors, deterministic tie-breaking, single-target matching, and the Public Presentation boundary. Quantization, image batching, dithering, and Worker execution remain later tasks.
 
-[`POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md`](POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md) is the implementation authority for P1-A07 RGBA/options validation, Alpha empties, the 512 engineering guard, exact RGB Histogram, weighted CIELAB Median Cut, actual-entry CIEDE2000 Medoids, stable cluster/index output, invariant checks, and the no-dither baseline. Formal palette mapping, pattern/material/board output, and Worker execution remain later tasks.
+[`POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md`](POPAROOZ_COLOR_QUANTIZATION_CONTRACT.md) is the implementation authority for P1-A07 RGBA/options validation, Alpha empties, the 512 engineering guard, exact RGB Histogram, weighted CIELAB Median Cut, actual-entry CIEDE2000 Medoids, stable cluster/index output, invariant checks, and the no-dither baseline. Formal palette mapping and pattern/material/board output remain later tasks; Worker execution is governed separately below.
+
+[`POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md`](POPAROOZ_WEB_WORKER_PROCESSING_CONTRACT.md) is the implementation authority for P1-A08 protocol version 1, strict request/response validation, exact input-copy and output-Transferable ownership, hard-terminate Abort/supersede behavior, request ID plus Worker-generation stale rejection, lazy reuse/rebuild/dispose lifecycle, and safe errors. Its Runtime is the only Worker-side caller of P1-A07; the main-thread Client performs validation/orchestration but no synchronous quantization or palette work.
 
 For normalized sRGB component `c` in 0–1:
 

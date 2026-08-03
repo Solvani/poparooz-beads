@@ -6,6 +6,16 @@ import { PUBLIC_BRAND, toPublicPaletteColor } from "./palette-public.mapper";
 import { PublicPaletteColorSchema } from "./palette-public.schema";
 import { parsePaletteColor } from "./palette.validation";
 
+function unnamedPaletteColor() {
+  return parsePaletteColor({
+    ...TEST_PLAIN_PALETTE_COLOR,
+    referenceSystem: "POPAROOZ",
+    referenceCode: "A1",
+    displayCode: "A1",
+    displayName: undefined,
+  });
+}
+
 describe("toPublicPaletteColor", () => {
   it("exposes separate internal and public API namespaces", () => {
     expect(publicPalette.PUBLIC_BRAND).toBe("Poparooz");
@@ -48,6 +58,16 @@ describe("toPublicPaletteColor", () => {
     expect(result.name).not.toBe(TEST_PLAIN_PALETTE_COLOR.referenceName);
   });
 
+  it("omits name entirely when displayName is unavailable", () => {
+    const result = toPublicPaletteColor(unnamedPaletteColor());
+
+    expect(result.code).toBe("A1");
+    expect(Object.hasOwn(result, "name")).toBe(false);
+    expect(JSON.stringify(result)).not.toContain('"name"');
+    expect(JSON.stringify(result)).not.toContain("undefined");
+    expect(JSON.stringify(result)).not.toContain("Unknown Color");
+  });
+
   it.each([
     "referenceSystem",
     "referenceCode",
@@ -82,6 +102,28 @@ describe("toPublicPaletteColor", () => {
 });
 
 describe("PublicPaletteColorSchema", () => {
+  it("accepts a customer-safe color without name", () => {
+    expect(
+      PublicPaletteColorSchema.parse(
+        toPublicPaletteColor(unnamedPaletteColor()),
+      ),
+    ).toEqual({
+      brand: "Poparooz",
+      code: "A1",
+      hex: "#336699",
+      isSpecialFinish: false,
+    });
+  });
+
+  it.each(["", "   "])("rejects invalid optional name %j", (name) => {
+    expect(
+      PublicPaletteColorSchema.safeParse({
+        ...toPublicPaletteColor(unnamedPaletteColor()),
+        name,
+      }).success,
+    ).toBe(false);
+  });
+
   it("strictly rejects internal reference fields", () => {
     const result = PublicPaletteColorSchema.safeParse({
       ...toPublicPaletteColor(TEST_PLAIN_PALETTE_COLOR),

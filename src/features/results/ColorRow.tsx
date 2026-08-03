@@ -10,7 +10,7 @@ export function ColorRow({ row }: { readonly row: ColorRowView }) {
       />
       <span className="color-row__identity">
         <strong>{row.code}</strong>
-        <span>{row.name}</span>
+        {row.name === undefined ? null : <span>{row.name}</span>}
       </span>
       <span className="color-row__count">{row.beadCountLabel}</span>
     </li>

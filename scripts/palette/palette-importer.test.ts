@@ -143,6 +143,42 @@ describe("palette field conversion and domain integration", () => {
     }
   });
 
+  it("converts an empty optional display_name to undefined", () => {
+    const result = importPaletteFromText(
+      validCsv.replace(",Bright Red,", ",   ,"),
+      validMetadata,
+    );
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.palette.colors[0]!.displayName).toBeUndefined();
+    }
+  });
+
+  it("accepts a consistent POPAROOZ palette without display names", () => {
+    const csv = validCsv
+      .replaceAll("MARD,", "POPAROOZ,")
+      .replace(",Bright Red,", ",,")
+      .replace(",Forest Green,", ",,")
+      .replace(",Metallic Blue,", ",,");
+    const result = importPaletteFromText(csv, {
+      ...validMetadata,
+      referenceSystem: "POPAROOZ",
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.palette.referenceSystem).toBe("POPAROOZ");
+      expect(
+        result.palette.colors.every(
+          (color) =>
+            color.referenceSystem === "POPAROOZ" &&
+            color.displayName === undefined,
+        ),
+      ).toBe(true);
+    }
+  });
+
   it("accepts true and false without case sensitivity", () => {
     const csv = validCsv.replace(
       "true,true,false,,true",
@@ -194,11 +230,11 @@ describe("palette field conversion and domain integration", () => {
   it("rejects empty required strings", () => {
     expectIssue(
       importPaletteFromText(
-        validCsv.replace(",Bright Red,", ",   ,"),
+        validCsv.replace(",POP-TEST-001,", ",   ,"),
         validMetadata,
       ),
       "EMPTY_REQUIRED_FIELD",
-      "display_name",
+      "display_code",
     );
   });
 

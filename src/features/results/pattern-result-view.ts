@@ -81,7 +81,7 @@ export function toColorRows(
       !positiveInteger(entry.beadCount) ||
       entry.color.brand !== "Poparooz" ||
       !validLabel(entry.color.code) ||
-      !validLabel(entry.color.name) ||
+      (entry.color.name !== undefined && !validLabel(entry.color.name)) ||
       !/^#[0-9A-F]{6}$/.test(entry.color.hex)
     ) {
       return null;
@@ -91,7 +91,7 @@ export function toColorRows(
       Object.freeze({
         index: entry.index,
         code: entry.color.code,
-        name: entry.color.name,
+        ...(entry.color.name === undefined ? {} : { name: entry.color.name }),
         hex: entry.color.hex,
         beadCount: entry.beadCount,
         beadCountLabel: `${formatNumber(entry.beadCount)} ${

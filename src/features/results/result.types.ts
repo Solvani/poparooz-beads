@@ -14,7 +14,7 @@ export interface PatternSummaryView {
 export interface ColorRowView {
   readonly index: number;
   readonly code: string;
-  readonly name: string;
+  readonly name?: string;
   readonly hex: string;
   readonly beadCount: number;
   readonly beadCountLabel: string;

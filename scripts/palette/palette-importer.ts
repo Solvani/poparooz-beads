@@ -103,12 +103,7 @@ function convertPaletteRow(row: ParsedPaletteCsvRow): {
       "display_code",
       issues,
     ),
-    displayName: requiredString(
-      values.display_name,
-      row,
-      "display_name",
-      issues,
-    ),
+    displayName: optionalString(values.display_name),
     hex: requiredString(values.hex, row, "hex", issues),
     rgb: [
       requiredInteger(values.rgb_r, row, "rgb_r", issues),

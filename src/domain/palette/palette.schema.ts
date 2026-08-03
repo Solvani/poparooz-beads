@@ -18,7 +18,7 @@ const FiniteLabNumberSchema = z.custom<number>(
   "Lab channels must be finite.",
 );
 
-export const PaletteReferenceSystemSchema = z.literal("MARD");
+export const PaletteReferenceSystemSchema = z.enum(["MARD", "POPAROOZ"]);
 export const PaletteDisplayBrandSchema = z.literal("Poparooz");
 
 export const ReferenceCodeSchema = nonEmptyString("referenceCode")
@@ -108,7 +108,7 @@ export const PaletteColorSchema = z
     referenceName: nonEmptyString("referenceName").optional(),
     referenceSeries: nonEmptyString("referenceSeries").optional(),
     displayCode: DisplayCodeSchema,
-    displayName: DisplayNameSchema,
+    displayName: DisplayNameSchema.optional(),
     hex: nonEmptyString("hex")
       .transform((hex) => hex.toUpperCase())
       .pipe(

@@ -8,7 +8,7 @@ export function toPublicPaletteColor(color: PaletteColor): PublicPaletteColor {
   return PublicPaletteColorSchema.parse({
     brand: PUBLIC_BRAND,
     code: color.displayCode,
-    name: color.displayName,
+    ...(color.displayName === undefined ? {} : { name: color.displayName }),
     hex: color.hex,
     isSpecialFinish: color.isSpecialFinish,
     ...(color.finishType === undefined ? {} : { finishType: color.finishType }),

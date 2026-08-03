@@ -82,6 +82,35 @@ describe("pattern result view", () => {
     ]);
   });
 
+  it("builds a code-only row when the public color has no name", () => {
+    const pattern = createResultFixture({
+      width: 1,
+      height: 1,
+      transparentPositions: 0,
+      colors: [{ index: 0, beadCount: 1, code: "A1", name: "Temporary" }],
+    });
+    const color = pattern.colors[0]!.color;
+    const view = viewOf({
+      ...pattern,
+      colors: [
+        {
+          ...pattern.colors[0]!,
+          color: {
+            brand: color.brand,
+            code: color.code,
+            hex: color.hex,
+            isSpecialFinish: color.isSpecialFinish,
+          },
+        },
+      ],
+    });
+
+    expect(view.colors[0]).toMatchObject({ code: "A1", beadCount: 1 });
+    expect(Object.hasOwn(view.colors[0]!, "name")).toBe(false);
+    expect(JSON.stringify(view.colors[0])).not.toContain("undefined");
+    expect(JSON.stringify(view.colors[0])).not.toContain("Unknown Color");
+  });
+
   it.each([
     [
       "negative total",
@@ -137,6 +166,19 @@ describe("pattern result view", () => {
           {
             ...pattern.colors[0]!,
             color: { ...pattern.colors[0]!.color, hex: "white" },
+          },
+          pattern.colors[1]!,
+        ],
+      }),
+    ],
+    [
+      "blank optional name",
+      (pattern: PublicPatternResult) => ({
+        ...pattern,
+        colors: [
+          {
+            ...pattern.colors[0]!,
+            color: { ...pattern.colors[0]!.color, name: "   " },
           },
           pattern.colors[1]!,
         ],

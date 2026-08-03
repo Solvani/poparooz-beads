@@ -72,16 +72,51 @@ describe("PaletteColor", () => {
     },
   );
 
-  it("rejects an empty displayName", () => {
+  it("accepts a color without displayName", () => {
+    expect(
+      parsePaletteColor({
+        ...TEST_PLAIN_PALETTE_COLOR,
+        displayName: undefined,
+      }).displayName,
+    ).toBeUndefined();
+  });
+
+  it.each(["", "   "])("rejects invalid displayName %j", (displayName) => {
     expectIssue(
       safeParsePaletteColor({
         ...TEST_PLAIN_PALETTE_COLOR,
-        displayName: "   ",
+        displayName,
       }),
       ["displayName"],
       "must not be empty",
     );
   });
+
+  it("accepts POPAROOZ as the formal palette reference system", () => {
+    expect(
+      parsePaletteColor({
+        ...TEST_PLAIN_PALETTE_COLOR,
+        referenceSystem: "POPAROOZ",
+        referenceCode: "A1",
+        displayCode: "A1",
+        displayName: undefined,
+      }).referenceSystem,
+    ).toBe("POPAROOZ");
+  });
+
+  it.each(["OTHER", "poparooz", " POPAROOZ "])(
+    "rejects unsupported reference system %j",
+    (referenceSystem) => {
+      expectIssue(
+        safeParsePaletteColor({
+          ...TEST_PLAIN_PALETTE_COLOR,
+          referenceSystem,
+        }),
+        ["referenceSystem"],
+        "POPAROOZ",
+      );
+    },
+  );
 
   it.each([
     ["displayCode", "MARDTEST001"],
@@ -227,14 +262,52 @@ describe("PaletteDefinition", () => {
     );
   });
 
-  it("accepts only MARD as the internal referenceSystem", () => {
+  it("keeps the historical MARD reference system compatible", () => {
+    expect(
+      parsePaletteDefinition(TEST_PALETTE_DEFINITION).referenceSystem,
+    ).toBe("MARD");
+  });
+
+  it("accepts a consistent POPAROOZ PaletteDefinition", () => {
+    const palette = parsePaletteDefinition({
+      ...TEST_PALETTE_DEFINITION,
+      referenceSystem: "POPAROOZ",
+      colors: TEST_PALETTE_DEFINITION.colors.map((color) => ({
+        ...color,
+        referenceSystem: "POPAROOZ",
+      })),
+    });
+
+    expect(palette.referenceSystem).toBe("POPAROOZ");
+    expect(
+      palette.colors.every(
+        (color) => color.referenceSystem === palette.referenceSystem,
+      ),
+    ).toBe(true);
+  });
+
+  it.each(["OTHER", "poparooz", " POPAROOZ "])(
+    "rejects unsupported PaletteDefinition reference system %j",
+    (referenceSystem) => {
+      expectIssue(
+        safeParsePaletteDefinition({
+          ...TEST_PALETTE_DEFINITION,
+          referenceSystem,
+        }),
+        ["referenceSystem"],
+        "POPAROOZ",
+      );
+    },
+  );
+
+  it("rejects a PaletteDefinition and color reference-system mismatch", () => {
     expectIssue(
       safeParsePaletteDefinition({
         ...TEST_PALETTE_DEFINITION,
-        referenceSystem: "OTHER",
+        referenceSystem: "POPAROOZ",
       }),
-      ["referenceSystem"],
-      "MARD",
+      ["colors", 0, "referenceSystem"],
+      "must match",
     );
   });
 
@@ -313,7 +386,7 @@ describe("PaletteDefinition", () => {
         ],
       }),
       ["colors", 0, "referenceSystem"],
-      "MARD",
+      "POPAROOZ",
     );
   });
 

@@ -11,7 +11,7 @@ export const PublicPaletteColorSchema = z
   .object({
     brand: PaletteDisplayBrandSchema,
     code: DisplayCodeSchema,
-    name: DisplayNameSchema,
+    name: DisplayNameSchema.optional(),
     hex: z.string().regex(/^#[0-9A-F]{6}$/, "HEX must use #RRGGBB format."),
     isSpecialFinish: z.boolean(),
     finishType: PaletteFinishTypeSchema.optional(),

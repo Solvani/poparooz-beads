@@ -560,6 +560,36 @@ describe("public pattern boundary", () => {
     }
   });
 
+  it("omits an unavailable color name while preserving the Poparooz code", () => {
+    const unnamed = color("UNNAMED", {
+      referenceSystem: "POPAROOZ",
+      referenceCode: "A1",
+      displayCode: "A1",
+      displayName: undefined,
+    });
+    const formalPalette: PaletteDefinition = {
+      ...palette([unnamed]),
+      referenceSystem: "POPAROOZ",
+    };
+    const publicResult = toPublicPatternResult(
+      assemblePattern({
+        quantizedImage: solidQuantized(2, 1),
+        palette: formalPalette,
+        boardProfile: BOARD,
+      }),
+    );
+
+    expect(publicResult.colors[0]!.color).toEqual({
+      brand: "Poparooz",
+      code: "A1",
+      hex: "#112233",
+      isSpecialFinish: false,
+    });
+    expect(Object.hasOwn(publicResult.colors[0]!.color, "name")).toBe(false);
+    expect(JSON.stringify(publicResult)).not.toContain("Unknown Color");
+    expect(JSON.stringify(publicResult)).not.toContain("undefined");
+  });
+
   it("wraps invalid internal results in a public mapping error", () => {
     const internal = assemblePattern({
       quantizedImage: solidQuantized(1, 1),

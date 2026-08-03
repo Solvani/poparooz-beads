@@ -11,7 +11,7 @@ rejected. Optional means the column remains present but its cell may be empty.
 | `reference_name`        | trimmed string                         | yes      |
 | `reference_series`      | trimmed string                         | yes      |
 | `display_code`          | trimmed string; Domain normalizes      | no       |
-| `display_name`          | trimmed string                         | no       |
+| `display_name`          | trimmed string                         | yes      |
 | `hex`                   | trimmed string; Domain normalizes      | no       |
 | `rgb_r`                 | safe base-10 integer                   | no       |
 | `rgb_g`                 | safe base-10 integer                   | no       |

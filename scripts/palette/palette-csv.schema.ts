@@ -43,6 +43,7 @@ export const OPTIONAL_PALETTE_CSV_COLUMNS: ReadonlySet<PaletteCsvColumn> =
   new Set([
     "reference_name",
     "reference_series",
+    "display_name",
     "finish_type",
     "product_handle",
     "variant_id",

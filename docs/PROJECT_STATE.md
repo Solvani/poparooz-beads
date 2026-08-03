@@ -9,16 +9,15 @@ Repository: poparooz-beads
 Root: D:\Projects\poparooz-beads
 Remote: https://github.com/Solvani/poparooz-beads.git
 Branch: main
-Accepted implementation HEAD: 920d342bd04eef2a10fc19bf3691d668eec92e5c
-Accepted implementation commit: feat: establish formal palette source model
-Live repository HEAD: verify before every task
-Live worktree: verify before every task
-Worktree at handoff: clean
-Upstream at handoff: origin/main [gone]
-Push status: not pushed
+Accepted implementation HEAD: a3d11880603b430d8dc476b202968eb1b0accc62
+Accepted implementation commit: feat: compile formal Poparooz palette source
+Live HEAD: a3d11880603b430d8dc476b202968eb1b0accc62
+Live worktree: clean
+Upstream: origin/main [gone]
+Push: not executed
 ```
 
-`920d342bd04eef2a10fc19bf3691d668eec92e5c` is the latest accepted product implementation baseline. Documentation or governance commits may advance the live repository HEAD without changing that implementation baseline.
+`9b2c98e0a1d716243025359d4070ff8c7582a4e3` is the P3-A01.3-U01 ExcelJS dependency-gate commit. `a3d11880603b430d8dc476b202968eb1b0accc62` is the accepted P3-A01.3 formal Palette compilation commit and the latest accepted product implementation baseline. Documentation or governance commits may advance the live repository HEAD without changing that implementation baseline.
 
 Every task must verify the actual Git branch, HEAD, worktree, remote, and upstream state. When a formal task prompt provides an Expected HEAD, that explicitly specified task baseline governs. A live HEAD that differs from the accepted implementation baseline is not a conflict by itself; Codex must evaluate the commit history and the task baseline together.
 
@@ -119,15 +118,24 @@ Status: Accepted and Frozen
 Result: Formal BoardProfile v1 specifications approved from supplied product information, photographs, and physical measurements.
 ```
 
+```text
+P3-A01.3 Formal 221-color Palette Compilation
+Status: Accepted
+Commit state: Committed
+Freeze state: Frozen
+Commit: a3d11880603b430d8dc476b202968eb1b0accc62
+Commit message: feat: compile formal Poparooz palette source
+```
+
 ## Current Phase
 
 ```text
 Phase: Phase 3
 Status: active
-Current planning task: P3-A01.3 Formal 221-color Palette Compilation
+Current planning task: P3-A01.4 Runtime Palette Artifact and Production Gate
 ```
 
-P3-A01.3 is currently a planning task. No formal palette import or Runtime activation is authorized yet.
+P3-A01.4 is currently a planning task. No Runtime Palette implementation or Production Runtime activation is authorized yet.
 
 ## Frozen Phase 3 Decisions
 
@@ -141,8 +149,7 @@ P3-A01.3 is currently a planning task. No formal palette import or Runtime activ
 - Digital color status is `source_declared`.
 - Physical color status is `unverified`.
 - Source Manifest, Normalized Schema, Canonical Serialization, and separate source/canonical SHA-256 boundaries are established.
-- The formal `Poparooz色卡.xlsx` has not been read by the compilation flow.
-- The formal 221-color Palette has not been imported.
+- The formal 221-color source Palette is compiled, accepted, committed, and frozen as `poparooz-standard` version `1.0.0`.
 - A Production Runtime Palette has not been generated or enabled.
 - Runtime Policy uses a versioned local Palette Provider.
 - Production availability uses a fail-closed gate.
@@ -157,8 +164,107 @@ P3-A01.3 is currently a planning task. No formal palette import or Runtime activ
 - Partial results never enter public state; successful results are published atomically.
 - Internal technical details never enter customer errors.
 - Logs must not contain user images or pixel data.
-- Production Runtime has not been activated, and the formal 221-color Palette has not been imported.
+- Production Runtime has not been activated.
 - Download, Get Beads, and Shopify remain blocked.
+
+### Formal Palette v1
+
+```text
+paletteId = poparooz-standard
+paletteVersion = 1.0.0
+referenceSystem = POPAROOZ
+status = approved
+recordCount = 221
+```
+
+The approved series counts are:
+
+```text
+A: 26
+B: 32
+C: 29
+D: 26
+E: 24
+F: 25
+G: 21
+H: 23
+M: 15
+Total: 221
+```
+
+The authoritative formal source is:
+
+```text
+data-source/palettes/poparooz-standard/1.0.0/source/Poparooz色卡.xlsx
+```
+
+The frozen source and artifact hashes are:
+
+```text
+Source SHA-256: 5508b4c0e2060c1bd3ce5afcea9591c62cd26f2c924179143b95daa17e04a71e
+Palette Canonical SHA-256: 1474d8587f9959be876e5bdfc6f29373c68dd427b0c84ac1b474944d672872a4
+Derivation Audit SHA-256: f070bc32e80dd3a3885ee3caad4085b1752ed6376cba865597788d655fed9020
+Substitute Canonical SHA-256: 5582d15099ed4e623b0af325e884f6567cc405cecb72af2efdf587ceed5693a7
+```
+
+Color evidence status is frozen as:
+
+```text
+displayNameStatus = not_provided
+digitalColorStatus = source_declared
+physicalColorStatus = unverified
+```
+
+HEX is the numeric color source. RGB and Lab are derived deterministically through the frozen conversion path. The internal `color-derivation-audit.json` records:
+
+```text
+recordCount = 221
+algorithm = rgb8ToLab-v1
+decimalPrecision = 12
+```
+
+Audit serialization rounding does not change future Runtime color-matching inputs.
+
+### Substitute reference dataset
+
+```text
+substituteDatasetId = poparooz-substitute-reference
+substituteDatasetVersion = 1.0.0
+relationCount = 67
+high = 9
+regular = 22
+small_area_only = 36
+status = reference_only
+physicalValidationStatus = unverified
+applicationPolicy = disabled
+directionPolicy = worksheet_declared_bidirectional
+```
+
+The substitute reference dataset does not merge formal color codes, enter default color matching, automatically change a pattern, act as an inventory-outage replacement, or belong to the Runtime Palette.
+
+### Formal source lifecycle
+
+- The formal version directory is authoritative.
+- `data-source/incoming/` is only a local intake directory, and its contents are excluded by `.gitignore` except for the tracked `.gitkeep` placeholder.
+- The compiler does not automatically delete, move, or overwrite incoming content.
+- An incoming copy is not a second formal source of truth.
+- An incoming source with a different hash fails closed with `SOURCE_INPUT_CONFLICT`.
+- Formal version identity is determined by the version directory, Manifest, and approved hashes.
+
+### P3-A01.3 verification baseline
+
+```text
+Test files: 71 passed
+Tests: 795 passed
+TypeScript: passed
+Build: passed
+Lint: passed
+Prettier: passed
+git diff --check: passed
+Production Bundle boundary: passed
+```
+
+ExcelJS is used only by Node offline compilation tooling and is excluded from the browser production bundle. No Runtime Palette has been generated or enabled.
 
 ### BoardProfile v1
 
@@ -198,16 +304,27 @@ P3-G01.1   Repository Workflow Bootstrap         Accepted
 P3-G01.2   Read-only Codex Integration Check     Accepted
 P3-D02     Runtime Generation Policy             Policy frozen
 P3-D02-E01 BoardProfile Evidence Collection      Frozen
-P3-A01.3   Formal 221-color Palette Compilation  Planning
+P3-A01.3   Formal 221-color Palette Compilation  Frozen
+P3-A01.4   Runtime Palette Artifact and Production Gate Planning
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
 ```
+
+The provisional next-stage scope is:
+
+```text
+Formal Palette
+-> Runtime Palette artifact
+-> active / auto-match eligibility policy
+-> Production Gate integration
+```
+
+P3-A01.4 remains planning only. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
 
 ## Known Issues
 
 - Upstream is `origin/main [gone]`.
 - Accepted work has not been pushed.
-- The formal 221-color Excel source has not entered the compilation flow.
 - Production Runtime remains unavailable.
 - Firefox, Safari, iOS, Android, and screen-reader gates remain open.
 

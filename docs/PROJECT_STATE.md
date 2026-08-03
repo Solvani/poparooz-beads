@@ -101,15 +101,21 @@ Status: Accepted
 Purpose: Established AGENTS.md and docs/PROJECT_STATE.md as the repository governance and accepted-state boundaries.
 ```
 
+```text
+P3-G01.2 Read-only Codex Integration Check
+Status: Accepted
+Result: Repository governance, state loading, Git baseline interpretation, and read-only task execution verified.
+```
+
 ## Current Phase
 
 ```text
 Phase: Phase 3
 Status: active
-Current governance task: P3-G01.2 Read-only Codex Integration Check
+Current planning task: P3-D02 Runtime Generation Policy
 ```
 
-P3-G01.2 is a read-only verification task and has not yet been accepted.
+P3-D02 is currently a project-control design task only. Its policy is not frozen, and no implementation work is authorized.
 
 ## Frozen Phase 3 Decisions
 
@@ -136,8 +142,8 @@ P3-D01   Formal Palette Contract             Frozen
 P3-A01.1 Schema Compatibility Foundation     Frozen
 P3-A01.2 Formal Palette Source Model         Frozen
 P3-G01.1 Repository Workflow Bootstrap       Accepted
-P3-G01.2 Read-only Codex Integration Check   Ready
-P3-D02   Runtime Generation Policy           Not started
+P3-G01.2 Read-only Codex Integration Check   Accepted
+P3-D02   Runtime Generation Policy           Planning
 P3-D03   Pattern Annotation and Export        Not started
 P3-D04   Get Beads and Catalog Boundary       Not started
 ```

@@ -107,15 +107,22 @@ Status: Accepted
 Result: Repository governance, state loading, Git baseline interpretation, and read-only task execution verified.
 ```
 
+```text
+P3-D02 Runtime Generation Policy
+Status: Policy Contract Frozen
+Production Runtime Activation: Blocked
+Blocker: Formal BoardProfile specifications and evidence
+```
+
 ## Current Phase
 
 ```text
 Phase: Phase 3
 Status: active
-Current planning task: P3-D02 Runtime Generation Policy
+Current planning task: P3-D02-E01 BoardProfile Evidence Collection
 ```
 
-P3-D02 is currently a project-control design task only. Its policy is not frozen, and no implementation work is authorized.
+P3-D02-E01 is an evidence-collection task. No BoardProfile values are approved yet. No Runtime implementation is authorized.
 
 ## Frozen Phase 3 Decisions
 
@@ -132,20 +139,34 @@ P3-D02 is currently a project-control design task only. Its policy is not frozen
 - The formal `Poparooz色卡.xlsx` has not been read by the compilation flow.
 - The formal 221-color Palette has not been imported.
 - A Production Runtime Palette has not been generated or enabled.
-- Runtime Policy is not frozen.
+- Runtime Policy uses a versioned local Palette Provider.
+- Production availability uses a fail-closed gate.
+- Test palettes cannot be used as a production fallback.
+- Generation availability is independent from catalog inventory.
+- Runtime Policy is versioned, and each generation uses an immutable Runtime Snapshot.
+- Production inputs require strict build-time validation and lightweight browser-startup validation.
+- The alpha threshold is fixed at `16/255`.
+- Upscaling is deterministic and local only.
+- Maximum Colors has a minimum of `2`, a default of `32`, and a hard maximum of `64`.
+- Runtime v1 does not automatically retry Worker failures.
+- Partial results never enter public state; successful results are published atomically.
+- Internal technical details never enter customer errors.
+- Logs must not contain user images or pixel data.
+- Production Runtime activation remains blocked pending formal BoardProfile specifications and evidence.
 - Download, Get Beads, and Shopify remain blocked.
 
 ## Current Roadmap
 
 ```text
-P3-D01   Formal Palette Contract             Frozen
-P3-A01.1 Schema Compatibility Foundation     Frozen
-P3-A01.2 Formal Palette Source Model         Frozen
-P3-G01.1 Repository Workflow Bootstrap       Accepted
-P3-G01.2 Read-only Codex Integration Check   Accepted
-P3-D02   Runtime Generation Policy           Planning
-P3-D03   Pattern Annotation and Export        Not started
-P3-D04   Get Beads and Catalog Boundary       Not started
+P3-D01    Formal Palette Contract              Frozen
+P3-A01.1  Schema Compatibility Foundation      Frozen
+P3-A01.2  Formal Palette Source Model          Frozen
+P3-G01.1  Repository Workflow Bootstrap        Accepted
+P3-G01.2  Read-only Codex Integration Check    Accepted
+P3-D02    Runtime Generation Policy            Policy frozen
+P3-D02-E01 BoardProfile Evidence Collection    Ready
+P3-D03    Pattern Annotation and Export         Not started
+P3-D04    Get Beads and Catalog Boundary        Not started
 ```
 
 ## Known Issues

@@ -8,7 +8,7 @@ const repositoryRoot = path.resolve(import.meta.dirname, "../../..");
 describe("formal Palette incoming Git boundary", () => {
   it("ignores intake files while retaining .gitkeep and formal package files", () => {
     const incoming = checkIgnore("data-source/incoming/example.xlsx");
-    const gitkeep = checkIgnore("data-source/incoming/.gitkeep");
+    const gitkeep = checkIgnore("data-source/incoming/.gitkeep", false, true);
     const formal = checkIgnore(
       "data-source/palettes/poparooz-standard/1.0.0/manifest.json",
     );
@@ -22,9 +22,19 @@ describe("formal Palette incoming Git boundary", () => {
   });
 });
 
-function checkIgnore(relativePath: string, quiet = false) {
-  return spawnSync("git", ["check-ignore", quiet ? "-q" : "-v", relativePath], {
-    cwd: repositoryRoot,
-    encoding: "utf8",
-  });
+function checkIgnore(relativePath: string, quiet = false, noIndex = false) {
+  return spawnSync(
+    "git",
+    [
+      "check-ignore",
+      quiet ? "-q" : "-v",
+      ...(noIndex ? ["--no-index"] : []),
+      "--",
+      relativePath,
+    ],
+    {
+      cwd: repositoryRoot,
+      encoding: "utf8",
+    },
+  );
 }

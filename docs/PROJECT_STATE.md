@@ -127,15 +127,22 @@ Commit: a3d11880603b430d8dc476b202968eb1b0accc62
 Commit message: feat: compile formal Poparooz palette source
 ```
 
+```text
+P3-A01.4-D01 Runtime Palette Contract Freeze
+Status: Accepted and Frozen
+Result: Runtime Artifact, ordering, derivation, active and auto-match eligibility, versioning, determinism, Gate, fail-closed, and legacy-contract boundaries are frozen.
+```
+
 ## Current Phase
 
 ```text
 Phase: Phase 3
 Status: active
-Current planning task: P3-A01.4 Runtime Palette Artifact and Production Gate
+Current task: P3-A01.4-D01 Runtime Palette Contract Freeze
+Next task: P3-A01.4-A01 Deterministic Runtime Compiler
 ```
 
-P3-A01.4 is currently a planning task. No Runtime Palette implementation or Production Runtime activation is authorized yet.
+The P3-A01.4-D01 contract is frozen. The Runtime Artifact and Runtime Lock have not been generated, the Build Production Gate and Startup Palette Gate have not been implemented, and Production `GenerationRuntime` remains unavailable. P3-A01.4 remains in progress and must not be described as complete.
 
 ## Frozen Phase 3 Decisions
 
@@ -305,7 +312,9 @@ P3-G01.2   Read-only Codex Integration Check     Accepted
 P3-D02     Runtime Generation Policy             Policy frozen
 P3-D02-E01 BoardProfile Evidence Collection      Frozen
 P3-A01.3   Formal 221-color Palette Compilation  Frozen
-P3-A01.4   Runtime Palette Artifact and Production Gate Planning
+P3-A01.4   Runtime Palette Artifact and Production Gate In progress
+P3-A01.4-D01 Runtime Palette Contract Freeze      Frozen
+P3-A01.4-A01 Deterministic Runtime Compiler       Ready
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
 ```

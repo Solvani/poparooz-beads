@@ -111,7 +111,12 @@ Result: Repository governance, state loading, Git baseline interpretation, and r
 P3-D02 Runtime Generation Policy
 Status: Policy Contract Frozen
 Production Runtime Activation: Blocked
-Blocker: Formal BoardProfile specifications and evidence
+```
+
+```text
+P3-D02-E01 BoardProfile Evidence Collection
+Status: Accepted and Frozen
+Result: Formal BoardProfile v1 specifications approved from supplied product information, photographs, and physical measurements.
 ```
 
 ## Current Phase
@@ -119,10 +124,10 @@ Blocker: Formal BoardProfile specifications and evidence
 ```text
 Phase: Phase 3
 Status: active
-Current planning task: P3-D02-E01 BoardProfile Evidence Collection
+Current planning task: P3-A01.3 Formal 221-color Palette Compilation
 ```
 
-P3-D02-E01 is an evidence-collection task. No BoardProfile values are approved yet. No Runtime implementation is authorized.
+P3-A01.3 is currently a planning task. No formal palette import or Runtime activation is authorized yet.
 
 ## Frozen Phase 3 Decisions
 
@@ -152,21 +157,50 @@ P3-D02-E01 is an evidence-collection task. No BoardProfile values are approved y
 - Partial results never enter public state; successful results are published atomically.
 - Internal technical details never enter customer errors.
 - Logs must not contain user images or pixel data.
-- Production Runtime activation remains blocked pending formal BoardProfile specifications and evidence.
+- Production Runtime has not been activated, and the formal 221-color Palette has not been imported.
 - Download, Get Beads, and Shopify remain blocked.
+
+### BoardProfile v1
+
+```text
+BoardProfile ID: poparooz-board-104
+BoardProfile version: 1.0.0
+Status: approved
+Shape: square
+Columns: 104
+Rows: 104
+Outer width: 280 mm
+Outer height: 280 mm
+Board thickness: 2 mm
+First-to-last peg center span: 278 mm
+Internal peg pitch: 2.70 mm
+Connectable: true
+Shared edge pegs: false
+Seam peg-center distance: 2.3 mm
+Seam spacing: non-uniform
+Default for v1: true
+```
+
+- The internal peg pitch is derived from `278 mm / 103 intervals`.
+- Seam spacing does not change the Pattern Matrix cell count.
+- Board counts continue to use `104 × 104` cells per board.
+- `78 × 78` (`210 × 210 × 2 mm`) and `52 × 52` (`140 × 140 × 2 mm`) are future candidates only and are not enabled in v1.
+- Production Runtime has not been activated.
+- The formal 221-color Palette has not been imported.
 
 ## Current Roadmap
 
 ```text
-P3-D01    Formal Palette Contract              Frozen
-P3-A01.1  Schema Compatibility Foundation      Frozen
-P3-A01.2  Formal Palette Source Model          Frozen
-P3-G01.1  Repository Workflow Bootstrap        Accepted
-P3-G01.2  Read-only Codex Integration Check    Accepted
-P3-D02    Runtime Generation Policy            Policy frozen
-P3-D02-E01 BoardProfile Evidence Collection    Ready
-P3-D03    Pattern Annotation and Export         Not started
-P3-D04    Get Beads and Catalog Boundary        Not started
+P3-D01     Formal Palette Contract               Frozen
+P3-A01.1   Schema Compatibility Foundation       Frozen
+P3-A01.2   Formal Palette Source Model           Frozen
+P3-G01.1   Repository Workflow Bootstrap         Accepted
+P3-G01.2   Read-only Codex Integration Check     Accepted
+P3-D02     Runtime Generation Policy             Policy frozen
+P3-D02-E01 BoardProfile Evidence Collection      Frozen
+P3-A01.3   Formal 221-color Palette Compilation  Planning
+P3-D03     Pattern Annotation and Export          Not started
+P3-D04     Get Beads and Catalog Boundary         Not started
 ```
 
 ## Known Issues

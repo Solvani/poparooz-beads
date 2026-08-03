@@ -1,0 +1,3769 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactVersion": "1.0.0",
+  "paletteId": "poparooz-standard",
+  "paletteVersion": "1.0.0",
+  "referenceSystem": "POPAROOZ",
+  "recordCount": 221,
+  "activeCount": 221,
+  "autoMatchEligibleCount": 221,
+  "colors": [
+    {
+      "code": "A1",
+      "hex": "#FAF4C8",
+      "rgb": {
+        "r": 250,
+        "g": 244,
+        "b": 200
+      },
+      "lab": {
+        "l": 95.66255795454218,
+        "a": -4.930452709831446,
+        "b": 21.971712486604833
+      },
+      "sortOrder": 0,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A2",
+      "hex": "#FFFFD5",
+      "rgb": {
+        "r": 255,
+        "g": 255,
+        "b": 213
+      },
+      "lab": {
+        "l": 99.05855793186105,
+        "a": -6.761660825093385,
+        "b": 20.125590466482368
+      },
+      "sortOrder": 1,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A3",
+      "hex": "#FEFF8B",
+      "rgb": {
+        "r": 254,
+        "g": 255,
+        "b": 139
+      },
+      "lab": {
+        "l": 97.81572298953544,
+        "a": -15.966302511996988,
+        "b": 54.96630726653338
+      },
+      "sortOrder": 2,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A4",
+      "hex": "#FBED56",
+      "rgb": {
+        "r": 251,
+        "g": 237,
+        "b": 86
+      },
+      "lab": {
+        "l": 92.46539717342564,
+        "a": -12.257174514769432,
+        "b": 71.81902774164422
+      },
+      "sortOrder": 3,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A5",
+      "hex": "#F4D738",
+      "rgb": {
+        "r": 244,
+        "g": 215,
+        "b": 56
+      },
+      "lab": {
+        "l": 86.06778823885759,
+        "a": -5.557579754337794,
+        "b": 75.98779852404556
+      },
+      "sortOrder": 4,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A6",
+      "hex": "#FEAC4C",
+      "rgb": {
+        "r": 254,
+        "g": 172,
+        "b": 76
+      },
+      "lab": {
+        "l": 76.74120970812862,
+        "a": 21.737988006771236,
+        "b": 59.676230419467366
+      },
+      "sortOrder": 5,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A7",
+      "hex": "#FE8B4C",
+      "rgb": {
+        "r": 254,
+        "g": 139,
+        "b": 76
+      },
+      "lab": {
+        "l": 69.51486349685088,
+        "a": 38.800139770475916,
+        "b": 51.9202867645353
+      },
+      "sortOrder": 6,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A8",
+      "hex": "#FFDA45",
+      "rgb": {
+        "r": 255,
+        "g": 218,
+        "b": 69
+      },
+      "lab": {
+        "l": 87.88972038380693,
+        "a": -1.9520864732074372,
+        "b": 73.7006375859862
+      },
+      "sortOrder": 7,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A9",
+      "hex": "#FF995B",
+      "rgb": {
+        "r": 255,
+        "g": 153,
+        "b": 91
+      },
+      "lab": {
+        "l": 72.76218778182856,
+        "a": 32.85477983788121,
+        "b": 48.22462957519611
+      },
+      "sortOrder": 8,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A10",
+      "hex": "#F77C31",
+      "rgb": {
+        "r": 247,
+        "g": 124,
+        "b": 49
+      },
+      "lab": {
+        "l": 65.29218354232721,
+        "a": 42.519542185756656,
+        "b": 59.58576912403102
+      },
+      "sortOrder": 9,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A11",
+      "hex": "#FFDD99",
+      "rgb": {
+        "r": 255,
+        "g": 221,
+        "b": 153
+      },
+      "lab": {
+        "l": 89.52204716450254,
+        "a": 2.7397179275533423,
+        "b": 37.718868417418626
+      },
+      "sortOrder": 10,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A12",
+      "hex": "#FE9F72",
+      "rgb": {
+        "r": 254,
+        "g": 159,
+        "b": 114
+      },
+      "lab": {
+        "l": 74.24548412169653,
+        "a": 30.954728776279584,
+        "b": 38.1664597089592
+      },
+      "sortOrder": 11,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A13",
+      "hex": "#FFC365",
+      "rgb": {
+        "r": 255,
+        "g": 195,
+        "b": 101
+      },
+      "lab": {
+        "l": 82.50446096284324,
+        "a": 11.61054342458473,
+        "b": 54.64072851892618
+      },
+      "sortOrder": 12,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A14",
+      "hex": "#FD543D",
+      "rgb": {
+        "r": 253,
+        "g": 84,
+        "b": 61
+      },
+      "lab": {
+        "l": 59.49536661585715,
+        "a": 62.91276988521544,
+        "b": 48.58157386639903
+      },
+      "sortOrder": 13,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A15",
+      "hex": "#FFF365",
+      "rgb": {
+        "r": 255,
+        "g": 243,
+        "b": 101
+      },
+      "lab": {
+        "l": 94.44194377339575,
+        "a": -12.689845760529339,
+        "b": 67.97651184190727
+      },
+      "sortOrder": 14,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A16",
+      "hex": "#FFFF9F",
+      "rgb": {
+        "r": 255,
+        "g": 255,
+        "b": 159
+      },
+      "lab": {
+        "l": 98.14737679871078,
+        "a": -13.603630114414955,
+        "b": 45.87012033827846
+      },
+      "sortOrder": 15,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A17",
+      "hex": "#FFE36E",
+      "rgb": {
+        "r": 255,
+        "g": 227,
+        "b": 110
+      },
+      "lab": {
+        "l": 90.47199561189726,
+        "a": -4.139211303781587,
+        "b": 59.64089477691223
+      },
+      "sortOrder": 16,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A18",
+      "hex": "#FEBE7D",
+      "rgb": {
+        "r": 254,
+        "g": 190,
+        "b": 125
+      },
+      "lab": {
+        "l": 81.50148022900694,
+        "a": 15.66552988864489,
+        "b": 41.61971946726113
+      },
+      "sortOrder": 17,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A19",
+      "hex": "#FD7C72",
+      "rgb": {
+        "r": 253,
+        "g": 124,
+        "b": 114
+      },
+      "lab": {
+        "l": 66.91430934018048,
+        "a": 48.26463822041532,
+        "b": 28.715365814459926
+      },
+      "sortOrder": 18,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A20",
+      "hex": "#FFD568",
+      "rgb": {
+        "r": 255,
+        "g": 213,
+        "b": 104
+      },
+      "lab": {
+        "l": 86.92409662690339,
+        "a": 2.533926843039269,
+        "b": 58.310513422702236
+      },
+      "sortOrder": 19,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A21",
+      "hex": "#FFE395",
+      "rgb": {
+        "r": 255,
+        "g": 227,
+        "b": 149
+      },
+      "lab": {
+        "l": 90.94891521854628,
+        "a": -0.7302248137713852,
+        "b": 41.574097596493196
+      },
+      "sortOrder": 20,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A22",
+      "hex": "#F4F57D",
+      "rgb": {
+        "r": 244,
+        "g": 245,
+        "b": 125
+      },
+      "lab": {
+        "l": 94.32102899371411,
+        "a": -16.243803893676134,
+        "b": 57.0690992792358
+      },
+      "sortOrder": 21,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A23",
+      "hex": "#E6C9B7",
+      "rgb": {
+        "r": 230,
+        "g": 201,
+        "b": 183
+      },
+      "lab": {
+        "l": 82.9224454446655,
+        "a": 7.398351103538481,
+        "b": 12.744566050519657
+      },
+      "sortOrder": 22,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A24",
+      "hex": "#F7F8A2",
+      "rgb": {
+        "r": 247,
+        "g": 248,
+        "b": 162
+      },
+      "lab": {
+        "l": 95.7968858756577,
+        "a": -12.871535092029706,
+        "b": 41.258705538938244
+      },
+      "sortOrder": 23,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A25",
+      "hex": "#FFD67D",
+      "rgb": {
+        "r": 255,
+        "g": 214,
+        "b": 125
+      },
+      "lab": {
+        "l": 87.40593299267242,
+        "a": 3.6381293584917263,
+        "b": 48.963340980045686
+      },
+      "sortOrder": 24,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "A26",
+      "hex": "#FFC830",
+      "rgb": {
+        "r": 255,
+        "g": 200,
+        "b": 48
+      },
+      "lab": {
+        "l": 83.32987070573921,
+        "a": 6.490250380922102,
+        "b": 76.3744425299542
+      },
+      "sortOrder": 25,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B1",
+      "hex": "#E6EE31",
+      "rgb": {
+        "r": 230,
+        "g": 238,
+        "b": 49
+      },
+      "lab": {
+        "l": 90.86900459057904,
+        "a": -22.935764775906307,
+        "b": 81.79761854421537
+      },
+      "sortOrder": 26,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B2",
+      "hex": "#63F347",
+      "rgb": {
+        "r": 99,
+        "g": 243,
+        "b": 71
+      },
+      "lab": {
+        "l": 85.60748147747405,
+        "a": -68.5522854702244,
+        "b": 67.67728614161128
+      },
+      "sortOrder": 27,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B3",
+      "hex": "#9EF780",
+      "rgb": {
+        "r": 158,
+        "g": 247,
+        "b": 128
+      },
+      "lab": {
+        "l": 89.55511988808985,
+        "a": -47.99999144667261,
+        "b": 48.659749525956975
+      },
+      "sortOrder": 28,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B4",
+      "hex": "#5DE035",
+      "rgb": {
+        "r": 93,
+        "g": 224,
+        "b": 53
+      },
+      "lab": {
+        "l": 79.55268519051175,
+        "a": -64.7154479292757,
+        "b": 67.59620712328615
+      },
+      "sortOrder": 29,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B5",
+      "hex": "#35E352",
+      "rgb": {
+        "r": 53,
+        "g": 227,
+        "b": 82
+      },
+      "lab": {
+        "l": 79.78460955273314,
+        "a": -70.70814744126092,
+        "b": 56.94105824633902
+      },
+      "sortOrder": 30,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B6",
+      "hex": "#65E2A6",
+      "rgb": {
+        "r": 101,
+        "g": 226,
+        "b": 166
+      },
+      "lab": {
+        "l": 81.78867318431874,
+        "a": -48.556945173525214,
+        "b": 19.017029071762394
+      },
+      "sortOrder": 31,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B7",
+      "hex": "#3DAF80",
+      "rgb": {
+        "r": 61,
+        "g": 175,
+        "b": 128
+      },
+      "lab": {
+        "l": 64.32922428931742,
+        "a": -43.2639630938465,
+        "b": 14.87681190680954
+      },
+      "sortOrder": 32,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B8",
+      "hex": "#1C9C4F",
+      "rgb": {
+        "r": 28,
+        "g": 156,
+        "b": 79
+      },
+      "lab": {
+        "l": 56.670411479480734,
+        "a": -50.5830569179917,
+        "b": 30.98816877707765
+      },
+      "sortOrder": 33,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B9",
+      "hex": "#27523A",
+      "rgb": {
+        "r": 39,
+        "g": 82,
+        "b": 58
+      },
+      "lab": {
+        "l": 31.27990931278069,
+        "a": -21.351953268052004,
+        "b": 9.58447931320383
+      },
+      "sortOrder": 34,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B10",
+      "hex": "#95D3C2",
+      "rgb": {
+        "r": 149,
+        "g": 211,
+        "b": 194
+      },
+      "lab": {
+        "l": 80.10690569143998,
+        "a": -23.338601043813135,
+        "b": 2.0870460507849575
+      },
+      "sortOrder": 35,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B11",
+      "hex": "#5D722A",
+      "rgb": {
+        "r": 93,
+        "g": 114,
+        "b": 42
+      },
+      "lab": {
+        "l": 44.982061272376654,
+        "a": -19.564972984680658,
+        "b": 36.418256297376125
+      },
+      "sortOrder": 36,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B12",
+      "hex": "#166F41",
+      "rgb": {
+        "r": 22,
+        "g": 111,
+        "b": 65
+      },
+      "lab": {
+        "l": 41.08912443009177,
+        "a": -36.80256285755284,
+        "b": 18.563474741084374
+      },
+      "sortOrder": 37,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B13",
+      "hex": "#CAEB7B",
+      "rgb": {
+        "r": 202,
+        "g": 235,
+        "b": 123
+      },
+      "lab": {
+        "l": 88.63962114640944,
+        "a": -27.8120775706715,
+        "b": 50.464426796034424
+      },
+      "sortOrder": 38,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B14",
+      "hex": "#ADE946",
+      "rgb": {
+        "r": 173,
+        "g": 233,
+        "b": 70
+      },
+      "lab": {
+        "l": 85.80767791071906,
+        "a": -42.102593897951124,
+        "b": 69.24718413992284
+      },
+      "sortOrder": 39,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B15",
+      "hex": "#2E5132",
+      "rgb": {
+        "r": 46,
+        "g": 81,
+        "b": 50
+      },
+      "lab": {
+        "l": 31.103916208222373,
+        "a": -20.235012689832992,
+        "b": 14.371354869542385
+      },
+      "sortOrder": 40,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B16",
+      "hex": "#C5ED9C",
+      "rgb": {
+        "r": 197,
+        "g": 237,
+        "b": 156
+      },
+      "lab": {
+        "l": 89.31714182531923,
+        "a": -26.685855297014392,
+        "b": 35.11262242119155
+      },
+      "sortOrder": 41,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B17",
+      "hex": "#9BB13A",
+      "rgb": {
+        "r": 155,
+        "g": 177,
+        "b": 58
+      },
+      "lab": {
+        "l": 68.54687296148289,
+        "a": -23.978733354395487,
+        "b": 55.85220606503283
+      },
+      "sortOrder": 42,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B18",
+      "hex": "#E6EE49",
+      "rgb": {
+        "r": 230,
+        "g": 238,
+        "b": 73
+      },
+      "lab": {
+        "l": 90.98695577665117,
+        "a": -21.96645773501177,
+        "b": 74.58834517087875
+      },
+      "sortOrder": 43,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B19",
+      "hex": "#24B88C",
+      "rgb": {
+        "r": 36,
+        "g": 184,
+        "b": 140
+      },
+      "lab": {
+        "l": 66.93553086737765,
+        "a": -47.724423647546644,
+        "b": 11.89012288956819
+      },
+      "sortOrder": 44,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B20",
+      "hex": "#C2F0CC",
+      "rgb": {
+        "r": 194,
+        "g": 240,
+        "b": 204
+      },
+      "lab": {
+        "l": 90.84712406073582,
+        "a": -21.60881342030674,
+        "b": 12.588117397236488
+      },
+      "sortOrder": 45,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B21",
+      "hex": "#156A6B",
+      "rgb": {
+        "r": 21,
+        "g": 106,
+        "b": 107
+      },
+      "lab": {
+        "l": 40.45595032544079,
+        "a": -23.16875356022746,
+        "b": -7.548173718678908
+      },
+      "sortOrder": 46,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B22",
+      "hex": "#0B3C43",
+      "rgb": {
+        "r": 11,
+        "g": 60,
+        "b": 67
+      },
+      "lab": {
+        "l": 22.680848615082034,
+        "a": -12.922958236698673,
+        "b": -8.901080257555105
+      },
+      "sortOrder": 47,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B23",
+      "hex": "#303A21",
+      "rgb": {
+        "r": 48,
+        "g": 58,
+        "b": 33
+      },
+      "lab": {
+        "l": 22.876302452804346,
+        "a": -9.442112838080774,
+        "b": 14.199000735385459
+      },
+      "sortOrder": 48,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B24",
+      "hex": "#EEFCA5",
+      "rgb": {
+        "r": 238,
+        "g": 252,
+        "b": 165
+      },
+      "lab": {
+        "l": 96.21006925934448,
+        "a": -17.833815929643894,
+        "b": 40.18840688612932
+      },
+      "sortOrder": 49,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B25",
+      "hex": "#4E846D",
+      "rgb": {
+        "r": 78,
+        "g": 132,
+        "b": 109
+      },
+      "lab": {
+        "l": 50.949907774930125,
+        "a": -23.5642266388843,
+        "b": 6.835709859467309
+      },
+      "sortOrder": 50,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B26",
+      "hex": "#8D7A35",
+      "rgb": {
+        "r": 141,
+        "g": 122,
+        "b": 53
+      },
+      "lab": {
+        "l": 51.65554509228329,
+        "a": -1.3965981999248256,
+        "b": 39.62981470718808
+      },
+      "sortOrder": 51,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B27",
+      "hex": "#CCE1AF",
+      "rgb": {
+        "r": 204,
+        "g": 225,
+        "b": 175
+      },
+      "lab": {
+        "l": 86.89016325997768,
+        "a": -15.615908778145226,
+        "b": 22.196066312975592
+      },
+      "sortOrder": 52,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B28",
+      "hex": "#9EE5B9",
+      "rgb": {
+        "r": 158,
+        "g": 229,
+        "b": 185
+      },
+      "lab": {
+        "l": 85.40691413885285,
+        "a": -31.133655582779195,
+        "b": 14.499555310245672
+      },
+      "sortOrder": 53,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B29",
+      "hex": "#C5E254",
+      "rgb": {
+        "r": 197,
+        "g": 226,
+        "b": 84
+      },
+      "lab": {
+        "l": 85.45510709026587,
+        "a": -28.83136267849923,
+        "b": 64.01144393540355
+      },
+      "sortOrder": 54,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B30",
+      "hex": "#E2FCB1",
+      "rgb": {
+        "r": 226,
+        "g": 252,
+        "b": 177
+      },
+      "lab": {
+        "l": 95.56523744833741,
+        "a": -20.682732677604065,
+        "b": 33.213954394263176
+      },
+      "sortOrder": 55,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B31",
+      "hex": "#B0E792",
+      "rgb": {
+        "r": 176,
+        "g": 231,
+        "b": 146
+      },
+      "lab": {
+        "l": 86.23389709569899,
+        "a": -32.59814124999216,
+        "b": 35.8507131306421
+      },
+      "sortOrder": 56,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "B32",
+      "hex": "#9CAB5A",
+      "rgb": {
+        "r": 156,
+        "g": 171,
+        "b": 90
+      },
+      "lab": {
+        "l": 67.22609252708446,
+        "a": -17.851409554021814,
+        "b": 39.71339473987143
+      },
+      "sortOrder": 57,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C1",
+      "hex": "#E8FFE7",
+      "rgb": {
+        "r": 232,
+        "g": 255,
+        "b": 231
+      },
+      "lab": {
+        "l": 97.81079100379286,
+        "a": -11.768935360184473,
+        "b": 8.933618075889772
+      },
+      "sortOrder": 58,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C2",
+      "hex": "#A9F9FC",
+      "rgb": {
+        "r": 169,
+        "g": 249,
+        "b": 252
+      },
+      "lab": {
+        "l": 93.10655623079765,
+        "a": -23.528901746083186,
+        "b": -9.205769472814618
+      },
+      "sortOrder": 59,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C3",
+      "hex": "#A0E2FB",
+      "rgb": {
+        "r": 160,
+        "g": 226,
+        "b": 251
+      },
+      "lab": {
+        "l": 86.41872899776635,
+        "a": -14.696749602732705,
+        "b": -18.73736132976742
+      },
+      "sortOrder": 60,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C4",
+      "hex": "#41CCFF",
+      "rgb": {
+        "r": 65,
+        "g": 204,
+        "b": 255
+      },
+      "lab": {
+        "l": 76.99566804166237,
+        "a": -20.564023346972604,
+        "b": -35.5669280661425
+      },
+      "sortOrder": 61,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C5",
+      "hex": "#01ACEB",
+      "rgb": {
+        "r": 1,
+        "g": 172,
+        "b": 235
+      },
+      "lab": {
+        "l": 66.14043385314791,
+        "a": -14.55322106862833,
+        "b": -41.71082591761388
+      },
+      "sortOrder": 62,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C6",
+      "hex": "#50AAF0",
+      "rgb": {
+        "r": 80,
+        "g": 170,
+        "b": 240
+      },
+      "lab": {
+        "l": 67.08352834318376,
+        "a": -5.264464595773067,
+        "b": -42.87416379120232
+      },
+      "sortOrder": 63,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C7",
+      "hex": "#3677D2",
+      "rgb": {
+        "r": 54,
+        "g": 119,
+        "b": 210
+      },
+      "lab": {
+        "l": 50.250109098996305,
+        "a": 10.573703206075036,
+        "b": -52.88578152536776
+      },
+      "sortOrder": 64,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C8",
+      "hex": "#0F54C0",
+      "rgb": {
+        "r": 15,
+        "g": 84,
+        "b": 192
+      },
+      "lab": {
+        "l": 38.28084356286485,
+        "a": 22.83955870572216,
+        "b": -61.89461460673245
+      },
+      "sortOrder": 65,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C9",
+      "hex": "#324BCA",
+      "rgb": {
+        "r": 50,
+        "g": 75,
+        "b": 202
+      },
+      "lab": {
+        "l": 37.79384120887835,
+        "a": 35.22428695252608,
+        "b": -68.46631780209384
+      },
+      "sortOrder": 66,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C10",
+      "hex": "#3EBCE2",
+      "rgb": {
+        "r": 62,
+        "g": 188,
+        "b": 226
+      },
+      "lab": {
+        "l": 71.1989652629463,
+        "a": -21.997896940906315,
+        "b": -28.88595862056478
+      },
+      "sortOrder": 67,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C11",
+      "hex": "#28DDDE",
+      "rgb": {
+        "r": 40,
+        "g": 221,
+        "b": 222
+      },
+      "lab": {
+        "l": 80.42242081489093,
+        "a": -41.20020043320049,
+        "b": -12.766012842790243
+      },
+      "sortOrder": 68,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C12",
+      "hex": "#1C334D",
+      "rgb": {
+        "r": 28,
+        "g": 51,
+        "b": 77
+      },
+      "lab": {
+        "l": 20.635242629912767,
+        "a": 0.1356895235713751,
+        "b": -18.709035567017352
+      },
+      "sortOrder": 69,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C13",
+      "hex": "#CDE8FF",
+      "rgb": {
+        "r": 205,
+        "g": 232,
+        "b": 255
+      },
+      "lab": {
+        "l": 90.73902595504978,
+        "a": -4.122569108454099,
+        "b": -14.079515287898992
+      },
+      "sortOrder": 70,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C14",
+      "hex": "#D5FDFF",
+      "rgb": {
+        "r": 213,
+        "g": 253,
+        "b": 255
+      },
+      "lab": {
+        "l": 96.66244073160534,
+        "a": -12.329795129008392,
+        "b": -5.227386690877567
+      },
+      "sortOrder": 71,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C15",
+      "hex": "#22C4C6",
+      "rgb": {
+        "r": 34,
+        "g": 196,
+        "b": 198
+      },
+      "lab": {
+        "l": 72.15706771862537,
+        "a": -37.345503462259344,
+        "b": -12.223873633734161
+      },
+      "sortOrder": 72,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C16",
+      "hex": "#1557A8",
+      "rgb": {
+        "r": 21,
+        "g": 87,
+        "b": 168
+      },
+      "lab": {
+        "l": 37.48395843314241,
+        "a": 11.512739173268782,
+        "b": -49.04314068315645
+      },
+      "sortOrder": 73,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C17",
+      "hex": "#04D1F6",
+      "rgb": {
+        "r": 4,
+        "g": 209,
+        "b": 246
+      },
+      "lab": {
+        "l": 77.44511617122544,
+        "a": -29.723940150161887,
+        "b": -30.119033219928326
+      },
+      "sortOrder": 74,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C18",
+      "hex": "#1D3344",
+      "rgb": {
+        "r": 29,
+        "g": 51,
+        "b": 68
+      },
+      "lab": {
+        "l": 20.227210250031348,
+        "a": -2.961122993325016,
+        "b": -13.271144571806238
+      },
+      "sortOrder": 75,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C19",
+      "hex": "#1887A2",
+      "rgb": {
+        "r": 24,
+        "g": 135,
+        "b": 162
+      },
+      "lab": {
+        "l": 51.9824970461198,
+        "a": -19.50822586784473,
+        "b": -22.65586925964278
+      },
+      "sortOrder": 76,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C20",
+      "hex": "#176DAF",
+      "rgb": {
+        "r": 23,
+        "g": 109,
+        "b": 175
+      },
+      "lab": {
+        "l": 44.53663790136853,
+        "a": 0.30853117488788273,
+        "b": -41.87952831833901
+      },
+      "sortOrder": 77,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C21",
+      "hex": "#BEDDFF",
+      "rgb": {
+        "r": 190,
+        "g": 221,
+        "b": 255
+      },
+      "lab": {
+        "l": 86.9369194450215,
+        "a": -2.869323380829958,
+        "b": -19.892793058482017
+      },
+      "sortOrder": 78,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C22",
+      "hex": "#67B4BE",
+      "rgb": {
+        "r": 103,
+        "g": 180,
+        "b": 190
+      },
+      "lab": {
+        "l": 68.92570120950185,
+        "a": -21.126464898849008,
+        "b": -12.504448151908964
+      },
+      "sortOrder": 79,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C23",
+      "hex": "#C8E2FF",
+      "rgb": {
+        "r": 200,
+        "g": 226,
+        "b": 255
+      },
+      "lab": {
+        "l": 88.87053929404408,
+        "a": -2.5229616441374003,
+        "b": -16.915272192945974
+      },
+      "sortOrder": 80,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C24",
+      "hex": "#7CC4FF",
+      "rgb": {
+        "r": 124,
+        "g": 196,
+        "b": 255
+      },
+      "lab": {
+        "l": 76.66766327923368,
+        "a": -6.594204683295635,
+        "b": -35.921562794288086
+      },
+      "sortOrder": 81,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C25",
+      "hex": "#A9E5E5",
+      "rgb": {
+        "r": 169,
+        "g": 229,
+        "b": 229
+      },
+      "lab": {
+        "l": 87.05959036998982,
+        "a": -18.86085238246016,
+        "b": -6.1519544393004555
+      },
+      "sortOrder": 82,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C26",
+      "hex": "#3CAED8",
+      "rgb": {
+        "r": 60,
+        "g": 174,
+        "b": 216
+      },
+      "lab": {
+        "l": 66.6627271348131,
+        "a": -18.19885174818292,
+        "b": -30.410676639991017
+      },
+      "sortOrder": 83,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C27",
+      "hex": "#D3DFFA",
+      "rgb": {
+        "r": 211,
+        "g": 223,
+        "b": 250
+      },
+      "lab": {
+        "l": 88.69759810796769,
+        "a": 1.3293827297029548,
+        "b": -14.475327125660332
+      },
+      "sortOrder": 84,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C28",
+      "hex": "#BBCFED",
+      "rgb": {
+        "r": 187,
+        "g": 207,
+        "b": 237
+      },
+      "lab": {
+        "l": 82.54157221329862,
+        "a": -0.4344543955324687,
+        "b": -17.013556862622224
+      },
+      "sortOrder": 85,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "C29",
+      "hex": "#34488E",
+      "rgb": {
+        "r": 52,
+        "g": 72,
+        "b": 142
+      },
+      "lab": {
+        "l": 32.518054260859735,
+        "a": 15.464586747987397,
+        "b": -41.28788178798424
+      },
+      "sortOrder": 86,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D1",
+      "hex": "#AEB4F2",
+      "rgb": {
+        "r": 174,
+        "g": 180,
+        "b": 242
+      },
+      "lab": {
+        "l": 74.85688091653441,
+        "a": 11.462782254867744,
+        "b": -31.489808567148735
+      },
+      "sortOrder": 87,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D2",
+      "hex": "#858EDD",
+      "rgb": {
+        "r": 133,
+        "g": 142,
+        "b": 221
+      },
+      "lab": {
+        "l": 61.26540066752871,
+        "a": 16.213714389307686,
+        "b": -41.34020240184073
+      },
+      "sortOrder": 88,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D3",
+      "hex": "#2F54AF",
+      "rgb": {
+        "r": 47,
+        "g": 84,
+        "b": 175
+      },
+      "lab": {
+        "l": 37.91205242975967,
+        "a": 18.993775160757842,
+        "b": -52.46327690262271
+      },
+      "sortOrder": 89,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D4",
+      "hex": "#182A84",
+      "rgb": {
+        "r": 24,
+        "g": 42,
+        "b": 132
+      },
+      "lab": {
+        "l": 22.000087431715208,
+        "a": 28.042376144482017,
+        "b": -52.23349333820304
+      },
+      "sortOrder": 90,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D5",
+      "hex": "#B843C5",
+      "rgb": {
+        "r": 184,
+        "g": 67,
+        "b": 197
+      },
+      "lab": {
+        "l": 49.78315723587484,
+        "a": 63.748272266359926,
+        "b": -45.52813973501373
+      },
+      "sortOrder": 91,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D6",
+      "hex": "#AC7BDE",
+      "rgb": {
+        "r": 172,
+        "g": 123,
+        "b": 222
+      },
+      "lab": {
+        "l": 60.07864840381217,
+        "a": 38.070488323389164,
+        "b": -43.53457625159671
+      },
+      "sortOrder": 92,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D7",
+      "hex": "#8854B3",
+      "rgb": {
+        "r": 136,
+        "g": 84,
+        "b": 179
+      },
+      "lab": {
+        "l": 45.400202612262,
+        "a": 39.8003236548265,
+        "b": -42.41553607760502
+      },
+      "sortOrder": 93,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D8",
+      "hex": "#E2D3FF",
+      "rgb": {
+        "r": 226,
+        "g": 211,
+        "b": 255
+      },
+      "lab": {
+        "l": 86.98568668287831,
+        "a": 13.371943487938854,
+        "b": -19.570050005847904
+      },
+      "sortOrder": 94,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D9",
+      "hex": "#D5B9F8",
+      "rgb": {
+        "r": 213,
+        "g": 185,
+        "b": 248
+      },
+      "lab": {
+        "l": 79.39794677092758,
+        "a": 21.802264776430935,
+        "b": -27.480932611147544
+      },
+      "sortOrder": 95,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D10",
+      "hex": "#361851",
+      "rgb": {
+        "r": 54,
+        "g": 24,
+        "b": 81
+      },
+      "lab": {
+        "l": 15.652410254588638,
+        "a": 27.221806075618748,
+        "b": -29.19237926450311
+      },
+      "sortOrder": 96,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D11",
+      "hex": "#B9BAE1",
+      "rgb": {
+        "r": 185,
+        "g": 186,
+        "b": 225
+      },
+      "lab": {
+        "l": 76.5987685727703,
+        "a": 7.576205218787269,
+        "b": -19.5628937826098
+      },
+      "sortOrder": 97,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D12",
+      "hex": "#DE9AD4",
+      "rgb": {
+        "r": 222,
+        "g": 154,
+        "b": 212
+      },
+      "lab": {
+        "l": 71.82319207379898,
+        "a": 34.44665693783555,
+        "b": -19.391839268876442
+      },
+      "sortOrder": 98,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D13",
+      "hex": "#B90095",
+      "rgb": {
+        "r": 185,
+        "g": 0,
+        "b": 149
+      },
+      "lab": {
+        "l": 41.97988528308213,
+        "a": 72.2859517041139,
+        "b": -29.44771117967544
+      },
+      "sortOrder": 99,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D14",
+      "hex": "#8B279B",
+      "rgb": {
+        "r": 139,
+        "g": 39,
+        "b": 155
+      },
+      "lab": {
+        "l": 36.569775594660584,
+        "a": 56.70506505862097,
+        "b": -42.18167574741708
+      },
+      "sortOrder": 100,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D15",
+      "hex": "#2F1F90",
+      "rgb": {
+        "r": 47,
+        "g": 31,
+        "b": 144
+      },
+      "lab": {
+        "l": 22.293032357475923,
+        "a": 41.43474466150765,
+        "b": -59.19494514807445
+      },
+      "sortOrder": 101,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D16",
+      "hex": "#E3E1EE",
+      "rgb": {
+        "r": 227,
+        "g": 225,
+        "b": 238
+      },
+      "lab": {
+        "l": 90.023553918321,
+        "a": 3.046697686646671,
+        "b": -6.079061251452789
+      },
+      "sortOrder": 102,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D17",
+      "hex": "#C4D4F6",
+      "rgb": {
+        "r": 196,
+        "g": 212,
+        "b": 246
+      },
+      "lab": {
+        "l": 84.72797380904494,
+        "a": 1.637113771087051,
+        "b": -18.437416137064066
+      },
+      "sortOrder": 103,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D18",
+      "hex": "#A45EC7",
+      "rgb": {
+        "r": 164,
+        "g": 94,
+        "b": 199
+      },
+      "lab": {
+        "l": 51.862285143808634,
+        "a": 46.47760249336069,
+        "b": -43.54714532844521
+      },
+      "sortOrder": 104,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D19",
+      "hex": "#D8C3D7",
+      "rgb": {
+        "r": 216,
+        "g": 195,
+        "b": 215
+      },
+      "lab": {
+        "l": 81.03595373626396,
+        "a": 10.893156170214912,
+        "b": -7.268801545426085
+      },
+      "sortOrder": 105,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D20",
+      "hex": "#9C32B2",
+      "rgb": {
+        "r": 156,
+        "g": 50,
+        "b": 178
+      },
+      "lab": {
+        "l": 42.09979649102166,
+        "a": 60.63108904899156,
+        "b": -46.937697930590176
+      },
+      "sortOrder": 106,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D21",
+      "hex": "#9A009B",
+      "rgb": {
+        "r": 154,
+        "g": 0,
+        "b": 155
+      },
+      "lab": {
+        "l": 36.43877079341378,
+        "a": 67.56339595980084,
+        "b": -42.24598661736577
+      },
+      "sortOrder": 107,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D22",
+      "hex": "#333A95",
+      "rgb": {
+        "r": 51,
+        "g": 58,
+        "b": 149
+      },
+      "lab": {
+        "l": 29.156547185622827,
+        "a": 27.199565362909738,
+        "b": -51.014064827974856
+      },
+      "sortOrder": 108,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D23",
+      "hex": "#EBDAFC",
+      "rgb": {
+        "r": 235,
+        "g": 218,
+        "b": 252
+      },
+      "lab": {
+        "l": 89.31495578534869,
+        "a": 11.963241059244623,
+        "b": -14.416033202916466
+      },
+      "sortOrder": 109,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D24",
+      "hex": "#7786E5",
+      "rgb": {
+        "r": 119,
+        "g": 134,
+        "b": 229
+      },
+      "lab": {
+        "l": 58.62796069500709,
+        "a": 19.7832555642527,
+        "b": -50.02327693555706
+      },
+      "sortOrder": 110,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D25",
+      "hex": "#494FC7",
+      "rgb": {
+        "r": 73,
+        "g": 79,
+        "b": 199
+      },
+      "lab": {
+        "l": 39.79963174546539,
+        "a": 34.69063580549692,
+        "b": -63.39752890016253
+      },
+      "sortOrder": 111,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "D26",
+      "hex": "#DFC2F8",
+      "rgb": {
+        "r": 223,
+        "g": 194,
+        "b": 248
+      },
+      "lab": {
+        "l": 82.40524573187797,
+        "a": 20.081741149727105,
+        "b": -22.81810297388247
+      },
+      "sortOrder": 112,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E1",
+      "hex": "#FDD3CC",
+      "rgb": {
+        "r": 253,
+        "g": 211,
+        "b": 204
+      },
+      "lab": {
+        "l": 87.88831281953814,
+        "a": 13.629829682608785,
+        "b": 8.967496891642313
+      },
+      "sortOrder": 113,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E2",
+      "hex": "#FEC0DF",
+      "rgb": {
+        "r": 254,
+        "g": 192,
+        "b": 223
+      },
+      "lab": {
+        "l": 84.01816080692973,
+        "a": 26.868244725707203,
+        "b": -6.755539731657456
+      },
+      "sortOrder": 114,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E3",
+      "hex": "#FFB7E7",
+      "rgb": {
+        "r": 255,
+        "g": 183,
+        "b": 231
+      },
+      "lab": {
+        "l": 82.32469770931186,
+        "a": 33.23593386736173,
+        "b": -13.551825408353846
+      },
+      "sortOrder": 115,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E4",
+      "hex": "#E8649E",
+      "rgb": {
+        "r": 232,
+        "g": 100,
+        "b": 158
+      },
+      "lab": {
+        "l": 60.55430857717289,
+        "a": 56.842080176626894,
+        "b": -5.755135390616051
+      },
+      "sortOrder": 116,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E5",
+      "hex": "#F551A2",
+      "rgb": {
+        "r": 245,
+        "g": 81,
+        "b": 162
+      },
+      "lab": {
+        "l": 59.808547173338525,
+        "a": 68.97105212604926,
+        "b": -8.962916514165808
+      },
+      "sortOrder": 117,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E6",
+      "hex": "#F13D74",
+      "rgb": {
+        "r": 241,
+        "g": 61,
+        "b": 116
+      },
+      "lab": {
+        "l": 55.38508507289404,
+        "a": 70.40532782807118,
+        "b": 11.603284608417974
+      },
+      "sortOrder": 118,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E7",
+      "hex": "#C63478",
+      "rgb": {
+        "r": 198,
+        "g": 52,
+        "b": 120
+      },
+      "lab": {
+        "l": 46.739159818810236,
+        "a": 61.90359008788066,
+        "b": -4.272813085876792
+      },
+      "sortOrder": 119,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E8",
+      "hex": "#FFDBE9",
+      "rgb": {
+        "r": 255,
+        "g": 219,
+        "b": 233
+      },
+      "lab": {
+        "l": 90.6922604560747,
+        "a": 14.706195160405944,
+        "b": -2.2112568926432985
+      },
+      "sortOrder": 120,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E9",
+      "hex": "#E970CC",
+      "rgb": {
+        "r": 233,
+        "g": 112,
+        "b": 204
+      },
+      "lab": {
+        "l": 64.38317928620458,
+        "a": 57.94826155322347,
+        "b": -26.182324538668244
+      },
+      "sortOrder": 121,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E10",
+      "hex": "#D33793",
+      "rgb": {
+        "r": 211,
+        "g": 55,
+        "b": 147
+      },
+      "lab": {
+        "l": 50.32451941199041,
+        "a": 67.3003610677026,
+        "b": -14.977130575780429
+      },
+      "sortOrder": 122,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E11",
+      "hex": "#FCDDD2",
+      "rgb": {
+        "r": 252,
+        "g": 221,
+        "b": 210
+      },
+      "lab": {
+        "l": 90.35084390274562,
+        "a": 8.975776340025387,
+        "b": 9.326584529316605
+      },
+      "sortOrder": 123,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E12",
+      "hex": "#F78FC3",
+      "rgb": {
+        "r": 247,
+        "g": 143,
+        "b": 195
+      },
+      "lab": {
+        "l": 71.80086702129923,
+        "a": 45.72362774135441,
+        "b": -9.744477877100955
+      },
+      "sortOrder": 124,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E13",
+      "hex": "#B5006D",
+      "rgb": {
+        "r": 181,
+        "g": 0,
+        "b": 109
+      },
+      "lab": {
+        "l": 39.46379300862096,
+        "a": 67.07821404749691,
+        "b": -8.635199769642865
+      },
+      "sortOrder": 125,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E14",
+      "hex": "#FFD1BA",
+      "rgb": {
+        "r": 255,
+        "g": 209,
+        "b": 186
+      },
+      "lab": {
+        "l": 87.19712897886662,
+        "a": 12.878756247652278,
+        "b": 17.499725887949815
+      },
+      "sortOrder": 126,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E15",
+      "hex": "#F8C7C9",
+      "rgb": {
+        "r": 248,
+        "g": 199,
+        "b": 201
+      },
+      "lab": {
+        "l": 84.49558953881424,
+        "a": 17.668729684972572,
+        "b": 5.623028679056041
+      },
+      "sortOrder": 127,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E16",
+      "hex": "#FFF3EB",
+      "rgb": {
+        "r": 255,
+        "g": 243,
+        "b": 235
+      },
+      "lab": {
+        "l": 96.55819407775611,
+        "a": 2.6839173622432155,
+        "b": 5.28735977143977
+      },
+      "sortOrder": 128,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E17",
+      "hex": "#FFE2EA",
+      "rgb": {
+        "r": 255,
+        "g": 226,
+        "b": 234
+      },
+      "lab": {
+        "l": 92.39573426045025,
+        "a": 11.240077583580533,
+        "b": -0.241607361388807
+      },
+      "sortOrder": 129,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E18",
+      "hex": "#FFC7DB",
+      "rgb": {
+        "r": 255,
+        "g": 199,
+        "b": 219
+      },
+      "lab": {
+        "l": 85.61699385547425,
+        "a": 22.900312960083212,
+        "b": -2.2546463670966466
+      },
+      "sortOrder": 130,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E19",
+      "hex": "#FEBAD5",
+      "rgb": {
+        "r": 254,
+        "g": 186,
+        "b": 213
+      },
+      "lab": {
+        "l": 82.37656676618812,
+        "a": 28.445823324120823,
+        "b": -3.8179478428196356
+      },
+      "sortOrder": 131,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E20",
+      "hex": "#D8C7D1",
+      "rgb": {
+        "r": 216,
+        "g": 199,
+        "b": 209
+      },
+      "lab": {
+        "l": 81.86530943785253,
+        "a": 7.678421489226928,
+        "b": -2.827146484272247
+      },
+      "sortOrder": 132,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E21",
+      "hex": "#BD9DA1",
+      "rgb": {
+        "r": 189,
+        "g": 157,
+        "b": 161
+      },
+      "lab": {
+        "l": 67.65580961007055,
+        "a": 12.46594858318073,
+        "b": 2.3544832216583655
+      },
+      "sortOrder": 133,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E22",
+      "hex": "#B785A1",
+      "rgb": {
+        "r": 183,
+        "g": 133,
+        "b": 161
+      },
+      "lab": {
+        "l": 61.14788919321346,
+        "a": 23.611961551902873,
+        "b": -7.277137089835195
+      },
+      "sortOrder": 134,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E23",
+      "hex": "#937A8D",
+      "rgb": {
+        "r": 147,
+        "g": 122,
+        "b": 141
+      },
+      "lab": {
+        "l": 54.07549072763585,
+        "a": 13.096959720640289,
+        "b": -6.658846063675017
+      },
+      "sortOrder": 135,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "E24",
+      "hex": "#E1BCE8",
+      "rgb": {
+        "r": 225,
+        "g": 188,
+        "b": 232
+      },
+      "lab": {
+        "l": 80.62816738426592,
+        "a": 20.82510395796283,
+        "b": -16.927467074005943
+      },
+      "sortOrder": 136,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F1",
+      "hex": "#FD957B",
+      "rgb": {
+        "r": 253,
+        "g": 149,
+        "b": 123
+      },
+      "lab": {
+        "l": 72.10321407096234,
+        "a": 36.48209045483325,
+        "b": 30.581246263496475
+      },
+      "sortOrder": 137,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F2",
+      "hex": "#FC3D46",
+      "rgb": {
+        "r": 252,
+        "g": 61,
+        "b": 70
+      },
+      "lab": {
+        "l": 56.56703917394613,
+        "a": 70.82197549043518,
+        "b": 40.45583432562506
+      },
+      "sortOrder": 138,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F3",
+      "hex": "#F74941",
+      "rgb": {
+        "r": 247,
+        "g": 73,
+        "b": 65
+      },
+      "lab": {
+        "l": 57.00444713362728,
+        "a": 65.25234180865802,
+        "b": 43.46583136755379
+      },
+      "sortOrder": 139,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F4",
+      "hex": "#FC283C",
+      "rgb": {
+        "r": 252,
+        "g": 40,
+        "b": 60
+      },
+      "lab": {
+        "l": 54.601755143017,
+        "a": 75.68540446029142,
+        "b": 43.84732547437512
+      },
+      "sortOrder": 140,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F5",
+      "hex": "#E7002F",
+      "rgb": {
+        "r": 231,
+        "g": 0,
+        "b": 47
+      },
+      "lab": {
+        "l": 48.51094733476371,
+        "a": 75.02622459511721,
+        "b": 43.40218964509689
+      },
+      "sortOrder": 141,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F6",
+      "hex": "#943630",
+      "rgb": {
+        "r": 148,
+        "g": 54,
+        "b": 48
+      },
+      "lab": {
+        "l": 36.27063496846619,
+        "a": 39.17323013275209,
+        "b": 24.64250497872592
+      },
+      "sortOrder": 142,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F7",
+      "hex": "#971937",
+      "rgb": {
+        "r": 151,
+        "g": 25,
+        "b": 55
+      },
+      "lab": {
+        "l": 33.03301792828221,
+        "a": 51.45328809269525,
+        "b": 16.195919261592973
+      },
+      "sortOrder": 143,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F8",
+      "hex": "#BC0028",
+      "rgb": {
+        "r": 188,
+        "g": 0,
+        "b": 40
+      },
+      "lab": {
+        "l": 39.32358158712674,
+        "a": 64.40495847003022,
+        "b": 35.054736926293
+      },
+      "sortOrder": 144,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F9",
+      "hex": "#E2677A",
+      "rgb": {
+        "r": 226,
+        "g": 103,
+        "b": 122
+      },
+      "lab": {
+        "l": 59.23150087405227,
+        "a": 49.57533900528477,
+        "b": 13.098854489437395
+      },
+      "sortOrder": 145,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F10",
+      "hex": "#8A4526",
+      "rgb": {
+        "r": 138,
+        "g": 69,
+        "b": 38
+      },
+      "lab": {
+        "l": 37.482839581745175,
+        "a": 26.823813715695422,
+        "b": 31.520603458300755
+      },
+      "sortOrder": 146,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F11",
+      "hex": "#5A2121",
+      "rgb": {
+        "r": 90,
+        "g": 33,
+        "b": 33
+      },
+      "lab": {
+        "l": 21.475357616708784,
+        "a": 26.25489904080705,
+        "b": 13.436387340413647
+      },
+      "sortOrder": 147,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F12",
+      "hex": "#FD4E6A",
+      "rgb": {
+        "r": 253,
+        "g": 78,
+        "b": 106
+      },
+      "lab": {
+        "l": 59.32301719155171,
+        "a": 67.43492602485784,
+        "b": 23.231231953615893
+      },
+      "sortOrder": 148,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F13",
+      "hex": "#F35744",
+      "rgb": {
+        "r": 243,
+        "g": 87,
+        "b": 68
+      },
+      "lab": {
+        "l": 58.31541153598087,
+        "a": 58.74627219480072,
+        "b": 43.11771968393489
+      },
+      "sortOrder": 149,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F14",
+      "hex": "#FFA9AD",
+      "rgb": {
+        "r": 255,
+        "g": 169,
+        "b": 173
+      },
+      "lab": {
+        "l": 77.67229538502878,
+        "a": 32.12822808653748,
+        "b": 11.027440097341866
+      },
+      "sortOrder": 150,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F15",
+      "hex": "#D30022",
+      "rgb": {
+        "r": 211,
+        "g": 0,
+        "b": 34
+      },
+      "lab": {
+        "l": 44.188564382174754,
+        "a": 69.88336968602432,
+        "b": 44.88426418634693
+      },
+      "sortOrder": 151,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F16",
+      "hex": "#FEC2A6",
+      "rgb": {
+        "r": 254,
+        "g": 194,
+        "b": 166
+      },
+      "lab": {
+        "l": 83.1316490091822,
+        "a": 17.80690024138326,
+        "b": 22.40195750232994
+      },
+      "sortOrder": 152,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F17",
+      "hex": "#E69C79",
+      "rgb": {
+        "r": 230,
+        "g": 156,
+        "b": 121
+      },
+      "lab": {
+        "l": 70.8599599423031,
+        "a": 23.70740463914095,
+        "b": 29.51466336763886
+      },
+      "sortOrder": 153,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F18",
+      "hex": "#D37C46",
+      "rgb": {
+        "r": 211,
+        "g": 124,
+        "b": 70
+      },
+      "lab": {
+        "l": 60.524846395592164,
+        "a": 29.146870633056544,
+        "b": 43.2896732177602
+      },
+      "sortOrder": 154,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F19",
+      "hex": "#C1444A",
+      "rgb": {
+        "r": 193,
+        "g": 68,
+        "b": 74
+      },
+      "lab": {
+        "l": 46.9345180745002,
+        "a": 50.3572304517485,
+        "b": 23.953975535563377
+      },
+      "sortOrder": 155,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F20",
+      "hex": "#CD9391",
+      "rgb": {
+        "r": 205,
+        "g": 147,
+        "b": 145
+      },
+      "lab": {
+        "l": 66.438282593992,
+        "a": 21.599083435012545,
+        "b": 9.767289200422624
+      },
+      "sortOrder": 156,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F21",
+      "hex": "#F7B4C6",
+      "rgb": {
+        "r": 247,
+        "g": 180,
+        "b": 198
+      },
+      "lab": {
+        "l": 79.89588760015037,
+        "a": 26.883851515556668,
+        "b": 0.5506898662552606
+      },
+      "sortOrder": 157,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F22",
+      "hex": "#FDC0D0",
+      "rgb": {
+        "r": 253,
+        "g": 192,
+        "b": 208
+      },
+      "lab": {
+        "l": 83.51548704143234,
+        "a": 24.179611456874195,
+        "b": 0.5213011767496667
+      },
+      "sortOrder": 158,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F23",
+      "hex": "#F67E66",
+      "rgb": {
+        "r": 246,
+        "g": 126,
+        "b": 102
+      },
+      "lab": {
+        "l": 66.12008960941408,
+        "a": 43.84383921213764,
+        "b": 34.113990408799054
+      },
+      "sortOrder": 159,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F24",
+      "hex": "#E698AA",
+      "rgb": {
+        "r": 230,
+        "g": 152,
+        "b": 170
+      },
+      "lab": {
+        "l": 70.99828785028357,
+        "a": 31.621598526026307,
+        "b": 2.7268654987407714
+      },
+      "sortOrder": 160,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "F25",
+      "hex": "#E54B4F",
+      "rgb": {
+        "r": 229,
+        "g": 75,
+        "b": 79
+      },
+      "lab": {
+        "l": 54.30164238775667,
+        "a": 59.55535467958267,
+        "b": 31.62972880396144
+      },
+      "sortOrder": 161,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G1",
+      "hex": "#FFE2CE",
+      "rgb": {
+        "r": 255,
+        "g": 226,
+        "b": 206
+      },
+      "lab": {
+        "l": 91.73466710933772,
+        "a": 6.878071194819202,
+        "b": 13.422268960019611
+      },
+      "sortOrder": 162,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G2",
+      "hex": "#FFC4AA",
+      "rgb": {
+        "r": 255,
+        "g": 196,
+        "b": 170
+      },
+      "lab": {
+        "l": 83.78100264448491,
+        "a": 17.62081437423718,
+        "b": 21.19407589431548
+      },
+      "sortOrder": 163,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G3",
+      "hex": "#F4C3A5",
+      "rgb": {
+        "r": 244,
+        "g": 195,
+        "b": 165
+      },
+      "lab": {
+        "l": 82.36958574227683,
+        "a": 13.360852188517125,
+        "b": 21.728067670017694
+      },
+      "sortOrder": 164,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G4",
+      "hex": "#E1B383",
+      "rgb": {
+        "r": 225,
+        "g": 179,
+        "b": 131
+      },
+      "lab": {
+        "l": 76.00120904692945,
+        "a": 10.459003403776258,
+        "b": 30.840833465214047
+      },
+      "sortOrder": 165,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G5",
+      "hex": "#EDB045",
+      "rgb": {
+        "r": 237,
+        "g": 176,
+        "b": 69
+      },
+      "lab": {
+        "l": 75.75442203452162,
+        "a": 12.204350596510205,
+        "b": 61.0785849836298
+      },
+      "sortOrder": 166,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G6",
+      "hex": "#E99C17",
+      "rgb": {
+        "r": 233,
+        "g": 156,
+        "b": 23
+      },
+      "lab": {
+        "l": 70.29260194055328,
+        "a": 19.617630204170567,
+        "b": 71.21195306582075
+      },
+      "sortOrder": 167,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G7",
+      "hex": "#9D5B3E",
+      "rgb": {
+        "r": 157,
+        "g": 91,
+        "b": 62
+      },
+      "lab": {
+        "l": 45.63407017660468,
+        "a": 24.18859771947307,
+        "b": 28.194166291565924
+      },
+      "sortOrder": 168,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G8",
+      "hex": "#753832",
+      "rgb": {
+        "r": 117,
+        "g": 56,
+        "b": 50
+      },
+      "lab": {
+        "l": 31.443489076671497,
+        "a": 26.123944549587414,
+        "b": 16.175419712582894
+      },
+      "sortOrder": 169,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G9",
+      "hex": "#E6B483",
+      "rgb": {
+        "r": 230,
+        "g": 180,
+        "b": 131
+      },
+      "lab": {
+        "l": 76.74391376085403,
+        "a": 11.922647143973176,
+        "b": 31.909912029492805
+      },
+      "sortOrder": 170,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G10",
+      "hex": "#D98C39",
+      "rgb": {
+        "r": 217,
+        "g": 140,
+        "b": 57
+      },
+      "lab": {
+        "l": 64.80907980123716,
+        "a": 22.386804333922427,
+        "b": 54.33596963740497
+      },
+      "sortOrder": 171,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G11",
+      "hex": "#E0C593",
+      "rgb": {
+        "r": 224,
+        "g": 197,
+        "b": 147
+      },
+      "lab": {
+        "l": 80.67671451798844,
+        "a": 2.392188879273338,
+        "b": 28.614365589711955
+      },
+      "sortOrder": 172,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G12",
+      "hex": "#FFC890",
+      "rgb": {
+        "r": 255,
+        "g": 200,
+        "b": 144
+      },
+      "lab": {
+        "l": 84.26994781659184,
+        "a": 12.637286216589938,
+        "b": 35.457682654358244
+      },
+      "sortOrder": 173,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G13",
+      "hex": "#B7714A",
+      "rgb": {
+        "r": 183,
+        "g": 113,
+        "b": 74
+      },
+      "lab": {
+        "l": 54.422056187632506,
+        "a": 23.801908876821155,
+        "b": 33.05141984721751
+      },
+      "sortOrder": 174,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G14",
+      "hex": "#8D614C",
+      "rgb": {
+        "r": 141,
+        "g": 97,
+        "b": 76
+      },
+      "lab": {
+        "l": 45.269221349813535,
+        "a": 15.194887582534566,
+        "b": 19.139987773355514
+      },
+      "sortOrder": 175,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G15",
+      "hex": "#FCF9E0",
+      "rgb": {
+        "r": 252,
+        "g": 249,
+        "b": 224
+      },
+      "lab": {
+        "l": 97.56317685138043,
+        "a": -3.1456191827275437,
+        "b": 12.362113699466292
+      },
+      "sortOrder": 176,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G16",
+      "hex": "#F2D9BA",
+      "rgb": {
+        "r": 242,
+        "g": 217,
+        "b": 186
+      },
+      "lab": {
+        "l": 87.99267689685475,
+        "a": 3.9203885686246998,
+        "b": 18.44042941053501
+      },
+      "sortOrder": 177,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G17",
+      "hex": "#78524B",
+      "rgb": {
+        "r": 120,
+        "g": 82,
+        "b": 75
+      },
+      "lab": {
+        "l": 38.788495303741,
+        "a": 14.908243968497159,
+        "b": 10.503716916267624
+      },
+      "sortOrder": 178,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G18",
+      "hex": "#FFE4CC",
+      "rgb": {
+        "r": 255,
+        "g": 228,
+        "b": 204
+      },
+      "lab": {
+        "l": 92.17995533068749,
+        "a": 5.5612023749110335,
+        "b": 15.092918570609527
+      },
+      "sortOrder": 179,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G19",
+      "hex": "#E07935",
+      "rgb": {
+        "r": 224,
+        "g": 121,
+        "b": 53
+      },
+      "lab": {
+        "l": 61.46697849778195,
+        "a": 35.1552724618594,
+        "b": 53.05111319854986
+      },
+      "sortOrder": 180,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G20",
+      "hex": "#A94023",
+      "rgb": {
+        "r": 169,
+        "g": 64,
+        "b": 35
+      },
+      "lab": {
+        "l": 41.57270560559158,
+        "a": 41.6130569789451,
+        "b": 39.02244231939349
+      },
+      "sortOrder": 181,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "G21",
+      "hex": "#B88558",
+      "rgb": {
+        "r": 184,
+        "g": 133,
+        "b": 88
+      },
+      "lab": {
+        "l": 59.591350522499056,
+        "a": 14.29598774118107,
+        "b": 31.857475936596792
+      },
+      "sortOrder": 182,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H1",
+      "hex": "#FDFBFF",
+      "rgb": {
+        "r": 253,
+        "g": 251,
+        "b": 255
+      },
+      "lab": {
+        "l": 98.86648833081266,
+        "a": 1.3631068139462466,
+        "b": -1.6752148502994446
+      },
+      "sortOrder": 183,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H2",
+      "hex": "#FEFFFF",
+      "rgb": {
+        "r": 254,
+        "g": 255,
+        "b": 255
+      },
+      "lab": {
+        "l": 99.9267870796749,
+        "a": -0.32879787639467084,
+        "b": -0.1156955282666905
+      },
+      "sortOrder": 184,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H3",
+      "hex": "#B6B1BA",
+      "rgb": {
+        "r": 182,
+        "g": 177,
+        "b": 186
+      },
+      "lab": {
+        "l": 72.84882073578653,
+        "a": 3.453861792870272,
+        "b": -3.9473789454578245
+      },
+      "sortOrder": 185,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H4",
+      "hex": "#89858C",
+      "rgb": {
+        "r": 137,
+        "g": 133,
+        "b": 140
+      },
+      "lab": {
+        "l": 56.07469520042838,
+        "a": 2.8714675387269684,
+        "b": -3.220107644408099
+      },
+      "sortOrder": 186,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H5",
+      "hex": "#48464E",
+      "rgb": {
+        "r": 72,
+        "g": 70,
+        "b": 78
+      },
+      "lab": {
+        "l": 30.176795010766376,
+        "a": 2.641483137230838,
+        "b": -4.482943903996494
+      },
+      "sortOrder": 187,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H6",
+      "hex": "#2F2B2F",
+      "rgb": {
+        "r": 47,
+        "g": 43,
+        "b": 47
+      },
+      "lab": {
+        "l": 18.08667792121721,
+        "a": 2.7410022369359908,
+        "b": -1.9318326184724177
+      },
+      "sortOrder": 188,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H7",
+      "hex": "#000000",
+      "rgb": {
+        "r": 0,
+        "g": 0,
+        "b": 0
+      },
+      "lab": {
+        "l": 0,
+        "a": 0,
+        "b": 0
+      },
+      "sortOrder": 189,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H8",
+      "hex": "#E7D6DB",
+      "rgb": {
+        "r": 231,
+        "g": 214,
+        "b": 219
+      },
+      "lab": {
+        "l": 87.09357676377834,
+        "a": 6.704402891598904,
+        "b": -0.3436674409973861
+      },
+      "sortOrder": 190,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H9",
+      "hex": "#EDEDED",
+      "rgb": {
+        "r": 237,
+        "g": 237,
+        "b": 237
+      },
+      "lab": {
+        "l": 93.7482167336725,
+        "a": -0.000015768420902340097,
+        "b": 0.000006307368360936039
+      },
+      "sortOrder": 191,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H10",
+      "hex": "#EEE9EA",
+      "rgb": {
+        "r": 238,
+        "g": 233,
+        "b": 234
+      },
+      "lab": {
+        "l": 92.74925335735139,
+        "a": 1.8543652387431608,
+        "b": 0.11150072337438033
+      },
+      "sortOrder": 192,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H11",
+      "hex": "#CECDD5",
+      "rgb": {
+        "r": 206,
+        "g": 205,
+        "b": 213
+      },
+      "lab": {
+        "l": 82.6940849799532,
+        "a": 1.8211750507914903,
+        "b": -3.83953616879118
+      },
+      "sortOrder": 193,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H12",
+      "hex": "#FFF5ED",
+      "rgb": {
+        "r": 255,
+        "g": 245,
+        "b": 237
+      },
+      "lab": {
+        "l": 97.09760460418134,
+        "a": 1.9970208489973884,
+        "b": 5.035264961742136
+      },
+      "sortOrder": 194,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H13",
+      "hex": "#F5ECD2",
+      "rgb": {
+        "r": 245,
+        "g": 236,
+        "b": 210
+      },
+      "lab": {
+        "l": 93.47549529702599,
+        "a": -1.2051486682204682,
+        "b": 13.698685328298321
+      },
+      "sortOrder": 195,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H14",
+      "hex": "#CFD7D3",
+      "rgb": {
+        "r": 207,
+        "g": 215,
+        "b": 211
+      },
+      "lab": {
+        "l": 85.28587299221152,
+        "a": -3.439467769676685,
+        "b": 1.0284836658227325
+      },
+      "sortOrder": 196,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H15",
+      "hex": "#98A6A8",
+      "rgb": {
+        "r": 152,
+        "g": 166,
+        "b": 168
+      },
+      "lab": {
+        "l": 67.10748836796537,
+        "a": -4.5030207030684615,
+        "b": -2.7182567555165793
+      },
+      "sortOrder": 197,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H16",
+      "hex": "#1D1414",
+      "rgb": {
+        "r": 29,
+        "g": 20,
+        "b": 20
+      },
+      "lab": {
+        "l": 7.3353800095768555,
+        "a": 4.531506600077659,
+        "b": 1.6061825583333078
+      },
+      "sortOrder": 198,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H17",
+      "hex": "#F1EDED",
+      "rgb": {
+        "r": 241,
+        "g": 237,
+        "b": 237
+      },
+      "lab": {
+        "l": 94.0482596460579,
+        "a": 1.3381515371642116,
+        "b": 0.4740214585921443
+      },
+      "sortOrder": 199,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H18",
+      "hex": "#FFFDF0",
+      "rgb": {
+        "r": 255,
+        "g": 253,
+        "b": 240
+      },
+      "lab": {
+        "l": 99.14389930273079,
+        "a": -1.5474528662247633,
+        "b": 6.447794977196697
+      },
+      "sortOrder": 200,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H19",
+      "hex": "#F6EFE2",
+      "rgb": {
+        "r": 246,
+        "g": 239,
+        "b": 226
+      },
+      "lab": {
+        "l": 94.66079048276653,
+        "a": 0.15591591500607738,
+        "b": 7.115495077910738
+      },
+      "sortOrder": 201,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H20",
+      "hex": "#949FA3",
+      "rgb": {
+        "r": 148,
+        "g": 159,
+        "b": 163
+      },
+      "lab": {
+        "l": 64.75255938992422,
+        "a": -3.084281641229869,
+        "b": -3.4239599499982454
+      },
+      "sortOrder": 202,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H21",
+      "hex": "#FFFBE1",
+      "rgb": {
+        "r": 255,
+        "g": 251,
+        "b": 225
+      },
+      "lab": {
+        "l": 98.30949118185531,
+        "a": -2.952733609904168,
+        "b": 12.942064854218271
+      },
+      "sortOrder": 203,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H22",
+      "hex": "#CACAD4",
+      "rgb": {
+        "r": 202,
+        "g": 202,
+        "b": 212
+      },
+      "lab": {
+        "l": 81.59348154926685,
+        "a": 1.8689075428688917,
+        "b": -4.961391866672171
+      },
+      "sortOrder": 204,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "H23",
+      "hex": "#9A9D94",
+      "rgb": {
+        "r": 154,
+        "g": 157,
+        "b": 148
+      },
+      "lab": {
+        "l": 64.25964354912477,
+        "a": -2.7830742979658707,
+        "b": 4.327368143293375
+      },
+      "sortOrder": 205,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M1",
+      "hex": "#BCC6B8",
+      "rgb": {
+        "r": 188,
+        "g": 198,
+        "b": 184
+      },
+      "lab": {
+        "l": 78.77555773839441,
+        "a": -6.0123281356597165,
+        "b": 5.829501751793376
+      },
+      "sortOrder": 206,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M2",
+      "hex": "#8AA386",
+      "rgb": {
+        "r": 138,
+        "g": 163,
+        "b": 134
+      },
+      "lab": {
+        "l": 64.4178917314423,
+        "a": -14.409884517358417,
+        "b": 12.211929360318141
+      },
+      "sortOrder": 207,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M3",
+      "hex": "#697D80",
+      "rgb": {
+        "r": 105,
+        "g": 125,
+        "b": 128
+      },
+      "lab": {
+        "l": 50.95348867350698,
+        "a": -6.578636441835206,
+        "b": -4.071244246104544
+      },
+      "sortOrder": 208,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M4",
+      "hex": "#E3D2BC",
+      "rgb": {
+        "r": 227,
+        "g": 210,
+        "b": 188
+      },
+      "lab": {
+        "l": 85.02506680529257,
+        "a": 2.339704739025672,
+        "b": 13.033507984126501
+      },
+      "sortOrder": 209,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M5",
+      "hex": "#D0CCAA",
+      "rgb": {
+        "r": 208,
+        "g": 204,
+        "b": 170
+      },
+      "lab": {
+        "l": 81.56490071150427,
+        "a": -4.234260153575198,
+        "b": 17.476921490954123
+      },
+      "sortOrder": 210,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M6",
+      "hex": "#B0A782",
+      "rgb": {
+        "r": 176,
+        "g": 167,
+        "b": 130
+      },
+      "lab": {
+        "l": 68.37291023982017,
+        "a": -2.743464439486698,
+        "b": 20.351525557929783
+      },
+      "sortOrder": 211,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M7",
+      "hex": "#B4A497",
+      "rgb": {
+        "r": 180,
+        "g": 164,
+        "b": 151
+      },
+      "lab": {
+        "l": 68.37974846005812,
+        "a": 3.6111708001602127,
+        "b": 8.849773816009243
+      },
+      "sortOrder": 212,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M8",
+      "hex": "#B38281",
+      "rgb": {
+        "r": 179,
+        "g": 130,
+        "b": 129
+      },
+      "lab": {
+        "l": 59.099647596927355,
+        "a": 18.743038279733504,
+        "b": 8.011759578949906
+      },
+      "sortOrder": 213,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M9",
+      "hex": "#A58767",
+      "rgb": {
+        "r": 165,
+        "g": 135,
+        "b": 103
+      },
+      "lab": {
+        "l": 58.32806325566905,
+        "a": 6.795617708385326,
+        "b": 21.51402884334235
+      },
+      "sortOrder": 214,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M10",
+      "hex": "#C5B2BC",
+      "rgb": {
+        "r": 197,
+        "g": 178,
+        "b": 188
+      },
+      "lab": {
+        "l": 74.40840072257411,
+        "a": 8.542741753680083,
+        "b": -2.604536069915264
+      },
+      "sortOrder": 215,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M11",
+      "hex": "#9F7594",
+      "rgb": {
+        "r": 159,
+        "g": 117,
+        "b": 148
+      },
+      "lab": {
+        "l": 54.27289289998322,
+        "a": 21.692596896085437,
+        "b": -10.316737403303012
+      },
+      "sortOrder": 216,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M12",
+      "hex": "#644749",
+      "rgb": {
+        "r": 100,
+        "g": 71,
+        "b": 73
+      },
+      "lab": {
+        "l": 33.344357638628814,
+        "a": 12.744047687065052,
+        "b": 3.7204601036606832
+      },
+      "sortOrder": 217,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M13",
+      "hex": "#D19066",
+      "rgb": {
+        "r": 209,
+        "g": 144,
+        "b": 102
+      },
+      "lab": {
+        "l": 65.3293031289659,
+        "a": 19.93130988714392,
+        "b": 32.14258059787949
+      },
+      "sortOrder": 218,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M14",
+      "hex": "#C77362",
+      "rgb": {
+        "r": 199,
+        "g": 115,
+        "b": 98
+      },
+      "lab": {
+        "l": 57.35540652954671,
+        "a": 31.251434791166933,
+        "b": 23.747686993570106
+      },
+      "sortOrder": 219,
+      "active": true,
+      "autoMatchEligible": true
+    },
+    {
+      "code": "M15",
+      "hex": "#757D78",
+      "rgb": {
+        "r": 117,
+        "g": 125,
+        "b": 120
+      },
+      "lab": {
+        "l": 51.616079220962604,
+        "a": -4.002128706767138,
+        "b": 1.6956622857020598
+      },
+      "sortOrder": 220,
+      "active": true,
+      "autoMatchEligible": true
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0.0",
+  "paletteId": "poparooz-standard",
+  "paletteVersion": "1.0.0",
+  "artifactVersion": "1.0.0",
+  "defaults": {
+    "active": true,
+    "autoMatchEligible": true
+  },
+  "overrides": []
+}

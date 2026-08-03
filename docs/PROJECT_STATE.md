@@ -133,16 +133,26 @@ Status: Accepted and Frozen
 Result: Runtime Artifact, ordering, derivation, active and auto-match eligibility, versioning, determinism, Gate, fail-closed, and legacy-contract boundaries are frozen.
 ```
 
+```text
+P3-A01.4-A01 Deterministic Runtime Compiler
+Status: Completed and Frozen
+Runtime Artifact: src/runtime/palette/artifacts/poparooz-standard/formal-1.0.0/runtime-1.0.0/runtime-palette.json
+Artifact SHA-256: 86a742ed45b1dc06eb4e4cec64e6a4d35ece07b9ad11f7c01208909986337d70
+Records: 221
+Active: 221
+Auto-match eligible: 221
+```
+
 ## Current Phase
 
 ```text
 Phase: Phase 3
 Status: active
-Current task: P3-A01.4-D01 Runtime Palette Contract Freeze
-Next task: P3-A01.4-A01 Deterministic Runtime Compiler
+Current task: P3-A01.4-A01 Deterministic Runtime Compiler
+Next task: P3-A01.4-A02 Node-only Runtime Lock
 ```
 
-The P3-A01.4-D01 contract is frozen. The Runtime Artifact and Runtime Lock have not been generated, the Build Production Gate and Startup Palette Gate have not been implemented, and Production `GenerationRuntime` remains unavailable. P3-A01.4 remains in progress and must not be described as complete.
+The P3-A01.4-D01 contract and P3-A01.4-A01 deterministic compiler are frozen. The Runtime Artifact has been generated, but the Runtime Lock, Build Production Gate, Browser Provider, and Startup Palette Gate have not been implemented. Production `GenerationRuntime` remains unavailable. P3-A01.4 remains in progress and must not be described as complete.
 
 ## Frozen Phase 3 Decisions
 
@@ -157,7 +167,7 @@ The P3-A01.4-D01 contract is frozen. The Runtime Artifact and Runtime Lock have 
 - Physical color status is `unverified`.
 - Source Manifest, Normalized Schema, Canonical Serialization, and separate source/canonical SHA-256 boundaries are established.
 - The formal 221-color source Palette is compiled, accepted, committed, and frozen as `poparooz-standard` version `1.0.0`.
-- A Production Runtime Palette has not been generated or enabled.
+- The deterministic Runtime Palette Artifact has been generated, but no Production Runtime Palette Provider or generation runtime has been enabled.
 - Runtime Policy uses a versioned local Palette Provider.
 - Production availability uses a fail-closed gate.
 - Test palettes cannot be used as a production fallback.
@@ -271,7 +281,7 @@ git diff --check: passed
 Production Bundle boundary: passed
 ```
 
-ExcelJS is used only by Node offline compilation tooling and is excluded from the browser production bundle. No Runtime Palette has been generated or enabled.
+ExcelJS is used only by Node offline compilation tooling and is excluded from the browser production bundle. The Runtime Palette Artifact has been generated deterministically but is not loaded or enabled by the browser production runtime.
 
 ### BoardProfile v1
 
@@ -314,7 +324,8 @@ P3-D02-E01 BoardProfile Evidence Collection      Frozen
 P3-A01.3   Formal 221-color Palette Compilation  Frozen
 P3-A01.4   Runtime Palette Artifact and Production Gate In progress
 P3-A01.4-D01 Runtime Palette Contract Freeze      Frozen
-P3-A01.4-A01 Deterministic Runtime Compiler       Ready
+P3-A01.4-A01 Deterministic Runtime Compiler       Frozen
+P3-A01.4-A02 Node-only Runtime Lock               Ready
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
 ```
@@ -328,7 +339,7 @@ Formal Palette
 -> Production Gate integration
 ```
 
-P3-A01.4 remains planning only. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
+P3-A01.4 remains in progress. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
 
 ## Known Issues
 

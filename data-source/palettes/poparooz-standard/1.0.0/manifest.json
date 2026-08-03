@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "paletteId": "poparooz-standard",
+  "paletteVersion": "1.0.0",
+  "brand": "Poparooz",
+  "referenceSystem": "POPAROOZ",
+  "recordCount": 221,
+  "seriesOrder": ["A", "B", "C", "D", "E", "F", "G", "H", "M"],
+  "sourceFileName": "Poparooz色卡.xlsx",
+  "sourceFileSha256": "5508b4c0e2060c1bd3ce5afcea9591c62cd26f2c924179143b95daa17e04a71e",
+  "canonicalRecordsSha256": "1474d8587f9959be876e5bdfc6f29373c68dd427b0c84ac1b474944d672872a4",
+  "digitalColorPolicy": "source_declared",
+  "physicalColorPolicy": "unverified",
+  "displayNamePolicy": "optional_approved_only",
+  "status": "approved",
+  "createdAt": "2026-08-03T00:00:00.000Z",
+  "approvedAt": "2026-08-03T00:00:00.000Z",
+  "approvedBy": "poparooz-project-owner"
+}

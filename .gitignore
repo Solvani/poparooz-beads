@@ -7,3 +7,5 @@ coverage/
 .vite/
 *.log
 *.tsbuildinfo
+data-source/incoming/*
+!data-source/incoming/.gitkeep

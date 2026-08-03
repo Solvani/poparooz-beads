@@ -98,3 +98,108 @@ Both use Node's standard `node:crypto` implementation in the scripts layer and p
 ### Current availability and evidence status
 
 The included four-record fixture is explicitly **TEST ONLY / NON-PRODUCTION**. It is a draft, uses synthetic hashes, declares only digital source data, and keeps physical color status `unverified`. P3-A01.2 does not read the formal XLSX, import the formal 221 colors, generate a runtime Palette, fill runtime policy, or enable Production Runtime.
+
+## P3-A01.3 formal source compilation
+
+P3-A01.3 compiles the approved source workbook through the Node-only ExcelJS tool boundary. The compiler verifies the exact source SHA-256 before parsing, requires the fixed `Sheet1` and `替代色参考` layouts, validates the complete dataset in memory, and only then publishes versioned source artifacts. It does not generate a `PaletteDefinition`, create a Runtime Palette Provider, or activate Production Runtime.
+
+### Versioned source package
+
+The source package is stored under:
+
+```text
+data-source/palettes/poparooz-standard/1.0.0/
+```
+
+It contains the sole approved source workbook plus the manifest, normalized records, canonical records, internal color-derivation audit, and separate Palette and substitute validation reports. First publication is copy-first: the incoming workbook remains an ignored intake copy before, during, and after publication. The compiler never deletes, moves, renames, overwrites, or otherwise cleans up incoming files. The authoritative formal source is `data-source/palettes/poparooz-standard/1.0.0/source/Poparooz色卡.xlsx`; the temporary intake path is `data-source/incoming/Poparooz色卡.xlsx`. Its byte SHA-256 remains:
+
+```text
+5508b4c0e2060c1bd3ce5afcea9591c62cd26f2c924179143b95daa17e04a71e
+```
+
+All generated text artifacts use UTF-8, LF line endings, a fixed field order, a fixed record order, and exactly one trailing newline. They contain no execution timestamp, absolute path, user or machine identity, process ID, UUID, or random value. The fixed source lifecycle timestamps are `2026-08-03T00:00:00.000Z`.
+
+### Palette compilation
+
+The fixed worksheet column pairs are `A/B`, `D/E`, `G/H`, `J/K`, `M/N`, `P/Q`, `S/T`, `V/W`, and `Y/Z` for series `A, B, C, D, E, F, G, H, M`. Source-audit order is Excel row first and series column second. Business order is series rank followed by series number; `canonicalSourceIndex` never acts as business `sortOrder`.
+
+The approved series counts are:
+
+```text
+A 26
+B 32
+C 29
+D 26
+E 24
+F 25
+G 21
+H 23
+M 15
+Total 221
+```
+
+Every record omits `displayName`, declares `displayNameStatus = "not_provided"`, `digitalColorStatus = "source_declared"`, and `physicalColorStatus = "unverified"`. HEX remains the sole numeric source. Audit derivation calls the frozen `rgb8ToLab` path through `HEX -> RGB8 -> Lab`; RGB and Lab are not read from historical CSV data.
+
+The deterministic `color-derivation-audit.json` is internal source-audit evidence. It records all 221 colors in `canonicalSourceIndex` order, with formal business `sortOrder`, RGB8 parsed directly from HEX, and Lab derived only through the frozen `rgb8ToLab`. Lab values are rounded to 12 decimal places for audit serialization only. This audit rounding does not modify the frozen conversion or future Runtime matching inputs, and RGB/Lab are not added to substitute data or any customer-facing Runtime contract.
+
+### Substitute reference compilation
+
+The `替代色参考` worksheet compiles 67 reference-only bidirectional relationships. Endpoints are normalized into formal Palette business order and use deterministic `<codeA>--<codeB>` relation IDs. Reverse duplicates and self-relations are forbidden. Both endpoint codes must exist in the formal Palette, and both worksheet HEX values must exactly match their formal Palette records.
+
+The fixed level mapping and counts are:
+
+```text
+高替代      -> high             9
+常规替代    -> regular          22
+小面积替代  -> small_area_only  36
+Total                            67
+```
+
+The substitute dataset remains `status = "reference_only"`, `physicalValidationStatus = "unverified"`, and `applicationPolicy = "disabled"`. It is audit evidence only and must not participate in default color matching, tie-break behavior, or Runtime generation.
+
+### Fail-closed boundary
+
+An incorrect source hash, missing or reordered worksheet, changed fixed layout or header, incomplete series, duplicate code or HEX, invalid code or HEX, derivation failure, missing substitute endpoint, endpoint HEX mismatch, reverse duplicate, self-relation, invalid `ΔE00`, invalid level, or count mismatch blocks publication. Failure paths do not produce an approved source package.
+
+The compiled source package deliberately excludes matching eligibility, selling state, finishes, pack sizes, product handles, variant IDs, catalog inventory, and Production Runtime activation.
+
+### Publication, recovery, and exact inventory
+
+First publication reads, hashes, compiles, and validates the incoming workbook entirely in memory before creating staging. It then writes every text artifact, copies the workbook to `staging/source`, verifies the exact staging inventory and every byte, atomically renames staging to the formal version directory, verifies the exact formal inventory and every byte again, and returns with `incomingRetained = true`. The incoming file remains byte-identical throughout this process.
+
+`data-source/incoming/*` is excluded by `.gitignore`, while `data-source/incoming/.gitkeep` keeps the intake directory in the repository. The `.gitkeep` file is not a formal package member. Users may manually delete their local intake copy after independently confirming successful publication; the presence or absence of that copy does not change formal package identity. No cleanup quarantine exists in this lifecycle.
+
+Interrupted states are fail-closed:
+
+- incoming plus staging, without formal, rebuilds staging from the hash-verified incoming source and retains incoming;
+- matching incoming plus formal verifies both and returns `incomingRetained = true` and `incomingMatchesFormalSource = true` without mutating either file;
+- a different-hash incoming plus formal preserves both, leaves formal unchanged, and fails closed with `SOURCE_INPUT_CONFLICT` because the input may belong to a future version;
+- formal without incoming performs normal deterministic recompilation and byte verification;
+- formal plus stale staging, without incoming, requires complete formal verification before stale staging is removed;
+- staging as the only remaining source is never silently published or deleted and returns a stable recovery-required error.
+
+The approved formal package inventory is exactly:
+
+```text
+source/Poparooz色卡.xlsx
+manifest.json
+normalized-palette.json
+canonical-palette-records.txt
+color-derivation-audit.json
+palette-validation-report.json
+normalized-substitutes.json
+canonical-substitute-records.txt
+substitute-validation-report.json
+```
+
+Missing files, extra files, extra directories, source-hash differences, and artifact byte differences fail verification. The sibling `.compile-tmp` staging directory, the ignored incoming intake copy, and `.gitkeep` are not part of the formal package inventory.
+
+### Node-only and error boundaries
+
+ExcelJS and all formal XLSX compiler modules remain Node-only offline tooling. The automated boundary gate explicitly loads the repository's real `vite.config.ts` in production/build mode, overrides only the temporary output directory and module-capture plugin, captures the Rollup module graph, and fails if it loads ExcelJS, `scripts/palette/formal`, or the formal XLSX compiler. A separate static gate rejects those imports from `src/**`.
+
+Compiler and publication failures use centralized typed error codes. The offline CLI exposes stable high-level categories such as `WORKBOOK_LAYOUT_INVALID`, `PALETTE_VALIDATION_FAILED`, `SUBSTITUTE_VALIDATION_FAILED`, and `SOURCE_INPUT_CONFLICT`; finer layout or record errors remain attached as `cause`. Stable default messages exclude absolute paths, user or machine identity, and ExcelJS implementation details. Unknown failures map to `INTERNAL_ERROR` and exit non-zero.
+
+Publication catches save the original failure before any state probe or cleanup. Every recovery operation is independently protected, and simultaneous primary, probe, and cleanup failures are retained together through `AggregateError` rather than replacing the primary failure. These errors are not exposed to customer Runtime.
+
+Substitute relationships remain `reference_only`, physically `unverified`, and `applicationPolicy = "disabled"` after this remediation.

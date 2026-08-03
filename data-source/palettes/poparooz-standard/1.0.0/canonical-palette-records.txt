@@ -1,0 +1,3538 @@
+[
+  {
+    "code": "A1",
+    "series": "A",
+    "seriesNumber": 1,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 0,
+    "hex": "#FAF4C8",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 3,
+      "column": 1
+    }
+  },
+  {
+    "code": "B1",
+    "series": "B",
+    "seriesNumber": 1,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 1,
+    "hex": "#E6EE31",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 3,
+      "column": 4
+    }
+  },
+  {
+    "code": "C1",
+    "series": "C",
+    "seriesNumber": 1,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 2,
+    "hex": "#E8FFE7",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 3,
+      "column": 7
+    }
+  },
+  {
+    "code": "D1",
+    "series": "D",
+    "seriesNumber": 1,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 3,
+    "hex": "#AEB4F2",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 3,
+      "column": 10
+    }
+  },
+  {
+    "code": "E1",
+    "series": "E",
+    "seriesNumber": 1,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 4,
+    "hex": "#FDD3CC",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 3,
+      "column": 13
+    }
+  },
+  {
+    "code": "F1",
+    "series": "F",
+    "seriesNumber": 1,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 5,
+    "hex": "#FD957B",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 3,
+      "column": 16
+    }
+  },
+  {
+    "code": "G1",
+    "series": "G",
+    "seriesNumber": 1,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 6,
+    "hex": "#FFE2CE",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 3,
+      "column": 19
+    }
+  },
+  {
+    "code": "H1",
+    "series": "H",
+    "seriesNumber": 1,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 7,
+    "hex": "#FDFBFF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 3,
+      "column": 22
+    }
+  },
+  {
+    "code": "M1",
+    "series": "M",
+    "seriesNumber": 1,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 8,
+    "hex": "#BCC6B8",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 3,
+      "column": 25
+    }
+  },
+  {
+    "code": "A2",
+    "series": "A",
+    "seriesNumber": 2,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 9,
+    "hex": "#FFFFD5",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 4,
+      "column": 1
+    }
+  },
+  {
+    "code": "B2",
+    "series": "B",
+    "seriesNumber": 2,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 10,
+    "hex": "#63F347",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 4,
+      "column": 4
+    }
+  },
+  {
+    "code": "C2",
+    "series": "C",
+    "seriesNumber": 2,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 11,
+    "hex": "#A9F9FC",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 4,
+      "column": 7
+    }
+  },
+  {
+    "code": "D2",
+    "series": "D",
+    "seriesNumber": 2,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 12,
+    "hex": "#858EDD",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 4,
+      "column": 10
+    }
+  },
+  {
+    "code": "E2",
+    "series": "E",
+    "seriesNumber": 2,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 13,
+    "hex": "#FEC0DF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 4,
+      "column": 13
+    }
+  },
+  {
+    "code": "F2",
+    "series": "F",
+    "seriesNumber": 2,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 14,
+    "hex": "#FC3D46",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 4,
+      "column": 16
+    }
+  },
+  {
+    "code": "G2",
+    "series": "G",
+    "seriesNumber": 2,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 15,
+    "hex": "#FFC4AA",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 4,
+      "column": 19
+    }
+  },
+  {
+    "code": "H2",
+    "series": "H",
+    "seriesNumber": 2,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 16,
+    "hex": "#FEFFFF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 4,
+      "column": 22
+    }
+  },
+  {
+    "code": "M2",
+    "series": "M",
+    "seriesNumber": 2,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 17,
+    "hex": "#8AA386",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 4,
+      "column": 25
+    }
+  },
+  {
+    "code": "A3",
+    "series": "A",
+    "seriesNumber": 3,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 18,
+    "hex": "#FEFF8B",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 5,
+      "column": 1
+    }
+  },
+  {
+    "code": "B3",
+    "series": "B",
+    "seriesNumber": 3,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 19,
+    "hex": "#9EF780",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 5,
+      "column": 4
+    }
+  },
+  {
+    "code": "C3",
+    "series": "C",
+    "seriesNumber": 3,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 20,
+    "hex": "#A0E2FB",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 5,
+      "column": 7
+    }
+  },
+  {
+    "code": "D3",
+    "series": "D",
+    "seriesNumber": 3,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 21,
+    "hex": "#2F54AF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 5,
+      "column": 10
+    }
+  },
+  {
+    "code": "E3",
+    "series": "E",
+    "seriesNumber": 3,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 22,
+    "hex": "#FFB7E7",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 5,
+      "column": 13
+    }
+  },
+  {
+    "code": "F3",
+    "series": "F",
+    "seriesNumber": 3,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 23,
+    "hex": "#F74941",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 5,
+      "column": 16
+    }
+  },
+  {
+    "code": "G3",
+    "series": "G",
+    "seriesNumber": 3,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 24,
+    "hex": "#F4C3A5",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 5,
+      "column": 19
+    }
+  },
+  {
+    "code": "H3",
+    "series": "H",
+    "seriesNumber": 3,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 25,
+    "hex": "#B6B1BA",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 5,
+      "column": 22
+    }
+  },
+  {
+    "code": "M3",
+    "series": "M",
+    "seriesNumber": 3,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 26,
+    "hex": "#697D80",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 5,
+      "column": 25
+    }
+  },
+  {
+    "code": "A4",
+    "series": "A",
+    "seriesNumber": 4,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 27,
+    "hex": "#FBED56",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 6,
+      "column": 1
+    }
+  },
+  {
+    "code": "B4",
+    "series": "B",
+    "seriesNumber": 4,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 28,
+    "hex": "#5DE035",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 6,
+      "column": 4
+    }
+  },
+  {
+    "code": "C4",
+    "series": "C",
+    "seriesNumber": 4,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 29,
+    "hex": "#41CCFF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 6,
+      "column": 7
+    }
+  },
+  {
+    "code": "D4",
+    "series": "D",
+    "seriesNumber": 4,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 30,
+    "hex": "#182A84",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 6,
+      "column": 10
+    }
+  },
+  {
+    "code": "E4",
+    "series": "E",
+    "seriesNumber": 4,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 31,
+    "hex": "#E8649E",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 6,
+      "column": 13
+    }
+  },
+  {
+    "code": "F4",
+    "series": "F",
+    "seriesNumber": 4,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 32,
+    "hex": "#FC283C",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 6,
+      "column": 16
+    }
+  },
+  {
+    "code": "G4",
+    "series": "G",
+    "seriesNumber": 4,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 33,
+    "hex": "#E1B383",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 6,
+      "column": 19
+    }
+  },
+  {
+    "code": "H4",
+    "series": "H",
+    "seriesNumber": 4,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 34,
+    "hex": "#89858C",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 6,
+      "column": 22
+    }
+  },
+  {
+    "code": "M4",
+    "series": "M",
+    "seriesNumber": 4,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 35,
+    "hex": "#E3D2BC",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 6,
+      "column": 25
+    }
+  },
+  {
+    "code": "A5",
+    "series": "A",
+    "seriesNumber": 5,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 36,
+    "hex": "#F4D738",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 7,
+      "column": 1
+    }
+  },
+  {
+    "code": "B5",
+    "series": "B",
+    "seriesNumber": 5,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 37,
+    "hex": "#35E352",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 7,
+      "column": 4
+    }
+  },
+  {
+    "code": "C5",
+    "series": "C",
+    "seriesNumber": 5,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 38,
+    "hex": "#01ACEB",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 7,
+      "column": 7
+    }
+  },
+  {
+    "code": "D5",
+    "series": "D",
+    "seriesNumber": 5,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 39,
+    "hex": "#B843C5",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 7,
+      "column": 10
+    }
+  },
+  {
+    "code": "E5",
+    "series": "E",
+    "seriesNumber": 5,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 40,
+    "hex": "#F551A2",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 7,
+      "column": 13
+    }
+  },
+  {
+    "code": "F5",
+    "series": "F",
+    "seriesNumber": 5,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 41,
+    "hex": "#E7002F",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 7,
+      "column": 16
+    }
+  },
+  {
+    "code": "G5",
+    "series": "G",
+    "seriesNumber": 5,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 42,
+    "hex": "#EDB045",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 7,
+      "column": 19
+    }
+  },
+  {
+    "code": "H5",
+    "series": "H",
+    "seriesNumber": 5,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 43,
+    "hex": "#48464E",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 7,
+      "column": 22
+    }
+  },
+  {
+    "code": "M5",
+    "series": "M",
+    "seriesNumber": 5,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 44,
+    "hex": "#D0CCAA",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 7,
+      "column": 25
+    }
+  },
+  {
+    "code": "A6",
+    "series": "A",
+    "seriesNumber": 6,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 45,
+    "hex": "#FEAC4C",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 8,
+      "column": 1
+    }
+  },
+  {
+    "code": "B6",
+    "series": "B",
+    "seriesNumber": 6,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 46,
+    "hex": "#65E2A6",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 8,
+      "column": 4
+    }
+  },
+  {
+    "code": "C6",
+    "series": "C",
+    "seriesNumber": 6,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 47,
+    "hex": "#50AAF0",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 8,
+      "column": 7
+    }
+  },
+  {
+    "code": "D6",
+    "series": "D",
+    "seriesNumber": 6,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 48,
+    "hex": "#AC7BDE",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 8,
+      "column": 10
+    }
+  },
+  {
+    "code": "E6",
+    "series": "E",
+    "seriesNumber": 6,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 49,
+    "hex": "#F13D74",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 8,
+      "column": 13
+    }
+  },
+  {
+    "code": "F6",
+    "series": "F",
+    "seriesNumber": 6,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 50,
+    "hex": "#943630",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 8,
+      "column": 16
+    }
+  },
+  {
+    "code": "G6",
+    "series": "G",
+    "seriesNumber": 6,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 51,
+    "hex": "#E99C17",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 8,
+      "column": 19
+    }
+  },
+  {
+    "code": "H6",
+    "series": "H",
+    "seriesNumber": 6,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 52,
+    "hex": "#2F2B2F",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 8,
+      "column": 22
+    }
+  },
+  {
+    "code": "M6",
+    "series": "M",
+    "seriesNumber": 6,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 53,
+    "hex": "#B0A782",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 8,
+      "column": 25
+    }
+  },
+  {
+    "code": "A7",
+    "series": "A",
+    "seriesNumber": 7,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 54,
+    "hex": "#FE8B4C",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 9,
+      "column": 1
+    }
+  },
+  {
+    "code": "B7",
+    "series": "B",
+    "seriesNumber": 7,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 55,
+    "hex": "#3DAF80",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 9,
+      "column": 4
+    }
+  },
+  {
+    "code": "C7",
+    "series": "C",
+    "seriesNumber": 7,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 56,
+    "hex": "#3677D2",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 9,
+      "column": 7
+    }
+  },
+  {
+    "code": "D7",
+    "series": "D",
+    "seriesNumber": 7,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 57,
+    "hex": "#8854B3",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 9,
+      "column": 10
+    }
+  },
+  {
+    "code": "E7",
+    "series": "E",
+    "seriesNumber": 7,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 58,
+    "hex": "#C63478",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 9,
+      "column": 13
+    }
+  },
+  {
+    "code": "F7",
+    "series": "F",
+    "seriesNumber": 7,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 59,
+    "hex": "#971937",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 9,
+      "column": 16
+    }
+  },
+  {
+    "code": "G7",
+    "series": "G",
+    "seriesNumber": 7,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 60,
+    "hex": "#9D5B3E",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 9,
+      "column": 19
+    }
+  },
+  {
+    "code": "H7",
+    "series": "H",
+    "seriesNumber": 7,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 61,
+    "hex": "#000000",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 9,
+      "column": 22
+    }
+  },
+  {
+    "code": "M7",
+    "series": "M",
+    "seriesNumber": 7,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 62,
+    "hex": "#B4A497",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 9,
+      "column": 25
+    }
+  },
+  {
+    "code": "A8",
+    "series": "A",
+    "seriesNumber": 8,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 63,
+    "hex": "#FFDA45",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 10,
+      "column": 1
+    }
+  },
+  {
+    "code": "B8",
+    "series": "B",
+    "seriesNumber": 8,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 64,
+    "hex": "#1C9C4F",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 10,
+      "column": 4
+    }
+  },
+  {
+    "code": "C8",
+    "series": "C",
+    "seriesNumber": 8,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 65,
+    "hex": "#0F54C0",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 10,
+      "column": 7
+    }
+  },
+  {
+    "code": "D8",
+    "series": "D",
+    "seriesNumber": 8,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 66,
+    "hex": "#E2D3FF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 10,
+      "column": 10
+    }
+  },
+  {
+    "code": "E8",
+    "series": "E",
+    "seriesNumber": 8,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 67,
+    "hex": "#FFDBE9",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 10,
+      "column": 13
+    }
+  },
+  {
+    "code": "F8",
+    "series": "F",
+    "seriesNumber": 8,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 68,
+    "hex": "#BC0028",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 10,
+      "column": 16
+    }
+  },
+  {
+    "code": "G8",
+    "series": "G",
+    "seriesNumber": 8,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 69,
+    "hex": "#753832",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 10,
+      "column": 19
+    }
+  },
+  {
+    "code": "H8",
+    "series": "H",
+    "seriesNumber": 8,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 70,
+    "hex": "#E7D6DB",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 10,
+      "column": 22
+    }
+  },
+  {
+    "code": "M8",
+    "series": "M",
+    "seriesNumber": 8,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 71,
+    "hex": "#B38281",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 10,
+      "column": 25
+    }
+  },
+  {
+    "code": "A9",
+    "series": "A",
+    "seriesNumber": 9,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 72,
+    "hex": "#FF995B",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 11,
+      "column": 1
+    }
+  },
+  {
+    "code": "B9",
+    "series": "B",
+    "seriesNumber": 9,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 73,
+    "hex": "#27523A",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 11,
+      "column": 4
+    }
+  },
+  {
+    "code": "C9",
+    "series": "C",
+    "seriesNumber": 9,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 74,
+    "hex": "#324BCA",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 11,
+      "column": 7
+    }
+  },
+  {
+    "code": "D9",
+    "series": "D",
+    "seriesNumber": 9,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 75,
+    "hex": "#D5B9F8",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 11,
+      "column": 10
+    }
+  },
+  {
+    "code": "E9",
+    "series": "E",
+    "seriesNumber": 9,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 76,
+    "hex": "#E970CC",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 11,
+      "column": 13
+    }
+  },
+  {
+    "code": "F9",
+    "series": "F",
+    "seriesNumber": 9,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 77,
+    "hex": "#E2677A",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 11,
+      "column": 16
+    }
+  },
+  {
+    "code": "G9",
+    "series": "G",
+    "seriesNumber": 9,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 78,
+    "hex": "#E6B483",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 11,
+      "column": 19
+    }
+  },
+  {
+    "code": "H9",
+    "series": "H",
+    "seriesNumber": 9,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 79,
+    "hex": "#EDEDED",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 11,
+      "column": 22
+    }
+  },
+  {
+    "code": "M9",
+    "series": "M",
+    "seriesNumber": 9,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 80,
+    "hex": "#A58767",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 11,
+      "column": 25
+    }
+  },
+  {
+    "code": "A10",
+    "series": "A",
+    "seriesNumber": 10,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 81,
+    "hex": "#F77C31",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 12,
+      "column": 1
+    }
+  },
+  {
+    "code": "B10",
+    "series": "B",
+    "seriesNumber": 10,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 82,
+    "hex": "#95D3C2",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 12,
+      "column": 4
+    }
+  },
+  {
+    "code": "C10",
+    "series": "C",
+    "seriesNumber": 10,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 83,
+    "hex": "#3EBCE2",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 12,
+      "column": 7
+    }
+  },
+  {
+    "code": "D10",
+    "series": "D",
+    "seriesNumber": 10,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 84,
+    "hex": "#361851",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 12,
+      "column": 10
+    }
+  },
+  {
+    "code": "E10",
+    "series": "E",
+    "seriesNumber": 10,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 85,
+    "hex": "#D33793",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 12,
+      "column": 13
+    }
+  },
+  {
+    "code": "F10",
+    "series": "F",
+    "seriesNumber": 10,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 86,
+    "hex": "#8A4526",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 12,
+      "column": 16
+    }
+  },
+  {
+    "code": "G10",
+    "series": "G",
+    "seriesNumber": 10,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 87,
+    "hex": "#D98C39",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 12,
+      "column": 19
+    }
+  },
+  {
+    "code": "H10",
+    "series": "H",
+    "seriesNumber": 10,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 88,
+    "hex": "#EEE9EA",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 12,
+      "column": 22
+    }
+  },
+  {
+    "code": "M10",
+    "series": "M",
+    "seriesNumber": 10,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 89,
+    "hex": "#C5B2BC",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 12,
+      "column": 25
+    }
+  },
+  {
+    "code": "A11",
+    "series": "A",
+    "seriesNumber": 11,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 90,
+    "hex": "#FFDD99",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 13,
+      "column": 1
+    }
+  },
+  {
+    "code": "B11",
+    "series": "B",
+    "seriesNumber": 11,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 91,
+    "hex": "#5D722A",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 13,
+      "column": 4
+    }
+  },
+  {
+    "code": "C11",
+    "series": "C",
+    "seriesNumber": 11,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 92,
+    "hex": "#28DDDE",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 13,
+      "column": 7
+    }
+  },
+  {
+    "code": "D11",
+    "series": "D",
+    "seriesNumber": 11,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 93,
+    "hex": "#B9BAE1",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 13,
+      "column": 10
+    }
+  },
+  {
+    "code": "E11",
+    "series": "E",
+    "seriesNumber": 11,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 94,
+    "hex": "#FCDDD2",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 13,
+      "column": 13
+    }
+  },
+  {
+    "code": "F11",
+    "series": "F",
+    "seriesNumber": 11,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 95,
+    "hex": "#5A2121",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 13,
+      "column": 16
+    }
+  },
+  {
+    "code": "G11",
+    "series": "G",
+    "seriesNumber": 11,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 96,
+    "hex": "#E0C593",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 13,
+      "column": 19
+    }
+  },
+  {
+    "code": "H11",
+    "series": "H",
+    "seriesNumber": 11,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 97,
+    "hex": "#CECDD5",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 13,
+      "column": 22
+    }
+  },
+  {
+    "code": "M11",
+    "series": "M",
+    "seriesNumber": 11,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 98,
+    "hex": "#9F7594",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 13,
+      "column": 25
+    }
+  },
+  {
+    "code": "A12",
+    "series": "A",
+    "seriesNumber": 12,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 99,
+    "hex": "#FE9F72",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 14,
+      "column": 1
+    }
+  },
+  {
+    "code": "B12",
+    "series": "B",
+    "seriesNumber": 12,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 100,
+    "hex": "#166F41",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 14,
+      "column": 4
+    }
+  },
+  {
+    "code": "C12",
+    "series": "C",
+    "seriesNumber": 12,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 101,
+    "hex": "#1C334D",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 14,
+      "column": 7
+    }
+  },
+  {
+    "code": "D12",
+    "series": "D",
+    "seriesNumber": 12,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 102,
+    "hex": "#DE9AD4",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 14,
+      "column": 10
+    }
+  },
+  {
+    "code": "E12",
+    "series": "E",
+    "seriesNumber": 12,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 103,
+    "hex": "#F78FC3",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 14,
+      "column": 13
+    }
+  },
+  {
+    "code": "F12",
+    "series": "F",
+    "seriesNumber": 12,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 104,
+    "hex": "#FD4E6A",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 14,
+      "column": 16
+    }
+  },
+  {
+    "code": "G12",
+    "series": "G",
+    "seriesNumber": 12,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 105,
+    "hex": "#FFC890",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 14,
+      "column": 19
+    }
+  },
+  {
+    "code": "H12",
+    "series": "H",
+    "seriesNumber": 12,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 106,
+    "hex": "#FFF5ED",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 14,
+      "column": 22
+    }
+  },
+  {
+    "code": "M12",
+    "series": "M",
+    "seriesNumber": 12,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 107,
+    "hex": "#644749",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 14,
+      "column": 25
+    }
+  },
+  {
+    "code": "A13",
+    "series": "A",
+    "seriesNumber": 13,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 108,
+    "hex": "#FFC365",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 15,
+      "column": 1
+    }
+  },
+  {
+    "code": "B13",
+    "series": "B",
+    "seriesNumber": 13,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 109,
+    "hex": "#CAEB7B",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 15,
+      "column": 4
+    }
+  },
+  {
+    "code": "C13",
+    "series": "C",
+    "seriesNumber": 13,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 110,
+    "hex": "#CDE8FF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 15,
+      "column": 7
+    }
+  },
+  {
+    "code": "D13",
+    "series": "D",
+    "seriesNumber": 13,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 111,
+    "hex": "#B90095",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 15,
+      "column": 10
+    }
+  },
+  {
+    "code": "E13",
+    "series": "E",
+    "seriesNumber": 13,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 112,
+    "hex": "#B5006D",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 15,
+      "column": 13
+    }
+  },
+  {
+    "code": "F13",
+    "series": "F",
+    "seriesNumber": 13,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 113,
+    "hex": "#F35744",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 15,
+      "column": 16
+    }
+  },
+  {
+    "code": "G13",
+    "series": "G",
+    "seriesNumber": 13,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 114,
+    "hex": "#B7714A",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 15,
+      "column": 19
+    }
+  },
+  {
+    "code": "H13",
+    "series": "H",
+    "seriesNumber": 13,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 115,
+    "hex": "#F5ECD2",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 15,
+      "column": 22
+    }
+  },
+  {
+    "code": "M13",
+    "series": "M",
+    "seriesNumber": 13,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 116,
+    "hex": "#D19066",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 15,
+      "column": 25
+    }
+  },
+  {
+    "code": "A14",
+    "series": "A",
+    "seriesNumber": 14,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 117,
+    "hex": "#FD543D",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 16,
+      "column": 1
+    }
+  },
+  {
+    "code": "B14",
+    "series": "B",
+    "seriesNumber": 14,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 118,
+    "hex": "#ADE946",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 16,
+      "column": 4
+    }
+  },
+  {
+    "code": "C14",
+    "series": "C",
+    "seriesNumber": 14,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 119,
+    "hex": "#D5FDFF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 16,
+      "column": 7
+    }
+  },
+  {
+    "code": "D14",
+    "series": "D",
+    "seriesNumber": 14,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 120,
+    "hex": "#8B279B",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 16,
+      "column": 10
+    }
+  },
+  {
+    "code": "E14",
+    "series": "E",
+    "seriesNumber": 14,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 121,
+    "hex": "#FFD1BA",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 16,
+      "column": 13
+    }
+  },
+  {
+    "code": "F14",
+    "series": "F",
+    "seriesNumber": 14,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 122,
+    "hex": "#FFA9AD",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 16,
+      "column": 16
+    }
+  },
+  {
+    "code": "G14",
+    "series": "G",
+    "seriesNumber": 14,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 123,
+    "hex": "#8D614C",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 16,
+      "column": 19
+    }
+  },
+  {
+    "code": "H14",
+    "series": "H",
+    "seriesNumber": 14,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 124,
+    "hex": "#CFD7D3",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 16,
+      "column": 22
+    }
+  },
+  {
+    "code": "M14",
+    "series": "M",
+    "seriesNumber": 14,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 125,
+    "hex": "#C77362",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 16,
+      "column": 25
+    }
+  },
+  {
+    "code": "A15",
+    "series": "A",
+    "seriesNumber": 15,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 126,
+    "hex": "#FFF365",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 17,
+      "column": 1
+    }
+  },
+  {
+    "code": "B15",
+    "series": "B",
+    "seriesNumber": 15,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 127,
+    "hex": "#2E5132",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 17,
+      "column": 4
+    }
+  },
+  {
+    "code": "C15",
+    "series": "C",
+    "seriesNumber": 15,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 128,
+    "hex": "#22C4C6",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 17,
+      "column": 7
+    }
+  },
+  {
+    "code": "D15",
+    "series": "D",
+    "seriesNumber": 15,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 129,
+    "hex": "#2F1F90",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 17,
+      "column": 10
+    }
+  },
+  {
+    "code": "E15",
+    "series": "E",
+    "seriesNumber": 15,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 130,
+    "hex": "#F8C7C9",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 17,
+      "column": 13
+    }
+  },
+  {
+    "code": "F15",
+    "series": "F",
+    "seriesNumber": 15,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 131,
+    "hex": "#D30022",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 17,
+      "column": 16
+    }
+  },
+  {
+    "code": "G15",
+    "series": "G",
+    "seriesNumber": 15,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 132,
+    "hex": "#FCF9E0",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 17,
+      "column": 19
+    }
+  },
+  {
+    "code": "H15",
+    "series": "H",
+    "seriesNumber": 15,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 133,
+    "hex": "#98A6A8",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 17,
+      "column": 22
+    }
+  },
+  {
+    "code": "M15",
+    "series": "M",
+    "seriesNumber": 15,
+    "seriesRank": 8,
+    "canonicalSourceIndex": 134,
+    "hex": "#757D78",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 17,
+      "column": 25
+    }
+  },
+  {
+    "code": "A16",
+    "series": "A",
+    "seriesNumber": 16,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 135,
+    "hex": "#FFFF9F",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 18,
+      "column": 1
+    }
+  },
+  {
+    "code": "B16",
+    "series": "B",
+    "seriesNumber": 16,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 136,
+    "hex": "#C5ED9C",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 18,
+      "column": 4
+    }
+  },
+  {
+    "code": "C16",
+    "series": "C",
+    "seriesNumber": 16,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 137,
+    "hex": "#1557A8",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 18,
+      "column": 7
+    }
+  },
+  {
+    "code": "D16",
+    "series": "D",
+    "seriesNumber": 16,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 138,
+    "hex": "#E3E1EE",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 18,
+      "column": 10
+    }
+  },
+  {
+    "code": "E16",
+    "series": "E",
+    "seriesNumber": 16,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 139,
+    "hex": "#FFF3EB",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 18,
+      "column": 13
+    }
+  },
+  {
+    "code": "F16",
+    "series": "F",
+    "seriesNumber": 16,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 140,
+    "hex": "#FEC2A6",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 18,
+      "column": 16
+    }
+  },
+  {
+    "code": "G16",
+    "series": "G",
+    "seriesNumber": 16,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 141,
+    "hex": "#F2D9BA",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 18,
+      "column": 19
+    }
+  },
+  {
+    "code": "H16",
+    "series": "H",
+    "seriesNumber": 16,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 142,
+    "hex": "#1D1414",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 18,
+      "column": 22
+    }
+  },
+  {
+    "code": "A17",
+    "series": "A",
+    "seriesNumber": 17,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 143,
+    "hex": "#FFE36E",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 19,
+      "column": 1
+    }
+  },
+  {
+    "code": "B17",
+    "series": "B",
+    "seriesNumber": 17,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 144,
+    "hex": "#9BB13A",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 19,
+      "column": 4
+    }
+  },
+  {
+    "code": "C17",
+    "series": "C",
+    "seriesNumber": 17,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 145,
+    "hex": "#04D1F6",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 19,
+      "column": 7
+    }
+  },
+  {
+    "code": "D17",
+    "series": "D",
+    "seriesNumber": 17,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 146,
+    "hex": "#C4D4F6",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 19,
+      "column": 10
+    }
+  },
+  {
+    "code": "E17",
+    "series": "E",
+    "seriesNumber": 17,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 147,
+    "hex": "#FFE2EA",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 19,
+      "column": 13
+    }
+  },
+  {
+    "code": "F17",
+    "series": "F",
+    "seriesNumber": 17,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 148,
+    "hex": "#E69C79",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 19,
+      "column": 16
+    }
+  },
+  {
+    "code": "G17",
+    "series": "G",
+    "seriesNumber": 17,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 149,
+    "hex": "#78524B",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 19,
+      "column": 19
+    }
+  },
+  {
+    "code": "H17",
+    "series": "H",
+    "seriesNumber": 17,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 150,
+    "hex": "#F1EDED",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 19,
+      "column": 22
+    }
+  },
+  {
+    "code": "A18",
+    "series": "A",
+    "seriesNumber": 18,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 151,
+    "hex": "#FEBE7D",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 20,
+      "column": 1
+    }
+  },
+  {
+    "code": "B18",
+    "series": "B",
+    "seriesNumber": 18,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 152,
+    "hex": "#E6EE49",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 20,
+      "column": 4
+    }
+  },
+  {
+    "code": "C18",
+    "series": "C",
+    "seriesNumber": 18,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 153,
+    "hex": "#1D3344",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 20,
+      "column": 7
+    }
+  },
+  {
+    "code": "D18",
+    "series": "D",
+    "seriesNumber": 18,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 154,
+    "hex": "#A45EC7",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 20,
+      "column": 10
+    }
+  },
+  {
+    "code": "E18",
+    "series": "E",
+    "seriesNumber": 18,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 155,
+    "hex": "#FFC7DB",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 20,
+      "column": 13
+    }
+  },
+  {
+    "code": "F18",
+    "series": "F",
+    "seriesNumber": 18,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 156,
+    "hex": "#D37C46",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 20,
+      "column": 16
+    }
+  },
+  {
+    "code": "G18",
+    "series": "G",
+    "seriesNumber": 18,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 157,
+    "hex": "#FFE4CC",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 20,
+      "column": 19
+    }
+  },
+  {
+    "code": "H18",
+    "series": "H",
+    "seriesNumber": 18,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 158,
+    "hex": "#FFFDF0",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 20,
+      "column": 22
+    }
+  },
+  {
+    "code": "A19",
+    "series": "A",
+    "seriesNumber": 19,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 159,
+    "hex": "#FD7C72",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 21,
+      "column": 1
+    }
+  },
+  {
+    "code": "B19",
+    "series": "B",
+    "seriesNumber": 19,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 160,
+    "hex": "#24B88C",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 21,
+      "column": 4
+    }
+  },
+  {
+    "code": "C19",
+    "series": "C",
+    "seriesNumber": 19,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 161,
+    "hex": "#1887A2",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 21,
+      "column": 7
+    }
+  },
+  {
+    "code": "D19",
+    "series": "D",
+    "seriesNumber": 19,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 162,
+    "hex": "#D8C3D7",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 21,
+      "column": 10
+    }
+  },
+  {
+    "code": "E19",
+    "series": "E",
+    "seriesNumber": 19,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 163,
+    "hex": "#FEBAD5",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 21,
+      "column": 13
+    }
+  },
+  {
+    "code": "F19",
+    "series": "F",
+    "seriesNumber": 19,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 164,
+    "hex": "#C1444A",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 21,
+      "column": 16
+    }
+  },
+  {
+    "code": "G19",
+    "series": "G",
+    "seriesNumber": 19,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 165,
+    "hex": "#E07935",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 21,
+      "column": 19
+    }
+  },
+  {
+    "code": "H19",
+    "series": "H",
+    "seriesNumber": 19,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 166,
+    "hex": "#F6EFE2",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 21,
+      "column": 22
+    }
+  },
+  {
+    "code": "A20",
+    "series": "A",
+    "seriesNumber": 20,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 167,
+    "hex": "#FFD568",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 22,
+      "column": 1
+    }
+  },
+  {
+    "code": "B20",
+    "series": "B",
+    "seriesNumber": 20,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 168,
+    "hex": "#C2F0CC",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 22,
+      "column": 4
+    }
+  },
+  {
+    "code": "C20",
+    "series": "C",
+    "seriesNumber": 20,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 169,
+    "hex": "#176DAF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 22,
+      "column": 7
+    }
+  },
+  {
+    "code": "D20",
+    "series": "D",
+    "seriesNumber": 20,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 170,
+    "hex": "#9C32B2",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 22,
+      "column": 10
+    }
+  },
+  {
+    "code": "E20",
+    "series": "E",
+    "seriesNumber": 20,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 171,
+    "hex": "#D8C7D1",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 22,
+      "column": 13
+    }
+  },
+  {
+    "code": "F20",
+    "series": "F",
+    "seriesNumber": 20,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 172,
+    "hex": "#CD9391",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 22,
+      "column": 16
+    }
+  },
+  {
+    "code": "G20",
+    "series": "G",
+    "seriesNumber": 20,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 173,
+    "hex": "#A94023",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 22,
+      "column": 19
+    }
+  },
+  {
+    "code": "H20",
+    "series": "H",
+    "seriesNumber": 20,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 174,
+    "hex": "#949FA3",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 22,
+      "column": 22
+    }
+  },
+  {
+    "code": "A21",
+    "series": "A",
+    "seriesNumber": 21,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 175,
+    "hex": "#FFE395",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 23,
+      "column": 1
+    }
+  },
+  {
+    "code": "B21",
+    "series": "B",
+    "seriesNumber": 21,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 176,
+    "hex": "#156A6B",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 23,
+      "column": 4
+    }
+  },
+  {
+    "code": "C21",
+    "series": "C",
+    "seriesNumber": 21,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 177,
+    "hex": "#BEDDFF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 23,
+      "column": 7
+    }
+  },
+  {
+    "code": "D21",
+    "series": "D",
+    "seriesNumber": 21,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 178,
+    "hex": "#9A009B",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 23,
+      "column": 10
+    }
+  },
+  {
+    "code": "E21",
+    "series": "E",
+    "seriesNumber": 21,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 179,
+    "hex": "#BD9DA1",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 23,
+      "column": 13
+    }
+  },
+  {
+    "code": "F21",
+    "series": "F",
+    "seriesNumber": 21,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 180,
+    "hex": "#F7B4C6",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 23,
+      "column": 16
+    }
+  },
+  {
+    "code": "G21",
+    "series": "G",
+    "seriesNumber": 21,
+    "seriesRank": 6,
+    "canonicalSourceIndex": 181,
+    "hex": "#B88558",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 23,
+      "column": 19
+    }
+  },
+  {
+    "code": "H21",
+    "series": "H",
+    "seriesNumber": 21,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 182,
+    "hex": "#FFFBE1",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 23,
+      "column": 22
+    }
+  },
+  {
+    "code": "A22",
+    "series": "A",
+    "seriesNumber": 22,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 183,
+    "hex": "#F4F57D",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 24,
+      "column": 1
+    }
+  },
+  {
+    "code": "B22",
+    "series": "B",
+    "seriesNumber": 22,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 184,
+    "hex": "#0B3C43",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 24,
+      "column": 4
+    }
+  },
+  {
+    "code": "C22",
+    "series": "C",
+    "seriesNumber": 22,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 185,
+    "hex": "#67B4BE",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 24,
+      "column": 7
+    }
+  },
+  {
+    "code": "D22",
+    "series": "D",
+    "seriesNumber": 22,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 186,
+    "hex": "#333A95",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 24,
+      "column": 10
+    }
+  },
+  {
+    "code": "E22",
+    "series": "E",
+    "seriesNumber": 22,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 187,
+    "hex": "#B785A1",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 24,
+      "column": 13
+    }
+  },
+  {
+    "code": "F22",
+    "series": "F",
+    "seriesNumber": 22,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 188,
+    "hex": "#FDC0D0",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 24,
+      "column": 16
+    }
+  },
+  {
+    "code": "H22",
+    "series": "H",
+    "seriesNumber": 22,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 189,
+    "hex": "#CACAD4",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 24,
+      "column": 22
+    }
+  },
+  {
+    "code": "A23",
+    "series": "A",
+    "seriesNumber": 23,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 190,
+    "hex": "#E6C9B7",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 25,
+      "column": 1
+    }
+  },
+  {
+    "code": "B23",
+    "series": "B",
+    "seriesNumber": 23,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 191,
+    "hex": "#303A21",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 25,
+      "column": 4
+    }
+  },
+  {
+    "code": "C23",
+    "series": "C",
+    "seriesNumber": 23,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 192,
+    "hex": "#C8E2FF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 25,
+      "column": 7
+    }
+  },
+  {
+    "code": "D23",
+    "series": "D",
+    "seriesNumber": 23,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 193,
+    "hex": "#EBDAFC",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 25,
+      "column": 10
+    }
+  },
+  {
+    "code": "E23",
+    "series": "E",
+    "seriesNumber": 23,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 194,
+    "hex": "#937A8D",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 25,
+      "column": 13
+    }
+  },
+  {
+    "code": "F23",
+    "series": "F",
+    "seriesNumber": 23,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 195,
+    "hex": "#F67E66",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 25,
+      "column": 16
+    }
+  },
+  {
+    "code": "H23",
+    "series": "H",
+    "seriesNumber": 23,
+    "seriesRank": 7,
+    "canonicalSourceIndex": 196,
+    "hex": "#9A9D94",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 25,
+      "column": 22
+    }
+  },
+  {
+    "code": "A24",
+    "series": "A",
+    "seriesNumber": 24,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 197,
+    "hex": "#F7F8A2",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 26,
+      "column": 1
+    }
+  },
+  {
+    "code": "B24",
+    "series": "B",
+    "seriesNumber": 24,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 198,
+    "hex": "#EEFCA5",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 26,
+      "column": 4
+    }
+  },
+  {
+    "code": "C24",
+    "series": "C",
+    "seriesNumber": 24,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 199,
+    "hex": "#7CC4FF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 26,
+      "column": 7
+    }
+  },
+  {
+    "code": "D24",
+    "series": "D",
+    "seriesNumber": 24,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 200,
+    "hex": "#7786E5",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 26,
+      "column": 10
+    }
+  },
+  {
+    "code": "E24",
+    "series": "E",
+    "seriesNumber": 24,
+    "seriesRank": 4,
+    "canonicalSourceIndex": 201,
+    "hex": "#E1BCE8",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 26,
+      "column": 13
+    }
+  },
+  {
+    "code": "F24",
+    "series": "F",
+    "seriesNumber": 24,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 202,
+    "hex": "#E698AA",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 26,
+      "column": 16
+    }
+  },
+  {
+    "code": "A25",
+    "series": "A",
+    "seriesNumber": 25,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 203,
+    "hex": "#FFD67D",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 27,
+      "column": 1
+    }
+  },
+  {
+    "code": "B25",
+    "series": "B",
+    "seriesNumber": 25,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 204,
+    "hex": "#4E846D",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 27,
+      "column": 4
+    }
+  },
+  {
+    "code": "C25",
+    "series": "C",
+    "seriesNumber": 25,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 205,
+    "hex": "#A9E5E5",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 27,
+      "column": 7
+    }
+  },
+  {
+    "code": "D25",
+    "series": "D",
+    "seriesNumber": 25,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 206,
+    "hex": "#494FC7",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 27,
+      "column": 10
+    }
+  },
+  {
+    "code": "F25",
+    "series": "F",
+    "seriesNumber": 25,
+    "seriesRank": 5,
+    "canonicalSourceIndex": 207,
+    "hex": "#E54B4F",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 27,
+      "column": 16
+    }
+  },
+  {
+    "code": "A26",
+    "series": "A",
+    "seriesNumber": 26,
+    "seriesRank": 0,
+    "canonicalSourceIndex": 208,
+    "hex": "#FFC830",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 28,
+      "column": 1
+    }
+  },
+  {
+    "code": "B26",
+    "series": "B",
+    "seriesNumber": 26,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 209,
+    "hex": "#8D7A35",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 28,
+      "column": 4
+    }
+  },
+  {
+    "code": "C26",
+    "series": "C",
+    "seriesNumber": 26,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 210,
+    "hex": "#3CAED8",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 28,
+      "column": 7
+    }
+  },
+  {
+    "code": "D26",
+    "series": "D",
+    "seriesNumber": 26,
+    "seriesRank": 3,
+    "canonicalSourceIndex": 211,
+    "hex": "#DFC2F8",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 28,
+      "column": 10
+    }
+  },
+  {
+    "code": "B27",
+    "series": "B",
+    "seriesNumber": 27,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 212,
+    "hex": "#CCE1AF",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 29,
+      "column": 4
+    }
+  },
+  {
+    "code": "C27",
+    "series": "C",
+    "seriesNumber": 27,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 213,
+    "hex": "#D3DFFA",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 29,
+      "column": 7
+    }
+  },
+  {
+    "code": "B28",
+    "series": "B",
+    "seriesNumber": 28,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 214,
+    "hex": "#9EE5B9",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 30,
+      "column": 4
+    }
+  },
+  {
+    "code": "C28",
+    "series": "C",
+    "seriesNumber": 28,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 215,
+    "hex": "#BBCFED",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 30,
+      "column": 7
+    }
+  },
+  {
+    "code": "B29",
+    "series": "B",
+    "seriesNumber": 29,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 216,
+    "hex": "#C5E254",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 31,
+      "column": 4
+    }
+  },
+  {
+    "code": "C29",
+    "series": "C",
+    "seriesNumber": 29,
+    "seriesRank": 2,
+    "canonicalSourceIndex": 217,
+    "hex": "#34488E",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 31,
+      "column": 7
+    }
+  },
+  {
+    "code": "B30",
+    "series": "B",
+    "seriesNumber": 30,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 218,
+    "hex": "#E2FCB1",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 32,
+      "column": 4
+    }
+  },
+  {
+    "code": "B31",
+    "series": "B",
+    "seriesNumber": 31,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 219,
+    "hex": "#B0E792",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 33,
+      "column": 4
+    }
+  },
+  {
+    "code": "B32",
+    "series": "B",
+    "seriesNumber": 32,
+    "seriesRank": 1,
+    "canonicalSourceIndex": 220,
+    "hex": "#9CAB5A",
+    "displayNameStatus": "not_provided",
+    "digitalColorStatus": "source_declared",
+    "physicalColorStatus": "unverified",
+    "sourceLocation": {
+      "sheet": "Sheet1",
+      "row": 34,
+      "column": 4
+    }
+  }
+]

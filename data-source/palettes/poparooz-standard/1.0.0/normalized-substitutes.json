@@ -1,0 +1,1020 @@
+{
+  "schemaVersion": "1.0.0",
+  "substituteDatasetId": "poparooz-substitute-reference",
+  "substituteDatasetVersion": "1.0.0",
+  "relationCount": 67,
+  "status": "reference_only",
+  "physicalValidationStatus": "unverified",
+  "applicationPolicy": "disabled",
+  "directionPolicy": "worksheet_declared_bidirectional",
+  "sourceFileName": "Poparooz色卡.xlsx",
+  "sourceFileSha256": "5508b4c0e2060c1bd3ce5afcea9591c62cd26f2c924179143b95daa17e04a71e",
+  "canonicalRecordsSha256": "5582d15099ed4e623b0af325e884f6567cc405cecb72af2efdf587ceed5693a7",
+  "relations": [
+    {
+      "relationId": "A1--A2",
+      "codeA": "A1",
+      "hexA": "#FAF4C8",
+      "codeB": "A2",
+      "hexB": "#FFFFD5",
+      "deltaE00": 2.95,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 36
+      }
+    },
+    {
+      "relationId": "A3--A16",
+      "codeA": "A3",
+      "hexA": "#FEFF8B",
+      "codeB": "A16",
+      "hexB": "#FFFF9F",
+      "deltaE00": 2.8,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 32
+      }
+    },
+    {
+      "relationId": "A3--A22",
+      "codeA": "A3",
+      "hexA": "#FEFF8B",
+      "codeB": "A22",
+      "hexB": "#F4F57D",
+      "deltaE00": 2.16,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 19
+      }
+    },
+    {
+      "relationId": "A4--A15",
+      "codeA": "A4",
+      "hexA": "#FBED56",
+      "codeB": "A15",
+      "hexB": "#FFF365",
+      "deltaE00": 1.61,
+      "level": "high",
+      "guidanceZh": "可直接替代；大面积纯色先实物确认。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 12
+      }
+    },
+    {
+      "relationId": "A5--A8",
+      "codeA": "A5",
+      "hexA": "#F4D738",
+      "codeB": "A8",
+      "hexB": "#FFDA45",
+      "deltaE00": 2.41,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 23
+      }
+    },
+    {
+      "relationId": "A7--A9",
+      "codeA": "A7",
+      "hexA": "#FE8B4C",
+      "codeB": "A9",
+      "hexB": "#FF995B",
+      "deltaE00": 3.46,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 54
+      }
+    },
+    {
+      "relationId": "A11--A21",
+      "codeA": "A11",
+      "hexA": "#FFDD99",
+      "codeB": "A21",
+      "hexB": "#FFE395",
+      "deltaE00": 3.1,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 38
+      }
+    },
+    {
+      "relationId": "A14--F3",
+      "codeA": "A14",
+      "hexA": "#FD543D",
+      "codeB": "F3",
+      "hexB": "#F74941",
+      "deltaE00": 3.7,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 65
+      }
+    },
+    {
+      "relationId": "A14--F13",
+      "codeA": "A14",
+      "hexA": "#FD543D",
+      "codeB": "F13",
+      "hexB": "#F35744",
+      "deltaE00": 2.09,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 16
+      }
+    },
+    {
+      "relationId": "A16--A24",
+      "codeA": "A16",
+      "hexA": "#FFFF9F",
+      "codeB": "A24",
+      "hexB": "#F7F8A2",
+      "deltaE00": 2.09,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 17
+      }
+    },
+    {
+      "relationId": "A18--G12",
+      "codeA": "A18",
+      "hexA": "#FEBE7D",
+      "codeB": "G12",
+      "hexB": "#FFC890",
+      "deltaE00": 3.08,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 37
+      }
+    },
+    {
+      "relationId": "A20--A25",
+      "codeA": "A20",
+      "hexA": "#FFD568",
+      "codeB": "A25",
+      "hexB": "#FFD67D",
+      "deltaE00": 2.95,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 35
+      }
+    },
+    {
+      "relationId": "A24--B24",
+      "codeA": "A24",
+      "hexA": "#F7F8A2",
+      "codeB": "B24",
+      "hexB": "#EEFCA5",
+      "deltaE00": 3.19,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 42
+      }
+    },
+    {
+      "relationId": "B1--B18",
+      "codeA": "B1",
+      "hexA": "#E6EE31",
+      "codeB": "B18",
+      "hexB": "#E6EE49",
+      "deltaE00": 1.63,
+      "level": "high",
+      "guidanceZh": "可直接替代；大面积纯色先实物确认。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 13
+      }
+    },
+    {
+      "relationId": "B7--B19",
+      "codeA": "B7",
+      "hexA": "#3DAF80",
+      "codeB": "B19",
+      "hexB": "#24B88C",
+      "deltaE00": 3.26,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 46
+      }
+    },
+    {
+      "relationId": "B9--B15",
+      "codeA": "B9",
+      "hexA": "#27523A",
+      "codeB": "B15",
+      "hexB": "#2E5132",
+      "deltaE00": 3.18,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 40
+      }
+    },
+    {
+      "relationId": "B16--B31",
+      "codeA": "B16",
+      "hexA": "#C5ED9C",
+      "codeB": "B31",
+      "hexB": "#B0E792",
+      "deltaE00": 3.25,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 45
+      }
+    },
+    {
+      "relationId": "B24--B30",
+      "codeA": "B24",
+      "hexA": "#EEFCA5",
+      "codeB": "B30",
+      "hexB": "#E2FCB1",
+      "deltaE00": 3.9,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 69
+      }
+    },
+    {
+      "relationId": "C8--C16",
+      "codeA": "C8",
+      "hexA": "#0F54C0",
+      "codeB": "C16",
+      "hexB": "#1557A8",
+      "deltaE00": 3.65,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 61
+      }
+    },
+    {
+      "relationId": "C8--D3",
+      "codeA": "C8",
+      "hexA": "#0F54C0",
+      "codeB": "D3",
+      "hexB": "#2F54AF",
+      "deltaE00": 2.56,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 25
+      }
+    },
+    {
+      "relationId": "C9--D25",
+      "codeA": "C9",
+      "hexA": "#324BCA",
+      "codeB": "D25",
+      "hexB": "#494FC7",
+      "deltaE00": 2.66,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 26
+      }
+    },
+    {
+      "relationId": "C13--C23",
+      "codeA": "C13",
+      "hexA": "#CDE8FF",
+      "codeB": "C23",
+      "hexB": "#C8E2FF",
+      "deltaE00": 2.71,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 30
+      }
+    },
+    {
+      "relationId": "C16--D3",
+      "codeA": "C16",
+      "hexA": "#1557A8",
+      "codeB": "D3",
+      "hexB": "#2F54AF",
+      "deltaE00": 3.75,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 66
+      }
+    },
+    {
+      "relationId": "C21--C23",
+      "codeA": "C21",
+      "hexA": "#BEDDFF",
+      "codeB": "C23",
+      "hexB": "#C8E2FF",
+      "deltaE00": 2.03,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 15
+      }
+    },
+    {
+      "relationId": "C27--D17",
+      "codeA": "C27",
+      "hexA": "#D3DFFA",
+      "codeB": "D17",
+      "hexB": "#C4D4F6",
+      "deltaE00": 3.44,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 53
+      }
+    },
+    {
+      "relationId": "C28--D17",
+      "codeA": "C28",
+      "hexA": "#BBCFED",
+      "codeB": "D17",
+      "hexB": "#C4D4F6",
+      "deltaE00": 2.71,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 29
+      }
+    },
+    {
+      "relationId": "D2--D24",
+      "codeA": "D2",
+      "hexA": "#858EDD",
+      "codeB": "D24",
+      "hexB": "#7786E5",
+      "deltaE00": 3.68,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 64
+      }
+    },
+    {
+      "relationId": "D8--D23",
+      "codeA": "D8",
+      "hexA": "#E2D3FF",
+      "codeB": "D23",
+      "hexB": "#EBDAFC",
+      "deltaE00": 3.42,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 52
+      }
+    },
+    {
+      "relationId": "D9--D26",
+      "codeA": "D9",
+      "hexA": "#D5B9F8",
+      "codeB": "D26",
+      "hexB": "#DFC2F8",
+      "deltaE00": 3.15,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 39
+      }
+    },
+    {
+      "relationId": "D14--D21",
+      "codeA": "D14",
+      "hexA": "#8B279B",
+      "codeB": "D21",
+      "hexB": "#9A009B",
+      "deltaE00": 3.31,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 48
+      }
+    },
+    {
+      "relationId": "D26--E24",
+      "codeA": "D26",
+      "hexA": "#DFC2F8",
+      "codeB": "E24",
+      "hexB": "#E1BCE8",
+      "deltaE00": 3.99,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 72
+      }
+    },
+    {
+      "relationId": "E2--E18",
+      "codeA": "E2",
+      "hexA": "#FEC0DF",
+      "codeB": "E18",
+      "hexB": "#FFC7DB",
+      "deltaE00": 3.4,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 50
+      }
+    },
+    {
+      "relationId": "E2--E19",
+      "codeA": "E2",
+      "hexA": "#FEC0DF",
+      "codeB": "E19",
+      "hexB": "#FEBAD5",
+      "deltaE00": 2.27,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 21
+      }
+    },
+    {
+      "relationId": "E4--E5",
+      "codeA": "E4",
+      "hexA": "#E8649E",
+      "codeB": "E5",
+      "hexB": "#F551A2",
+      "deltaE00": 3.38,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 49
+      }
+    },
+    {
+      "relationId": "E8--E17",
+      "codeA": "E8",
+      "hexA": "#FFDBE9",
+      "codeB": "E17",
+      "hexB": "#FFE2EA",
+      "deltaE00": 3.2,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 43
+      }
+    },
+    {
+      "relationId": "E14--G2",
+      "codeA": "E14",
+      "hexA": "#FFD1BA",
+      "codeB": "G2",
+      "hexB": "#FFC4AA",
+      "deltaE00": 3.9,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 68
+      }
+    },
+    {
+      "relationId": "E16--H12",
+      "codeA": "E16",
+      "hexA": "#FFF3EB",
+      "codeB": "H12",
+      "hexB": "#FFF5ED",
+      "deltaE00": 0.96,
+      "level": "high",
+      "guidanceZh": "可直接替代；大面积纯色先实物确认。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 8
+      }
+    },
+    {
+      "relationId": "E18--E19",
+      "codeA": "E18",
+      "hexA": "#FFC7DB",
+      "codeB": "E19",
+      "hexB": "#FEBAD5",
+      "deltaE00": 3.55,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 58
+      }
+    },
+    {
+      "relationId": "E18--F22",
+      "codeA": "E18",
+      "hexA": "#FFC7DB",
+      "codeB": "F22",
+      "hexB": "#FDC0D0",
+      "deltaE00": 2.36,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 22
+      }
+    },
+    {
+      "relationId": "E19--F21",
+      "codeA": "E19",
+      "hexA": "#FEBAD5",
+      "codeB": "F21",
+      "hexB": "#F7B4C6",
+      "deltaE00": 3.24,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 44
+      }
+    },
+    {
+      "relationId": "E19--F22",
+      "codeA": "E19",
+      "hexA": "#FEBAD5",
+      "codeB": "F22",
+      "hexB": "#FDC0D0",
+      "deltaE00": 3.41,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 51
+      }
+    },
+    {
+      "relationId": "F2--F3",
+      "codeA": "F2",
+      "hexA": "#FC3D46",
+      "codeB": "F3",
+      "hexB": "#F74941",
+      "deltaE00": 2.93,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 34
+      }
+    },
+    {
+      "relationId": "F2--F4",
+      "codeA": "F2",
+      "hexA": "#FC3D46",
+      "codeB": "F4",
+      "hexB": "#FC283C",
+      "deltaE00": 2.23,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 20
+      }
+    },
+    {
+      "relationId": "F3--F4",
+      "codeA": "F3",
+      "hexA": "#F74941",
+      "codeB": "F4",
+      "hexB": "#FC283C",
+      "deltaE00": 3.95,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 71
+      }
+    },
+    {
+      "relationId": "F3--F13",
+      "codeA": "F3",
+      "hexA": "#F74941",
+      "codeB": "F13",
+      "hexB": "#F35744",
+      "deltaE00": 2.54,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 24
+      }
+    },
+    {
+      "relationId": "F16--G2",
+      "codeA": "F16",
+      "hexA": "#FEC2A6",
+      "codeB": "G2",
+      "hexB": "#FFC4AA",
+      "deltaE00": 0.8,
+      "level": "high",
+      "guidanceZh": "可直接替代；大面积纯色先实物确认。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 7
+      }
+    },
+    {
+      "relationId": "F16--G3",
+      "codeA": "F16",
+      "hexA": "#FEC2A6",
+      "codeB": "G3",
+      "hexB": "#F4C3A5",
+      "deltaE00": 3.18,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 41
+      }
+    },
+    {
+      "relationId": "F18--G19",
+      "codeA": "F18",
+      "hexA": "#D37C46",
+      "codeB": "G19",
+      "hexB": "#E07935",
+      "deltaE00": 3.29,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 47
+      }
+    },
+    {
+      "relationId": "F21--F22",
+      "codeA": "F21",
+      "hexA": "#F7B4C6",
+      "codeB": "F22",
+      "hexB": "#FDC0D0",
+      "deltaE00": 2.8,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 31
+      }
+    },
+    {
+      "relationId": "G1--G18",
+      "codeA": "G1",
+      "hexA": "#FFE2CE",
+      "codeB": "G18",
+      "hexB": "#FFE4CC",
+      "deltaE00": 2.15,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 18
+      }
+    },
+    {
+      "relationId": "G2--G3",
+      "codeA": "G2",
+      "hexA": "#FFC4AA",
+      "codeB": "G3",
+      "hexB": "#F4C3A5",
+      "deltaE00": 3.51,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 57
+      }
+    },
+    {
+      "relationId": "G4--G9",
+      "codeA": "G4",
+      "hexA": "#E1B383",
+      "codeB": "G9",
+      "hexB": "#E6B483",
+      "deltaE00": 1.14,
+      "level": "high",
+      "guidanceZh": "可直接替代；大面积纯色先实物确认。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 10
+      }
+    },
+    {
+      "relationId": "G15--H13",
+      "codeA": "G15",
+      "hexA": "#FCF9E0",
+      "codeB": "H13",
+      "hexB": "#F5ECD2",
+      "deltaE00": 3.6,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 60
+      }
+    },
+    {
+      "relationId": "G15--H21",
+      "codeA": "G15",
+      "hexA": "#FCF9E0",
+      "codeB": "H21",
+      "hexB": "#FFFBE1",
+      "deltaE00": 0.65,
+      "level": "high",
+      "guidanceZh": "可直接替代；大面积纯色先实物确认。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 6
+      }
+    },
+    {
+      "relationId": "G16--M4",
+      "codeA": "G16",
+      "hexA": "#F2D9BA",
+      "codeB": "M4",
+      "hexB": "#E3D2BC",
+      "deltaE00": 3.9,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 67
+      }
+    },
+    {
+      "relationId": "H1--H2",
+      "codeA": "H1",
+      "hexA": "#FDFBFF",
+      "codeB": "H2",
+      "hexB": "#FEFFFF",
+      "deltaE00": 2.9,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 33
+      }
+    },
+    {
+      "relationId": "H1--H9",
+      "codeA": "H1",
+      "hexA": "#FDFBFF",
+      "codeB": "H9",
+      "hexB": "#EDEDED",
+      "deltaE00": 3.92,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 70
+      }
+    },
+    {
+      "relationId": "H1--H17",
+      "codeA": "H1",
+      "hexA": "#FDFBFF",
+      "codeB": "H17",
+      "hexB": "#F1EDED",
+      "deltaE00": 3.5,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 55
+      }
+    },
+    {
+      "relationId": "H2--H9",
+      "codeA": "H2",
+      "hexA": "#FEFFFF",
+      "codeB": "H9",
+      "hexB": "#EDEDED",
+      "deltaE00": 3.67,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 63
+      }
+    },
+    {
+      "relationId": "H9--H10",
+      "codeA": "H9",
+      "hexA": "#EDEDED",
+      "codeB": "H10",
+      "hexB": "#EEE9EA",
+      "deltaE00": 2.69,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 28
+      }
+    },
+    {
+      "relationId": "H9--H17",
+      "codeA": "H9",
+      "hexA": "#EDEDED",
+      "codeB": "H17",
+      "hexB": "#F1EDED",
+      "deltaE00": 1.98,
+      "level": "high",
+      "guidanceZh": "可直接替代；大面积纯色先实物确认。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 14
+      }
+    },
+    {
+      "relationId": "H10--H17",
+      "codeA": "H10",
+      "hexA": "#EEE9EA",
+      "codeB": "H17",
+      "hexB": "#F1EDED",
+      "deltaE00": 1.11,
+      "level": "high",
+      "guidanceZh": "可直接替代；大面积纯色先实物确认。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 9
+      }
+    },
+    {
+      "relationId": "H11--H22",
+      "codeA": "H11",
+      "hexA": "#CECDD5",
+      "codeB": "H22",
+      "hexB": "#CACAD4",
+      "deltaE00": 1.21,
+      "level": "high",
+      "guidanceZh": "可直接替代；大面积纯色先实物确认。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 11
+      }
+    },
+    {
+      "relationId": "H12--H19",
+      "codeA": "H12",
+      "hexA": "#FFF5ED",
+      "codeB": "H19",
+      "hexB": "#F6EFE2",
+      "deltaE00": 3.51,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 56
+      }
+    },
+    {
+      "relationId": "H13--H21",
+      "codeA": "H13",
+      "hexA": "#F5ECD2",
+      "codeB": "H21",
+      "hexB": "#FFFBE1",
+      "deltaE00": 3.66,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 62
+      }
+    },
+    {
+      "relationId": "H15--H20",
+      "codeA": "H15",
+      "hexA": "#98A6A8",
+      "codeB": "H20",
+      "hexB": "#949FA3",
+      "deltaE00": 2.69,
+      "level": "regular",
+      "guidanceZh": "普通图案可用；肤色、渐变或大面积先试拼。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 27
+      }
+    },
+    {
+      "relationId": "H18--H19",
+      "codeA": "H18",
+      "hexA": "#FFFDF0",
+      "codeB": "H19",
+      "hexB": "#F6EFE2",
+      "deltaE00": 3.6,
+      "level": "small_area_only",
+      "guidanceZh": "仅用于阴影、边缘或少量缺豆补位。",
+      "bidirectional": true,
+      "sourceLocation": {
+        "sheet": "替代色参考",
+        "row": 59
+      }
+    }
+  ]
+}

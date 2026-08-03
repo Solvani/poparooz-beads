@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "substituteDatasetId": "poparooz-substitute-reference",
+  "substituteDatasetVersion": "1.0.0",
+  "sourceFileSha256": "5508b4c0e2060c1bd3ce5afcea9591c62cd26f2c924179143b95daa17e04a71e",
+  "canonicalRecordsSha256": "5582d15099ed4e623b0af325e884f6567cc405cecb72af2efdf587ceed5693a7",
+  "relationCount": 67,
+  "levelCounts": {
+    "high": 9,
+    "regular": 22,
+    "small_area_only": 36
+  },
+  "missingPaletteCodeCount": 0,
+  "hexMismatchCount": 0,
+  "selfRelationCount": 0,
+  "duplicateRelationCount": 0,
+  "invalidDeltaECount": 0,
+  "invalidLevelCount": 0,
+  "result": "passed",
+  "issues": []
+}

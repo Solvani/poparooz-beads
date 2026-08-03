@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0.0",
+  "paletteId": "poparooz-standard",
+  "paletteVersion": "1.0.0",
+  "sourceFileSha256": "5508b4c0e2060c1bd3ce5afcea9591c62cd26f2c924179143b95daa17e04a71e",
+  "canonicalRecordsSha256": "1474d8587f9959be876e5bdfc6f29373c68dd427b0c84ac1b474944d672872a4",
+  "recordCount": 221,
+  "seriesCounts": {
+    "A": 26,
+    "B": 32,
+    "C": 29,
+    "D": 26,
+    "E": 24,
+    "F": 25,
+    "G": 21,
+    "H": 23,
+    "M": 15
+  },
+  "duplicateCodeCount": 0,
+  "duplicateHexCount": 0,
+  "missingHexCount": 0,
+  "invalidHexCount": 0,
+  "invalidCodeCount": 0,
+  "nonContiguousSeriesCount": 0,
+  "derivationFailureCount": 0,
+  "derivationAuditRecordCount": 221,
+  "derivationAuditSha256": "f070bc32e80dd3a3885ee3caad4085b1752ed6376cba865597788d655fed9020",
+  "derivationAlgorithm": "rgb8ToLab-v1",
+  "derivationDecimalPrecision": 12,
+  "result": "passed",
+  "issues": []
+}

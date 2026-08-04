@@ -12,7 +12,9 @@ describe("Runtime Palette dependency boundaries", () => {
   it("keeps compiler production modules free of workbook, substitute, and ExcelJS dependencies", async () => {
     const files = (await collectFiles(runtimeScripts)).filter(
       (file) =>
-        !file.endsWith(".test.ts") && !file.endsWith("runtime-palette.json"),
+        !file.endsWith(".test.ts") &&
+        !file.endsWith("runtime-palette.json") &&
+        !file.endsWith("runtime-palette-production-bundle-boundary.ts"),
     );
     for (const file of files) {
       const source = await readFile(file, "utf8");

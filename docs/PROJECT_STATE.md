@@ -128,6 +128,18 @@ Commit message: feat: compile formal Poparooz palette source
 ```
 
 ```text
+P3-A01.4 Runtime Palette Artifact and Production Gate
+Status: Completed and Frozen
+Runtime Artifact SHA-256: 86a742ed45b1dc06eb4e4cec64e6a4d35ece07b9ad11f7c01208909986337d70
+Runtime Lock SHA-256: 36302e25510d8b46afdc6cbaceea06ca8905c9456d006bc70cc3164cf8e6a648
+Runtime Palette: 221 records / 221 active / 221 auto-match eligible
+Build Gate: All Vite build modes execute the fail-closed Production Gate.
+Startup Gate: The approved Provider is validated synchronously before React render.
+Browser boundary: The approved Runtime Artifact is the only Palette-generated data source reachable from the production module graph.
+Production GenerationRuntime: Unavailable
+```
+
+```text
 P3-A01.4-D01 Runtime Palette Contract Freeze
 Status: Accepted and Frozen
 Result: Runtime Artifact, ordering, derivation, active and auto-match eligibility, versioning, determinism, Gate, fail-closed, and legacy-contract boundaries are frozen.
@@ -202,16 +214,32 @@ ProcessingPolicy production wiring: Not implemented
 Production GenerationRuntime: Unavailable
 ```
 
+```text
+P3-A01.4-A06 Production Bundle Boundary and Final Gate Review
+Status: Completed and Frozen
+Production module graph: Verified from the real Vite config and src/main.tsx entry.
+Required browser Palette path: Startup Bootstrap -> approved Provider -> strict Browser Schema -> approved Runtime Artifact
+Excluded from browser graph and emitted assets: ExcelJS, XLSX, Formal Package, Derivation Audit, Runtime Lock, Runtime Policy, Substitute data, provenance, MARD, and supplier information
+Emitted bundle inspection: Passed in isolated temporary output with success and failure cleanup verified
+Artifact field whitelist: Passed recursively
+Build Gate: Passed for npm run build, vite build, and vite build --mode development
+Startup Gate: Fail closed before React render; no Generation Service or Worker is created
+Tests after task: 83 files / 997 tests passed
+Accepted Minor: favicon.ico 404 remains deferred to a separate UI or public-asset task
+Production GenerationRuntime: Unavailable
+```
+
 ## Current Phase
 
 ```text
 Phase: Phase 3
 Status: active
-Current task: P3-A01.4-A05 Startup Palette Gate Integration
-Next task: P3-A01.4-A06 Production Bundle Boundary and Final Gate Review
+Current planning task: P3-A02 Production Generation Runtime Activation Planning
 ```
 
-The P3-A01.4-D01 contract and P3-A01.4-A01 through P3-A01.4-A05 implementation tasks are frozen. The Runtime Artifact and Runtime Lock have been generated, every Vite build passes the fail-closed Production Gate during configuration resolution, and application startup synchronously validates and initializes the approved immutable Provider before React render. Chrome smoke verification passed with generation remaining safely unavailable. Matcher, BoardProfile, and ProcessingPolicy production wiring have not been implemented, and Production `GenerationRuntime` remains unavailable. P3-A01.4 remains in progress and must not be described as complete.
+P3-A01.4 and its D01 and A01 through A06 tasks are completed and frozen. The Runtime Artifact and Runtime Lock are deterministic and approved, every Vite build passes the fail-closed Production Gate during configuration resolution, and application startup synchronously validates and initializes the approved immutable Provider before React render. The real production module graph and emitted bundle expose only the approved Runtime Artifact as Palette-generated data. Build or Startup Gate failures do not fall back. Chrome smoke verification passed with generation remaining safely unavailable.
+
+P3-A02 is a planning task only and has not started implementation. Matcher contract migration, BoardProfile production wiring, ProcessingPolicy production wiring, and complete generator activation remain unfinished. Production `GenerationRuntime` remains unavailable.
 
 ## Frozen Phase 3 Decisions
 
@@ -226,7 +254,7 @@ The P3-A01.4-D01 contract and P3-A01.4-A01 through P3-A01.4-A05 implementation t
 - Physical color status is `unverified`.
 - Source Manifest, Normalized Schema, Canonical Serialization, and separate source/canonical SHA-256 boundaries are established.
 - The formal 221-color source Palette is compiled, accepted, committed, and frozen as `poparooz-standard` version `1.0.0`.
-- The deterministic Runtime Palette Artifact has been generated, but no Production Runtime Palette Provider or generation runtime has been enabled.
+- The deterministic Runtime Palette Artifact and startup Palette Provider are enabled only for strict Palette validation; Production `GenerationRuntime` remains unavailable.
 - Runtime Policy uses a versioned local Palette Provider.
 - Production availability uses a fail-closed gate.
 - Test palettes cannot be used as a production fallback.
@@ -340,7 +368,7 @@ git diff --check: passed
 Production Bundle boundary: passed
 ```
 
-ExcelJS is used only by Node offline compilation tooling and is excluded from the browser production bundle. The Runtime Palette Artifact has been generated deterministically but is not loaded or enabled by the browser production runtime.
+ExcelJS is used only by Node offline compilation tooling and is excluded from the browser production bundle. The approved Runtime Palette Artifact is loaded only by the strict Browser Provider during startup; the browser does not load the Formal Package, Runtime Lock, Runtime Policy, Derivation Audit, or Substitute data, and Production `GenerationRuntime` remains unavailable.
 
 ### BoardProfile v1
 
@@ -368,7 +396,7 @@ Default for v1: true
 - Board counts continue to use `104 × 104` cells per board.
 - `78 × 78` (`210 × 210 × 2 mm`) and `52 × 52` (`140 × 140 × 2 mm`) are future candidates only and are not enabled in v1.
 - Production Runtime has not been activated.
-- The formal 221-color Palette has not been imported.
+- The formal 221-color Palette is compiled and frozen, but the Formal Package does not enter the browser production graph directly.
 
 ## Current Roadmap
 
@@ -381,28 +409,30 @@ P3-G01.2   Read-only Codex Integration Check     Accepted
 P3-D02     Runtime Generation Policy             Policy frozen
 P3-D02-E01 BoardProfile Evidence Collection      Frozen
 P3-A01.3   Formal 221-color Palette Compilation  Frozen
-P3-A01.4   Runtime Palette Artifact and Production Gate In progress
+P3-A01.4   Runtime Palette Artifact and Production Gate Frozen
 P3-A01.4-D01 Runtime Palette Contract Freeze      Frozen
 P3-A01.4-A01 Deterministic Runtime Compiler       Frozen
 P3-A01.4-A02 Node-only Runtime Lock               Frozen
 P3-A01.4-A03 Build-time Production Gate           Frozen
 P3-A01.4-A04 Browser Runtime Schema and Provider   Frozen
 P3-A01.4-A05 Startup Gate Integration              Frozen
-P3-A01.4-A06 Production Bundle Boundary and Final Gate Review Ready
+P3-A01.4-A06 Production Bundle Boundary and Final Gate Review Frozen
+P3-A02     Production Generation Runtime Activation Planning Planning
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
 ```
 
-The provisional next-stage scope is:
+The next planning-stage scope is:
 
 ```text
-Formal Palette
--> Runtime Palette artifact
--> active / auto-match eligibility policy
--> Production Gate integration
+approved Runtime Palette Provider
+-> matcher contract migration
+-> BoardProfile production wiring
+-> ProcessingPolicy production wiring
+-> complete Production GenerationRuntime activation review
 ```
 
-P3-A01.4 remains in progress. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
+P3-A01.4 is frozen. P3-A02 is planning only and has not started implementation. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
 
 ## Known Issues
 

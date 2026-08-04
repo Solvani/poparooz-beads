@@ -1,0 +1,336 @@
+// @vitest-environment node
+
+import { access, mkdtemp, readFile, readdir, rm } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+
+import { build, type Plugin } from "vite";
+import { describe, expect, it } from "vitest";
+
+import approvedRuntimePalette from "../../../src/runtime/palette/artifacts/poparooz-standard/formal-1.0.0/runtime-1.0.0/runtime-palette.json";
+import {
+  APPROVED_RUNTIME_ARTIFACT_MODULE,
+  type EmittedProductionFile,
+  RuntimePaletteBundleBoundaryError,
+  verifyRuntimePaletteArtifactBoundary,
+  verifyRuntimePaletteProductionBundleBoundary,
+} from "./runtime-palette-production-bundle-boundary.ts";
+
+const repositoryRoot = path.resolve(import.meta.dirname, "../../..");
+const configPath = path.join(repositoryRoot, "vite.config.ts");
+const approvedArtifactPath = path.join(
+  repositoryRoot,
+  ...APPROVED_RUNTIME_ARTIFACT_MODULE.slice(1).split("/"),
+);
+
+describe("Runtime Palette production bundle boundary", () => {
+  it("passes the real production module graph and emitted bundle", async () => {
+    const inspection = await withTemporaryProductionBuild(
+      async ({ moduleIds, emittedFiles }) => {
+        const runtimeArtifact = JSON.parse(
+          await readFile(approvedArtifactPath, "utf8"),
+        ) as unknown;
+        return verifyRuntimePaletteProductionBundleBoundary({
+          moduleIds,
+          emittedFiles,
+          runtimeArtifact,
+        });
+      },
+    );
+
+    expect(inspection).toMatchObject({
+      requiredModuleCount: 7,
+      generatedPaletteDataModules: [normalize(approvedArtifactPath)],
+      recordCount: 221,
+      activeCount: 221,
+      autoMatchEligibleCount: 221,
+      verified: true,
+    });
+    expect(inspection.emittedFileCount).toBeGreaterThan(0);
+  }, 30_000);
+
+  it.each([
+    [
+      "Runtime Lock",
+      "D:/repo/data-source/runtime-locks/palette/runtime-palette.lock.json",
+    ],
+    [
+      "Runtime Policy",
+      "D:/repo/scripts/palette/runtime/policies/runtime-palette-policy.json",
+    ],
+    ["Formal Manifest", "D:/repo/data-source/palettes/formal/manifest.json"],
+    ["ExcelJS", "D:/repo/node_modules/exceljs/lib/exceljs.nodejs.js"],
+    ["Node built-in", "node:fs"],
+    [
+      "Substitute",
+      "D:/repo/data-source/palettes/formal/normalized-substitutes.json",
+    ],
+    ["MARD fixture", "D:/repo/src/domain/palette/mard-palette.fixture.ts"],
+  ])("rejects a browser import of %s", (_label, forbiddenModule) => {
+    expectBoundaryFailure(
+      () =>
+        verifyRuntimePaletteProductionBundleBoundary(
+          validInspection({
+            moduleIds: [...requiredModuleIds(), forbiddenModule],
+          }),
+        ),
+      "RUNTIME_BUNDLE_FORBIDDEN_MODULE",
+    );
+  });
+
+  it("rejects a second generated Palette data module", () => {
+    expectBoundaryFailure(
+      () =>
+        verifyRuntimePaletteProductionBundleBoundary(
+          validInspection({
+            moduleIds: [
+              ...requiredModuleIds(),
+              "/src/runtime/palette/artifacts/copy/runtime-palette.json",
+            ],
+          }),
+        ),
+      "RUNTIME_BUNDLE_GENERATED_DATA_INVALID",
+    );
+  });
+
+  it.each([
+    "sourceLocation",
+    "runtimeLockSha256",
+    "codeA",
+    "codeB",
+    "applicationPolicy",
+    "MARD",
+    "data-source/runtime-locks",
+  ])("rejects forbidden emitted content: %s", (forbidden) => {
+    const content = [
+      "sourceLocation",
+      "runtimeLockSha256",
+      "codeA",
+      "codeB",
+      "applicationPolicy",
+    ].includes(forbidden)
+      ? `{${forbidden}:\"A1\"}`
+      : forbidden;
+    expectBoundaryFailure(
+      () =>
+        verifyRuntimePaletteProductionBundleBoundary(
+          validInspection({
+            emittedFiles: [{ relativePath: "assets/app.js", content }],
+          }),
+        ),
+      "RUNTIME_BUNDLE_EMITTED_CONTENT_FORBIDDEN",
+    );
+  });
+
+  it.each([
+    "assets/source.xlsx",
+    "assets/runtime-palette.lock.json",
+    "assets/formal-manifest.json",
+    "assets/normalized-palette.json",
+    "assets/normalized-substitutes.json",
+    "assets/runtime-palette-policy.json",
+  ])("rejects an extra generated-data output: %s", (relativePath) => {
+    expectBoundaryFailure(
+      () =>
+        verifyRuntimePaletteProductionBundleBoundary(
+          validInspection({ emittedFiles: [{ relativePath, content: "{}" }] }),
+        ),
+      "RUNTIME_BUNDLE_EMITTED_FILE_FORBIDDEN",
+    );
+  });
+
+  it.each([
+    [
+      "unknown top-level",
+      (artifact: MutableArtifact) => (artifact.extra = true),
+    ],
+    [
+      "provenance",
+      (artifact: MutableArtifact) =>
+        (artifact.colors[0]!.sourceLocation = "Sheet1!A1"),
+    ],
+    [
+      "sellability",
+      (artifact: MutableArtifact) => (artifact.colors[0]!.isSellable = true),
+    ],
+    [
+      "nested provenance",
+      (artifact: MutableArtifact) =>
+        (artifact.colors[0]!.rgb.sourceSha256 = "not allowed"),
+    ],
+  ])("rejects an Artifact %s field", async (_label, mutate) => {
+    const artifact = await readApprovedArtifact();
+    mutate(artifact);
+    expectBoundaryFailure(
+      () => verifyRuntimePaletteArtifactBoundary(artifact),
+      "RUNTIME_BUNDLE_ARTIFACT_INVALID",
+    );
+  });
+
+  it("removes the temporary output after a successful inspection", async () => {
+    let temporaryOutput = "";
+    await withTemporaryProductionBuild(async ({ outputDirectory }) => {
+      temporaryOutput = outputDirectory;
+      expect(await exists(outputDirectory)).toBe(true);
+    });
+    expect(await exists(temporaryOutput)).toBe(false);
+  }, 30_000);
+
+  it("removes the temporary output after a boundary failure", async () => {
+    let temporaryOutput = "";
+    await expect(
+      withTemporaryProductionBuild(async ({ outputDirectory }) => {
+        temporaryOutput = outputDirectory;
+        verifyRuntimePaletteProductionBundleBoundary(
+          validInspection({
+            moduleIds: [
+              ...requiredModuleIds(),
+              "D:/repo/node_modules/exceljs/index.js",
+            ],
+          }),
+        );
+      }),
+    ).rejects.toMatchObject({
+      code: "RUNTIME_BUNDLE_FORBIDDEN_MODULE",
+    });
+    expect(await exists(temporaryOutput)).toBe(false);
+  }, 30_000);
+});
+
+interface ProductionBuildInspection {
+  readonly outputDirectory: string;
+  readonly moduleIds: readonly string[];
+  readonly emittedFiles: readonly EmittedProductionFile[];
+}
+
+async function withTemporaryProductionBuild<T>(
+  inspect: (inspection: ProductionBuildInspection) => Promise<T> | T,
+): Promise<T> {
+  const outputDirectory = await mkdtemp(
+    path.join(os.tmpdir(), "poparooz-runtime-bundle-boundary-"),
+  );
+  const moduleIds = new Set<string>();
+  const captureModuleGraph: Plugin = {
+    name: "capture-runtime-palette-production-boundary",
+    moduleParsed(moduleInfo) {
+      moduleIds.add(normalize(moduleInfo.id));
+    },
+  };
+
+  try {
+    await build({
+      configFile: configPath,
+      mode: "production",
+      root: repositoryRoot,
+      logLevel: "silent",
+      plugins: [captureModuleGraph],
+      build: {
+        outDir: outputDirectory,
+        emptyOutDir: true,
+        manifest: true,
+      },
+    });
+    return await inspect({
+      outputDirectory,
+      moduleIds: [...moduleIds].sort(),
+      emittedFiles: await collectEmittedFiles(outputDirectory),
+    });
+  } finally {
+    await rm(outputDirectory, { recursive: true, force: true });
+  }
+}
+
+async function collectEmittedFiles(
+  directory: string,
+  root = directory,
+): Promise<EmittedProductionFile[]> {
+  const files: EmittedProductionFile[] = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const child = path.join(directory, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await collectEmittedFiles(child, root)));
+    } else if (entry.isFile()) {
+      files.push({
+        relativePath: normalize(path.relative(root, child)),
+        content: await readFile(child, "utf8"),
+      });
+    }
+  }
+  return files.sort((left, right) =>
+    left.relativePath.localeCompare(right.relativePath),
+  );
+}
+
+function validInspection(
+  overrides: Partial<{
+    moduleIds: readonly string[];
+    emittedFiles: readonly EmittedProductionFile[];
+    runtimeArtifact: unknown;
+  }> = {},
+) {
+  return {
+    moduleIds: overrides.moduleIds ?? requiredModuleIds(),
+    emittedFiles:
+      overrides.emittedFiles ??
+      ([{ relativePath: "assets/app.js", content: "approved" }] as const),
+    runtimeArtifact: overrides.runtimeArtifact ?? approvedArtifactFixture(),
+  };
+}
+
+function requiredModuleIds(): string[] {
+  return [
+    "/src/main.tsx",
+    "/src/runtime/bootstrap/application-runtime-bootstrap.ts",
+    "/src/runtime/bootstrap/application-startup.ts",
+    "/src/runtime/palette/approved-runtime-palette.ts",
+    "/src/runtime/palette/runtime-palette.provider.ts",
+    "/src/runtime/palette/runtime-palette.schema.ts",
+    APPROVED_RUNTIME_ARTIFACT_MODULE,
+  ];
+}
+
+function approvedArtifactFixture(): unknown {
+  return structuredClone(approvedRuntimePalette);
+}
+
+interface MutableColor extends Record<string, unknown> {
+  rgb: Record<string, unknown>;
+  lab: Record<string, unknown>;
+}
+
+interface MutableArtifact extends Record<string, unknown> {
+  colors: MutableColor[];
+}
+
+async function readApprovedArtifact(): Promise<MutableArtifact> {
+  return JSON.parse(
+    await readFile(approvedArtifactPath, "utf8"),
+  ) as MutableArtifact;
+}
+
+function expectBoundaryFailure(
+  invoke: () => unknown,
+  code: RuntimePaletteBundleBoundaryError["code"],
+): void {
+  let failure: unknown;
+  try {
+    invoke();
+  } catch (error) {
+    failure = error;
+  }
+  expect(failure).toBeInstanceOf(RuntimePaletteBundleBoundaryError);
+  expect(failure).toMatchObject({ code });
+}
+
+async function exists(filePath: string): Promise<boolean> {
+  try {
+    await access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function normalize(value: string): string {
+  return value.replaceAll("\\", "/");
+}

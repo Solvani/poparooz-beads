@@ -185,16 +185,33 @@ Matcher migration: Not implemented
 Production GenerationRuntime: Unavailable
 ```
 
+```text
+P3-A01.4-A05 Startup Palette Gate Integration
+Status: Completed and Frozen
+Startup behavior: The approved Runtime Palette Provider is initialized synchronously before React render.
+Provider success: 221 / 221 / 221
+Provider failure: Fail closed
+App runtime: Explicitly injected unavailable GenerationRuntime
+Provider lifecycle: Created outside React render and StrictMode lifecycle
+Generation Service: Not created
+Worker: Not created
+Chrome smoke verification: Passed
+Matcher migration: Not implemented
+BoardProfile production wiring: Not implemented
+ProcessingPolicy production wiring: Not implemented
+Production GenerationRuntime: Unavailable
+```
+
 ## Current Phase
 
 ```text
 Phase: Phase 3
 Status: active
-Current task: P3-A01.4-A04 Browser Runtime Schema and Provider
-Next task: P3-A01.4-A05 Startup Gate Integration
+Current task: P3-A01.4-A05 Startup Palette Gate Integration
+Next task: P3-A01.4-A06 Production Bundle Boundary and Final Gate Review
 ```
 
-The P3-A01.4-D01 contract, P3-A01.4-A01 deterministic compiler, P3-A01.4-A02 Node-only Runtime Palette Lock, P3-A01.4-A03 Build-time Production Gate, and P3-A01.4-A04 Browser Runtime Schema and Provider are frozen. The Runtime Artifact and Runtime Lock have been generated, every Vite build passes the fail-closed Production Gate during configuration resolution, and the browser can synchronously create an immutable Provider from the strictly validated approved Artifact. The Startup Palette Gate has not been implemented, `src/main.tsx` is not wired, and Production `GenerationRuntime` remains unavailable. P3-A01.4 remains in progress and must not be described as complete.
+The P3-A01.4-D01 contract and P3-A01.4-A01 through P3-A01.4-A05 implementation tasks are frozen. The Runtime Artifact and Runtime Lock have been generated, every Vite build passes the fail-closed Production Gate during configuration resolution, and application startup synchronously validates and initializes the approved immutable Provider before React render. Chrome smoke verification passed with generation remaining safely unavailable. Matcher, BoardProfile, and ProcessingPolicy production wiring have not been implemented, and Production `GenerationRuntime` remains unavailable. P3-A01.4 remains in progress and must not be described as complete.
 
 ## Frozen Phase 3 Decisions
 
@@ -370,7 +387,8 @@ P3-A01.4-A01 Deterministic Runtime Compiler       Frozen
 P3-A01.4-A02 Node-only Runtime Lock               Frozen
 P3-A01.4-A03 Build-time Production Gate           Frozen
 P3-A01.4-A04 Browser Runtime Schema and Provider   Frozen
-P3-A01.4-A05 Startup Gate Integration              Ready
+P3-A01.4-A05 Startup Gate Integration              Frozen
+P3-A01.4-A06 Production Bundle Boundary and Final Gate Review Ready
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
 ```

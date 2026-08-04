@@ -10,6 +10,7 @@ import type { PatternSettingsValue } from "../settings/settings.types";
 
 export type GenerationUnavailableReason =
   | "palette-unavailable"
+  | "production-runtime-unavailable"
   | "board-profile-unavailable"
   | "processing-policy-unavailable"
   | "worker-unavailable";
@@ -79,3 +80,11 @@ export const UNAVAILABLE_GENERATION_RUNTIME: GenerationRuntime = Object.freeze({
     reason: "palette-unavailable",
   }),
 });
+
+export const STARTUP_GATED_GENERATION_RUNTIME: GenerationRuntime =
+  Object.freeze({
+    availability: Object.freeze({
+      available: false,
+      reason: "production-runtime-unavailable",
+    }),
+  });

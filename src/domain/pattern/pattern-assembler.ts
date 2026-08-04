@@ -43,7 +43,7 @@ export function assemblePattern(
 
   const mapping = buildPatternPaletteMapping(
     input.quantizedImage,
-    input.palette,
+    input.paletteColors,
   );
   const matrix = buildPatternMatrix(
     input.quantizedImage,

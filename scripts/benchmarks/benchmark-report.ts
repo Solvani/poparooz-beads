@@ -11,6 +11,7 @@ import {
 } from "../../src/domain/color/color-matching";
 import { assemblePattern } from "../../src/domain/pattern/pattern-assembler";
 import { toPublicPatternResult } from "../../src/domain/pattern/public-pattern.mapper";
+import type { GenerationPaletteColor } from "../../src/runtime/generation-palette/generation-palette.types";
 import { quantizeImage } from "../../src/domain/quantization/quantize-image";
 import {
   BENCHMARK_BOARD_PROFILE,
@@ -140,6 +141,19 @@ function runMeasurements(): {
   for (const definition of BENCHMARK_FIXTURES) {
     const image = createBenchmarkRgbaFixture(definition);
     const palette = createBenchmarkPalette(definition.paletteCandidates);
+    const generationColors: readonly GenerationPaletteColor[] = Object.freeze(
+      palette.colors.map((color, index) =>
+        Object.freeze({
+          code: `A${index + 1}`,
+          hex: color.hex,
+          rgb: color.rgb,
+          lab: color.lab,
+          sortOrder: color.sortOrder,
+          active: color.isActive,
+          autoMatchEligible: color.isAutoMatchEnabled,
+        }),
+      ),
+    );
     const parameters = fixtureParameters(definition);
     measurements.push(
       measure("Quantization", definition.name, parameters, () => {
@@ -170,7 +184,7 @@ function runMeasurements(): {
       measure("Pattern assembly", definition.name, parameters, () => {
         const result = assemblePattern({
           quantizedImage: quantized,
-          palette,
+          paletteColors: generationColors,
           boardProfile: BENCHMARK_BOARD_PROFILE,
         });
         return result.totals.totalBeads + result.boardLayout.boardCount;
@@ -179,7 +193,7 @@ function runMeasurements(): {
 
     const internal = assemblePattern({
       quantizedImage: quantized,
-      palette,
+      paletteColors: generationColors,
       boardProfile: BENCHMARK_BOARD_PROFILE,
     });
     measurements.push(
@@ -201,7 +215,7 @@ function runMeasurements(): {
           });
           const endInternal = assemblePattern({
             quantizedImage: endQuantized,
-            palette,
+            paletteColors: generationColors,
             boardProfile: BENCHMARK_BOARD_PROFILE,
           });
           const result = toPublicPatternResult(endInternal);

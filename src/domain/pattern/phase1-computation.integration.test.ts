@@ -6,9 +6,29 @@ import {
   createBenchmarkPalette,
   createBenchmarkRgbaFixture,
 } from "../../../scripts/benchmarks/benchmark-fixtures.ts";
+import type { GenerationPaletteColor } from "../../runtime/generation-palette/generation-palette.types";
+import type { PaletteDefinition } from "../palette/palette.types";
 import { quantizeImage } from "../quantization/quantize-image";
 import { assemblePattern } from "./pattern-assembler";
 import { toPublicPatternResult } from "./public-pattern.mapper";
+
+function toGenerationColors(
+  palette: PaletteDefinition,
+): readonly GenerationPaletteColor[] {
+  return Object.freeze(
+    palette.colors.map((color, index) =>
+      Object.freeze({
+        code: `A${index + 1}`,
+        hex: color.hex,
+        rgb: color.rgb,
+        lab: color.lab,
+        sortOrder: color.sortOrder,
+        active: color.isActive,
+        autoMatchEligible: color.isAutoMatchEnabled,
+      }),
+    ),
+  );
+}
 
 describe("Phase 1 pure computation chain", () => {
   it("produces a deterministic, exact, Poparooz-only result with isolated buffers", () => {
@@ -16,15 +36,16 @@ describe("Phase 1 pure computation chain", () => {
     const image = createBenchmarkRgbaFixture(fixture);
     const originalRgba = image.data.slice();
     const palette = createBenchmarkPalette(fixture.paletteCandidates);
+    const paletteColors = toGenerationColors(palette);
 
-    const execute = (colors = palette.colors) => {
+    const execute = (colors = paletteColors) => {
       const quantized = quantizeImage(image, {
         maxColors: fixture.maxColors,
         alphaThreshold: 0,
       });
       const internal = assemblePattern({
         quantizedImage: quantized,
-        palette: { ...palette, colors },
+        paletteColors: colors,
         boardProfile: BENCHMARK_BOARD_PROFILE,
       });
       const publicResult = toPublicPatternResult(internal);
@@ -32,7 +53,7 @@ describe("Phase 1 pure computation chain", () => {
     };
 
     const first = execute();
-    const second = execute([...palette.colors].reverse());
+    const second = execute([...paletteColors].reverse());
 
     expect(second).toEqual(first);
     expect(image.data).toEqual(originalRgba);
@@ -89,7 +110,9 @@ describe("Phase 1 pure computation chain", () => {
     });
     const internal = assemblePattern({
       quantizedImage: quantized,
-      palette: createBenchmarkPalette(fixture.paletteCandidates),
+      paletteColors: toGenerationColors(
+        createBenchmarkPalette(fixture.paletteCandidates),
+      ),
       boardProfile: BENCHMARK_BOARD_PROFILE,
     });
     const expectedTransparent = fixture.width * 2 + (fixture.height - 2) * 2;

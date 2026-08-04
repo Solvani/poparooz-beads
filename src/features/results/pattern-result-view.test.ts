@@ -99,7 +99,6 @@ describe("pattern result view", () => {
             brand: color.brand,
             code: color.code,
             hex: color.hex,
-            isSpecialFinish: color.isSpecialFinish,
           },
         },
       ],
@@ -203,7 +202,7 @@ describe("pattern result view", () => {
     ).toBe(false);
   });
 
-  it("accepts the maximum 512 public color rows without reading materials", () => {
+  it("accepts the maximum 512 public color rows without coupling row order to materials", () => {
     const colors = createManyColors(512);
     const pattern = createResultFixture({
       width: 512,
@@ -213,13 +212,7 @@ describe("pattern result view", () => {
     });
     const result = toPatternResultView({
       ...pattern,
-      materials: Object.freeze(
-        pattern.materials.map((entry) => ({
-          ...entry,
-          packSize: 1000,
-          packsRequired: 1,
-        })),
-      ),
+      materials: Object.freeze([...pattern.materials].reverse()),
     });
     expect(result.ok).toBe(true);
     if (result.ok) expect(result.view.colors).toHaveLength(512);

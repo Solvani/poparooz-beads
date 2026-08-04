@@ -2,12 +2,14 @@ import { describe, expect, it, vi } from "vitest";
 
 import { TEST_BOARD_PROFILE } from "../../domain/board/board-profile.fixture";
 import type { NormalizedImageResult } from "../../domain/image/image.types";
-import { TEST_PALETTE_DEFINITION } from "../../domain/palette/palette.fixture";
 import { PatternAssemblyError } from "../../domain/pattern/pattern-errors";
 import type { PatternAssemblyResult } from "../../domain/pattern/pattern.types";
 import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
 import type { QuantizedImage } from "../../domain/quantization/quantization.types";
 import { QuantizationWorkerError } from "../../lib/quantization-worker/quantization-worker.errors";
+import { GenerationPaletteAdapterError } from "../../runtime/generation-palette/generation-palette.errors";
+import { adaptRuntimePaletteToGeneration } from "../../runtime/generation-palette/runtime-to-generation-palette.adapter";
+import { createApprovedRuntimePaletteProvider } from "../../runtime/palette/approved-runtime-palette";
 import {
   createGenerationRuntime,
   createGenerationService,
@@ -57,6 +59,9 @@ const QUANTIZED: QuantizedImage = {
 
 const INTERNAL = {} as PatternAssemblyResult;
 const PUBLIC = { marker: "public-only" } as unknown as PublicPatternResult;
+const GENERATION_PALETTE = adaptRuntimePaletteToGeneration(
+  createApprovedRuntimePaletteProvider().getSnapshot(),
+);
 
 function snapshot(maxColors = 512): GenerationInputSnapshot {
   return Object.freeze({
@@ -97,7 +102,7 @@ function setup() {
     }),
   };
   const dependencies: GenerationDependencies = {
-    palette: TEST_PALETTE_DEFINITION,
+    palette: GENERATION_PALETTE,
     boardProfile: TEST_BOARD_PROFILE,
     processingPolicy: { allowUpscale: false, alphaThreshold: 0 },
     createWorkerClient: vi.fn(() => worker),
@@ -150,14 +155,16 @@ describe("Generation Service", () => {
     );
     expect(context.pipeline.assemble).toHaveBeenCalledWith({
       quantizedImage: QUANTIZED,
-      palette: TEST_PALETTE_DEFINITION,
+      paletteColors: GENERATION_PALETTE.colors,
       boardProfile: TEST_BOARD_PROFILE,
     });
+    expect(Object.isFrozen(GENERATION_PALETTE)).toBe(true);
+    expect(Object.isFrozen(GENERATION_PALETTE.colors)).toBe(true);
   });
 
   it("allows maxColors above the palette length without clipping", async () => {
     const context = setup();
-    expect(TEST_PALETTE_DEFINITION.colors.length).toBeLessThan(512);
+    expect(GENERATION_PALETTE.colors.length).toBeLessThan(512);
     await createGenerationService(
       context.dependencies,
       context.pipeline,
@@ -213,8 +220,29 @@ describe("Generation Service", () => {
       reason: "palette-unavailable",
     });
     expect(
-      createGenerationRuntime({ palette: TEST_PALETTE_DEFINITION })
-        .availability,
+      createGenerationRuntime({ palette: GENERATION_PALETTE }).availability,
     ).toEqual({ available: false, reason: "board-profile-unavailable" });
+  });
+
+  it("fails closed on an invalid Generation Palette before creating a Worker", () => {
+    const context = setup();
+    const invalidPalette = {
+      ...GENERATION_PALETTE,
+      colors: [],
+    } as unknown as GenerationDependencies["palette"];
+
+    expect(() =>
+      createGenerationService({
+        ...context.dependencies,
+        palette: invalidPalette,
+      }),
+    ).toThrow(GenerationPaletteAdapterError);
+    expect(
+      createGenerationRuntime({
+        ...context.dependencies,
+        palette: invalidPalette,
+      }).availability,
+    ).toEqual({ available: false, reason: "palette-unavailable" });
+    expect(context.dependencies.createWorkerClient).not.toHaveBeenCalled();
   });
 });

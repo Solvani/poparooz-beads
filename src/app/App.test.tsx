@@ -546,7 +546,7 @@ describe("App", () => {
     expect(
       screen.queryByRole("heading", { name: "Pattern Summary" }),
     ).toBeNull();
-    expect(screen.queryByText("POP-RED")).toBeNull();
+    expect(screen.queryByText("A1")).toBeNull();
     expect(
       screen.getByRole("region", { name: "Start with an image" }),
     ).toBeInTheDocument();
@@ -616,7 +616,7 @@ describe("App", () => {
     const colorsLauncher = screen.getByRole("button", { name: "Colors" });
     await userEvent.click(colorsLauncher);
     expect(screen.getByRole("dialog", { name: "Colors" })).toBeInTheDocument();
-    expect(screen.getByText("POP-RED")).toBeInTheDocument();
+    expect(screen.getByText("A1")).toBeInTheDocument();
     expect(document.querySelector(".app-root")).toHaveAttribute("inert");
 
     await userEvent.click(screen.getByRole("tab", { name: "Boards" }));
@@ -648,12 +648,12 @@ describe("App", () => {
     expect(screen.getByText("Updating your pattern…")).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "Colors" }));
-    expect(screen.getByText("POP-RED")).toBeInTheDocument();
+    expect(screen.getByText("A1")).toBeInTheDocument();
     await act(async () =>
       resolveSecond(createPublicPattern(2, 2, [1, 1, 65535, 1])),
     );
-    expect(screen.getByText("POP-BLUE")).toBeInTheDocument();
-    expect(screen.queryByText("POP-RED")).toBeNull();
+    expect(screen.getByText("B1")).toBeInTheDocument();
+    expect(screen.queryByText("A1")).toBeNull();
 
     await userEvent.click(screen.getByRole("tab", { name: "Original" }));
     await userEvent.upload(

@@ -15,16 +15,10 @@ export function buildMaterialRequirements(
           "Material bead counts must be positive integers.",
         );
       }
-      const packSize = patternColor.color.packSize;
-      const packsRequired =
-        packSize === undefined
-          ? undefined
-          : Math.ceil(patternColor.beadCount / packSize);
       return Object.freeze({
         patternColorIndex: patternColor.index,
         color: patternColor.color,
         beadCount: patternColor.beadCount,
-        ...(packSize === undefined ? {} : { packSize, packsRequired }),
       });
     }),
   );

@@ -1,4 +1,4 @@
-import { PaletteColorSchema } from "../palette/palette.schema";
+import { GenerationPaletteColorSchema } from "../../runtime/generation-palette/generation-palette.schema";
 import { PATTERN_TRANSPARENT_INDEX } from "./pattern-constants";
 import { PatternAssemblyError } from "./pattern-errors";
 import type { PatternAssemblyResult, PatternBoardTile } from "./pattern.types";
@@ -37,8 +37,7 @@ function comparePatternColors(
 ): number {
   return (
     left.color.sortOrder - right.color.sortOrder ||
-    compareBinary(left.color.displayCode, right.color.displayCode) ||
-    compareBinary(left.color.referenceCode, right.color.referenceCode)
+    compareBinary(left.color.code, right.color.code)
   );
 }
 
@@ -104,7 +103,7 @@ export function validatePatternAssemblyResult(
     }
   }
 
-  const references = new Set<string>();
+  const codes = new Set<string>();
   const quantizedIndices = new Set<number>();
   for (let index = 0; index < colors.length; index += 1) {
     const patternColor = colors[index]!;
@@ -114,8 +113,8 @@ export function validatePatternAssemblyResult(
       patternColor.index !== index ||
       typeof patternColor.color !== "object" ||
       patternColor.color === null ||
-      !PaletteColorSchema.safeParse(patternColor.color).success ||
-      references.has(patternColor.color.referenceCode) ||
+      !GenerationPaletteColorSchema.safeParse(patternColor.color).success ||
+      codes.has(patternColor.color.code) ||
       (index > 0 &&
         comparePatternColors(colors[index - 1]!, patternColor) >= 0) ||
       !isPositiveSafeInteger(patternColor.beadCount) ||
@@ -131,7 +130,7 @@ export function validatePatternAssemblyResult(
     ) {
       fail("INVALID_PATTERN_RESULT");
     }
-    references.add(patternColor.color.referenceCode);
+    codes.add(patternColor.color.code);
 
     let mappedBeads = 0;
     let weightedDistance = 0;
@@ -143,7 +142,7 @@ export function validatePatternAssemblyResult(
         mapping === null ||
         !isNonNegativeSafeInteger(mapping.quantizedColorIndex) ||
         mapping.quantizedColorIndex <= previousQuantizedIndex ||
-        mapping.paletteReferenceCode !== patternColor.color.referenceCode ||
+        mapping.paletteCode !== patternColor.color.code ||
         !Number.isFinite(mapping.distance) ||
         mapping.distance < 0 ||
         Object.is(mapping.distance, -0) ||
@@ -185,17 +184,10 @@ export function validatePatternAssemblyResult(
       material === null ||
       typeof material.color !== "object" ||
       material.color === null ||
-      !PaletteColorSchema.safeParse(material.color).success ||
+      !GenerationPaletteColorSchema.safeParse(material.color).success ||
       material.patternColorIndex !== index ||
-      material.color !== color.color ||
-      material.color.referenceCode !== color.color.referenceCode ||
-      material.beadCount !== color.beadCount ||
-      (material.packSize === undefined) !==
-        (material.packsRequired === undefined) ||
-      (material.packSize !== undefined &&
-        (!isPositiveSafeInteger(material.packSize) ||
-          material.packsRequired !==
-            Math.ceil(material.beadCount / material.packSize)))
+      material.color.code !== color.color.code ||
+      material.beadCount !== color.beadCount
     ) {
       fail("INVALID_MATERIAL_REQUIREMENT");
     }

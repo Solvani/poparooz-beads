@@ -5,7 +5,6 @@ import { describe, expect, it } from "vitest";
 
 import type { BoardProfile } from "../board/board-profile.types";
 import { deltaE2000 } from "../color";
-import type { PaletteColor, PaletteDefinition } from "../palette/palette.types";
 import { TRANSPARENT_COLOR_INDEX } from "../quantization/quantization-options";
 import type {
   QuantizedColor,
@@ -22,69 +21,48 @@ import {
   type PatternAssemblyErrorCode,
   type PatternAssemblyResult,
 } from ".";
-
-const VERSION = "pattern-fixture-v1-not-production";
+import type { GenerationPaletteColor } from "../../runtime/generation-palette/generation-palette.types";
 
 function color(
-  suffix: string,
-  overrides: Partial<PaletteColor> = {},
-): PaletteColor {
+  code: string,
+  overrides: Partial<GenerationPaletteColor> = {},
+): GenerationPaletteColor {
   return {
-    referenceSystem: "MARD",
-    referenceCode: `TEST-REF-${suffix}`,
-    referenceName: `Fixture Internal ${suffix}`,
-    referenceSeries: "Fixture Internal Series",
-    displayCode: `POP-TEST-${suffix}`,
-    displayName: `Test ${suffix} Color`,
+    code,
     hex: "#112233",
     rgb: [17, 34, 51],
     lab: [50, 0, 0],
-    isActive: true,
-    isSellable: true,
-    isSpecialFinish: false,
-    isAutoMatchEnabled: true,
+    active: true,
+    autoMatchEligible: true,
     sortOrder: 1,
-    sourceVersion: VERSION,
     ...overrides,
   };
 }
 
-const COLOR_A = color("A", {
+const COLOR_A = color("A1", {
   lab: [20, 0, 0],
   sortOrder: 20,
-  packSize: 2,
 });
-const COLOR_B = color("B", { lab: [80, 0, 0], sortOrder: 10 });
-const INACTIVE = color("INACTIVE", {
-  isActive: false,
-  isAutoMatchEnabled: false,
+const COLOR_B = color("B1", { lab: [80, 0, 0], sortOrder: 10 });
+const INACTIVE = color("C1", {
+  active: false,
+  autoMatchEligible: false,
   sortOrder: 2,
 });
-const UNSELLABLE = color("UNSELLABLE", {
-  isSellable: false,
-  isAutoMatchEnabled: false,
+const MANUAL = color("D1", {
+  autoMatchEligible: false,
   sortOrder: 3,
 });
-const SPECIAL = color("SPECIAL", {
-  isSpecialFinish: true,
-  finishType: "glow",
-  isAutoMatchEnabled: false,
-  sortOrder: 4,
-});
 
-function palette(
-  colors: PaletteColor[] = [COLOR_A, INACTIVE, COLOR_B, UNSELLABLE, SPECIAL],
-): PaletteDefinition {
-  return {
-    id: "test-pattern-palette-not-production",
-    referenceSystem: "MARD",
-    displayBrand: "Poparooz",
-    name: "Non-Production Pattern Test Palette",
-    version: VERSION,
-    colorCount: colors.length,
-    sourceType: "reference",
-    colors,
-  };
+function paletteColors(
+  colors: readonly GenerationPaletteColor[] = [
+    COLOR_A,
+    INACTIVE,
+    COLOR_B,
+    MANUAL,
+  ],
+): readonly GenerationPaletteColor[] {
+  return colors;
 }
 
 const BOARD: BoardProfile = {
@@ -167,65 +145,71 @@ describe("pattern palette mapping and merging", () => {
   it("maps eligible colors with CIEDE2000 and merges identical palette matches", () => {
     const result = assemblePattern({
       quantizedImage: quantizedFixture(),
-      palette: palette(),
+      paletteColors: paletteColors(),
       boardProfile: BOARD,
     });
 
     expect(result.colors).toHaveLength(2);
-    expect(result.colors.map(({ color: item }) => item.referenceCode)).toEqual([
-      "TEST-REF-B",
-      "TEST-REF-A",
+    expect(result.colors.map(({ color: item }) => item.code)).toEqual([
+      "B1",
+      "A1",
     ]);
     expect(result.colors[0]).toMatchObject({ index: 0, beadCount: 2 });
     expect(result.colors[1]).toMatchObject({ index: 1, beadCount: 3 });
     expect(result.colors[1]!.sourceMappings).toEqual([
       {
         quantizedColorIndex: 0,
-        paletteReferenceCode: "TEST-REF-A",
+        paletteCode: "A1",
         distance: 0,
         pixelCount: 2,
       },
       {
         quantizedColorIndex: 1,
-        paletteReferenceCode: "TEST-REF-A",
+        paletteCode: "A1",
         distance: expect.any(Number),
         pixelCount: 1,
       },
+    ]);
+    expect(Object.keys(result.colors[1]!.sourceMappings[0]!).sort()).toEqual([
+      "distance",
+      "paletteCode",
+      "pixelCount",
+      "quantizedColorIndex",
     ]);
     const distance = deltaE2000({ l: 21, a: 0, b: 0 }, { l: 20, a: 0, b: 0 });
     expect(result.colors[1]!.weightedAverageDistance).toBe(distance / 3);
     expect(result.colors[1]!.maximumDistance).toBe(distance);
   });
 
-  it("excludes inactive, unsellable, and manual/special candidates", () => {
+  it("excludes inactive and manual candidates", () => {
     const result = assemblePattern({
       quantizedImage: solidQuantized(1, 1),
-      palette: palette(),
+      paletteColors: paletteColors(),
       boardProfile: BOARD,
     });
     expect(result.colors).toHaveLength(1);
-    expect(result.colors[0]!.color.referenceCode).toBe("TEST-REF-A");
+    expect(result.colors[0]!.color.code).toBe("A1");
   });
 
   it("uses the accepted tie-breaker instead of palette order", () => {
-    const later = color("LATER", { lab: [20, 0, 0], sortOrder: 8 });
-    const winner = color("WINNER", { lab: [20, 0, 0], sortOrder: 2 });
+    const later = color("A8", { lab: [20, 0, 0], sortOrder: 8 });
+    const winner = color("A2", { lab: [20, 0, 0], sortOrder: 2 });
     const result = assemblePattern({
       quantizedImage: solidQuantized(1, 1),
-      palette: palette([later, winner]),
+      paletteColors: paletteColors([later, winner]),
       boardProfile: BOARD,
     });
-    expect(result.colors[0]!.color.referenceCode).toBe("TEST-REF-WINNER");
+    expect(result.colors[0]!.color.code).toBe("A2");
   });
 
   it("uses Palette Lab rather than RGB or HEX for matching", () => {
-    const misleadingRgb = color("MISLEADING-RGB", {
+    const misleadingRgb = color("A3", {
       rgb: [255, 0, 0],
       hex: "#FF0000",
       lab: [90, 0, 0],
       sortOrder: 1,
     });
-    const labWinner = color("LAB-WINNER", {
+    const labWinner = color("A4", {
       rgb: [0, 255, 0],
       hex: "#00FF00",
       lab: [20, 0, 0],
@@ -233,31 +217,29 @@ describe("pattern palette mapping and merging", () => {
     });
     const result = assemblePattern({
       quantizedImage: solidQuantized(1, 1),
-      palette: palette([misleadingRgb, labWinner]),
+      paletteColors: paletteColors([misleadingRgb, labWinner]),
       boardProfile: BOARD,
     });
-    expect(result.colors[0]!.color.referenceCode).toBe("TEST-REF-LAB-WINNER");
+    expect(result.colors[0]!.color.code).toBe("A4");
   });
 
-  it("sorts final colors by sortOrder then binary displayCode", () => {
-    const zColor = color("REF-FIRST", {
-      displayCode: "POP-TEST-Z",
+  it("sorts final colors by sortOrder then binary code", () => {
+    const zColor = color("B2", {
       lab: [20, 0, 0],
       sortOrder: 5,
     });
-    const aColor = color("REF-LAST", {
-      displayCode: "POP-TEST-A",
+    const aColor = color("A2", {
       lab: [80, 0, 0],
       sortOrder: 5,
     });
     const result = assemblePattern({
       quantizedImage: quantizedFixture(),
-      palette: palette([zColor, aColor]),
+      paletteColors: paletteColors([zColor, aColor]),
       boardProfile: BOARD,
     });
-    expect(result.colors.map(({ color: item }) => item.displayCode)).toEqual([
-      "POP-TEST-A",
-      "POP-TEST-Z",
+    expect(result.colors.map(({ color: item }) => item.code)).toEqual([
+      "A2",
+      "B2",
     ]);
     expect(result.colors.map(({ index }) => index)).toEqual([0, 1]);
   });
@@ -267,7 +249,7 @@ describe("pattern palette mapping and merging", () => {
       () =>
         assemblePattern({
           quantizedImage: solidQuantized(1, 1),
-          palette: { ...palette(), colorCount: 0, colors: [] },
+          paletteColors: [],
           boardProfile: BOARD,
         }),
       "INVALID_PALETTE",
@@ -276,10 +258,22 @@ describe("pattern palette mapping and merging", () => {
       () =>
         assemblePattern({
           quantizedImage: solidQuantized(1, 1),
-          palette: palette([INACTIVE, UNSELLABLE, SPECIAL]),
+          paletteColors: paletteColors([INACTIVE, MANUAL]),
           boardProfile: BOARD,
         }),
       "NO_ELIGIBLE_PALETTE_COLORS",
+    );
+  });
+
+  it("rejects duplicate official codes without a fallback identity", () => {
+    expectPatternError(
+      () =>
+        assemblePattern({
+          quantizedImage: solidQuantized(1, 1),
+          paletteColors: [COLOR_A, { ...COLOR_B, code: COLOR_A.code }],
+          boardProfile: BOARD,
+        }),
+      "INVALID_PALETTE",
     );
   });
 });
@@ -293,7 +287,7 @@ describe("pattern matrix, materials, and totals", () => {
     (width, height, transparent, expected) => {
       const result = assemblePattern({
         quantizedImage: solidQuantized(width, height, transparent),
-        palette: palette([COLOR_A]),
+        paletteColors: paletteColors([COLOR_A]),
         boardProfile: BOARD,
       });
       expect([...result.matrix.colorIndices]).toEqual(expected);
@@ -306,7 +300,7 @@ describe("pattern matrix, materials, and totals", () => {
     const before = input.colorIndices.slice();
     const result = assemblePattern({
       quantizedImage: input,
-      palette: palette(),
+      paletteColors: paletteColors(),
       boardProfile: BOARD,
     });
     expect(result.matrix).toMatchObject({
@@ -328,10 +322,10 @@ describe("pattern matrix, materials, and totals", () => {
     expect(input.colorIndices).toEqual(before);
   });
 
-  it("calculates exact materials, optional packs, and totals without waste", () => {
+  it("calculates exact generation-only materials and totals without waste", () => {
     const result = assemblePattern({
       quantizedImage: quantizedFixture(),
-      palette: palette(),
+      paletteColors: paletteColors(),
       boardProfile: BOARD,
     });
     expect(result.materials).toEqual([
@@ -342,12 +336,17 @@ describe("pattern matrix, materials, and totals", () => {
       expect.objectContaining({
         patternColorIndex: 1,
         beadCount: 3,
-        packSize: 2,
-        packsRequired: 2,
       }),
     ]);
-    expect(result.materials[0]).not.toHaveProperty("packSize");
-    expect(result.materials[0]).not.toHaveProperty("packsRequired");
+    for (const material of result.materials) {
+      expect(Object.keys(material).sort()).toEqual([
+        "beadCount",
+        "color",
+        "patternColorIndex",
+      ]);
+      expect(material).not.toHaveProperty("packSize");
+      expect(material).not.toHaveProperty("packsRequired");
+    }
     expect(result.totals).toEqual({
       width: 3,
       height: 2,
@@ -361,25 +360,28 @@ describe("pattern matrix, materials, and totals", () => {
     ).toBe(5);
   });
 
-  it("uses one pack when beadCount divides the validated packSize", () => {
+  it("validates material identity by official code rather than object reference", () => {
     const result = assemblePattern({
       quantizedImage: solidQuantized(2, 1),
-      palette: palette([COLOR_A]),
+      paletteColors: paletteColors([COLOR_A]),
       boardProfile: BOARD,
     });
-    expect(result.materials[0]).toMatchObject({
-      beadCount: 2,
-      packSize: 2,
-      packsRequired: 1,
-    });
+    expect(() =>
+      validatePatternAssemblyResult({
+        ...result,
+        materials: [
+          { ...result.materials[0]!, color: { ...result.materials[0]!.color } },
+        ],
+      }),
+    ).not.toThrow();
   });
 
-  it("rejects invalid pack data through the existing strict Palette schema", () => {
+  it("rejects invalid official color codes", () => {
     expectPatternError(
       () =>
         assemblePattern({
           quantizedImage: solidQuantized(1, 1),
-          palette: palette([{ ...COLOR_A, packSize: 0 }]),
+          paletteColors: paletteColors([{ ...COLOR_A, code: "INVALID" }]),
           boardProfile: BOARD,
         }),
       "INVALID_PALETTE",
@@ -397,7 +399,7 @@ describe("pattern matrix, materials, and totals", () => {
     (width, height, boardColumns, boardRows, boardCount) => {
       const result = assemblePattern({
         quantizedImage: solidQuantized(width, height),
-        palette: palette(),
+        paletteColors: paletteColors(),
         boardProfile: BOARD,
       });
       expect(result.boardLayout).toMatchObject({
@@ -414,7 +416,7 @@ describe("board layout statistics", () => {
   it("counts row-major edge tiles, transparent positions, and outside pegs", () => {
     const result = assemblePattern({
       quantizedImage: quantizedFixture(),
-      palette: palette(),
+      paletteColors: paletteColors(),
       boardProfile: BOARD,
     });
     expect(result.boardLayout).toMatchObject({
@@ -461,7 +463,7 @@ describe("board layout statistics", () => {
     const custom = { ...BOARD, columns: 3, rows: 1 };
     const result = assemblePattern({
       quantizedImage: solidQuantized(3, 2),
-      palette: palette(),
+      paletteColors: paletteColors(),
       boardProfile: custom,
     });
     expect(result.boardLayout).toMatchObject({
@@ -473,7 +475,7 @@ describe("board layout statistics", () => {
       () =>
         assemblePattern({
           quantizedImage: solidQuantized(1, 1),
-          palette: palette(),
+          paletteColors: paletteColors(),
           boardProfile: { ...BOARD, columns: 0 },
         }),
       "INVALID_BOARD_PROFILE",
@@ -483,7 +485,7 @@ describe("board layout statistics", () => {
   it("reconciles every tile and layout total for partial boards", () => {
     const result = assemblePattern({
       quantizedImage: solidQuantized(3, 3, [0, 8]),
-      palette: palette([COLOR_A]),
+      paletteColors: paletteColors([COLOR_A]),
       boardProfile: BOARD,
     });
     expect(result.boardLayout).toMatchObject({
@@ -516,20 +518,26 @@ describe("public pattern boundary", () => {
   it("constructs an explicit Poparooz-only model with independent matrix ownership", () => {
     const internal = assemblePattern({
       quantizedImage: quantizedFixture(),
-      palette: palette(),
+      paletteColors: paletteColors(),
       boardProfile: BOARD,
     });
     const publicResult = toPublicPatternResult(internal);
+    expect(Object.isFrozen(publicResult.colors)).toBe(true);
+    expect(Object.isFrozen(publicResult.materials)).toBe(true);
+    expect(Object.isFrozen(publicResult.colors[0]!.color)).toBe(true);
     expect(
       publicResult.colors.every(({ color: item }) => item.brand === "Poparooz"),
     ).toBe(true);
     expect(publicResult.colors[0]!.color).toEqual({
       brand: "Poparooz",
-      code: "POP-TEST-B",
-      name: "Test B Color",
+      code: "B1",
       hex: "#112233",
-      isSpecialFinish: false,
     });
+    expect(Object.keys(publicResult.colors[0]!.color).sort()).toEqual([
+      "brand",
+      "code",
+      "hex",
+    ]);
     expect(publicResult.matrix.colorIndices).toEqual(
       internal.matrix.colorIndices,
     );
@@ -550,6 +558,17 @@ describe("public pattern boundary", () => {
       "verifiedAt",
       "productHandle",
       "variantId",
+      "isSellable",
+      "isSpecialFinish",
+      "finishType",
+      "packSize",
+      "packsRequired",
+      "inventory",
+      "rgb",
+      "lab",
+      "sortOrder",
+      "active",
+      "autoMatchEligible",
       "sourceMappings",
       "weightedAverageDistance",
       "maximumDistance",
@@ -561,20 +580,11 @@ describe("public pattern boundary", () => {
   });
 
   it("omits an unavailable color name while preserving the Poparooz code", () => {
-    const unnamed = color("UNNAMED", {
-      referenceSystem: "POPAROOZ",
-      referenceCode: "A1",
-      displayCode: "A1",
-      displayName: undefined,
-    });
-    const formalPalette: PaletteDefinition = {
-      ...palette([unnamed]),
-      referenceSystem: "POPAROOZ",
-    };
+    const unnamed = color("A1");
     const publicResult = toPublicPatternResult(
       assemblePattern({
         quantizedImage: solidQuantized(2, 1),
-        palette: formalPalette,
+        paletteColors: paletteColors([unnamed]),
         boardProfile: BOARD,
       }),
     );
@@ -583,7 +593,6 @@ describe("public pattern boundary", () => {
       brand: "Poparooz",
       code: "A1",
       hex: "#112233",
-      isSpecialFinish: false,
     });
     expect(Object.hasOwn(publicResult.colors[0]!.color, "name")).toBe(false);
     expect(JSON.stringify(publicResult)).not.toContain("Unknown Color");
@@ -593,7 +602,7 @@ describe("public pattern boundary", () => {
   it("wraps invalid internal results in a public mapping error", () => {
     const internal = assemblePattern({
       quantizedImage: solidQuantized(1, 1),
-      palette: palette(),
+      paletteColors: paletteColors(),
       boardProfile: BOARD,
     });
     expectPatternError(
@@ -610,7 +619,7 @@ describe("public pattern boundary", () => {
     const publicResult = toPublicPatternResult(
       assemblePattern({
         quantizedImage: solidQuantized(2, 1),
-        palette: palette([COLOR_A]),
+        paletteColors: paletteColors([COLOR_A]),
         boardProfile: BOARD,
       }),
     );
@@ -618,15 +627,16 @@ describe("public pattern boundary", () => {
       patternColorIndex: 0,
       color: {
         brand: "Poparooz",
-        code: "POP-TEST-A",
-        name: "Test A Color",
+        code: "A1",
         hex: "#112233",
-        isSpecialFinish: false,
       },
       beadCount: 2,
-      packSize: 2,
-      packsRequired: 1,
     });
+    expect(Object.keys(publicResult.materials[0]!).sort()).toEqual([
+      "beadCount",
+      "color",
+      "patternColorIndex",
+    ]);
   });
 });
 
@@ -685,7 +695,7 @@ describe("input validation and result invariants", () => {
       () =>
         assemblePattern({
           quantizedImage,
-          palette: palette(),
+          paletteColors: paletteColors(),
           boardProfile: BOARD,
         }),
       "INVALID_QUANTIZED_IMAGE",
@@ -695,7 +705,7 @@ describe("input validation and result invariants", () => {
   it("detects matrix, material, board, and aggregate result corruption", () => {
     const valid = assemblePattern({
       quantizedImage: quantizedFixture(),
-      palette: palette(),
+      paletteColors: paletteColors(),
       boardProfile: BOARD,
     });
     expectPatternError(
@@ -724,6 +734,53 @@ describe("input validation and result invariants", () => {
       () =>
         validatePatternAssemblyResult({
           ...valid,
+          materials: [
+            {
+              ...valid.materials[0]!,
+              color: { ...valid.materials[0]!.color, code: "H99" },
+            },
+            valid.materials[1]!,
+          ],
+        }),
+      "INVALID_MATERIAL_REQUIREMENT",
+    );
+    expectPatternError(
+      () =>
+        validatePatternAssemblyResult({
+          ...valid,
+          materials: [valid.materials[0]!],
+        }),
+      "INVALID_MATERIAL_REQUIREMENT",
+    );
+    expectPatternError(
+      () =>
+        validatePatternAssemblyResult({
+          ...valid,
+          materials: [valid.materials[0]!, valid.materials[0]!],
+        }),
+      "INVALID_MATERIAL_REQUIREMENT",
+    );
+    expectPatternError(
+      () =>
+        validatePatternAssemblyResult({
+          ...valid,
+          colors: [
+            valid.colors[0]!,
+            {
+              ...valid.colors[1]!,
+              color: {
+                ...valid.colors[1]!.color,
+                code: valid.colors[0]!.color.code,
+              },
+            },
+          ],
+        }),
+      "INVALID_PATTERN_RESULT",
+    );
+    expectPatternError(
+      () =>
+        validatePatternAssemblyResult({
+          ...valid,
           boardLayout: { ...valid.boardLayout, unusedPegCount: 99 },
         }),
       "INVALID_BOARD_LAYOUT",
@@ -741,7 +798,7 @@ describe("input validation and result invariants", () => {
   it("turns malformed nested result objects into stable errors", () => {
     const valid = assemblePattern({
       quantizedImage: solidQuantized(1, 1),
-      palette: palette([COLOR_A]),
+      paletteColors: paletteColors([COLOR_A]),
       boardProfile: BOARD,
     });
     expectPatternError(
@@ -768,7 +825,7 @@ describe("determinism and domain boundary", () => {
     const input = quantizedFixture();
     const first = assemblePattern({
       quantizedImage: input,
-      palette: palette(),
+      paletteColors: paletteColors(),
       boardProfile: BOARD,
     });
     const second = assemblePattern({
@@ -777,14 +834,14 @@ describe("determinism and domain boundary", () => {
         input.colors[0]!,
         input.colors[1]!,
       ]),
-      palette: palette([...palette().colors].reverse()),
+      paletteColors: paletteColors([...paletteColors()].reverse()),
       boardProfile: BOARD,
     });
     expect(second).toEqual(first);
     expect(
       assemblePattern({
         quantizedImage: input,
-        palette: palette(),
+        paletteColors: paletteColors(),
         boardProfile: BOARD,
       }),
     ).toEqual(first);
@@ -799,17 +856,20 @@ describe("determinism and domain boundary", () => {
       Object.freeze(item);
     });
     Object.freeze(image);
-    const sourcePalette = palette();
-    sourcePalette.colors.forEach(Object.freeze);
-    Object.freeze(sourcePalette.colors);
+    const sourcePalette = paletteColors();
+    sourcePalette.forEach((item) => {
+      Object.freeze(item.rgb);
+      Object.freeze(item.lab);
+      Object.freeze(item);
+    });
     Object.freeze(sourcePalette);
     const board = Object.freeze({ ...BOARD });
     const result = assemblePattern({
       quantizedImage: image,
-      palette: sourcePalette,
+      paletteColors: sourcePalette,
       boardProfile: board,
     });
-    expect(result.colors[0]!.color).not.toBe(sourcePalette.colors[2]);
+    expect(result.colors[0]!.color).toBe(sourcePalette[2]);
     expect(result.boardLayout.boardProfileId).toBe(board.id);
   });
 
@@ -840,8 +900,24 @@ describe("determinism and domain boundary", () => {
       "indexedDB",
       "Shopify",
       "import.meta.env",
+      "PaletteDefinition",
+      "referenceCode",
+      "paletteReferenceCode",
+      "displayCode",
+      "isSellable",
+      "isSpecialFinish",
+      "finishType",
+      "packSize",
+      "packsRequired",
+      "productHandle",
+      "variantId",
+      "toPublicPaletteColor",
+      "preparePaletteCandidates",
+      "matchNearestPaletteColor",
     ]) {
       expect(source).not.toContain(forbidden);
     }
+    expect(source).toContain("prepareColorMatchCandidates");
+    expect(source).toContain("matchNearestColor");
   });
 });

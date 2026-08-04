@@ -1,18 +1,23 @@
-import type { PublicPaletteColor } from "../palette/palette-public.types";
+import type { GenerationPaletteColor } from "../../runtime/generation-palette/generation-palette.types";
 import type { PatternBoardTile, PatternTotals } from "./pattern.types";
+
+export interface PublicPatternPaletteColor {
+  readonly brand: "Poparooz";
+  readonly code: GenerationPaletteColor["code"];
+  readonly hex: string;
+  readonly name?: string;
+}
 
 export interface PublicPatternColor {
   readonly index: number;
-  readonly color: PublicPaletteColor;
+  readonly color: PublicPatternPaletteColor;
   readonly beadCount: number;
 }
 
 export interface PublicMaterialRequirement {
   readonly patternColorIndex: number;
-  readonly color: PublicPaletteColor;
+  readonly color: PublicPatternPaletteColor;
   readonly beadCount: number;
-  readonly packSize?: number;
-  readonly packsRequired?: number;
 }
 
 export interface PublicPatternBoardLayout {

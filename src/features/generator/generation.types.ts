@@ -1,11 +1,11 @@
 import type { BoardProfile } from "../../domain/board/board-profile.types";
-import type { PaletteDefinition } from "../../domain/palette/palette.types";
 import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
 import type {
   QuantizationOptions,
   QuantizedImage,
 } from "../../domain/quantization/quantization.types";
 import type { RgbaImage } from "../../domain/image/image.types";
+import type { GenerationPaletteSnapshot } from "../../runtime/generation-palette/generation-palette.types";
 import type { PatternSettingsValue } from "../settings/settings.types";
 
 export type GenerationUnavailableReason =
@@ -48,7 +48,7 @@ export interface GenerationProcessingPolicy {
 }
 
 export interface GenerationDependencies {
-  readonly palette: PaletteDefinition;
+  readonly palette: GenerationPaletteSnapshot;
   readonly boardProfile: BoardProfile;
   readonly processingPolicy: GenerationProcessingPolicy;
   readonly createWorkerClient: () => GenerationWorkerClient;

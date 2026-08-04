@@ -1,10 +1,10 @@
 import {
   ColorMatchingError,
-  matchNearestPaletteColor,
-  preparePaletteCandidates,
+  matchNearestColor,
+  prepareColorMatchCandidates,
 } from "../color";
-import type { PaletteDefinition } from "../palette/palette.types";
 import type { QuantizedImage } from "../quantization/quantization.types";
+import type { GenerationPaletteColor } from "../../runtime/generation-palette/generation-palette.types";
 import { MAX_PATTERN_COLORS } from "./pattern-constants";
 import { PatternAssemblyError } from "./pattern-errors";
 import type { PatternColor, QuantizedPaletteMapping } from "./pattern.types";
@@ -24,8 +24,7 @@ function comparePatternPaletteColor(
 ): number {
   return (
     left.color.sortOrder - right.color.sortOrder ||
-    compareBinary(left.color.displayCode, right.color.displayCode) ||
-    compareBinary(left.color.referenceCode, right.color.referenceCode)
+    compareBinary(left.color.code, right.color.code)
   );
 }
 
@@ -52,11 +51,11 @@ function matchingFailure(error: unknown): never {
 
 export function buildPatternPaletteMapping(
   quantizedImage: QuantizedImage,
-  palette: PaletteDefinition,
+  paletteColors: readonly GenerationPaletteColor[],
 ): PatternPaletteMappingResult {
   let candidates;
   try {
-    candidates = preparePaletteCandidates(palette);
+    candidates = prepareColorMatchCandidates(paletteColors);
   } catch (error) {
     matchingFailure(error);
   }
@@ -75,7 +74,7 @@ export function buildPatternPaletteMapping(
   for (const quantizedColor of sortedQuantizedColors) {
     let match;
     try {
-      match = matchNearestPaletteColor(quantizedColor.lab, candidates);
+      match = matchNearestColor(quantizedColor.lab, candidates);
     } catch (error) {
       matchingFailure(error);
     }
@@ -89,15 +88,15 @@ export function buildPatternPaletteMapping(
 
     const mapping = Object.freeze({
       quantizedColorIndex: quantizedColor.index,
-      paletteReferenceCode: match.color.referenceCode,
+      paletteCode: match.color.code,
       distance,
       pixelCount: quantizedColor.pixelCount,
     });
-    const existing = grouped.get(match.color.referenceCode);
+    const existing = grouped.get(match.color.code);
     if (existing) {
       existing.mappings.push(mapping);
     } else {
-      grouped.set(match.color.referenceCode, {
+      grouped.set(match.color.code, {
         color: match.color,
         mappings: [mapping],
       });

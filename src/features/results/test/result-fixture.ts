@@ -78,10 +78,9 @@ export function createResultFixture(
       index: definition.index,
       color: Object.freeze({
         brand: "Poparooz" as const,
-        code: definition.code ?? `P${String(position + 1).padStart(3, "0")}`,
+        code: definition.code ?? `A${position + 1}`,
         name: definition.name ?? `Color ${position + 1}`,
         hex: definition.hex ?? hexFor(position),
-        isSpecialFinish: false,
       }),
       beadCount: definition.beadCount,
     }),

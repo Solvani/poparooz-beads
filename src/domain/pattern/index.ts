@@ -25,5 +25,6 @@ export type {
   PublicMaterialRequirement,
   PublicPatternBoardLayout,
   PublicPatternColor,
+  PublicPatternPaletteColor,
   PublicPatternResult,
 } from "./public-pattern.types";

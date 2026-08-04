@@ -1,23 +1,23 @@
 import type { BoardProfile } from "../board/board-profile.types";
-import type { PaletteColor, PaletteDefinition } from "../palette/palette.types";
 import type { QuantizedImage } from "../quantization/quantization.types";
+import type { GenerationPaletteColor } from "../../runtime/generation-palette/generation-palette.types";
 
 export interface AssemblePatternInput {
   readonly quantizedImage: QuantizedImage;
-  readonly palette: PaletteDefinition;
+  readonly paletteColors: readonly GenerationPaletteColor[];
   readonly boardProfile: BoardProfile;
 }
 
 export interface QuantizedPaletteMapping {
   readonly quantizedColorIndex: number;
-  readonly paletteReferenceCode: string;
+  readonly paletteCode: GenerationPaletteColor["code"];
   readonly distance: number;
   readonly pixelCount: number;
 }
 
 export interface PatternColor {
   readonly index: number;
-  readonly color: PaletteColor;
+  readonly color: GenerationPaletteColor;
   readonly beadCount: number;
   readonly sourceMappings: readonly QuantizedPaletteMapping[];
   readonly weightedAverageDistance: number;
@@ -33,10 +33,8 @@ export interface PatternMatrix {
 
 export interface MaterialRequirement {
   readonly patternColorIndex: number;
-  readonly color: PaletteColor;
+  readonly color: GenerationPaletteColor;
   readonly beadCount: number;
-  readonly packSize?: number;
-  readonly packsRequired?: number;
 }
 
 export interface PatternTotals {

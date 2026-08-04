@@ -8,6 +8,8 @@ import { toPublicPatternResult } from "../../domain/pattern/public-pattern.mappe
 import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
 import type { QuantizedImage } from "../../domain/quantization/quantization.types";
 import { decodeAndNormalizeImage } from "../../lib/browser-image/browser-image-normalizer";
+import { GenerationPaletteAdapterError } from "../../runtime/generation-palette/generation-palette.errors";
+import { parseGenerationPaletteSnapshot } from "../../runtime/generation-palette/generation-palette.schema";
 import type {
   GenerationDependencies,
   GenerationInputSnapshot,
@@ -42,6 +44,7 @@ export function createGenerationService(
   dependencies: GenerationDependencies,
   pipeline: GenerationPipeline = REAL_PIPELINE,
 ): GenerationService {
+  parseGenerationPaletteSnapshot(dependencies.palette);
   return Object.freeze({
     async generate(
       input: GenerationInputSnapshot,
@@ -71,7 +74,7 @@ export function createGenerationService(
         );
         const assembled = pipeline.assemble({
           quantizedImage: quantized,
-          palette: dependencies.palette,
+          paletteColors: dependencies.palette.colors,
           boardProfile: dependencies.boardProfile,
         });
         return pipeline.toPublic(assembled);
@@ -94,6 +97,14 @@ export function createGenerationRuntime(
 ): GenerationRuntime {
   if (dependencies.palette === undefined)
     return unavailable("palette-unavailable");
+  try {
+    parseGenerationPaletteSnapshot(dependencies.palette);
+  } catch (error) {
+    if (error instanceof GenerationPaletteAdapterError) {
+      return unavailable("palette-unavailable");
+    }
+    throw error;
+  }
   if (dependencies.boardProfile === undefined)
     return unavailable("board-profile-unavailable");
   if (dependencies.processingPolicy === undefined)

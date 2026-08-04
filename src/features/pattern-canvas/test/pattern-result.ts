@@ -13,20 +13,18 @@ export function createPublicPattern(
       index: 0,
       color: {
         brand: "Poparooz" as const,
-        code: "POP-RED",
+        code: "A1",
         name: "Red",
         hex: "#FF0000",
-        isSpecialFinish: false,
       },
     },
     {
       index: 1,
       color: {
         brand: "Poparooz" as const,
-        code: "POP-BLUE",
+        code: "B1",
         name: "Blue",
         hex: "#0000FF",
-        isSpecialFinish: false,
       },
     },
   ];

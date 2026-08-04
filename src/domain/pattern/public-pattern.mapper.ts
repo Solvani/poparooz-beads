@@ -1,4 +1,4 @@
-import { toPublicPaletteColor } from "../palette/palette-public.mapper";
+import type { GenerationPaletteColor } from "../../runtime/generation-palette/generation-palette.types";
 import { PatternAssemblyError } from "./pattern-errors";
 import { validatePatternAssemblyResult } from "./pattern-result-validation";
 import type { PatternAssemblyResult } from "./pattern.types";
@@ -16,7 +16,7 @@ export function toPublicPatternResult(
       internal.colors.map((patternColor) =>
         Object.freeze({
           index: patternColor.index,
-          color: toPublicPaletteColor(patternColor.color),
+          color: toPublicPatternColor(patternColor.color),
           beadCount: patternColor.beadCount,
         }),
       ),
@@ -25,14 +25,8 @@ export function toPublicPatternResult(
       internal.materials.map((material) =>
         Object.freeze({
           patternColorIndex: material.patternColorIndex,
-          color: toPublicPaletteColor(material.color),
+          color: toPublicPatternColor(material.color),
           beadCount: material.beadCount,
-          ...(material.packSize === undefined
-            ? {}
-            : {
-                packSize: material.packSize,
-                packsRequired: material.packsRequired,
-              }),
         }),
       ),
     );
@@ -98,4 +92,12 @@ export function toPublicPatternResult(
       error instanceof PatternAssemblyError ? error.code : undefined,
     );
   }
+}
+
+function toPublicPatternColor(color: GenerationPaletteColor) {
+  return Object.freeze({
+    brand: "Poparooz" as const,
+    code: color.code,
+    hex: color.hex,
+  });
 }

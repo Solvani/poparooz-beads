@@ -4,7 +4,10 @@ import approvedRuntimePalette from "./artifacts/poparooz-standard/formal-1.0.0/r
 import { createApprovedRuntimePaletteProvider } from "./approved-runtime-palette";
 import { RuntimePaletteBrowserError } from "./runtime-palette.errors";
 import { createRuntimePaletteProvider } from "./runtime-palette.provider";
-import { parseRuntimePaletteArtifact } from "./runtime-palette.schema";
+import {
+  parseRuntimePaletteArtifact,
+  RuntimePaletteColorSchema,
+} from "./runtime-palette.schema";
 import type { RuntimePaletteProvider } from "./runtime-palette.types";
 
 interface MutableColor extends Record<string, unknown> {
@@ -44,6 +47,15 @@ describe("Browser Runtime Palette Schema and Provider", () => {
     expect(provider.getColorByCode(middle.code)).toBe(middle);
     expect(provider.getActiveColors()).toHaveLength(221);
     expect(provider.getAutoMatchEligibleColors()).toHaveLength(221);
+  });
+
+  it.each(["A1", "B10", "M221"])("accepts formal Poparooz code %s", (code) => {
+    expect(
+      RuntimePaletteColorSchema.safeParse({
+        ...approvedRuntimePalette.colors[0],
+        code,
+      }).success,
+    ).toBe(true);
   });
 
   it.each([
@@ -120,6 +132,9 @@ describe("Browser Runtime Palette Schema and Provider", () => {
     ["empty code", (color: MutableColor) => (color.code = "")],
     ["code with spaces", (color: MutableColor) => (color.code = " A1")],
     ["lowercase code", (color: MutableColor) => (color.code = "a1")],
+    ["zero code", (color: MutableColor) => (color.code = "A0")],
+    ["leading-zero code", (color: MutableColor) => (color.code = "A01")],
+    ["unknown series code", (color: MutableColor) => (color.code = "OTHER")],
     ["invalid HEX", (color: MutableColor) => (color.hex = "#ffffff")],
     ["fractional RGB", (color: MutableColor) => (color.rgb.r = 1.5)],
     ["low RGB", (color: MutableColor) => (color.rgb.g = -1)],

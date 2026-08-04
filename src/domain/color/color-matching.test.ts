@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import type { GenerationPaletteColor } from "../../runtime/generation-palette/generation-palette.types";
 import { publicPalette } from "../palette";
 import {
   TEST_PALETTE_DEFINITION,
@@ -9,9 +10,15 @@ import type { PaletteColor, PaletteDefinition } from "../palette/palette.types";
 import {
   MATCH_DISTANCE_EPSILON,
   ColorMatchingError,
+  deltaE2000,
+  matchNearestColor,
   matchNearestPaletteColor,
+  prepareColorMatchCandidates,
   preparePaletteCandidates,
+  isPoparoozColorCode,
+  type ColorMatchCandidate,
   type ColorMatchingErrorCode,
+  type MatchableColor,
   type PaletteMatchCandidate,
 } from ".";
 
@@ -28,6 +35,8 @@ function expectMatchingError(
   }
 }
 
+let nextLegacyDisplayCode = 1;
+
 function makeColor(
   suffix: string,
   overrides: Partial<PaletteColor> = {},
@@ -37,7 +46,7 @@ function makeColor(
     rgb: [...TEST_PLAIN_PALETTE_COLOR.rgb],
     lab: [...TEST_PLAIN_PALETTE_COLOR.lab],
     referenceCode: `TEST-REF-${suffix}`,
-    displayCode: `POP-TEST-${suffix}`,
+    displayCode: `A${nextLegacyDisplayCode++}`,
     displayName: `Test ${suffix} Color`,
     ...overrides,
   };
@@ -55,7 +64,317 @@ function candidate(color: PaletteColor): PaletteMatchCandidate {
   return { color };
 }
 
-describe("preparePaletteCandidates", () => {
+interface TestMatchableColor extends MatchableColor {
+  readonly marker: string;
+}
+
+function matchableColor(
+  code: string,
+  overrides: Partial<TestMatchableColor> = {},
+): TestMatchableColor {
+  return {
+    code,
+    lab: [50, 0, 0],
+    sortOrder: 0,
+    active: true,
+    autoMatchEligible: true,
+    marker: `marker-${code}`,
+    ...overrides,
+  };
+}
+
+function coreCandidate<TColor extends MatchableColor>(
+  color: TColor,
+): ColorMatchCandidate<TColor> {
+  return { color };
+}
+
+describe("generation-safe matcher core", () => {
+  it("uses the shared Poparooz customer color-code grammar", () => {
+    for (const code of ["A1", "B10", "M221"]) {
+      expect(isPoparoozColorCode(code)).toBe(true);
+      expect(prepareColorMatchCandidates([matchableColor(code)])).toHaveLength(
+        1,
+      );
+    }
+
+    for (const code of ["a1", "A0", "A01", "OTHER", "A 1", "", "!"]) {
+      expect(isPoparoozColorCode(code)).toBe(false);
+      expectMatchingError(
+        () => prepareColorMatchCandidates([matchableColor(code)]),
+        "INVALID_PALETTE_CANDIDATE",
+      );
+    }
+  });
+
+  it("keeps the shared color-code predicate stateless and deterministic", () => {
+    for (let iteration = 0; iteration < 20; iteration += 1) {
+      for (const code of ["A1", "M221"]) {
+        expect(isPoparoozColorCode(code)).toBe(true);
+      }
+      for (const code of ["a1", "A0", "A01", "OTHER"]) {
+        expect(isPoparoozColorCode(code)).toBe(false);
+      }
+    }
+  });
+
+  it("covers all active and autoMatchEligible combinations", () => {
+    const inactiveManual = matchableColor("A1", {
+      active: false,
+      autoMatchEligible: false,
+    });
+    const inactiveEligible = matchableColor("B1", {
+      active: false,
+      autoMatchEligible: true,
+    });
+    const activeManual = matchableColor("C1", {
+      autoMatchEligible: false,
+    });
+    const activeEligible = matchableColor("D1");
+
+    const candidates = prepareColorMatchCandidates([
+      inactiveManual,
+      inactiveEligible,
+      activeManual,
+      activeEligible,
+    ]);
+
+    expect(candidates.map(({ color }) => color.code)).toEqual(["D1"]);
+    expect(activeEligible).not.toHaveProperty("isSellable");
+    expect(activeEligible).not.toHaveProperty("finish");
+    expect(activeEligible).not.toHaveProperty("packSize");
+  });
+
+  it("does not read commerce, finish, pack, or inventory fields", () => {
+    const forbidden = new Set([
+      "isSellable",
+      "referenceCode",
+      "displayCode",
+      "finish",
+      "isSpecialFinish",
+      "finishType",
+      "packSize",
+      "packsRequired",
+      "inventory",
+      "supplier",
+      "productHandle",
+      "variantId",
+      "substitutes",
+    ]);
+    const guarded = new Proxy(matchableColor("A1"), {
+      get(target, property, receiver) {
+        if (typeof property === "string" && forbidden.has(property)) {
+          throw new Error(`Unexpected field read: ${property}`);
+        }
+        return Reflect.get(target, property, receiver);
+      },
+      ownKeys() {
+        throw new Error("Unexpected candidate field enumeration.");
+      },
+    });
+
+    const candidates = prepareColorMatchCandidates([guarded]);
+    expect(
+      matchNearestColor({ l: 50, a: 0, b: 0 }, candidates).color.code,
+    ).toBe("A1");
+  });
+
+  it("preserves the caller type and accepts GenerationPaletteColor structurally", () => {
+    const generationColor: GenerationPaletteColor = {
+      code: "A1",
+      hex: "#000000",
+      rgb: [0, 0, 0],
+      lab: [0, 0, 0],
+      sortOrder: 0,
+      active: true,
+      autoMatchEligible: true,
+    };
+    const generationResult = matchNearestColor(
+      { l: 0, a: 0, b: 0 },
+      prepareColorMatchCandidates([generationColor]),
+    );
+    const typedGenerationColor: GenerationPaletteColor = generationResult.color;
+
+    const custom = matchableColor("A2", { marker: "preserved" });
+    const customResult = matchNearestColor(
+      { l: 50, a: 0, b: 0 },
+      prepareColorMatchCandidates([custom]),
+    );
+
+    expect(typedGenerationColor).toBe(generationColor);
+    expect(customResult.color.marker).toBe("preserved");
+  });
+
+  it("returns the nearest Lab color and its unchanged CIEDE2000 distance", () => {
+    const nearer = matchableColor("A1", { lab: [51, 0, 0] });
+    const farther = matchableColor("B1", { lab: [80, 0, 0] });
+    const target = { l: 50, a: 0, b: 0 };
+    const result = matchNearestColor(
+      target,
+      prepareColorMatchCandidates([farther, nearer]),
+    );
+
+    expect(result.color).toBe(nearer);
+    expect(result.distance).toBe(deltaE2000(target, { l: 51, a: 0, b: 0 }));
+  });
+
+  it("lets distance win before sortOrder and code", () => {
+    const exact = matchableColor("B1", {
+      lab: [50, 0, 0],
+      sortOrder: 99,
+    });
+    const farther = matchableColor("A1", {
+      lab: [50, 1e-9, 0],
+      sortOrder: 0,
+    });
+
+    expect(
+      matchNearestColor({ l: 50, a: 0, b: 0 }, [
+        coreCandidate(farther),
+        coreCandidate(exact),
+      ]).color.code,
+    ).toBe("B1");
+  });
+
+  it("uses sortOrder for distances within the fixed epsilon", () => {
+    const later = matchableColor("B1", {
+      lab: [50, 0, 0],
+      sortOrder: 5,
+    });
+    const earlier = matchableColor("A1", {
+      lab: [50, MATCH_DISTANCE_EPSILON / 4, 0],
+      sortOrder: 1,
+    });
+
+    expect(
+      matchNearestColor({ l: 50, a: 0, b: 0 }, [
+        coreCandidate(later),
+        coreCandidate(earlier),
+      ]).color.code,
+    ).toBe("A1");
+  });
+
+  it("uses exact binary code order independently of input order", () => {
+    const alpha = matchableColor("A2", { sortOrder: 1 });
+    const beta = matchableColor("B1", { sortOrder: 1 });
+    const forward = [coreCandidate(beta), coreCandidate(alpha)];
+    const reverse = [...forward].reverse();
+
+    const first = matchNearestColor({ l: 50, a: 0, b: 0 }, forward);
+    const second = matchNearestColor({ l: 50, a: 0, b: 0 }, reverse);
+
+    expect(first.color.code).toBe("A2");
+    expect(second).toEqual(first);
+    for (let index = 0; index < 20; index += 1) {
+      expect(matchNearestColor({ l: 50, a: 0, b: 0 }, reverse)).toEqual(first);
+    }
+  });
+
+  it("rejects duplicate codes before matching", () => {
+    const first = matchableColor("A1", { sortOrder: 0 });
+    const second = matchableColor("A1", { sortOrder: 1 });
+
+    expectMatchingError(
+      () => prepareColorMatchCandidates([first, second]),
+      "INVALID_PALETTE_CANDIDATE",
+    );
+    expectMatchingError(
+      () =>
+        matchNearestColor({ l: 50, a: 0, b: 0 }, [
+          coreCandidate(first),
+          coreCandidate(second),
+        ]),
+      "INVALID_PALETTE_CANDIDATE",
+    );
+  });
+
+  it("distinguishes empty input from no eligible colors", () => {
+    expectMatchingError(() => prepareColorMatchCandidates([]), "EMPTY_PALETTE");
+    expectMatchingError(
+      () =>
+        prepareColorMatchCandidates([
+          matchableColor("A1", { autoMatchEligible: false }),
+        ]),
+      "NO_ELIGIBLE_PALETTE_COLORS",
+    );
+    expectMatchingError(
+      () => matchNearestColor({ l: 50, a: 0, b: 0 }, []),
+      "EMPTY_PALETTE",
+    );
+  });
+
+  it("rejects invalid target and candidate Lab values", () => {
+    expectMatchingError(
+      () =>
+        matchNearestColor({ l: Number.NaN, a: 0, b: 0 }, [
+          coreCandidate(matchableColor("A1")),
+        ]),
+      "INVALID_LAB_COLOR",
+    );
+    expectMatchingError(
+      () =>
+        prepareColorMatchCandidates([
+          matchableColor("B1", {
+            lab: [50, Number.POSITIVE_INFINITY, 0],
+          }),
+        ]),
+      "INVALID_PALETTE_CANDIDATE",
+    );
+    expectMatchingError(
+      () =>
+        prepareColorMatchCandidates([
+          matchableColor("C1", {
+            lab: [50, 0] as unknown as readonly [number, number, number],
+          }),
+        ]),
+      "INVALID_PALETTE_CANDIDATE",
+    );
+  });
+
+  it.each(["", " A1", "A1 ", "A 1"])("rejects invalid code %j", (code) => {
+    expectMatchingError(
+      () => prepareColorMatchCandidates([matchableColor(code)]),
+      "INVALID_PALETTE_CANDIDATE",
+    );
+  });
+
+  it("fails safely when CIEDE2000 cannot produce a finite distance", () => {
+    expectMatchingError(
+      () =>
+        matchNearestColor({ l: 50, a: 0, b: 0 }, [
+          coreCandidate(
+            matchableColor("A1", {
+              lab: [50, Number.MAX_VALUE, Number.MAX_VALUE],
+            }),
+          ),
+        ]),
+      "NON_FINITE_COLOR_DISTANCE",
+    );
+  });
+
+  it.each([-1, 0.5])("rejects invalid sortOrder %s", (sortOrder) => {
+    expectMatchingError(
+      () => prepareColorMatchCandidates([matchableColor("A1", { sortOrder })]),
+      "INVALID_PALETTE_CANDIDATE",
+    );
+  });
+
+  it("does not mutate source arrays, colors, Lab tuples, or candidates", () => {
+    const color = matchableColor("A1", { lab: [51, 2, -3] });
+    const colors = [color];
+    const beforeColors = structuredClone(colors);
+    const candidates = prepareColorMatchCandidates(colors);
+    const beforeCandidates = structuredClone(candidates);
+
+    matchNearestColor({ l: 50, a: 0, b: 0 }, candidates);
+
+    expect(colors).toEqual(beforeColors);
+    expect(color.lab).toEqual(beforeColors[0]!.lab);
+    expect(candidates).toEqual(beforeCandidates);
+  });
+});
+
+describe("legacy PaletteDefinition compatibility wrapper", () => {
   it("retains only active, sellable, auto-match-enabled colors", () => {
     const eligible = makeColor("ELIGIBLE", { sortOrder: 4 });
     const inactive = makeColor("INACTIVE", {
@@ -156,6 +475,30 @@ describe("preparePaletteCandidates", () => {
 });
 
 describe("matchNearestPaletteColor", () => {
+  it("preserves exact shared-core distance and restores the Legacy color", () => {
+    const legacyColor = makeColor("PARITY", {
+      displayCode: "A1",
+      lab: [52, 4, -7],
+      sortOrder: 7,
+    });
+    const target = { l: 50, a: 0, b: 0 };
+    const narrowColor = matchableColor(legacyColor.displayCode, {
+      lab: legacyColor.lab,
+      sortOrder: legacyColor.sortOrder,
+      active: legacyColor.isActive,
+      autoMatchEligible: legacyColor.isAutoMatchEnabled,
+    });
+
+    const coreResult = matchNearestColor(target, [coreCandidate(narrowColor)]);
+    const legacyResult = matchNearestPaletteColor(target, [
+      candidate(legacyColor),
+    ]);
+
+    expect(legacyResult.distance).toBe(coreResult.distance);
+    expect(legacyResult.color).toEqual(legacyColor);
+    expect(legacyResult.color.referenceCode).toBe(legacyColor.referenceCode);
+  });
+
   it("returns the only candidate and its actual CIEDE2000 distance", () => {
     const color = makeColor("ONLY", { lab: [52, 4, -7] });
     const result = matchNearestPaletteColor({ l: 50, a: 0, b: 0 }, [
@@ -210,8 +553,16 @@ describe("matchNearestPaletteColor", () => {
   });
 
   it("uses binary displayCode order after equal sortOrder", () => {
-    const zulu = makeColor("ZULU", { lab: [50, 0, 0], sortOrder: 1 });
-    const alpha = makeColor("ALPHA", { lab: [50, 0, 0], sortOrder: 1 });
+    const zulu = makeColor("ZULU", {
+      displayCode: "B1",
+      lab: [50, 0, 0],
+      sortOrder: 1,
+    });
+    const alpha = makeColor("ALPHA", {
+      displayCode: "A1",
+      lab: [50, 0, 0],
+      sortOrder: 1,
+    });
     expect(
       matchNearestPaletteColor({ l: 50, a: 0, b: 0 }, [
         candidate(zulu),
@@ -220,25 +571,27 @@ describe("matchNearestPaletteColor", () => {
     ).toBe(alpha.displayCode);
   });
 
-  it("uses binary referenceCode order when prior tie fields match", () => {
+  it("rejects duplicate displayCode instead of using referenceCode as a tertiary tie-break", () => {
     const later = makeColor("LATER-REF", {
       referenceCode: "TEST-REF-Z",
-      displayCode: "POP-TEST-SAME",
+      displayCode: "A1",
       lab: [50, 0, 0],
       sortOrder: 1,
     });
     const earlier = makeColor("EARLIER-REF", {
       referenceCode: "TEST-REF-A",
-      displayCode: "POP-TEST-SAME",
+      displayCode: "A1",
       lab: [50, 0, 0],
       sortOrder: 1,
     });
-    expect(
-      matchNearestPaletteColor({ l: 50, a: 0, b: 0 }, [
-        candidate(later),
-        candidate(earlier),
-      ]).color.referenceCode,
-    ).toBe(earlier.referenceCode);
+    expectMatchingError(
+      () =>
+        matchNearestPaletteColor({ l: 50, a: 0, b: 0 }, [
+          candidate(later),
+          candidate(earlier),
+        ]),
+      "INVALID_PALETTE_CANDIDATE",
+    );
   });
 
   it("is independent of candidate input order and system locale", () => {

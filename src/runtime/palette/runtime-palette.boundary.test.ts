@@ -10,6 +10,10 @@ import { describe, expect, it } from "vitest";
 const paletteRoot = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(paletteRoot, "../../..");
 const approvedEntry = path.join(paletteRoot, "approved-runtime-palette.ts");
+const sharedColorCodeGrammar = path.join(
+  repositoryRoot,
+  "src/domain/color/poparooz-color-code.ts",
+);
 const approvedArtifact = path.join(
   paletteRoot,
   "artifacts/poparooz-standard/formal-1.0.0/runtime-1.0.0/runtime-palette.json",
@@ -23,8 +27,15 @@ describe("Browser Runtime Palette dependency boundary", () => {
     expect(graph.files.filter((file) => file.endsWith(".json"))).toEqual([
       approvedArtifact,
     ]);
+    expect(
+      graph.files.filter((file) =>
+        file.includes(`${path.sep}domain${path.sep}color${path.sep}`),
+      ),
+    ).toEqual([sharedColorCodeGrammar]);
     for (const file of graph.files) {
-      expect(file.startsWith(paletteRoot)).toBe(true);
+      expect(
+        file.startsWith(paletteRoot) || file === sharedColorCodeGrammar,
+      ).toBe(true);
       expect(file).not.toMatch(
         /data-source|scripts[\\/]palette|runtime-lock|runtime-policy|manifest|derivation-audit|validation-report|substitute|fixture|domain[\\/]palette/i,
       );

@@ -10,6 +10,7 @@ import { describe, expect, it } from "vitest";
 import approvedRuntimePalette from "../../../src/runtime/palette/artifacts/poparooz-standard/formal-1.0.0/runtime-1.0.0/runtime-palette.json";
 import {
   APPROVED_RUNTIME_ARTIFACT_MODULE,
+  POPAROOZ_COLOR_CODE_GRAMMAR_MODULE,
   type EmittedProductionFile,
   RuntimePaletteBundleBoundaryError,
   verifyRuntimePaletteArtifactBoundary,
@@ -39,7 +40,7 @@ describe("Runtime Palette production bundle boundary", () => {
     );
 
     expect(inspection).toMatchObject({
-      requiredModuleCount: 7,
+      requiredModuleCount: 8,
       generatedPaletteDataModules: [normalize(approvedArtifactPath)],
       recordCount: 221,
       activeCount: 221,
@@ -280,6 +281,7 @@ function validInspection(
 function requiredModuleIds(): string[] {
   return [
     "/src/main.tsx",
+    POPAROOZ_COLOR_CODE_GRAMMAR_MODULE,
     "/src/runtime/bootstrap/application-runtime-bootstrap.ts",
     "/src/runtime/bootstrap/application-startup.ts",
     "/src/runtime/palette/approved-runtime-palette.ts",

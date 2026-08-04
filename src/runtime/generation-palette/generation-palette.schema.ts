@@ -1,12 +1,13 @@
 import { z } from "zod";
 
+import { POPAROOZ_COLOR_CODE_PATTERN } from "../../domain/color/poparooz-color-code";
 import { GenerationPaletteAdapterError } from "./generation-palette.errors";
 import type { GenerationPaletteSnapshot } from "./generation-palette.types";
 
 const generationCodeSchema = z
   .string()
   .min(1)
-  .regex(/^(A|B|C|D|E|F|G|H|M)[1-9][0-9]*$/);
+  .regex(POPAROOZ_COLOR_CODE_PATTERN);
 const hexSchema = z.string().regex(/^#[0-9A-F]{6}$/);
 const rgbChannelSchema = z.number().int().min(0).max(255);
 const finiteLabNumberSchema = z.number().finite();

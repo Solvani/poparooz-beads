@@ -15,10 +15,15 @@ export {
 } from "./color-matching-errors";
 export {
   MATCH_DISTANCE_EPSILON,
+  matchNearestColor,
   matchNearestPaletteColor,
+  prepareColorMatchCandidates,
   preparePaletteCandidates,
 } from "./color-matching";
 export type {
+  ColorMatchCandidate,
+  ColorMatchResult,
+  MatchableColor,
   PaletteMatchCandidate,
   PaletteMatchResult,
 } from "./color-matching.types";
@@ -43,3 +48,7 @@ export type {
   XyzD65,
 } from "./color.types";
 export { linearRgbToXyzD65 } from "./xyz";
+export {
+  POPAROOZ_COLOR_CODE_PATTERN,
+  isPoparoozColorCode,
+} from "./poparooz-color-code";

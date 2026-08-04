@@ -6,6 +6,7 @@ import {
   GenerationPaletteAdapterError,
   type GenerationPaletteAdapterErrorCode,
 } from "./generation-palette.errors";
+import { GenerationPaletteColorSchema } from "./generation-palette.schema";
 import { adaptRuntimePaletteToGeneration } from "./runtime-to-generation-palette.adapter";
 
 interface MutableRuntimeColor extends Record<string, unknown> {
@@ -46,6 +47,42 @@ const FORBIDDEN_COLOR_FIELDS = [
 ] as const;
 
 describe("Runtime-to-Generation Palette Adapter", () => {
+  it.each(["A1", "B10", "M221"])(
+    "accepts shared Poparooz color code %s",
+    (code) => {
+      const source = approvedSnapshot().colors[0]!;
+      expect(
+        GenerationPaletteColorSchema.safeParse({
+          code,
+          hex: source.hex,
+          rgb: [source.rgb.r, source.rgb.g, source.rgb.b],
+          lab: [source.lab.l, source.lab.a, source.lab.b],
+          sortOrder: source.sortOrder,
+          active: source.active,
+          autoMatchEligible: source.autoMatchEligible,
+        }).success,
+      ).toBe(true);
+    },
+  );
+
+  it.each(["a1", "A0", "A01", "OTHER", "A 1", "", "!"])(
+    "rejects invalid Poparooz color code %j",
+    (code) => {
+      const source = approvedSnapshot().colors[0]!;
+      expect(
+        GenerationPaletteColorSchema.safeParse({
+          code,
+          hex: source.hex,
+          rgb: [source.rgb.r, source.rgb.g, source.rgb.b],
+          lab: [source.lab.l, source.lab.a, source.lab.b],
+          sortOrder: source.sortOrder,
+          active: source.active,
+          autoMatchEligible: source.autoMatchEligible,
+        }).success,
+      ).toBe(false);
+    },
+  );
+
   it("maps the approved 221 / 221 / 221 Snapshot without changing values or order", () => {
     const runtime = approvedSnapshot();
     const generation = adaptRuntimePaletteToGeneration(runtime);

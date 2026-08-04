@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-const codeSchema = z.string().regex(/^(A|B|C|D|E|F|G|H|M)[1-9][0-9]*$/);
+import { POPAROOZ_COLOR_CODE_PATTERN } from "../../../src/domain/color/poparooz-color-code.ts";
+
+const codeSchema = z.string().regex(POPAROOZ_COLOR_CODE_PATTERN);
 const hexSchema = z.string().regex(/^#[0-9A-F]{6}$/);
 const rgbChannelSchema = z.number().int().min(0).max(255);
 const finiteNumberSchema = z.number().finite();

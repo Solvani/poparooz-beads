@@ -1,5 +1,6 @@
 import ExcelJS, { type Worksheet } from "exceljs";
 
+import { POPAROOZ_COLOR_CODE_PATTERN } from "../../../src/domain/color/poparooz-color-code.ts";
 import { compileFormalPaletteColors } from "./formal-palette-color-compiler.ts";
 import {
   hashCanonicalFormalPaletteRecords,
@@ -361,7 +362,7 @@ function parsePaletteSheet(
         "MISSING_HEX",
         `Missing HEX for ${codeText} at ${worksheet.getCell(row, layout.hexColumn).address}.`,
       );
-      const codeMatch = /^(A|B|C|D|E|F|G|H|M)([1-9][0-9]*)$/.exec(codeText);
+      const codeMatch = POPAROOZ_COLOR_CODE_PATTERN.exec(codeText);
       assertCompilation(
         codeMatch !== null && codeMatch[1] === layout.series,
         "INVALID_CODE",
@@ -376,7 +377,7 @@ function parsePaletteSheet(
       colors.push({
         code: codeText,
         series: layout.series,
-        seriesNumber: Number(codeMatch[2]),
+        seriesNumber: Number(codeText.slice(1)),
         seriesRank,
         canonicalSourceIndex: colors.length,
         hex: hexText,

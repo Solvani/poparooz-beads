@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { POPAROOZ_COLOR_CODE_PATTERN } from "../../../src/domain/color/poparooz-color-code.ts";
 import { DisplayNameSchema } from "../../../src/domain/palette/palette.schema.ts";
 import { formalIssueMessage } from "./formal-palette-errors.ts";
 
@@ -16,7 +17,6 @@ export const FORMAL_PALETTE_SERIES = [
 ] as const;
 
 const sha256Pattern = /^[0-9a-f]{64}$/;
-const formalCodePattern = /^(A|B|C|D|E|F|G|H|M)[1-9][0-9]*$/;
 const canonicalHexPattern = /^#[0-9A-F]{6}$/;
 const safeIdentifierPattern = /^[a-z0-9][a-z0-9._-]*$/;
 const safeFileNamePattern = /^[^<>:"/\\|?*\u0000-\u001F]+$/;
@@ -154,7 +154,7 @@ export const NormalizedFormalPaletteColorSchema = z
     code: z
       .string()
       .regex(
-        formalCodePattern,
+        POPAROOZ_COLOR_CODE_PATTERN,
         formalIssueMessage(
           "CODE_SERIES_MISMATCH",
           "code must be an approved uppercase series followed by a positive integer without leading zeroes.",

@@ -4,9 +4,12 @@ import { RuntimePaletteArtifactSchema } from "./runtime-palette.schema.ts";
 
 export const APPROVED_RUNTIME_ARTIFACT_MODULE =
   "/src/runtime/palette/artifacts/poparooz-standard/formal-1.0.0/runtime-1.0.0/runtime-palette.json";
+export const POPAROOZ_COLOR_CODE_GRAMMAR_MODULE =
+  "/src/domain/color/poparooz-color-code.ts";
 
 const requiredProductionModules = [
   "/src/main.tsx",
+  POPAROOZ_COLOR_CODE_GRAMMAR_MODULE,
   "/src/runtime/bootstrap/application-runtime-bootstrap.ts",
   "/src/runtime/bootstrap/application-startup.ts",
   "/src/runtime/palette/approved-runtime-palette.ts",

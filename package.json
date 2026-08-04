@@ -16,6 +16,7 @@
     "format:check": "prettier --check .",
     "benchmark": "node scripts/benchmarks/run-benchmark.mjs --write",
     "palette:runtime:compile": "node --experimental-strip-types --import ./scripts/palette/runtime/register-typescript-extension-loader.mjs scripts/palette/runtime/compile-runtime-palette.ts",
+    "palette:runtime:lock": "node --experimental-strip-types --import ./scripts/palette/runtime/register-typescript-extension-loader.mjs scripts/palette/runtime/generate-runtime-palette-lock.ts",
     "palette:validate": "node --experimental-strip-types scripts/palette/validate-palette.ts",
     "test": "vitest",
     "test:run": "vitest run"

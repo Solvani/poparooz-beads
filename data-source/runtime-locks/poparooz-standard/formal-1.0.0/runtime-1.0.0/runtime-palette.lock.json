@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0.0",
+  "lockVersion": "1.0.0",
+  "paletteId": "poparooz-standard",
+  "paletteVersion": "1.0.0",
+  "artifactVersion": "1.0.0",
+  "referenceSystem": "POPAROOZ",
+  "approvedFormalHashes": {
+    "sourceSha256": "5508b4c0e2060c1bd3ce5afcea9591c62cd26f2c924179143b95daa17e04a71e",
+    "paletteCanonicalSha256": "1474d8587f9959be876e5bdfc6f29373c68dd427b0c84ac1b474944d672872a4",
+    "derivationAuditSha256": "f070bc32e80dd3a3885ee3caad4085b1752ed6376cba865597788d655fed9020"
+  },
+  "inputs": {
+    "manifest": {
+      "path": "data-source/palettes/poparooz-standard/1.0.0/manifest.json",
+      "sha256": "97f836f762a2383fb2dc239321e1370d7c0da5b90d9ab2eaefbf1d64a23ef69a",
+      "byteLength": 751
+    },
+    "normalizedPalette": {
+      "path": "data-source/palettes/poparooz-standard/1.0.0/normalized-palette.json",
+      "sha256": "4b096a4e6d3d2ec4de85ab67e80ddf848f4def1498b497b951b5fa6b752fa89d",
+      "byteLength": 88138
+    },
+    "colorDerivationAudit": {
+      "path": "data-source/palettes/poparooz-standard/1.0.0/color-derivation-audit.json",
+      "sha256": "f070bc32e80dd3a3885ee3caad4085b1752ed6376cba865597788d655fed9020",
+      "byteLength": 67513
+    },
+    "paletteValidationReport": {
+      "path": "data-source/palettes/poparooz-standard/1.0.0/palette-validation-report.json",
+      "sha256": "2516401aa319ea461e7f94c406303037d925bfd66f8c3bfec7915ee039bbd167",
+      "byteLength": 882
+    },
+    "runtimePolicy": {
+      "path": "scripts/palette/runtime/policies/poparooz-standard.formal-1.0.0.runtime-1.0.0.json",
+      "sha256": "68eea50db5880b57076d756e5b3730ac6ce83df8dd5899a43c7825366f7f7e25",
+      "byteLength": 216
+    }
+  },
+  "runtimeArtifact": {
+    "path": "src/runtime/palette/artifacts/poparooz-standard/formal-1.0.0/runtime-1.0.0/runtime-palette.json",
+    "sha256": "86a742ed45b1dc06eb4e4cec64e6a4d35ece07b9ad11f7c01208909986337d70",
+    "byteLength": 73595,
+    "recordCount": 221,
+    "activeCount": 221,
+    "autoMatchEligibleCount": 221
+  }
+}

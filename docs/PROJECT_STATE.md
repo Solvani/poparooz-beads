@@ -143,16 +143,31 @@ Active: 221
 Auto-match eligible: 221
 ```
 
+```text
+P3-A01.4-A02 Node-only Runtime Palette Lock
+Status: Completed and Frozen
+Runtime Lock: data-source/runtime-locks/poparooz-standard/formal-1.0.0/runtime-1.0.0/runtime-palette.lock.json
+Runtime Lock SHA-256: 36302e25510d8b46afdc6cbaceea06ca8905c9456d006bc70cc3164cf8e6a648
+Runtime Artifact SHA-256: 86a742ed45b1dc06eb4e4cec64e6a4d35ece07b9ad11f7c01208909986337d70
+Formal identity: poparooz-standard / 1.0.0 / POPAROOZ
+Source SHA-256: 5508b4c0e2060c1bd3ce5afcea9591c62cd26f2c924179143b95daa17e04a71e
+Palette Canonical SHA-256: 1474d8587f9959be876e5bdfc6f29373c68dd427b0c84ac1b474944d672872a4
+Derivation Audit SHA-256: f070bc32e80dd3a3885ee3caad4085b1752ed6376cba865597788d655fed9020
+Records: 221
+Active: 221
+Auto-match eligible: 221
+```
+
 ## Current Phase
 
 ```text
 Phase: Phase 3
 Status: active
-Current task: P3-A01.4-A01 Deterministic Runtime Compiler
-Next task: P3-A01.4-A02 Node-only Runtime Lock
+Current task: P3-A01.4-A02 Node-only Runtime Palette Lock
+Next task: P3-A01.4-A03 Build-time Production Gate
 ```
 
-The P3-A01.4-D01 contract and P3-A01.4-A01 deterministic compiler are frozen. The Runtime Artifact has been generated, but the Runtime Lock, Build Production Gate, Browser Provider, and Startup Palette Gate have not been implemented. Production `GenerationRuntime` remains unavailable. P3-A01.4 remains in progress and must not be described as complete.
+The P3-A01.4-D01 contract, P3-A01.4-A01 deterministic compiler, and P3-A01.4-A02 Node-only Runtime Palette Lock are frozen. The Runtime Artifact and Runtime Lock have been generated, but the Build Production Gate, Browser Provider, and Startup Palette Gate have not been implemented. Production `GenerationRuntime` remains unavailable. P3-A01.4 remains in progress and must not be described as complete.
 
 ## Frozen Phase 3 Decisions
 
@@ -325,7 +340,8 @@ P3-A01.3   Formal 221-color Palette Compilation  Frozen
 P3-A01.4   Runtime Palette Artifact and Production Gate In progress
 P3-A01.4-D01 Runtime Palette Contract Freeze      Frozen
 P3-A01.4-A01 Deterministic Runtime Compiler       Frozen
-P3-A01.4-A02 Node-only Runtime Lock               Ready
+P3-A01.4-A02 Node-only Runtime Lock               Frozen
+P3-A01.4-A03 Build-time Production Gate           Ready
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
 ```

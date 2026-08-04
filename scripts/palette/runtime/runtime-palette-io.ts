@@ -1,4 +1,12 @@
-import { mkdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
+import {
+  mkdir,
+  readFile,
+  readdir,
+  rename,
+  rm,
+  stat,
+  writeFile,
+} from "node:fs/promises";
 import path from "node:path";
 
 import { RuntimePaletteArtifactSchema } from "./runtime-palette.schema.ts";
@@ -27,6 +35,7 @@ export interface RuntimePaletteFileSystem {
   rename(sourcePath: string, destinationPath: string): Promise<void>;
   rm(filePath: string, options: { force: boolean }): Promise<void>;
   stat(filePath: string): Promise<unknown>;
+  readdir(directoryPath: string): Promise<readonly string[]>;
 }
 
 export const nodeRuntimePaletteFileSystem: RuntimePaletteFileSystem = {
@@ -40,7 +49,16 @@ export const nodeRuntimePaletteFileSystem: RuntimePaletteFileSystem = {
   rename,
   rm,
   stat,
+  readdir,
 };
+
+export interface RuntimePaletteInputBytes {
+  readonly manifest: Buffer;
+  readonly normalizedPalette: Buffer;
+  readonly derivationAudit: Buffer;
+  readonly validationReport: Buffer;
+  readonly policy: Buffer;
+}
 
 export async function compileRuntimePaletteFromFiles(
   formalDirectory: string,
@@ -55,13 +73,31 @@ export async function compileRuntimePaletteFromFiles(
       readInput(path.join(formalDirectory, FORMAL_INPUT_NAMES[3]), fileSystem),
       readInput(policyPath, fileSystem),
     ] as const);
+  return compileRuntimePaletteFromInputBytes({
+    manifest: manifestBytes,
+    normalizedPalette: normalizedBytes,
+    derivationAudit: auditBytes,
+    validationReport: reportBytes,
+    policy: policyBytes,
+  });
+}
+
+export function compileRuntimePaletteFromInputBytes(
+  bytes: RuntimePaletteInputBytes,
+): RuntimePaletteCompilation {
   const input: RuntimePaletteCompilerInput = {
-    manifest: parseJson(manifestBytes, "Formal Palette Manifest"),
-    normalizedPalette: parseJson(normalizedBytes, "normalized Formal Palette"),
-    derivationAudit: parseJson(auditBytes, "color derivation audit"),
-    derivationAuditBytes: auditBytes.toString("utf8"),
-    validationReport: parseJson(reportBytes, "Palette validation report"),
-    policy: parseJson(policyBytes, "Runtime Palette policy"),
+    manifest: parseJson(bytes.manifest, "Formal Palette Manifest"),
+    normalizedPalette: parseJson(
+      bytes.normalizedPalette,
+      "normalized Formal Palette",
+    ),
+    derivationAudit: parseJson(bytes.derivationAudit, "color derivation audit"),
+    derivationAuditBytes: bytes.derivationAudit.toString("utf8"),
+    validationReport: parseJson(
+      bytes.validationReport,
+      "Palette validation report",
+    ),
+    policy: parseJson(bytes.policy, "Runtime Palette policy"),
   };
   return compileRuntimePalette(input);
 }
@@ -72,14 +108,29 @@ export async function publishRuntimePaletteArtifact(
   fileSystem: RuntimePaletteFileSystem = nodeRuntimePaletteFileSystem,
 ): Promise<{ readonly published: boolean }> {
   verifyCompilation(compilation);
+  return publishDeterministicRuntimeFile(
+    compilation.bytes,
+    outputPath,
+    parseAndValidateArtifact,
+    fileSystem,
+  );
+}
+
+export async function publishDeterministicRuntimeFile(
+  bytes: string,
+  outputPath: string,
+  validateBytes: (bytes: string) => unknown,
+  fileSystem: RuntimePaletteFileSystem = nodeRuntimePaletteFileSystem,
+): Promise<{ readonly published: boolean }> {
+  validateBytes(bytes);
   if (await pathExists(outputPath, fileSystem)) {
-    const existing = await readInput(outputPath, fileSystem);
-    if (existing.equals(Buffer.from(compilation.bytes, "utf8"))) {
+    const existing = await readPublicationFile(outputPath, fileSystem);
+    if (existing.equals(Buffer.from(bytes, "utf8"))) {
       return { published: false };
     }
     throw new RuntimePaletteCompilationError(
       "PUBLICATION_CONFLICT",
-      "An existing Runtime Palette Artifact differs from deterministic compilation.",
+      "An existing Runtime data file differs from deterministic generation.",
     );
   }
 
@@ -92,43 +143,76 @@ export async function publishRuntimePaletteArtifact(
   }
 
   let stagingCreated = false;
+  let outputCreated = false;
   try {
     await fileSystem.mkdir(path.dirname(outputPath), { recursive: true });
-    await fileSystem.writeFile(stagingPath, compilation.bytes, {
+    await fileSystem.writeFile(stagingPath, bytes, {
       encoding: "utf8",
       flag: "wx",
     });
     stagingCreated = true;
-    const staged = await readInput(stagingPath, fileSystem);
-    if (!staged.equals(Buffer.from(compilation.bytes, "utf8"))) {
+    const staged = await readPublicationFile(stagingPath, fileSystem);
+    if (!staged.equals(Buffer.from(bytes, "utf8"))) {
       throw new RuntimePaletteCompilationError(
         "PUBLICATION_FAILED",
-        "The staged Runtime Palette bytes failed verification.",
+        "The staged Runtime data bytes failed verification.",
       );
     }
-    parseAndValidateArtifact(staged.toString("utf8"));
+    validateBytes(staged.toString("utf8"));
     await fileSystem.rename(stagingPath, outputPath);
     stagingCreated = false;
+    outputCreated = true;
+    const published = await readPublicationFile(outputPath, fileSystem);
+    if (!published.equals(Buffer.from(bytes, "utf8"))) {
+      throw new RuntimePaletteCompilationError(
+        "PUBLICATION_FAILED",
+        "The published Runtime data bytes failed verification.",
+      );
+    }
+    validateBytes(published.toString("utf8"));
+    outputCreated = false;
     return { published: true };
   } catch (primaryError) {
-    if (stagingCreated) {
+    const cleanupErrors: unknown[] = [];
+    for (const cleanupPath of [
+      ...(stagingCreated ? [stagingPath] : []),
+      ...(outputCreated ? [outputPath] : []),
+    ]) {
       try {
-        await fileSystem.rm(stagingPath, { force: true });
+        await fileSystem.rm(cleanupPath, { force: true });
       } catch (cleanupError) {
-        throw new RuntimePaletteCompilationError(
-          "PUBLICATION_FAILED",
-          "Runtime Palette publication and staging cleanup both failed.",
-          { cause: new AggregateError([primaryError, cleanupError]) },
-        );
+        cleanupErrors.push(cleanupError);
       }
+    }
+    if (cleanupErrors.length > 0) {
+      throw new RuntimePaletteCompilationError(
+        "PUBLICATION_FAILED",
+        "Runtime data publication and cleanup both failed.",
+        { cause: new AggregateError([primaryError, ...cleanupErrors]) },
+      );
     }
     if (primaryError instanceof RuntimePaletteCompilationError) {
       throw primaryError;
     }
     throw new RuntimePaletteCompilationError(
       "PUBLICATION_FAILED",
-      "The Runtime Palette Artifact could not be published safely.",
+      "The Runtime data file could not be published safely.",
       { cause: primaryError },
+    );
+  }
+}
+
+async function readPublicationFile(
+  filePath: string,
+  fileSystem: RuntimePaletteFileSystem,
+): Promise<Buffer> {
+  try {
+    return await fileSystem.readFile(filePath);
+  } catch (error) {
+    throw new RuntimePaletteCompilationError(
+      "PUBLICATION_FAILED",
+      "A Runtime publication file could not be read.",
+      { cause: error },
     );
   }
 }

@@ -24,6 +24,18 @@ describe("Runtime Palette dependency boundaries", () => {
     }
   });
 
+  it("keeps the Lock generator dependency graph free of ExcelJS, XLSX, and Substitute modules", async () => {
+    const graph = await collectDependencyGraph(
+      path.join(runtimeScripts, "generate-runtime-palette-lock.ts"),
+    );
+    expect(graph.externalSpecifiers).not.toContain("exceljs");
+    for (const file of graph.files) {
+      expect(file).not.toMatch(
+        /formal-palette-(xlsx-compiler|substitutes)|normalized-substitutes|canonical-substitute/i,
+      );
+    }
+  });
+
   it("keeps src modules from importing Node compiler or policy modules", async () => {
     const files = (await collectFiles(sourceRoot)).filter((file) =>
       /\.(ts|tsx|js|jsx)$/.test(file),
@@ -32,6 +44,8 @@ describe("Runtime Palette dependency boundaries", () => {
       const source = await readFile(file, "utf8");
       expect(source, file).not.toMatch(/scripts\/palette\/runtime/i);
       expect(source, file).not.toMatch(/runtime\/policies/i);
+      expect(source, file).not.toMatch(/data-source\/runtime-locks/i);
+      expect(source, file).not.toMatch(/generate-runtime-palette-lock/i);
     }
   });
 
@@ -88,6 +102,17 @@ describe("Runtime Palette dependency boundaries", () => {
       expect(createHash("sha256").update(bytes).digest("hex")).toBe(expected);
     }
   });
+
+  it("keeps the Node-only Lock outside src and out of browser imports", async () => {
+    const lockPath = path.join(
+      repositoryRoot,
+      "data-source/runtime-locks/poparooz-standard/formal-1.0.0/runtime-1.0.0/runtime-palette.lock.json",
+    );
+    expect(lockPath.startsWith(sourceRoot)).toBe(false);
+    expect(await readFile(lockPath, "utf8")).toContain(
+      '"lockVersion": "1.0.0"',
+    );
+  });
 });
 
 async function collectFiles(directory: string): Promise<string[]> {
@@ -99,4 +124,35 @@ async function collectFiles(directory: string): Promise<string[]> {
     else if (entry.isFile()) files.push(child);
   }
   return files;
+}
+
+async function collectDependencyGraph(entry: string): Promise<{
+  files: string[];
+  externalSpecifiers: string[];
+}> {
+  const files = new Set<string>();
+  const externalSpecifiers = new Set<string>();
+  const pending = [entry];
+  while (pending.length > 0) {
+    const file = pending.pop();
+    if (file === undefined || files.has(file)) continue;
+    files.add(file);
+    const source = await readFile(file, "utf8");
+    for (const match of source.matchAll(/from\s+["']([^"']+)["']/g)) {
+      const specifier = match[1];
+      if (specifier === undefined) continue;
+      if (!specifier.startsWith(".")) {
+        externalSpecifiers.add(specifier);
+        continue;
+      }
+      const resolved = path.resolve(path.dirname(file), specifier);
+      pending.push(
+        /\.(?:ts|tsx|js|mjs|cjs)$/.test(resolved) ? resolved : `${resolved}.ts`,
+      );
+    }
+  }
+  return {
+    files: [...files].sort(),
+    externalSpecifiers: [...externalSpecifiers].sort(),
+  };
 }

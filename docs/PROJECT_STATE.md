@@ -229,23 +229,32 @@ Accepted Minor: favicon.ico 404 remains deferred to a separate UI or public-asse
 Production GenerationRuntime: Unavailable
 ```
 
+```text
+P3-A02-D01 Production Generation Runtime Activation Contract Freeze
+Status: Accepted and Frozen
+Accepted contract commit: da631da7e58ed43815a27a90b7de386fa2742007
+Nature: Documentation and governance contract only
+Production implementation: Not started and not authorized
+Production GenerationRuntime: Unavailable
+```
+
 ## Current Phase
 
 ```text
 Phase: Phase 3
 Status: active
 Current contract task: P3-A02-D01 Production Generation Runtime Activation Contract Freeze
-Contract status: pending final review
+Contract status: frozen
 Implementation status: not started and not authorized
 ```
 
 P3-A01.4 and its D01 and A01 through A06 tasks are completed and frozen. The Runtime Artifact and Runtime Lock are deterministic and approved, every Vite build passes the fail-closed Production Gate during configuration resolution, and application startup synchronously validates and initializes the approved immutable Provider before React render. The real production module graph and emitted bundle expose only the approved Runtime Artifact as Palette-generated data. Build or Startup Gate failures do not fall back. Chrome smoke verification passed with generation remaining safely unavailable.
 
-P3-A02-D01 records the proposed production Runtime activation contract and implementation boundaries in [`POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md`](POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md). The contract is pending final review and does not authorize source implementation. Matcher contract migration, BoardProfile production wiring, ProcessingPolicy production wiring, and complete generator activation remain unfinished. Production `GenerationRuntime` remains unavailable. P3-A02 as a whole is not completed, implemented, frozen, or activated.
+P3-A02-D01 freezes the accepted production Runtime activation contract and implementation boundaries in [`POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md`](POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md) at contract commit `da631da7e58ed43815a27a90b7de386fa2742007`. This documentation and governance contract does not authorize source implementation. Matcher contract migration, BoardProfile production wiring, ProcessingPolicy production wiring, and complete generator activation remain unfinished. Production `GenerationRuntime` remains unavailable. P3-A02 as a whole is not completed or activated.
 
-### P3-A02-D01 contract under final review
+### P3-A02-D01 frozen contract
 
-The P3-A02-D01 contract records:
+The frozen P3-A02-D01 contract records:
 
 - a permanent `RuntimePaletteSnapshot -> Runtime-to-Generation Palette Adapter -> GenerationPaletteSnapshot` boundary;
 - a Generation Palette limited to `code`, `hex`, `rgb`, `lab`, `sortOrder`, `active`, and `autoMatchEligible`;
@@ -441,13 +450,13 @@ P3-A01.4-A03 Build-time Production Gate           Frozen
 P3-A01.4-A04 Browser Runtime Schema and Provider   Frozen
 P3-A01.4-A05 Startup Gate Integration              Frozen
 P3-A01.4-A06 Production Bundle Boundary and Final Gate Review Frozen
-P3-A02-D01 Production Generation Runtime Activation Contract — pending final review
+P3-A02-D01 Production Generation Runtime Activation Contract — contract frozen
 P3-A02     Production Generation Runtime Activation — implementation not started
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
 ```
 
-The P3-A02-D01 implementation boundary under final review is:
+The frozen P3-A02-D01 implementation boundary is:
 
 ```text
 approved Runtime Palette Provider
@@ -459,7 +468,7 @@ approved Runtime Palette Provider
 -> complete Production GenerationRuntime activation review
 ```
 
-P3-A01.4 is frozen. P3-A02-D01 is pending final review; P3-A02 production implementation has not started and source implementation is not authorized by this governance task. P3-A02 and Runtime activation are not completed, frozen, implemented, or activated. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
+P3-A01.4 and the P3-A02-D01 contract are frozen. Only the P3-A02-D01 contract is frozen; P3-A02 production implementation has not started, and source implementation is not authorized by this governance task. P3-A02 and Runtime activation are not completed or activated. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
 
 ## Known Issues
 

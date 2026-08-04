@@ -1,8 +1,10 @@
 # P3-A02 Production Generation Runtime Activation Contract
 
-Status: **Pending Final Review**
+Status: **Contract Frozen**
 
 Date: **2026-08-04**
+
+Accepted contract commit: **`da631da7e58ed43815a27a90b7de386fa2742007`**
 
 Runtime Palette authority: [`POPAROOZ_RUNTIME_PALETTE_CONTRACT.md`](POPAROOZ_RUNTIME_PALETTE_CONTRACT.md)
 

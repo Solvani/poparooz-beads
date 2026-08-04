@@ -234,12 +234,36 @@ Production GenerationRuntime: Unavailable
 ```text
 Phase: Phase 3
 Status: active
-Current planning task: P3-A02 Production Generation Runtime Activation Planning
+Current contract task: P3-A02-D01 Production Generation Runtime Activation Contract Freeze
+Contract status: pending final review
+Implementation status: not started and not authorized
 ```
 
 P3-A01.4 and its D01 and A01 through A06 tasks are completed and frozen. The Runtime Artifact and Runtime Lock are deterministic and approved, every Vite build passes the fail-closed Production Gate during configuration resolution, and application startup synchronously validates and initializes the approved immutable Provider before React render. The real production module graph and emitted bundle expose only the approved Runtime Artifact as Palette-generated data. Build or Startup Gate failures do not fall back. Chrome smoke verification passed with generation remaining safely unavailable.
 
-P3-A02 is a planning task only and has not started implementation. Matcher contract migration, BoardProfile production wiring, ProcessingPolicy production wiring, and complete generator activation remain unfinished. Production `GenerationRuntime` remains unavailable.
+P3-A02-D01 records the proposed production Runtime activation contract and implementation boundaries in [`POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md`](POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md). The contract is pending final review and does not authorize source implementation. Matcher contract migration, BoardProfile production wiring, ProcessingPolicy production wiring, and complete generator activation remain unfinished. Production `GenerationRuntime` remains unavailable. P3-A02 as a whole is not completed, implemented, frozen, or activated.
+
+### P3-A02-D01 contract under final review
+
+The P3-A02-D01 contract records:
+
+- a permanent `RuntimePaletteSnapshot -> Runtime-to-Generation Palette Adapter -> GenerationPaletteSnapshot` boundary;
+- a Generation Palette limited to `code`, `hex`, `rgb`, `lab`, `sortOrder`, `active`, and `autoMatchEligible`;
+- a separate Public Color record limited to the literal brand `Poparooz`, approved customer-facing `code`, approved `hex`, and an optional approved customer-facing `name`;
+- omission of `name` when no approved customer-facing name exists, without internal, supplier, series, code, `MARD`, or third-party-brand fallback;
+- matcher eligibility as `active && autoMatchEligible`, independent from Catalog sellability, inventory, or product status;
+- the existing CIEDE2000 calculation and deterministic `distance -> sortOrder -> code` tie-break;
+- omission of unverified finish data rather than inference, `false`, or an `unknown` placeholder;
+- an approved BoardProfile artifact, Provider, adapter, and immutable generation snapshot using `poparooz-board-104` version `1.0.0`;
+- `278 / 103 mm` as the authoritative derived internal peg pitch and `2.70 mm` as its rounded display value;
+- a versioned ProcessingPolicy with contain sizing, no upscale, Alpha threshold byte `16`, and Maximum Colors `2..64` with default `32`;
+- the unchanged Worker protocol and Quantizer engineering range of `1..512`;
+- synchronous, fail-closed Runtime composition before React render;
+- one immutable Runtime and Service per successful application startup, with no Worker created at startup;
+- lazy Worker creation during quantization, deterministic disposal, and no automatic retry; and
+- atomic result publication through the existing Phase 2 controller and state-machine boundary.
+
+Production Generation does not read, populate, calculate, or output `packSize` or `packsRequired`. P3-A02 does not delete the complete legacy commerce schema and does not authorize sellability, inventory, Shopify, Substitute, shortage replacement, Download, Get Beads, multi-Palette selection, or UI redesign work.
 
 ## Frozen Phase 3 Decisions
 
@@ -417,22 +441,25 @@ P3-A01.4-A03 Build-time Production Gate           Frozen
 P3-A01.4-A04 Browser Runtime Schema and Provider   Frozen
 P3-A01.4-A05 Startup Gate Integration              Frozen
 P3-A01.4-A06 Production Bundle Boundary and Final Gate Review Frozen
-P3-A02     Production Generation Runtime Activation Planning Planning
+P3-A02-D01 Production Generation Runtime Activation Contract — pending final review
+P3-A02     Production Generation Runtime Activation — implementation not started
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
 ```
 
-The next planning-stage scope is:
+The P3-A02-D01 implementation boundary under final review is:
 
 ```text
 approved Runtime Palette Provider
+-> permanent Runtime-to-Generation Palette adapter
 -> matcher contract migration
--> BoardProfile production wiring
--> ProcessingPolicy production wiring
+-> approved BoardProfile Provider and adapter
+-> versioned ProcessingPolicy Provider
+-> synchronous complete Runtime composition
 -> complete Production GenerationRuntime activation review
 ```
 
-P3-A01.4 is frozen. P3-A02 is planning only and has not started implementation. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
+P3-A01.4 is frozen. P3-A02-D01 is pending final review; P3-A02 production implementation has not started and source implementation is not authorized by this governance task. P3-A02 and Runtime activation are not completed, frozen, implemented, or activated. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
 
 ## Known Issues
 

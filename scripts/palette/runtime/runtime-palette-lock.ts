@@ -123,12 +123,12 @@ export function compileRuntimePaletteLock(
   inputs: RuntimePaletteLockInputBytes,
 ): RuntimePaletteLockCompilation {
   const actualHashes = {
-    manifest: hashBytes(inputs.manifest),
-    normalizedPalette: hashBytes(inputs.normalizedPalette),
-    colorDerivationAudit: hashBytes(inputs.derivationAudit),
-    paletteValidationReport: hashBytes(inputs.validationReport),
-    runtimePolicy: hashBytes(inputs.policy),
-    runtimeArtifact: hashBytes(inputs.runtimeArtifact),
+    manifest: hashRuntimePaletteBytes(inputs.manifest),
+    normalizedPalette: hashRuntimePaletteBytes(inputs.normalizedPalette),
+    colorDerivationAudit: hashRuntimePaletteBytes(inputs.derivationAudit),
+    paletteValidationReport: hashRuntimePaletteBytes(inputs.validationReport),
+    runtimePolicy: hashRuntimePaletteBytes(inputs.policy),
+    runtimeArtifact: hashRuntimePaletteBytes(inputs.runtimeArtifact),
   };
   for (const name of Object.keys(APPROVED_INPUT_SHA256) as Array<
     keyof typeof APPROVED_INPUT_SHA256
@@ -220,7 +220,11 @@ export function compileRuntimePaletteLock(
     );
   }
   const bytes = `${JSON.stringify(result.data, null, 2)}\n`;
-  return { lock: result.data, bytes, sha256: hashBytes(bytes) };
+  return {
+    lock: result.data,
+    bytes,
+    sha256: hashRuntimePaletteBytes(bytes),
+  };
 }
 
 export async function publishRuntimePaletteLock(
@@ -264,7 +268,7 @@ export function parseRuntimeLock(bytes: string): RuntimePaletteLock {
 function lockedFile(relativePath: string, bytes: Buffer) {
   return {
     path: relativePath,
-    sha256: hashBytes(bytes),
+    sha256: hashRuntimePaletteBytes(bytes),
     byteLength: bytes.byteLength,
   };
 }
@@ -373,7 +377,7 @@ async function assertLockDirectoryInventory(
   }
 }
 
-function hashBytes(bytes: Uint8Array | string): string {
+export function hashRuntimePaletteBytes(bytes: Uint8Array | string): string {
   return createHash("sha256").update(bytes).digest("hex");
 }
 

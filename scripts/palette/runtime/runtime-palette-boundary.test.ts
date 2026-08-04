@@ -36,6 +36,16 @@ describe("Runtime Palette dependency boundaries", () => {
     }
   });
 
+  it("keeps the Production Gate dependency graph Node-only and free of workbook tooling", async () => {
+    const graph = await collectDependencyGraph(
+      path.join(runtimeScripts, "verify-runtime-palette-production-gate.ts"),
+    );
+    expect(graph.externalSpecifiers).not.toContain("exceljs");
+    for (const file of graph.files) {
+      expect(file).not.toMatch(/formal-palette-(xlsx-compiler|substitutes)/i);
+    }
+  });
+
   it("keeps src modules from importing Node compiler or policy modules", async () => {
     const files = (await collectFiles(sourceRoot)).filter((file) =>
       /\.(ts|tsx|js|jsx)$/.test(file),

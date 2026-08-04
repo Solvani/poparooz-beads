@@ -158,16 +158,29 @@ Active: 221
 Auto-match eligible: 221
 ```
 
+```text
+P3-A01.4-A03 Build-time Production Gate
+Status: Completed and Frozen
+Production Gate config: scripts/palette/runtime/runtime-palette-production-gate.config.ts
+Approved Runtime Lock SHA-256: 36302e25510d8b46afdc6cbaceea06ca8905c9456d006bc70cc3164cf8e6a648
+Approved Runtime Artifact SHA-256: 86a742ed45b1dc06eb4e4cec64e6a4d35ece07b9ad11f7c01208909986337d70
+Build behavior: All Vite build commands execute the fail-closed Production Gate during configuration resolution.
+Serve behavior: Vite dev and serve do not execute the Production Build Gate.
+Browser Provider: Not implemented
+Startup Gate: Not implemented
+Production GenerationRuntime: Unavailable
+```
+
 ## Current Phase
 
 ```text
 Phase: Phase 3
 Status: active
-Current task: P3-A01.4-A02 Node-only Runtime Palette Lock
-Next task: P3-A01.4-A03 Build-time Production Gate
+Current task: P3-A01.4-A03 Build-time Production Gate
+Next task: P3-A01.4-A04 Browser Runtime Schema and Provider
 ```
 
-The P3-A01.4-D01 contract, P3-A01.4-A01 deterministic compiler, and P3-A01.4-A02 Node-only Runtime Palette Lock are frozen. The Runtime Artifact and Runtime Lock have been generated, but the Build Production Gate, Browser Provider, and Startup Palette Gate have not been implemented. Production `GenerationRuntime` remains unavailable. P3-A01.4 remains in progress and must not be described as complete.
+The P3-A01.4-D01 contract, P3-A01.4-A01 deterministic compiler, P3-A01.4-A02 Node-only Runtime Palette Lock, and P3-A01.4-A03 Build-time Production Gate are frozen. The Runtime Artifact and Runtime Lock have been generated and every Vite build now passes the fail-closed Production Gate during configuration resolution. The Browser Provider and Startup Palette Gate have not been implemented. Production `GenerationRuntime` remains unavailable. P3-A01.4 remains in progress and must not be described as complete.
 
 ## Frozen Phase 3 Decisions
 
@@ -341,7 +354,8 @@ P3-A01.4   Runtime Palette Artifact and Production Gate In progress
 P3-A01.4-D01 Runtime Palette Contract Freeze      Frozen
 P3-A01.4-A01 Deterministic Runtime Compiler       Frozen
 P3-A01.4-A02 Node-only Runtime Lock               Frozen
-P3-A01.4-A03 Build-time Production Gate           Ready
+P3-A01.4-A03 Build-time Production Gate           Frozen
+P3-A01.4-A04 Browser Runtime Schema and Provider   Ready
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
 ```

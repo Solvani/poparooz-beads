@@ -1,5 +1,5 @@
-import { BoardProfileSchema } from "../board/board-profile.schema";
 import { QuantizationError } from "../quantization/quantization-errors";
+import { GenerationBoardProfileSnapshotSchema } from "../../runtime/generation-board-profile/generation-board-profile.schema";
 import { validateQuantizedImage } from "../quantization/quantized-result-validation";
 import { buildPatternBoardLayout } from "./board-layout";
 import { buildMaterialRequirements } from "./material-requirements";
@@ -33,8 +33,9 @@ export function assemblePattern(
     );
   }
 
-  const parsedBoard = BoardProfileSchema.safeParse(input.boardProfile);
-  if (!parsedBoard.success) {
+  if (
+    !GenerationBoardProfileSnapshotSchema.safeParse(input.boardProfile).success
+  ) {
     throw new PatternAssemblyError(
       "INVALID_BOARD_PROFILE",
       "The board profile is invalid for pattern assembly.",
@@ -59,7 +60,11 @@ export function assemblePattern(
     transparentPositions: input.quantizedImage.transparentPixelCount,
     colorCount: mapping.colors.length,
   });
-  const boardLayout = buildPatternBoardLayout(matrix, totals, parsedBoard.data);
+  const boardLayout = buildPatternBoardLayout(
+    matrix,
+    totals,
+    input.boardProfile,
+  );
   const result: PatternAssemblyResult = Object.freeze({
     matrix,
     colors: mapping.colors,

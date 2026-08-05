@@ -1,4 +1,4 @@
-import type { BoardProfile } from "../board/board-profile.types";
+import type { GenerationBoardProfileSnapshot } from "../../runtime/generation-board-profile/generation-board-profile.types";
 import { PATTERN_TRANSPARENT_INDEX } from "./pattern-constants";
 import { PatternAssemblyError } from "./pattern-errors";
 import type {
@@ -22,10 +22,10 @@ function safeMultiply(left: number, right: number): number {
 export function buildPatternBoardLayout(
   matrix: PatternMatrix,
   totals: PatternTotals,
-  boardProfile: BoardProfile,
+  boardProfile: GenerationBoardProfileSnapshot,
 ): PatternBoardLayout {
-  const boardWidthInBeads = boardProfile.columns;
-  const boardHeightInBeads = boardProfile.rows;
+  const boardWidthInBeads = boardProfile.pegGrid.columns;
+  const boardHeightInBeads = boardProfile.pegGrid.rows;
   const boardColumns = Math.ceil(matrix.width / boardWidthInBeads);
   const boardRows = Math.ceil(matrix.height / boardHeightInBeads);
   const boardCount = safeMultiply(boardColumns, boardRows);
@@ -80,7 +80,7 @@ export function buildPatternBoardLayout(
   const unusedPegCount = totals.transparentPositions + outsidePatternPegCount;
   return Object.freeze({
     boardProfileId: boardProfile.id,
-    boardProfileName: boardProfile.name,
+    boardProfileVersion: boardProfile.version,
     boardColumns,
     boardRows,
     boardCount,

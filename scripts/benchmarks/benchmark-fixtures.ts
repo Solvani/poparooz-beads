@@ -1,4 +1,3 @@
-import type { BoardProfile } from "../../src/domain/board/board-profile.types";
 import { rgb8ToLab } from "../../src/domain/color/color-conversion";
 import type { Rgb8 } from "../../src/domain/color/color.types";
 import type { RgbaImage } from "../../src/domain/image/image.types";
@@ -6,6 +5,7 @@ import type {
   PaletteColor,
   PaletteDefinition,
 } from "../../src/domain/palette/palette.types";
+import type { GenerationBoardProfileSnapshot } from "../../src/runtime/generation-board-profile/generation-board-profile.types";
 
 export type BenchmarkPattern =
   | "solid-blocks"
@@ -67,15 +67,14 @@ export const BENCHMARK_FIXTURES: readonly BenchmarkFixtureDefinition[] =
     }),
   ]);
 
-export const BENCHMARK_BOARD_PROFILE: BoardProfile = Object.freeze({
-  id: "benchmark-board-29-not-production",
-  name: "Synthetic 29 Position Benchmark Board - Not Production",
-  columns: 29,
-  rows: 29,
-  beadSizeMm: 5,
-  isDefault: false,
-  isActive: true,
-});
+export const BENCHMARK_BOARD_PROFILE: GenerationBoardProfileSnapshot =
+  Object.freeze({
+    id: "poparooz-board-104",
+    version: "1.0.0",
+    shape: "square",
+    pegGrid: Object.freeze({ columns: 104, rows: 104 }),
+    tiling: Object.freeze({ supported: true, sharedEdgePegs: false }),
+  });
 
 function rgbForIndex(index: number): Rgb8 {
   return {

@@ -3,7 +3,6 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import type { BoardProfile } from "../board/board-profile.types";
 import { deltaE2000 } from "../color";
 import { TRANSPARENT_COLOR_INDEX } from "../quantization/quantization-options";
 import type {
@@ -22,6 +21,7 @@ import {
   type PatternAssemblyResult,
 } from ".";
 import type { GenerationPaletteColor } from "../../runtime/generation-palette/generation-palette.types";
+import type { GenerationBoardProfileSnapshot } from "../../runtime/generation-board-profile/generation-board-profile.types";
 
 function color(
   code: string,
@@ -65,15 +65,13 @@ function paletteColors(
   return colors;
 }
 
-const BOARD: BoardProfile = {
-  id: "test-pattern-board-not-production",
-  name: "Non-Production Internal Test Board",
-  columns: 2,
-  rows: 2,
-  beadSizeMm: 5,
-  isDefault: false,
-  isActive: true,
-};
+const BOARD: GenerationBoardProfileSnapshot = Object.freeze({
+  id: "poparooz-board-104",
+  version: "1.0.0",
+  shape: "square",
+  pegGrid: Object.freeze({ columns: 104, rows: 104 }),
+  tiling: Object.freeze({ supported: true, sharedEdgePegs: false }),
+});
 
 function quantizedColor(
   index: number,
@@ -390,10 +388,15 @@ describe("pattern matrix, materials, and totals", () => {
 
   it.each([
     [1, 1, 1, 1, 1],
-    [2, 2, 1, 1, 1],
-    [3, 2, 2, 1, 2],
-    [2, 3, 1, 2, 2],
-    [3, 3, 2, 2, 4],
+    [103, 1, 1, 1, 1],
+    [1, 103, 1, 1, 1],
+    [104, 104, 1, 1, 1],
+    [105, 104, 2, 1, 2],
+    [104, 105, 1, 2, 2],
+    [208, 104, 2, 1, 2],
+    [104, 208, 1, 2, 2],
+    [209, 105, 3, 2, 6],
+    [105, 209, 2, 3, 6],
   ])(
     "lays out %sx%s over the complete matrix",
     (width, height, boardColumns, boardRows, boardCount) => {
@@ -420,16 +423,18 @@ describe("board layout statistics", () => {
       boardProfile: BOARD,
     });
     expect(result.boardLayout).toMatchObject({
-      boardColumns: 2,
+      boardProfileId: "poparooz-board-104",
+      boardProfileVersion: "1.0.0",
+      boardColumns: 1,
       boardRows: 1,
-      boardCount: 2,
-      boardWidthInBeads: 2,
-      boardHeightInBeads: 2,
-      totalPegCapacity: 8,
+      boardCount: 1,
+      boardWidthInBeads: 104,
+      boardHeightInBeads: 104,
+      totalPegCapacity: 10816,
       usedBeadCount: 5,
       transparentPatternPositions: 1,
-      outsidePatternPegCount: 2,
-      unusedPegCount: 3,
+      outsidePatternPegCount: 10810,
+      unusedPegCount: 10811,
     });
     expect(result.boardLayout.tiles).toEqual([
       {
@@ -438,67 +443,101 @@ describe("board layout statistics", () => {
         column: 0,
         originX: 0,
         originY: 0,
-        coveredWidth: 2,
+        coveredWidth: 3,
         coveredHeight: 2,
-        beadCount: 3,
+        beadCount: 5,
         transparentPatternPositions: 1,
-        outsidePatternPegCount: 0,
-      },
-      {
-        index: 1,
-        row: 0,
-        column: 1,
-        originX: 2,
-        originY: 0,
-        coveredWidth: 1,
-        coveredHeight: 2,
-        beadCount: 2,
-        transparentPatternPositions: 0,
-        outsidePatternPegCount: 2,
+        outsidePatternPegCount: 10810,
       },
     ]);
   });
 
-  it("uses BoardProfile rows/columns and rejects invalid profiles", () => {
-    const custom = { ...BOARD, columns: 3, rows: 1 };
-    const result = assemblePattern({
-      quantizedImage: solidQuantized(3, 2),
-      paletteColors: paletteColors(),
-      boardProfile: custom,
-    });
-    expect(result.boardLayout).toMatchObject({
-      boardColumns: 1,
-      boardRows: 2,
-      boardCount: 2,
-    });
+  it("rejects malformed and Legacy BoardProfile inputs", () => {
     expectPatternError(
       () =>
         assemblePattern({
           quantizedImage: solidQuantized(1, 1),
           paletteColors: paletteColors(),
-          boardProfile: { ...BOARD, columns: 0 },
+          boardProfile: {
+            ...BOARD,
+            pegGrid: { ...BOARD.pegGrid, columns: 0 },
+          } as unknown as GenerationBoardProfileSnapshot,
+        }),
+      "INVALID_BOARD_PROFILE",
+    );
+    expectPatternError(
+      () =>
+        assemblePattern({
+          quantizedImage: solidQuantized(1, 1),
+          paletteColors: paletteColors(),
+          boardProfile: {
+            id: "legacy",
+            name: "Legacy",
+            columns: 104,
+            rows: 104,
+            beadSizeMm: 5,
+            isDefault: false,
+            isActive: true,
+          } as unknown as GenerationBoardProfileSnapshot,
         }),
       "INVALID_BOARD_PROFILE",
     );
   });
 
+  it.each([
+    ["unknown ID", { ...BOARD, id: "other-board" }],
+    ["unsupported version", { ...BOARD, version: "2.0.0" }],
+    ["candidate 78 x 78", { ...BOARD, pegGrid: { columns: 78, rows: 78 } }],
+    ["candidate 52 x 52", { ...BOARD, pegGrid: { columns: 52, rows: 52 } }],
+    ["extra key", { ...BOARD, extra: true }],
+  ])(
+    "rejects %s through the canonical BoardProfile schema",
+    (_label, board) => {
+      expectPatternError(
+        () =>
+          assemblePattern({
+            quantizedImage: solidQuantized(1, 1),
+            paletteColors: paletteColors(),
+            boardProfile: board as unknown as GenerationBoardProfileSnapshot,
+          }),
+        "INVALID_BOARD_PROFILE",
+      );
+    },
+  );
+
+  it("accepts the approved Generation BoardProfile Snapshot", () => {
+    expect(
+      assemblePattern({
+        quantizedImage: solidQuantized(1, 1),
+        paletteColors: paletteColors(),
+        boardProfile: BOARD,
+      }).boardLayout,
+    ).toMatchObject({
+      boardProfileId: "poparooz-board-104",
+      boardProfileVersion: "1.0.0",
+      boardCount: 1,
+    });
+  });
+
   it("reconciles every tile and layout total for partial boards", () => {
     const result = assemblePattern({
-      quantizedImage: solidQuantized(3, 3, [0, 8]),
+      quantizedImage: solidQuantized(209, 105, [0, 21944]),
       paletteColors: paletteColors([COLOR_A]),
       boardProfile: BOARD,
     });
     expect(result.boardLayout).toMatchObject({
-      boardCount: 4,
-      totalPegCapacity: 16,
-      usedBeadCount: 7,
+      boardColumns: 3,
+      boardRows: 2,
+      boardCount: 6,
+      totalPegCapacity: 64896,
+      usedBeadCount: 21943,
       transparentPatternPositions: 2,
-      outsidePatternPegCount: 7,
-      unusedPegCount: 9,
+      outsidePatternPegCount: 42951,
+      unusedPegCount: 42953,
     });
     expect(
       result.boardLayout.tiles.reduce((sum, tile) => sum + tile.beadCount, 0),
-    ).toBe(7);
+    ).toBe(21943);
     expect(
       result.boardLayout.tiles.reduce(
         (sum, tile) => sum + tile.transparentPatternPositions,
@@ -510,7 +549,68 @@ describe("board layout statistics", () => {
         (sum, tile) => sum + tile.outsidePatternPegCount,
         0,
       ),
-    ).toBe(7);
+    ).toBe(42951);
+    expect(
+      result.boardLayout.tiles.map(
+        ({ row, column, originX, originY, coveredWidth, coveredHeight }) => ({
+          row,
+          column,
+          originX,
+          originY,
+          coveredWidth,
+          coveredHeight,
+        }),
+      ),
+    ).toEqual([
+      {
+        row: 0,
+        column: 0,
+        originX: 0,
+        originY: 0,
+        coveredWidth: 104,
+        coveredHeight: 104,
+      },
+      {
+        row: 0,
+        column: 1,
+        originX: 104,
+        originY: 0,
+        coveredWidth: 104,
+        coveredHeight: 104,
+      },
+      {
+        row: 0,
+        column: 2,
+        originX: 208,
+        originY: 0,
+        coveredWidth: 1,
+        coveredHeight: 104,
+      },
+      {
+        row: 1,
+        column: 0,
+        originX: 0,
+        originY: 104,
+        coveredWidth: 104,
+        coveredHeight: 1,
+      },
+      {
+        row: 1,
+        column: 1,
+        originX: 104,
+        originY: 104,
+        coveredWidth: 104,
+        coveredHeight: 1,
+      },
+      {
+        row: 1,
+        column: 2,
+        originX: 208,
+        originY: 104,
+        coveredWidth: 1,
+        coveredHeight: 1,
+      },
+    ]);
   });
 });
 
@@ -573,7 +673,6 @@ describe("public pattern boundary", () => {
       "weightedAverageDistance",
       "maximumDistance",
       BOARD.id,
-      BOARD.name,
     ]) {
       expect(serialized).not.toContain(forbidden);
     }
@@ -863,7 +962,11 @@ describe("determinism and domain boundary", () => {
       Object.freeze(item);
     });
     Object.freeze(sourcePalette);
-    const board = Object.freeze({ ...BOARD });
+    const board = Object.freeze({
+      ...BOARD,
+      pegGrid: Object.freeze({ ...BOARD.pegGrid }),
+      tiling: Object.freeze({ ...BOARD.tiling }),
+    });
     const result = assemblePattern({
       quantizedImage: image,
       paletteColors: sourcePalette,
@@ -871,6 +974,7 @@ describe("determinism and domain boundary", () => {
     });
     expect(result.colors[0]!.color).toBe(sourcePalette[2]);
     expect(result.boardLayout.boardProfileId).toBe(board.id);
+    expect(result.boardLayout.boardProfileVersion).toBe(board.version);
   });
 
   it("contains no forbidden platform, locale, random, or Worker dependencies", () => {

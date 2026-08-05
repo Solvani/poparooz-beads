@@ -12,15 +12,28 @@ const bootstrapEntry = path.join(
   bootstrapRoot,
   "application-runtime-bootstrap.ts",
 );
+const approvedBoardArtifact = path.join(
+  sourceRoot,
+  "runtime",
+  "board-profile",
+  "artifacts",
+  "poparooz-board-104",
+  "1.0.0",
+  "board-profile.json",
+);
 
 describe("Application Runtime Bootstrap boundary", () => {
   it("has a browser-only runtime graph with no service, Worker, fallback, or governance input", async () => {
     const graph = await collectRuntimeDependencyGraph(bootstrapEntry);
     expect(graph.externalSpecifiers).toEqual(["zod"]);
+    expect(graph.files).toContain(approvedBoardArtifact);
+    expect(
+      graph.files.filter((file) => file.endsWith("board-profile.json")),
+    ).toEqual([approvedBoardArtifact]);
     for (const file of graph.files) {
       expect(file.startsWith(sourceRoot)).toBe(true);
       expect(file).not.toMatch(
-        /generation-service|workers?|quantization-worker|pattern-assembler|color-matching|fixture|data-source|scripts[\\/]palette|runtime-lock|runtime-policy|manifest|derivation-audit|validation-report|substitute|catalog|shopify|inventory/i,
+        /generation-service|workers?|quantization-worker|pattern-assembler|color-matching|fixture|benchmark|data-source|docs?[\\/]|evidence|scripts[\\/]palette|runtime-lock|runtime-policy|manifest|derivation-audit|validation-report|substitute|catalog|shopify|inventory|candidate/i,
       );
     }
   });
@@ -32,7 +45,7 @@ describe("Application Runtime Bootstrap boundary", () => {
     )) {
       const source = await readFile(file, "utf8");
       expect(source, file).not.toMatch(
-        /node:|fetch\(|XMLHttpRequest|localStorage|indexedDB|document\.cookie|new Worker|createGenerationService|assemblePattern|matchNearestPaletteColor|TEST_PALETTE_DEFINITION|palette\.fixture/i,
+        /node:|fetch\(|XMLHttpRequest|localStorage|indexedDB|document\.cookie|new Worker|createGenerationService|assemblePattern|matchNearestPaletteColor|TEST_PALETTE_DEFINITION|palette\.fixture|board-profile\.fixture|BENCHMARK_BOARD_PROFILE/i,
       );
     }
   });

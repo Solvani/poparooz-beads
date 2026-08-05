@@ -214,8 +214,8 @@ export function validatePatternAssemblyResult(
     boardLayout === null ||
     typeof boardLayout.boardProfileId !== "string" ||
     boardLayout.boardProfileId.length === 0 ||
-    typeof boardLayout.boardProfileName !== "string" ||
-    boardLayout.boardProfileName.length === 0 ||
+    typeof boardLayout.boardProfileVersion !== "string" ||
+    boardLayout.boardProfileVersion.length === 0 ||
     !isPositiveSafeInteger(boardLayout.boardColumns) ||
     !isPositiveSafeInteger(boardLayout.boardRows) ||
     !isPositiveSafeInteger(boardLayout.boardWidthInBeads) ||

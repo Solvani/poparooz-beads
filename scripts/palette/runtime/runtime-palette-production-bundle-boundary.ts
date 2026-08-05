@@ -6,6 +6,8 @@ export const APPROVED_RUNTIME_ARTIFACT_MODULE =
   "/src/runtime/palette/artifacts/poparooz-standard/formal-1.0.0/runtime-1.0.0/runtime-palette.json";
 export const POPAROOZ_COLOR_CODE_GRAMMAR_MODULE =
   "/src/domain/color/poparooz-color-code.ts";
+export const APPROVED_BOARD_PROFILE_ARTIFACT_MODULE =
+  "/src/runtime/board-profile/artifacts/poparooz-board-104/1.0.0/board-profile.json";
 
 const requiredProductionModules = [
   "/src/main.tsx",
@@ -16,6 +18,12 @@ const requiredProductionModules = [
   "/src/runtime/palette/runtime-palette.provider.ts",
   "/src/runtime/palette/runtime-palette.schema.ts",
   APPROVED_RUNTIME_ARTIFACT_MODULE,
+  "/src/runtime/board-profile/approved-board-profile.ts",
+  "/src/runtime/board-profile/board-profile.provider.ts",
+  "/src/runtime/board-profile/board-profile.schema.ts",
+  APPROVED_BOARD_PROFILE_ARTIFACT_MODULE,
+  "/src/runtime/generation-board-profile/board-profile-to-generation.adapter.ts",
+  "/src/runtime/generation-board-profile/generation-board-profile.schema.ts",
 ] as const;
 
 const topLevelArtifactFields = [
@@ -102,6 +110,7 @@ const nodeBuiltins = new Set(
 export type RuntimePaletteBundleBoundaryErrorCode =
   | "RUNTIME_BUNDLE_REQUIRED_MODULE_MISSING"
   | "RUNTIME_BUNDLE_FORBIDDEN_MODULE"
+  | "RUNTIME_BUNDLE_BOARD_PROFILE_DATA_INVALID"
   | "RUNTIME_BUNDLE_GENERATED_DATA_INVALID"
   | "RUNTIME_BUNDLE_EMITTED_FILE_FORBIDDEN"
   | "RUNTIME_BUNDLE_EMITTED_CONTENT_FORBIDDEN"
@@ -133,6 +142,7 @@ export interface RuntimePaletteProductionBundleBoundaryResult {
   readonly moduleCount: number;
   readonly emittedFileCount: number;
   readonly generatedPaletteDataModules: readonly string[];
+  readonly boardProfileDataModules: readonly string[];
   readonly recordCount: 221;
   readonly activeCount: 221;
   readonly autoMatchEligibleCount: 221;
@@ -145,6 +155,8 @@ export function verifyRuntimePaletteProductionBundleBoundary(
   const normalizedModuleIds = inspection.moduleIds.map(normalizeModuleId);
   verifyRequiredProductionModules(normalizedModuleIds);
   verifyForbiddenProductionModules(normalizedModuleIds);
+  const boardProfileDataModules =
+    verifyBoardProfileDataModules(normalizedModuleIds);
   const generatedPaletteDataModules =
     verifyGeneratedPaletteDataModules(normalizedModuleIds);
   const artifact = verifyRuntimePaletteArtifactBoundary(
@@ -157,6 +169,7 @@ export function verifyRuntimePaletteProductionBundleBoundary(
     moduleCount: normalizedModuleIds.length,
     emittedFileCount: inspection.emittedFiles.length,
     generatedPaletteDataModules: Object.freeze(generatedPaletteDataModules),
+    boardProfileDataModules: Object.freeze(boardProfileDataModules),
     recordCount: artifact.recordCount,
     activeCount: artifact.activeCount,
     autoMatchEligibleCount: artifact.autoMatchEligibleCount,
@@ -236,6 +249,24 @@ function verifyGeneratedPaletteDataModules(
   return generatedDataModules;
 }
 
+function verifyBoardProfileDataModules(moduleIds: readonly string[]): string[] {
+  const boardProfileDataModules = moduleIds.filter(
+    isBoardProfileArtifactModule,
+  );
+  if (
+    boardProfileDataModules.length !== 1 ||
+    !boardProfileDataModules[0]?.endsWith(
+      APPROVED_BOARD_PROFILE_ARTIFACT_MODULE,
+    )
+  ) {
+    fail(
+      "RUNTIME_BUNDLE_BOARD_PROFILE_DATA_INVALID",
+      `Production graph must contain only the approved BoardProfile Artifact; found: ${boardProfileDataModules.join(", ") || "none"}`,
+    );
+  }
+  return boardProfileDataModules;
+}
+
 function verifyEmittedProductionFiles(
   emittedFiles: readonly EmittedProductionFile[],
 ): void {
@@ -300,7 +331,42 @@ function forbiddenModuleReason(moduleId: string): string | undefined {
   if (/(?:\/catalog\/|shopify|\/inventory\/)/i.test(unqualified)) {
     return "catalog, Shopify, or inventory module";
   }
+  if (
+    /board-profile/i.test(unqualified) &&
+    /(?:candidate|(?:^|[^0-9])(?:52|78)(?:[^0-9]|$))/i.test(unqualified)
+  ) {
+    return "candidate BoardProfile input";
+  }
+  if (
+    /(?:board-profile.*fixture|fixture.*board-profile|scripts\/benchmarks\/benchmark-fixtures)/i.test(
+      unqualified,
+    )
+  ) {
+    return "BoardProfile or benchmark fixture";
+  }
+  if (/\/src\/domain\/board\/board-profile\./i.test(unqualified)) {
+    return "Legacy BoardProfile data module";
+  }
+  if (/\/(?:docs?|evidence)(?:\/|$)/i.test(unqualified)) {
+    return "documentation or evidence input";
+  }
+  if (
+    /board(?:-profile)?[^/]*(?:compiler|manifest|lock|hash)|(?:compiler|manifest|lock|hash)[^/]*board(?:-profile)?/i.test(
+      unqualified,
+    )
+  ) {
+    return "Node-only BoardProfile tooling or publication input";
+  }
   return undefined;
+}
+
+function isBoardProfileArtifactModule(moduleId: string): boolean {
+  const unqualified = moduleId.split("?")[0] ?? moduleId;
+  return (
+    /\.json$/i.test(unqualified) &&
+    (unqualified.includes("/src/runtime/board-profile/artifacts/") ||
+      /(?:^|\/)board-profile\.json$/i.test(unqualified))
+  );
 }
 
 function isGeneratedPaletteDataModule(moduleId: string): boolean {

@@ -9,6 +9,7 @@ import { describe, expect, it } from "vitest";
 
 import approvedRuntimePalette from "../../../src/runtime/palette/artifacts/poparooz-standard/formal-1.0.0/runtime-1.0.0/runtime-palette.json";
 import {
+  APPROVED_BOARD_PROFILE_ARTIFACT_MODULE,
   APPROVED_RUNTIME_ARTIFACT_MODULE,
   POPAROOZ_COLOR_CODE_GRAMMAR_MODULE,
   type EmittedProductionFile,
@@ -40,8 +41,11 @@ describe("Runtime Palette production bundle boundary", () => {
     );
 
     expect(inspection).toMatchObject({
-      requiredModuleCount: 8,
+      requiredModuleCount: 14,
       generatedPaletteDataModules: [normalize(approvedArtifactPath)],
+      boardProfileDataModules: [
+        expect.stringContaining(APPROVED_BOARD_PROFILE_ARTIFACT_MODULE),
+      ],
       recordCount: 221,
       activeCount: 221,
       autoMatchEligibleCount: 221,
@@ -67,6 +71,48 @@ describe("Runtime Palette production bundle boundary", () => {
       "D:/repo/data-source/palettes/formal/normalized-substitutes.json",
     ],
     ["MARD fixture", "D:/repo/src/domain/palette/mard-palette.fixture.ts"],
+    [
+      "candidate BoardProfile",
+      "D:/repo/src/runtime/board-profile/candidate/profile.ts",
+    ],
+    [
+      "78 x 78 BoardProfile",
+      "D:/repo/src/runtime/board-profile/candidate-78/profile.ts",
+    ],
+    [
+      "52 x 52 BoardProfile",
+      "D:/repo/src/runtime/board-profile/candidate-52/profile.ts",
+    ],
+    [
+      "BoardProfile fixture",
+      "D:/repo/src/domain/board/board-profile.fixture.ts",
+    ],
+    ["benchmark fixture", "D:/repo/scripts/benchmarks/benchmark-fixtures.ts"],
+    [
+      "Legacy BoardProfile module",
+      "D:/repo/src/domain/board/board-profile.schema.ts",
+    ],
+    [
+      "BoardProfile evidence",
+      "D:/repo/evidence/board-profile-measurements.json",
+    ],
+    ["BoardProfile documentation", "D:/repo/docs/board-profile.md"],
+    [
+      "BoardProfile compiler",
+      "D:/repo/scripts/board-profile/board-profile-compiler.ts",
+    ],
+    [
+      "BoardProfile manifest",
+      "D:/repo/src/runtime/board-profile/board-manifest.json",
+    ],
+    [
+      "BoardProfile lock",
+      "D:/repo/src/runtime/board-profile/board-profile.lock.json",
+    ],
+    [
+      "BoardProfile hash pipeline",
+      "D:/repo/scripts/board-profile/publish-board-hash.ts",
+    ],
   ])("rejects a browser import of %s", (_label, forbiddenModule) => {
     expectBoundaryFailure(
       () =>
@@ -76,6 +122,41 @@ describe("Runtime Palette production bundle boundary", () => {
           }),
         ),
       "RUNTIME_BUNDLE_FORBIDDEN_MODULE",
+    );
+  });
+
+  it("rejects a missing approved BoardProfile Artifact", () => {
+    expectBoundaryFailure(
+      () =>
+        verifyRuntimePaletteProductionBundleBoundary(
+          validInspection({
+            moduleIds: requiredModuleIds().filter(
+              (moduleId) => moduleId !== APPROVED_BOARD_PROFILE_ARTIFACT_MODULE,
+            ),
+          }),
+        ),
+      "RUNTIME_BUNDLE_REQUIRED_MODULE_MISSING",
+    );
+  });
+
+  it.each([
+    [
+      "a second BoardProfile JSON",
+      "/src/runtime/board-profile/artifacts/poparooz-board-104/1.0.1/board-profile.json",
+    ],
+    [
+      "an unknown BoardProfile Artifact",
+      "/src/runtime/board-profile/artifacts/unknown/1.0.0/board-profile.json",
+    ],
+  ])("rejects %s", (_label, extraArtifact) => {
+    expectBoundaryFailure(
+      () =>
+        verifyRuntimePaletteProductionBundleBoundary(
+          validInspection({
+            moduleIds: [...requiredModuleIds(), extraArtifact],
+          }),
+        ),
+      "RUNTIME_BUNDLE_BOARD_PROFILE_DATA_INVALID",
     );
   });
 
@@ -288,6 +369,12 @@ function requiredModuleIds(): string[] {
     "/src/runtime/palette/runtime-palette.provider.ts",
     "/src/runtime/palette/runtime-palette.schema.ts",
     APPROVED_RUNTIME_ARTIFACT_MODULE,
+    "/src/runtime/board-profile/approved-board-profile.ts",
+    "/src/runtime/board-profile/board-profile.provider.ts",
+    "/src/runtime/board-profile/board-profile.schema.ts",
+    APPROVED_BOARD_PROFILE_ARTIFACT_MODULE,
+    "/src/runtime/generation-board-profile/board-profile-to-generation.adapter.ts",
+    "/src/runtime/generation-board-profile/generation-board-profile.schema.ts",
   ];
 }
 

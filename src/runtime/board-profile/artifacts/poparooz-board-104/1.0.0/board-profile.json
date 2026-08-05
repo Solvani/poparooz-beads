@@ -1,0 +1,23 @@
+{
+  "id": "poparooz-board-104",
+  "version": "1.0.0",
+  "status": "approved",
+  "shape": "square",
+  "pegGrid": {
+    "columns": 104,
+    "rows": 104
+  },
+  "outerDimensionsMm": {
+    "width": 280,
+    "height": 280,
+    "thickness": 2
+  },
+  "firstToLastPegCenterSpanMm": 278,
+  "internalPegIntervalCount": 103,
+  "tiling": {
+    "supported": true,
+    "sharedEdgePegs": false,
+    "seamAdjacentPegCenterDistanceMm": 2.3,
+    "seamType": "non-uniform"
+  }
+}

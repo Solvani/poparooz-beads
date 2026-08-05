@@ -1,11 +1,11 @@
-import type { BoardProfile } from "../board/board-profile.types";
 import type { QuantizedImage } from "../quantization/quantization.types";
+import type { GenerationBoardProfileSnapshot } from "../../runtime/generation-board-profile/generation-board-profile.types";
 import type { GenerationPaletteColor } from "../../runtime/generation-palette/generation-palette.types";
 
 export interface AssemblePatternInput {
   readonly quantizedImage: QuantizedImage;
   readonly paletteColors: readonly GenerationPaletteColor[];
-  readonly boardProfile: BoardProfile;
+  readonly boardProfile: GenerationBoardProfileSnapshot;
 }
 
 export interface QuantizedPaletteMapping {
@@ -61,7 +61,7 @@ export interface PatternBoardTile {
 
 export interface PatternBoardLayout {
   readonly boardProfileId: string;
-  readonly boardProfileName: string;
+  readonly boardProfileVersion: string;
   readonly boardColumns: number;
   readonly boardRows: number;
   readonly boardCount: number;

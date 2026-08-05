@@ -45,10 +45,10 @@ The sole approved v1 Artifact has exactly this contract:
 
 ```ts
 type ApprovedBoardProfileArtifact = Readonly<{
-  id: 'poparooz-board-104';
-  version: '1.0.0';
-  status: 'approved';
-  shape: 'square';
+  id: "poparooz-board-104";
+  version: "1.0.0";
+  status: "approved";
+  shape: "square";
 
   pegGrid: Readonly<{
     columns: 104;
@@ -68,7 +68,7 @@ type ApprovedBoardProfileArtifact = Readonly<{
     supported: true;
     sharedEdgePegs: false;
     seamAdjacentPegCenterDistanceMm: 2.3;
-    seamType: 'non-uniform';
+    seamType: "non-uniform";
   }>;
 }>;
 ```
@@ -112,9 +112,9 @@ The generation-only Snapshot contains exactly:
 
 ```ts
 type GenerationBoardProfileSnapshot = Readonly<{
-  id: 'poparooz-board-104';
-  version: '1.0.0';
-  shape: 'square';
+  id: "poparooz-board-104";
+  version: "1.0.0";
+  shape: "square";
 
   pegGrid: Readonly<{
     columns: 104;

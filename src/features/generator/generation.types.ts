@@ -1,4 +1,3 @@
-import type { BoardProfile } from "../../domain/board/board-profile.types";
 import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
 import type {
   QuantizationOptions,
@@ -6,6 +5,7 @@ import type {
 } from "../../domain/quantization/quantization.types";
 import type { RgbaImage } from "../../domain/image/image.types";
 import type { GenerationPaletteSnapshot } from "../../runtime/generation-palette/generation-palette.types";
+import type { GenerationBoardProfileSnapshot } from "../../runtime/generation-board-profile/generation-board-profile.types";
 import type { PatternSettingsValue } from "../settings/settings.types";
 
 export type GenerationUnavailableReason =
@@ -49,7 +49,7 @@ export interface GenerationProcessingPolicy {
 
 export interface GenerationDependencies {
   readonly palette: GenerationPaletteSnapshot;
-  readonly boardProfile: BoardProfile;
+  readonly boardProfile: GenerationBoardProfileSnapshot;
   readonly processingPolicy: GenerationProcessingPolicy;
   readonly createWorkerClient: () => GenerationWorkerClient;
 }
@@ -86,5 +86,13 @@ export const STARTUP_GATED_GENERATION_RUNTIME: GenerationRuntime =
     availability: Object.freeze({
       available: false,
       reason: "production-runtime-unavailable",
+    }),
+  });
+
+export const BOARD_PROFILE_UNAVAILABLE_GENERATION_RUNTIME: GenerationRuntime =
+  Object.freeze({
+    availability: Object.freeze({
+      available: false,
+      reason: "board-profile-unavailable",
     }),
   });

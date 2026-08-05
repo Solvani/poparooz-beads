@@ -1,6 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { TEST_BOARD_PROFILE } from "../../domain/board/board-profile.fixture";
 import type { NormalizedImageResult } from "../../domain/image/image.types";
 import { PatternAssemblyError } from "../../domain/pattern/pattern-errors";
 import type { PatternAssemblyResult } from "../../domain/pattern/pattern.types";
@@ -9,6 +8,8 @@ import type { QuantizedImage } from "../../domain/quantization/quantization.type
 import { QuantizationWorkerError } from "../../lib/quantization-worker/quantization-worker.errors";
 import { GenerationPaletteAdapterError } from "../../runtime/generation-palette/generation-palette.errors";
 import { adaptRuntimePaletteToGeneration } from "../../runtime/generation-palette/runtime-to-generation-palette.adapter";
+import { createApprovedBoardProfileProvider } from "../../runtime/board-profile/approved-board-profile";
+import { adaptBoardProfileToGeneration } from "../../runtime/generation-board-profile/board-profile-to-generation.adapter";
 import { createApprovedRuntimePaletteProvider } from "../../runtime/palette/approved-runtime-palette";
 import {
   createGenerationRuntime,
@@ -62,6 +63,9 @@ const PUBLIC = { marker: "public-only" } as unknown as PublicPatternResult;
 const GENERATION_PALETTE = adaptRuntimePaletteToGeneration(
   createApprovedRuntimePaletteProvider().getSnapshot(),
 );
+const GENERATION_BOARD_PROFILE = adaptBoardProfileToGeneration(
+  createApprovedBoardProfileProvider().getSnapshot(),
+);
 
 function snapshot(maxColors = 512): GenerationInputSnapshot {
   return Object.freeze({
@@ -103,7 +107,7 @@ function setup() {
   };
   const dependencies: GenerationDependencies = {
     palette: GENERATION_PALETTE,
-    boardProfile: TEST_BOARD_PROFILE,
+    boardProfile: GENERATION_BOARD_PROFILE,
     processingPolicy: { allowUpscale: false, alphaThreshold: 0 },
     createWorkerClient: vi.fn(() => worker),
   };
@@ -156,7 +160,7 @@ describe("Generation Service", () => {
     expect(context.pipeline.assemble).toHaveBeenCalledWith({
       quantizedImage: QUANTIZED,
       paletteColors: GENERATION_PALETTE.colors,
-      boardProfile: TEST_BOARD_PROFILE,
+      boardProfile: GENERATION_BOARD_PROFILE,
     });
     expect(Object.isFrozen(GENERATION_PALETTE)).toBe(true);
     expect(Object.isFrozen(GENERATION_PALETTE.colors)).toBe(true);
@@ -243,6 +247,84 @@ describe("Generation Service", () => {
         palette: invalidPalette,
       }).availability,
     ).toEqual({ available: false, reason: "palette-unavailable" });
+    expect(context.dependencies.createWorkerClient).not.toHaveBeenCalled();
+  });
+
+  it("keeps Palette failure priority when Palette and BoardProfile are both invalid", () => {
+    const context = setup();
+    const invalidPalette = {
+      ...GENERATION_PALETTE,
+      colors: [],
+    } as unknown as GenerationDependencies["palette"];
+    const invalidBoardProfile = {
+      ...GENERATION_BOARD_PROFILE,
+      id: "other-board",
+    } as unknown as GenerationDependencies["boardProfile"];
+
+    expect(
+      createGenerationRuntime({
+        ...context.dependencies,
+        palette: invalidPalette,
+        boardProfile: invalidBoardProfile,
+      }).availability,
+    ).toEqual({ available: false, reason: "palette-unavailable" });
+    expect(() =>
+      createGenerationService(
+        {
+          ...context.dependencies,
+          palette: invalidPalette,
+          boardProfile: invalidBoardProfile,
+        },
+        context.pipeline,
+      ),
+    ).toThrow(GenerationPaletteAdapterError);
+    expect(context.dependencies.createWorkerClient).not.toHaveBeenCalled();
+    expect(context.pipeline.decode).not.toHaveBeenCalled();
+    expect(context.worker.quantize).not.toHaveBeenCalled();
+    expect(context.pipeline.assemble).not.toHaveBeenCalled();
+  });
+
+  it("fails closed on an invalid Generation BoardProfile before creating a Worker", () => {
+    const context = setup();
+    const invalidBoardProfile = {
+      ...GENERATION_BOARD_PROFILE,
+      pegGrid: { columns: 78, rows: 78 },
+    } as unknown as GenerationDependencies["boardProfile"];
+
+    expect(() =>
+      createGenerationService({
+        ...context.dependencies,
+        boardProfile: invalidBoardProfile,
+      }),
+    ).toThrow();
+    expect(
+      createGenerationRuntime({
+        ...context.dependencies,
+        boardProfile: invalidBoardProfile,
+      }).availability,
+    ).toEqual({ available: false, reason: "board-profile-unavailable" });
+    expect(context.dependencies.createWorkerClient).not.toHaveBeenCalled();
+    expect(context.pipeline.decode).not.toHaveBeenCalled();
+  });
+
+  it("rejects a Legacy BoardProfile shape before creating a Worker", () => {
+    const context = setup();
+    const legacyBoard = {
+      id: "legacy-board",
+      name: "Legacy Board",
+      columns: 104,
+      rows: 104,
+      beadSizeMm: 5,
+      isDefault: false,
+      isActive: true,
+    } as unknown as GenerationDependencies["boardProfile"];
+
+    expect(
+      createGenerationRuntime({
+        ...context.dependencies,
+        boardProfile: legacyBoard,
+      }).availability,
+    ).toEqual({ available: false, reason: "board-profile-unavailable" });
     expect(context.dependencies.createWorkerClient).not.toHaveBeenCalled();
   });
 });

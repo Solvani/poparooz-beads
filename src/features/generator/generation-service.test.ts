@@ -180,6 +180,49 @@ describe("Generation Service", () => {
     expect(Object.isFrozen(GENERATION_PALETTE.colors)).toBe(true);
   });
 
+  it("excludes only edge-connected light pixels before transparent-background quantization", async () => {
+    const context = setup();
+    const normalized = {
+      ...NORMALIZED,
+      image: {
+        width: 2,
+        height: 1,
+        data: new Uint8ClampedArray([255, 255, 255, 255, 200, 10, 20, 255]),
+      },
+    };
+    vi.mocked(context.pipeline.decode).mockResolvedValueOnce(normalized);
+
+    await createGenerationService(
+      context.dependencies,
+      context.pipeline,
+    ).generate(snapshot(), new AbortController().signal);
+
+    const quantizationImage = vi.mocked(context.worker.quantize).mock
+      .calls[0]![0];
+    expect([...quantizationImage.data]).toEqual([0, 0, 0, 0, 200, 10, 20, 255]);
+    expect(normalized.image.data).toEqual(
+      new Uint8ClampedArray([255, 255, 255, 255, 200, 10, 20, 255]),
+    );
+  });
+
+  it("passes the original normalized image through in white-background mode", async () => {
+    const context = setup();
+    const input = snapshot();
+    const whiteInput = {
+      ...input,
+      settings: { ...input.settings, background: "white" as const },
+    };
+
+    await createGenerationService(
+      context.dependencies,
+      context.pipeline,
+    ).generate(whiteInput, new AbortController().signal);
+
+    expect(vi.mocked(context.worker.quantize).mock.calls[0]![0]).toBe(
+      NORMALIZED.image,
+    );
+  });
+
   it("keeps the full selected Color Set membership independent from maxColors", async () => {
     const context = setup();
     const profile72 = GENERATION_COLOR_SETS.profiles.find(

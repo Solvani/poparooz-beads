@@ -68,8 +68,50 @@ describe("renderPatternExport", () => {
     expect(labels).toContain("Actual Colors: 2 · Total Beads: 3");
     expect(labels.filter((label) => label === "A1")).toHaveLength(2);
     expect(labels.filter((label) => label === "B1")).toHaveLength(1);
+    expect(labels.filter((label) => /^(?:A1|B1)$/.test(label))).toHaveLength(3);
     expect(labels).toContain("A1  2 beads");
     expect(labels).toContain("B1  1 beads");
+  });
+
+  it("omits codes for excluded background positions and retains an interior white code", () => {
+    const target = exportCanvas();
+    const base = createPublicPattern(
+      3,
+      3,
+      [65535, 65535, 65535, 65535, 1, 65535, 65535, 65535, 65535],
+    );
+    const white = Object.freeze({
+      index: 1,
+      color: Object.freeze({
+        brand: "Poparooz" as const,
+        code: "H2",
+        hex: "#FEFFFF",
+      }),
+      beadCount: 1,
+    });
+    const pattern = Object.freeze({
+      ...base,
+      colors: Object.freeze([white]),
+      materials: Object.freeze([
+        Object.freeze({
+          patternColorIndex: 1,
+          color: white.color,
+          beadCount: 1,
+        }),
+      ]),
+    });
+
+    expect(
+      renderPatternExport(
+        { pattern, selectedColorSetLabel: "221-Color Set" },
+        () => target.canvas,
+      ).ok,
+    ).toBe(true);
+    const cellCodes = vi
+      .mocked(target.context.fillText)
+      .mock.calls.map(([text]) => String(text))
+      .filter((label) => /^[A-HM]\d{1,2}$/.test(label));
+    expect(cellCodes).toEqual(["H2"]);
   });
 
   it("fails closed for unknown color indices and canvas failures", () => {

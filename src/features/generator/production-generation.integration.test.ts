@@ -52,6 +52,7 @@ const NORMALIZED: NormalizedImageResult = {
 function input(
   selectedColorSetProfileId: PublishedColorSetProfileId,
   maxColors: number,
+  background: "transparent" | "white" = "white",
 ): GenerationInputSnapshot {
   return Object.freeze({
     jobId: 1,
@@ -63,10 +64,10 @@ function input(
       width: 8,
       height: 8,
       maxColors,
-      background: "white" as const,
+      background,
       selectedColorSetProfileId,
     }),
-    inputKey: `1:8:8:${maxColors}:white:${selectedColorSetProfileId}`,
+    inputKey: `1:8:8:${maxColors}:${background}:${selectedColorSetProfileId}`,
   });
 }
 
@@ -141,4 +142,103 @@ describe("production generation composition", () => {
       );
     },
   );
+
+  it("excludes outer white canvas pixels while retaining enclosed white bead detail", async () => {
+    const white = [254, 255, 255, 255];
+    const red = [210, 20, 30, 255];
+    const normalized: NormalizedImageResult = {
+      ...NORMALIZED,
+      target: {
+        ...NORMALIZED.target,
+        width: 5,
+        height: 5,
+        drawWidth: 5,
+        drawHeight: 5,
+      },
+      image: {
+        width: 5,
+        height: 5,
+        data: new Uint8ClampedArray(
+          [
+            white,
+            white,
+            white,
+            white,
+            white,
+            white,
+            red,
+            red,
+            red,
+            white,
+            white,
+            red,
+            white,
+            red,
+            white,
+            white,
+            red,
+            red,
+            red,
+            white,
+            white,
+            white,
+            white,
+            white,
+            white,
+          ].flat(),
+        ),
+      },
+    };
+    const pipeline: GenerationPipeline = {
+      decode: vi.fn(async () => normalized),
+      assemble: assemblePattern,
+      toPublic: toPublicPatternResult,
+    };
+    const service = createGenerationService(
+      {
+        palette: adaptRuntimePaletteToGeneration(
+          createApprovedRuntimePaletteProvider().getSnapshot(),
+        ),
+        colorSets: adaptColorSetToGeneration(
+          createApprovedColorSetProvider().getSnapshot(),
+        ),
+        boardProfile: adaptBoardProfileToGeneration(
+          createApprovedBoardProfileProvider().getSnapshot(),
+        ),
+        processingPolicy:
+          createApprovedProcessingPolicyProvider().getSnapshot(),
+        createWorkerClient: () => ({
+          quantize: async (image, options) => quantizeImage(image, options),
+          dispose: vi.fn(),
+        }),
+      },
+      pipeline,
+    );
+
+    const result = await service.generate(
+      input("poparooz-set-221", 2, "transparent"),
+      new AbortController().signal,
+    );
+    const whiteColor = result.colors.find(({ color }) => color.code === "H2");
+
+    expect(result.totals).toMatchObject({
+      totalPositions: 25,
+      totalBeads: 9,
+      transparentPositions: 16,
+    });
+    expect(result.matrix.colorIndices[0]).toBe(result.matrix.transparentIndex);
+    expect(result.matrix.colorIndices[12]).not.toBe(
+      result.matrix.transparentIndex,
+    );
+    expect(whiteColor?.beadCount).toBe(1);
+    expect(
+      result.materials.find(({ color }) => color.code === "H2")?.beadCount,
+    ).toBe(1);
+    expect(result.colors.reduce((sum, color) => sum + color.beadCount, 0)).toBe(
+      result.totals.totalBeads,
+    );
+    expect(
+      result.materials.reduce((sum, material) => sum + material.beadCount, 0),
+    ).toBe(result.totals.totalBeads);
+  });
 });

@@ -14,7 +14,7 @@ const COLOR_SET_PROFILES = [
 ] as const;
 
 describe("pattern settings validation", () => {
-  it("starts without invented valid defaults", () => {
+  it("starts with the approved 80 by 80 default but requires a background", () => {
     expect(
       validatePatternSettings(EMPTY_PATTERN_SETTINGS, COLOR_SET_PROFILES),
     ).toMatchObject({
@@ -22,66 +22,60 @@ describe("pattern settings validation", () => {
     });
   });
 
-  it("accepts the formal dimension, color, and background boundaries", () => {
-    expect(
-      validatePatternSettings(
-        {
-          width: "1",
-          height: "1",
-          maxColors: "2",
+  it.each(["40", "60", "80", "104"])(
+    "accepts the approved %s by %s preset",
+    (size) => {
+      expect(
+        validatePatternSettings(
+          {
+            width: size,
+            height: size,
+            maxColors: "2",
+            background: "white",
+            selectedColorSetProfileId: "poparooz-set-24",
+          },
+          COLOR_SET_PROFILES,
+        ),
+      ).toEqual({
+        valid: true,
+        value: {
+          width: Number(size),
+          height: Number(size),
+          maxColors: 2,
           background: "white",
           selectedColorSetProfileId: "poparooz-set-24",
         },
-        COLOR_SET_PROFILES,
-      ),
-    ).toEqual({
-      valid: true,
-      value: {
-        width: 1,
-        height: 1,
-        maxColors: 2,
-        background: "white",
-        selectedColorSetProfileId: "poparooz-set-24",
-      },
-    });
-    expect(
-      validatePatternSettings(
-        {
-          width: "4096",
-          height: "4096",
-          maxColors: "64",
-          background: "transparent",
-          selectedColorSetProfileId: "poparooz-set-221",
-        },
-        COLOR_SET_PROFILES,
-      ),
-    ).toMatchObject({ valid: true });
-  });
+      });
+    },
+  );
 
-  it.each(["NaN", "Infinity", "-1", "1.5", "0", "4097"])(
-    "rejects invalid dimension input %s",
+  it.each(["41", "72", "100", "4096", "NaN", "1.5"])(
+    "rejects unsupported Pattern Size %s",
     (width) => {
       expect(
         validatePatternSettings(
           {
             width,
-            height: "1",
+            height: width,
             maxColors: "2",
             background: "white",
             selectedColorSetProfileId: "poparooz-set-221",
           },
           COLOR_SET_PROFILES,
         ),
-      ).toMatchObject({ valid: false, errors: { width: expect.any(String) } });
+      ).toMatchObject({
+        valid: false,
+        errors: { dimensions: expect.any(String) },
+      });
     },
   );
 
-  it("rejects dimensions above the formal total-pixel boundary", () => {
+  it("rejects unequal width and height", () => {
     expect(
       validatePatternSettings(
         {
-          width: "4096",
-          height: "4097",
+          width: "80",
+          height: "104",
           maxColors: "32",
           background: "white",
           selectedColorSetProfileId: "poparooz-set-221",
@@ -97,8 +91,8 @@ describe("pattern settings validation", () => {
       expect(
         validatePatternSettings(
           {
-            width: "1",
-            height: "1",
+            width: "80",
+            height: "80",
             maxColors,
             background: "white",
             selectedColorSetProfileId: "poparooz-set-221",
@@ -122,8 +116,8 @@ describe("pattern settings validation", () => {
     expect(
       validatePatternSettings(
         {
-          width: "1",
-          height: "1",
+          width: "80",
+          height: "80",
           maxColors: "32",
           background: "white",
           selectedColorSetProfileId:

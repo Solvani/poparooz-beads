@@ -2,9 +2,11 @@ import type { PatternSummaryView } from "./result.types";
 
 export function PatternSummary({
   summary,
+  selectedColorSetLabel,
   variant = "full",
 }: {
   readonly summary: PatternSummaryView;
+  readonly selectedColorSetLabel: string;
   readonly variant?: "full" | "compact";
 }) {
   return (
@@ -29,6 +31,10 @@ export function PatternSummary({
         <div>
           <dt>Boards</dt>
           <dd>{summary.boardsLabel}</dd>
+        </div>
+        <div>
+          <dt>Selected Bead Color Set</dt>
+          <dd>{selectedColorSetLabel}</dd>
         </div>
       </dl>
       {summary.transparentPositionsLabel ? (

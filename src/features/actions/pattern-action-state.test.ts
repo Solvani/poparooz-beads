@@ -97,10 +97,9 @@ describe("toPatternActionState", () => {
       hasResult: true,
       resultIdentity: 7,
       resultScope: "current-result",
-      downloadEnabled: false,
+      downloadEnabled: true,
       getBeadsEnabled: false,
-      availabilityMessage:
-        "Download and bead options are not available in this preview.",
+      availabilityMessage: "Download your color code pattern as a PNG.",
       scopeMessage: null,
     });
   });
@@ -198,9 +197,9 @@ describe("toPatternActionState", () => {
     expect(state.lastSuccess.result).toBe(guardedResult);
   });
 
-  it("keeps both production capabilities frozen and unavailable", () => {
+  it("enables only the frozen production download capability", () => {
     expect(PRODUCTION_PATTERN_ACTION_CAPABILITIES).toEqual({
-      downloadPattern: false,
+      downloadPattern: true,
       getBeads: false,
     });
     expect(Object.isFrozen(PRODUCTION_PATTERN_ACTION_CAPABILITIES)).toBe(true);

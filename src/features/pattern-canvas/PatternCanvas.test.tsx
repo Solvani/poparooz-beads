@@ -30,6 +30,11 @@ function context() {
     moveTo: vi.fn(),
     lineTo: vi.fn(),
     stroke: vi.fn(),
+    save: vi.fn(),
+    restore: vi.fn(),
+    rect: vi.fn(),
+    clip: vi.fn(),
+    fillText: vi.fn(),
   } as unknown as CanvasRenderingContext2D;
 }
 
@@ -65,15 +70,27 @@ function environment() {
   const resizeFrames = controlledFrames();
   const drawFrames = controlledFrames();
   const observer = { observe: vi.fn(), disconnect: vi.fn() };
+  let resizeCallback: ResizeObserverCallback | undefined;
   const value: PatternCanvasEnvironment = {
     createRasterSurface,
     scheduler: resizeFrames.scheduler,
     drawScheduler: drawFrames.scheduler,
-    createResizeObserver: vi.fn(() => observer),
+    createResizeObserver: vi.fn((callback) => {
+      resizeCallback = callback;
+      return observer;
+    }),
     getDevicePixelRatio: () => 2,
   };
   const flush = () => {
     act(() => resizeFrames.flush());
+    act(() => drawFrames.flush());
+    act(() => drawFrames.flush());
+  };
+  const notifyResize = () => {
+    act(() => {
+      resizeCallback?.([], observer as unknown as ResizeObserver);
+      resizeFrames.flush();
+    });
     act(() => drawFrames.flush());
     act(() => drawFrames.flush());
   };
@@ -84,23 +101,35 @@ function environment() {
     drawFrames,
     observer,
     flush,
+    notifyResize,
   };
 }
 
+let displayContext: CanvasRenderingContext2D;
+
 beforeEach(() => {
-  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({
-    x: 0,
-    y: 0,
-    top: 0,
-    left: 0,
-    right: 600,
-    bottom: 420,
-    width: 600,
-    height: 420,
-    toJSON: () => ({}),
-  } as DOMRect);
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+    function (this: HTMLElement) {
+      const width = 600;
+      const height = this.classList.contains("pattern-canvas__viewport--code")
+        ? width
+        : 420;
+      return {
+        x: 0,
+        y: 0,
+        top: 0,
+        left: 0,
+        right: width,
+        bottom: height,
+        width,
+        height,
+        toJSON: () => ({}),
+      } as DOMRect;
+    },
+  );
+  displayContext = context();
   vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(
-    context(),
+    displayContext,
   );
 });
 
@@ -126,12 +155,212 @@ describe("PatternCanvas", () => {
       }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Zoom in" })).toBeEnabled();
+    expect(
+      screen.getByRole("button", { name: "Color Preview" }),
+    ).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("button", { name: "Fit Pattern" })).toBeEnabled();
     expect(screen.getByRole("button", { name: "Grid" })).toHaveAttribute(
       "aria-pressed",
       "false",
     );
     expect(document.querySelectorAll("canvas")).toHaveLength(1);
+    expect(
+      document.querySelector(".pattern-canvas__viewport--code"),
+    ).toBeNull();
+  });
+
+  it("registers wheel panning as non-passive and removes the listener", () => {
+    const addEventListener = vi.spyOn(
+      HTMLCanvasElement.prototype,
+      "addEventListener",
+    );
+    const removeEventListener = vi.spyOn(
+      HTMLCanvasElement.prototype,
+      "removeEventListener",
+    );
+    const setup = environment();
+    const view = render(
+      <PatternCanvas
+        pattern={createPublicPattern(20, 20, new Uint16Array(400))}
+        environment={setup.value}
+      />,
+    );
+
+    expect(addEventListener).toHaveBeenCalledWith(
+      "wheel",
+      expect.any(Function),
+      { passive: false },
+    );
+    view.unmount();
+    expect(removeEventListener).toHaveBeenCalledWith(
+      "wheel",
+      expect.any(Function),
+    );
+  });
+
+  it("switches views without rebuilding or mutating the pattern", async () => {
+    const setup = environment();
+    const pattern = createPublicPattern(20, 20, new Uint16Array(400));
+    render(<PatternCanvas pattern={pattern} environment={setup.value} />);
+    setup.flush();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Color Code View" }),
+    );
+    setup.notifyResize();
+    expect(setup.createRasterSurface).toHaveBeenCalledOnce();
+    expect(displayContext.fillText).toHaveBeenCalledWith(
+      "A1",
+      expect.any(Number),
+      expect.any(Number),
+      expect.any(Number),
+    );
+    expect(
+      screen.getByRole("button", { name: "Color Code View" }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(
+      document.querySelector(".pattern-canvas__viewport--code"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Poparooz color codes are aligned with their pattern cells.",
+      ),
+    ).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Color Preview" }),
+    );
+    setup.flush();
+    expect(setup.createRasterSurface).toHaveBeenCalledOnce();
+    expect(pattern.matrix.colorIndices).toEqual(new Uint16Array(400));
+    expect(
+      document.querySelector(".pattern-canvas__viewport--code"),
+    ).toBeNull();
+  });
+
+  it.each([40, 80, 104])(
+    "fits the complete %i-square pattern before offering readable codes",
+    async (size) => {
+      const setup = environment();
+      render(
+        <PatternCanvas
+          pattern={createPublicPattern(
+            size,
+            size,
+            new Uint16Array(size * size),
+          )}
+          environment={setup.value}
+        />,
+      );
+      setup.flush();
+      expect(screen.getByLabelText("Current zoom")).toHaveTextContent("100%");
+
+      await userEvent.click(
+        screen.getByRole("button", { name: "Color Code View" }),
+      );
+      setup.notifyResize();
+
+      expect(screen.getByLabelText("Current zoom")).toHaveTextContent("100%");
+      const canvas = screen.getByRole("img") as HTMLCanvasElement;
+      expect(canvas.width).toBe(canvas.height);
+      expect(displayContext.drawImage).toHaveBeenLastCalledWith(
+        expect.anything(),
+        0,
+        0,
+        size,
+        size,
+        expect.any(Number),
+        expect.any(Number),
+        expect.any(Number),
+        expect.any(Number),
+      );
+      expect(displayContext.fillText).not.toHaveBeenCalled();
+      expect(
+        screen.getByText("Zoom in to read color codes."),
+      ).toBeInTheDocument();
+
+      await userEvent.click(screen.getByRole("button", { name: "Read Codes" }));
+      setup.flush();
+
+      expect(screen.getByLabelText("Current zoom")).not.toHaveTextContent(
+        "100%",
+      );
+      expect(displayContext.fillText).toHaveBeenCalledWith(
+        "A1",
+        expect.any(Number),
+        expect.any(Number),
+        expect.any(Number),
+      );
+      expect(
+        vi
+          .mocked(displayContext.rect)
+          .mock.calls.every(([, , width, height]) => width === height),
+      ).toBe(true);
+      expect(
+        screen.getByText(
+          "Poparooz color codes are aligned with their pattern cells.",
+        ),
+      ).toBeInTheDocument();
+    },
+  );
+
+  it("allows Fit Pattern to return Code View to the low-scale hint", async () => {
+    const setup = environment();
+    render(
+      <PatternCanvas
+        pattern={createPublicPattern(104, 104, new Uint16Array(104 * 104))}
+        environment={setup.value}
+      />,
+    );
+    setup.flush();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Color Code View" }),
+    );
+    setup.notifyResize();
+    expect(displayContext.fillText).not.toHaveBeenCalled();
+
+    await userEvent.click(screen.getByRole("button", { name: "Read Codes" }));
+    setup.flush();
+    expect(displayContext.fillText).toHaveBeenCalled();
+
+    vi.mocked(displayContext.fillText).mockClear();
+    await userEvent.click(screen.getByRole("button", { name: "Fit Pattern" }));
+    setup.flush();
+    expect(displayContext.fillText).not.toHaveBeenCalled();
+    const canvas = screen.getByRole("img") as HTMLCanvasElement;
+    expect(canvas.width).toBe(canvas.height);
+    expect(
+      screen.getByText("Zoom in to read color codes."),
+    ).toBeInTheDocument();
+  });
+
+  it("shows and hides grid lines in Color Code View without hiding codes", async () => {
+    const setup = environment();
+    render(
+      <PatternCanvas
+        pattern={createPublicPattern(80, 80, new Uint16Array(80 * 80))}
+        environment={setup.value}
+      />,
+    );
+    setup.flush();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Color Code View" }),
+    );
+    setup.notifyResize();
+    await userEvent.click(screen.getByRole("button", { name: "Read Codes" }));
+    setup.flush();
+
+    expect(displayContext.fillText).toHaveBeenCalled();
+    expect(displayContext.stroke).not.toHaveBeenCalled();
+
+    await userEvent.click(screen.getByRole("button", { name: "Grid" }));
+    setup.flush();
+    expect(displayContext.stroke).toHaveBeenCalled();
+
+    vi.mocked(displayContext.stroke).mockClear();
+    vi.mocked(displayContext.fillText).mockClear();
+    await userEvent.click(screen.getByRole("button", { name: "Grid" }));
+    setup.flush();
+    expect(displayContext.stroke).not.toHaveBeenCalled();
+    expect(displayContext.fillText).toHaveBeenCalled();
   });
 
   it("caches a raster across zoom, pan, and grid changes and invalidates on a new result", async () => {

@@ -28,6 +28,28 @@ function layout(overrides: Partial<BoardLayoutView> = {}): BoardLayoutView {
 }
 
 describe("BoardLayoutSummary", () => {
+  it("keeps the single-board summary without an empty visual placeholder", () => {
+    const { container } = render(
+      <BoardLayoutSummary
+        layout={layout({
+          boardCount: 1,
+          boardCountLabel: "1 board",
+          boardColumns: 1,
+          boardRows: 1,
+          dimensionsLabel: "1 column 脳 1 row",
+          accessibilityLabel: "Board layout, 1 board, 1 column by 1 row.",
+          previewColumns: 1,
+          previewRows: 1,
+          tiles: [{ row: 0, column: 0, label: "Board at row 1, column 1" }],
+        })}
+      />,
+    );
+    expect(screen.getByRole("heading", { name: "Board Layout" })).toBeVisible();
+    expect(screen.getByText("1 board")).toBeVisible();
+    expect(screen.getByText("1 column 脳 1 row")).toBeVisible();
+    expect(container.querySelector(".board-layout-preview")).toBeNull();
+  });
+
   it("renders exact small-layout tiles and an accessible text summary", () => {
     render(<BoardLayoutSummary layout={layout()} />);
     expect(screen.getByText("4 boards")).toBeInTheDocument();

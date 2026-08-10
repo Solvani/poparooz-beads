@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 
 import { Button } from "../../components/ui/Button";
-import { MAX_TARGET_DIMENSION, MIN_TARGET_DIMENSION } from "../../domain/image";
 import type {
   ColorSetProfileOption,
   PatternSettingsDraft,
 } from "./settings.types";
+import { PATTERN_SIZE_PRESETS } from "./settings.types";
 import { validatePatternSettings } from "./settings-validation";
 
 export interface PatternSettingsProps {
@@ -32,26 +32,7 @@ export function PatternSettings({
   return (
     <section className="pattern-settings" aria-labelledby="settings-heading">
       <h3 id="settings-heading">Pattern Settings</h3>
-      <div className="settings-grid">
-        <NumberSetting
-          id="pattern-width"
-          label="Pattern Width"
-          value={value.width}
-          min={MIN_TARGET_DIMENSION}
-          max={MAX_TARGET_DIMENSION}
-          error={value.width === "" ? undefined : errors.width}
-          onChange={(nextValue) => update("width", nextValue)}
-        />
-        <NumberSetting
-          id="pattern-height"
-          label="Pattern Height"
-          value={value.height}
-          min={MIN_TARGET_DIMENSION}
-          max={MAX_TARGET_DIMENSION}
-          error={value.height === "" ? undefined : errors.height}
-          onChange={(nextValue) => update("height", nextValue)}
-        />
-      </div>
+      <PatternSizeSetting value={value} onChange={onChange} />
       {errors.dimensions ? (
         <p className="form-error" role="alert">
           {errors.dimensions}
@@ -145,6 +126,46 @@ export function PatternSettings({
         generationControls
       )}
     </section>
+  );
+}
+
+function PatternSizeSetting({
+  value,
+  onChange,
+}: {
+  readonly value: PatternSettingsDraft;
+  readonly onChange: (value: PatternSettingsDraft) => void;
+}) {
+  const selected = PATTERN_SIZE_PRESETS.find(
+    (preset) =>
+      String(preset.size) === value.width && value.width === value.height,
+  );
+  return (
+    <div className="form-field">
+      <label htmlFor="pattern-size">Pattern Size</label>
+      <select
+        id="pattern-size"
+        value={selected?.size ?? ""}
+        aria-describedby="pattern-size-help"
+        onChange={(event) => {
+          const size = event.currentTarget.value;
+          onChange({ ...value, width: size, height: size });
+        }}
+      >
+        {selected === undefined ? (
+          <option value="">Choose a size</option>
+        ) : null}
+        {PATTERN_SIZE_PRESETS.map((preset) => (
+          <option key={preset.size} value={preset.size}>
+            {preset.size} × {preset.size}
+            {preset.size === 80 ? " — Recommended" : ""}
+          </option>
+        ))}
+      </select>
+      <p id="pattern-size-help" className="form-help">
+        {selected?.guidance ?? "Choose a supported square Pattern Size."}
+      </p>
+    </div>
   );
 }
 

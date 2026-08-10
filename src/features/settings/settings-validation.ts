@@ -1,13 +1,9 @@
-import {
-  MAX_TARGET_DIMENSION,
-  MAX_TARGET_PIXELS,
-  MIN_TARGET_DIMENSION,
-} from "../../domain/image";
 import type {
   ColorSetProfileOption,
   PatternSettingsDraft,
   PatternSettingsValue,
 } from "./settings.types";
+import { PATTERN_SIZE_PRESETS } from "./settings.types";
 
 export interface PatternSettingsErrors {
   readonly width?: string;
@@ -29,13 +25,11 @@ export function validatePatternSettings(
   const width = parseContractInteger(draft.width);
   const height = parseContractInteger(draft.height);
   const maxColors = parseContractInteger(draft.maxColors);
+  const dimensionsValid = isPatternSizePreset(width) && width === height;
   const errors: PatternSettingsErrors = {
-    ...(isDimension(width)
+    ...(dimensionsValid
       ? {}
-      : { width: "Enter a whole number from 1 to 4096." }),
-    ...(isDimension(height)
-      ? {}
-      : { height: "Enter a whole number from 1 to 4096." }),
+      : { dimensions: "Choose a supported square Pattern Size." }),
     ...(isColorCount(maxColors)
       ? {}
       : { maxColors: "Enter a whole number from 2 to 64." }),
@@ -47,11 +41,6 @@ export function validatePatternSettings(
     )
       ? {}
       : { selectedColorSetProfileId: "Choose an available Color Set." }),
-    ...(isDimension(width) &&
-    isDimension(height) &&
-    width > Math.floor(MAX_TARGET_PIXELS / height)
-      ? { dimensions: "Width and height exceed the supported pixel limit." }
-      : {}),
   };
 
   if (Object.keys(errors).length > 0) return { valid: false, errors };
@@ -74,12 +63,8 @@ function parseContractInteger(input: string): number | null {
   return Number.isSafeInteger(value) ? value : null;
 }
 
-function isDimension(value: number | null): value is number {
-  return (
-    value !== null &&
-    value >= MIN_TARGET_DIMENSION &&
-    value <= MAX_TARGET_DIMENSION
-  );
+function isPatternSizePreset(value: number | null): value is number {
+  return PATTERN_SIZE_PRESETS.some((preset) => preset.size === value);
 }
 
 function isColorCount(value: number | null): value is number {

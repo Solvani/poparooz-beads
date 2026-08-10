@@ -19,9 +19,14 @@ export type ResultLifecycleStatus =
 export interface PatternResultsProps {
   readonly pattern: PublicPatternResult;
   readonly status: ResultLifecycleStatus;
+  readonly selectedColorSetLabel: string;
 }
 
-export function PatternResults({ pattern, status }: PatternResultsProps) {
+export function PatternResults({
+  pattern,
+  status,
+  selectedColorSetLabel,
+}: PatternResultsProps) {
   const result = useMemo(() => toPatternResultView(pattern), [pattern]);
   if (!result.ok) {
     return (
@@ -33,7 +38,10 @@ export function PatternResults({ pattern, status }: PatternResultsProps) {
   return (
     <div className="pattern-results">
       <ResultRetentionStatus status={status} />
-      <PatternSummary summary={result.view.summary} />
+      <PatternSummary
+        summary={result.view.summary}
+        selectedColorSetLabel={selectedColorSetLabel}
+      />
       <ColorList colors={result.view.colors} />
       <BoardLayoutSummary layout={result.view.boardLayout} />
     </div>

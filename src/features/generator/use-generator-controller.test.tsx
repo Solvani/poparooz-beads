@@ -8,8 +8,8 @@ import type { GenerationRuntime, GenerationService } from "./generation.types";
 import { useGeneratorController } from "./use-generator-controller";
 
 const VALID_SETTINGS: PatternSettingsDraft = {
-  width: "32",
-  height: "24",
+  width: "80",
+  height: "80",
   maxColors: "16",
   background: "white",
   selectedColorSetProfileId: "poparooz-set-221",
@@ -70,13 +70,15 @@ describe("useGeneratorController", () => {
     expect(Object.isFrozen(snapshot)).toBe(true);
     expect(Object.isFrozen(snapshot.settings)).toBe(true);
 
-    rerender({ settings: { ...VALID_SETTINGS, width: "40" } });
+    rerender({
+      settings: { ...VALID_SETTINGS, width: "40", height: "40" },
+    });
     await waitFor(() => {
       if (result.current.state.status !== "processing")
         throw new Error("not processing");
       expect(result.current.state.input.candidate?.settings.width).toBe(40);
     });
-    expect(snapshot.settings.width).toBe(32);
+    expect(snapshot.settings.width).toBe(80);
 
     await act(async () => task.resolve(RESULT));
     expect(result.current.state.status).toBe("dirty");

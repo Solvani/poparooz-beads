@@ -9,7 +9,13 @@ afterEach(cleanup);
 
 describe("PatternResults", () => {
   it("renders summary, colors, and board layout from one public result", () => {
-    render(<PatternResults pattern={createResultFixture()} status="success" />);
+    render(
+      <PatternResults
+        pattern={createResultFixture()}
+        status="success"
+        selectedColorSetLabel="72-Color Set"
+      />,
+    );
     expect(
       screen.getByRole("heading", { name: "Pattern Summary" }),
     ).toBeInTheDocument();
@@ -17,6 +23,8 @@ describe("PatternResults", () => {
     expect(
       screen.getByRole("heading", { name: "Board Layout" }),
     ).toBeInTheDocument();
+    expect(screen.getByText("Selected Bead Color Set")).toBeInTheDocument();
+    expect(screen.getByText("72-Color Set")).toBeInTheDocument();
   });
 
   it.each([
@@ -34,7 +42,13 @@ describe("PatternResults", () => {
       "Pattern update failed. These previous pattern details remain available.",
     ],
   ] as const)("announces retained details while %s", (status, message) => {
-    render(<PatternResults pattern={createResultFixture()} status={status} />);
+    render(
+      <PatternResults
+        pattern={createResultFixture()}
+        status={status}
+        selectedColorSetLabel="72-Color Set"
+      />,
+    );
     expect(screen.getByRole("status")).toHaveTextContent(message);
   });
 
@@ -52,7 +66,12 @@ describe("PatternResults", () => {
       colors: createManyColors(9),
     });
     const view = render(
-      <PatternResults key="first" pattern={first} status="success" />,
+      <PatternResults
+        key="first"
+        pattern={first}
+        status="success"
+        selectedColorSetLabel="72-Color Set"
+      />,
     );
     await userEvent.click(
       screen.getByRole("button", { name: "Show all colors" }),
@@ -61,13 +80,23 @@ describe("PatternResults", () => {
       10,
     );
     view.rerender(
-      <PatternResults key="first" pattern={first} status="dirty" />,
+      <PatternResults
+        key="first"
+        pattern={first}
+        status="dirty"
+        selectedColorSetLabel="72-Color Set"
+      />,
     );
     expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
       10,
     );
     view.rerender(
-      <PatternResults key="second" pattern={second} status="success" />,
+      <PatternResults
+        key="second"
+        pattern={second}
+        status="success"
+        selectedColorSetLabel="221-Color Set"
+      />,
     );
     expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
       8,
@@ -83,6 +112,7 @@ describe("PatternResults", () => {
           totals: { ...pattern.totals, totalBeads: -1 },
         }}
         status="success"
+        selectedColorSetLabel="72-Color Set"
       />,
     );
     expect(screen.getByRole("status")).toHaveTextContent(

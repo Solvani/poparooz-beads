@@ -1,6 +1,7 @@
 import { Button } from "../../components/ui/Button";
 
 export interface CanvasToolbarProps {
+  readonly viewMode: "color" | "code";
   readonly zoomPercentage: number;
   readonly canZoomIn: boolean;
   readonly canZoomOut: boolean;
@@ -9,10 +10,13 @@ export interface CanvasToolbarProps {
   readonly onZoomIn: () => void;
   readonly onZoomOut: () => void;
   readonly onFit: () => void;
+  readonly onReadCodes: () => void;
   readonly onToggleGrid: () => void;
+  readonly onViewModeChange: (mode: "color" | "code") => void;
 }
 
 export function CanvasToolbar({
+  viewMode,
   zoomPercentage,
   canZoomIn,
   canZoomOut,
@@ -21,10 +25,28 @@ export function CanvasToolbar({
   onZoomIn,
   onZoomOut,
   onFit,
+  onReadCodes,
   onToggleGrid,
+  onViewModeChange,
 }: CanvasToolbarProps) {
   return (
     <div className="canvas-toolbar" aria-label="Pattern preview controls">
+      <div className="canvas-toolbar__views" aria-label="Pattern view">
+        <Button
+          variant="secondary"
+          aria-pressed={viewMode === "color"}
+          onClick={() => onViewModeChange("color")}
+        >
+          Color Preview
+        </Button>
+        <Button
+          variant="secondary"
+          aria-pressed={viewMode === "code"}
+          onClick={() => onViewModeChange("code")}
+        >
+          Color Code View
+        </Button>
+      </div>
       <Button
         variant="secondary"
         aria-label="Zoom out"
@@ -47,6 +69,11 @@ export function CanvasToolbar({
       <Button variant="secondary" onClick={onFit}>
         Fit Pattern
       </Button>
+      {viewMode === "code" ? (
+        <Button variant="secondary" onClick={onReadCodes}>
+          Read Codes
+        </Button>
+      ) : null}
       <Button
         variant="secondary"
         aria-pressed={gridVisible}

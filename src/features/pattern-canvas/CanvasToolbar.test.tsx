@@ -10,6 +10,7 @@ function renderToolbar(
   overrides: Partial<Parameters<typeof CanvasToolbar>[0]> = {},
 ) {
   const props = {
+    viewMode: "color" as const,
     zoomPercentage: 125,
     canZoomIn: true,
     canZoomOut: true,
@@ -18,7 +19,9 @@ function renderToolbar(
     onZoomIn: vi.fn(),
     onZoomOut: vi.fn(),
     onFit: vi.fn(),
+    onReadCodes: vi.fn(),
     onToggleGrid: vi.fn(),
+    onViewModeChange: vi.fn(),
     ...overrides,
   };
   render(<CanvasToolbar {...props} />);
@@ -35,6 +38,23 @@ describe("CanvasToolbar", () => {
     expect(props.onZoomOut).toHaveBeenCalledOnce();
     expect(props.onZoomIn).toHaveBeenCalledOnce();
     expect(props.onFit).toHaveBeenCalledOnce();
+    expect(screen.queryByRole("button", { name: "Read Codes" })).toBeNull();
+  });
+
+  it("switches between pure presentation modes with an announced selection", async () => {
+    const props = renderToolbar();
+    const color = screen.getByRole("button", { name: "Color Preview" });
+    const code = screen.getByRole("button", { name: "Color Code View" });
+    expect(color).toHaveAttribute("aria-pressed", "true");
+    expect(code).toHaveAttribute("aria-pressed", "false");
+    await userEvent.click(code);
+    expect(props.onViewModeChange).toHaveBeenCalledWith("code");
+  });
+
+  it("offers an explicit readable-code zoom only in Color Code View", async () => {
+    const props = renderToolbar({ viewMode: "code" });
+    await userEvent.click(screen.getByRole("button", { name: "Read Codes" }));
+    expect(props.onReadCodes).toHaveBeenCalledOnce();
   });
 
   it("uses native disabled controls at zoom boundaries", () => {

@@ -9,6 +9,7 @@ import { useBottomSheet } from "../components/mobile/use-bottom-sheet";
 import { useWorkspaceMode } from "../components/responsive/use-workspace-mode";
 import { PatternActions } from "../features/actions/PatternActions";
 import { toPatternActionState } from "../features/actions/pattern-action-state";
+import { createPatternDownloader } from "../features/download/pattern-download";
 import { GenerationStatus } from "../features/generator/GenerationStatus";
 import { getLastSuccess } from "../features/generator/generator-state";
 import {
@@ -60,6 +61,22 @@ export function App({
   });
   const lastSuccess = getLastSuccess(generator.state);
   const visiblePattern = lastSuccess?.result;
+  const patternDownloader = useMemo(() => createPatternDownloader(), []);
+  const selectedColorSetLabel = useMemo(() => {
+    if (
+      lastSuccess === undefined ||
+      !generationRuntime.availability.available ||
+      !("colorSetProfiles" in generationRuntime)
+    ) {
+      return null;
+    }
+    const selected = generationRuntime.colorSetProfiles.find(
+      (profile) =>
+        profile.profileId ===
+        lastSuccess.snapshot.settings.selectedColorSetProfileId,
+    );
+    return selected ? `${selected.size}-Color Set` : null;
+  }, [generationRuntime, lastSuccess]);
   const patternActionState = toPatternActionState(generator.state);
   const compactResultMode =
     workspaceMode === "compact" && visiblePattern !== undefined;
@@ -170,17 +187,40 @@ export function App({
 
   const compactResults = compactResult?.ok ? (
     <div className="compact-result-content">
-      <PatternSummary summary={compactResult.view.summary} variant="compact" />
+      <PatternSummary
+        summary={compactResult.view.summary}
+        selectedColorSetLabel={selectedColorSetLabel ?? "Unavailable"}
+        variant="compact"
+      />
       <MobilePanelLaunchers onOpen={openSheet} />
-      <PatternActions state={patternActionState} />
+      <PatternActions
+        state={patternActionState}
+        onDownload={() => downloadLastSuccess()}
+      />
     </div>
   ) : (
     <div className="compact-result-content">
       <ResultViewError />
       <MobilePanelLaunchers onOpen={openSheet} />
-      <PatternActions state={patternActionState} />
+      <PatternActions
+        state={patternActionState}
+        onDownload={() => downloadLastSuccess()}
+      />
     </div>
   );
+
+  function downloadLastSuccess() {
+    if (lastSuccess === undefined || selectedColorSetLabel === null) {
+      return Promise.resolve({
+        ok: false as const,
+        message: "We couldn’t prepare this pattern download.",
+      });
+    }
+    return patternDownloader.download({
+      pattern: lastSuccess.result,
+      selectedColorSetLabel,
+    });
+  }
 
   return (
     <div ref={containerRef} className="app-root">
@@ -203,7 +243,10 @@ export function App({
           }
           actionsContent={
             compactResultMode ? undefined : (
-              <PatternActions state={patternActionState} />
+              <PatternActions
+                state={patternActionState}
+                onDownload={() => downloadLastSuccess()}
+              />
             )
           }
           canvasContent={
@@ -222,6 +265,7 @@ export function App({
                 key={lastSuccess?.snapshot.jobId}
                 pattern={visiblePattern}
                 status={generator.state.status}
+                selectedColorSetLabel={selectedColorSetLabel ?? "Unavailable"}
               />
             )
           }

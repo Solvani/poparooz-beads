@@ -41,12 +41,23 @@ function canvasContext() {
     moveTo: vi.fn(),
     lineTo: vi.fn(),
     stroke: vi.fn(),
+    strokeRect: vi.fn(),
+    save: vi.fn(),
+    restore: vi.fn(),
+    rect: vi.fn(),
+    clip: vi.fn(),
+    fillText: vi.fn(),
   } as unknown as CanvasRenderingContext2D;
 }
 
+type AvailableGenerationRuntime = Extract<
+  GenerationRuntime,
+  { readonly availability: { readonly available: true } }
+>;
+
 function availableRuntime(
   tasks: readonly Promise<PublicPatternResult>[],
-): GenerationRuntime {
+): AvailableGenerationRuntime {
   let index = 0;
   return {
     availability: { available: true },
@@ -60,8 +71,6 @@ async function completeInputs() {
     screen.getByLabelText("Choose an Image"),
     new File(["image"], "photo.png", { type: "image/png" }),
   );
-  await userEvent.type(screen.getByLabelText("Pattern Width"), "32");
-  await userEvent.type(screen.getByLabelText("Pattern Height"), "24");
   await userEvent.clear(screen.getByLabelText("Pattern Color Limit"));
   await userEvent.type(screen.getByLabelText("Pattern Color Limit"), "16");
   await userEvent.click(screen.getByRole("radio", { name: "White" }));
@@ -78,6 +87,9 @@ beforeEach(() => {
   });
   vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockImplementation(() =>
     canvasContext(),
+  );
+  vi.spyOn(HTMLCanvasElement.prototype, "toBlob").mockImplementation(
+    (callback) => callback(new Blob(["png"], { type: "image/png" })),
   );
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({
     x: 0,
@@ -145,7 +157,6 @@ describe("App", () => {
       "variantId",
       "shopifyHandle",
       "29×29",
-      "40×40",
     ]) {
       expect(page).not.toContain(forbidden);
     }
@@ -153,8 +164,7 @@ describe("App", () => {
 
   it("moves from local upload to preview and back without changing settings", async () => {
     render(<App />);
-    const width = screen.getByLabelText("Pattern Width");
-    await userEvent.type(width, "64");
+    await userEvent.selectOptions(screen.getByLabelText("Pattern Size"), "60");
     await userEvent.upload(
       screen.getByLabelText("Choose an Image"),
       new File(["image"], "photo.png", { type: "image/png" }),
@@ -168,12 +178,12 @@ describe("App", () => {
         "Your image is ready. Generate the pattern in the next step.",
       ),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText("Pattern Width")).toHaveValue(64);
+    expect(screen.getByLabelText("Pattern Size")).toHaveValue("60");
 
     await userEvent.click(screen.getByRole("button", { name: "Remove Image" }));
 
     expect(screen.getByLabelText("Choose an Image")).toBeInTheDocument();
-    expect(screen.getByLabelText("Pattern Width")).toHaveValue(64);
+    expect(screen.getByLabelText("Pattern Size")).toHaveValue("60");
     expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:app-preview");
   });
 
@@ -215,6 +225,10 @@ describe("App", () => {
     const runtime = availableRuntime([first, second]);
     render(<App generationRuntime={runtime} />);
     await completeInputs();
+    await userEvent.selectOptions(
+      screen.getByLabelText("Bead Color Set"),
+      "poparooz-set-72",
+    );
 
     const generate = await screen.findByRole("button", {
       name: "Generate Pattern",
@@ -250,10 +264,26 @@ describe("App", () => {
     expect(screen.getAllByText("1 board")).toHaveLength(2);
     expect(
       screen.getByRole("region", { name: "Pattern Options" }),
-    ).toHaveTextContent(
-      "Download and bead options are not available in this preview.",
+    ).toHaveTextContent("Download your color code pattern as a PNG.");
+    const packageRow = screen
+      .getByText("Selected Bead Color Set")
+      .closest("div")!;
+    expect(within(packageRow).getByText("72-Color Set")).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Color Code View" }),
     );
+    await userEvent.click(screen.getByRole("button", { name: "Fit Pattern" }));
+    await userEvent.click(screen.getByRole("button", { name: "Read Codes" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Color Preview" }),
+    );
+    expect(runtime.service.generate).toHaveBeenCalledOnce();
 
+    await userEvent.selectOptions(
+      screen.getByLabelText("Bead Color Set"),
+      "poparooz-set-221",
+    );
+    expect(within(packageRow).getByText("72-Color Set")).toBeInTheDocument();
     await userEvent.clear(screen.getByLabelText("Pattern Color Limit"));
     await userEvent.type(screen.getByLabelText("Pattern Color Limit"), "20");
     expect(screen.getByText("Settings changed")).toBeInTheDocument();
@@ -474,16 +504,18 @@ describe("App", () => {
     }
     expect(
       screen.getByRole("button", { name: "Download Pattern" }),
-    ).toBeDisabled();
+    ).toBeEnabled();
     expect(
       screen.getByRole("button", { name: "Get Beads for This Pattern" }),
     ).toBeDisabled();
   });
 
-  it("keeps both pattern actions inert after a successful customer flow", async () => {
+  it("downloads locally while keeping the future bead action inert", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
     const storageSpy = vi.spyOn(Storage.prototype, "setItem");
-    const anchorClickSpy = vi.spyOn(HTMLAnchorElement.prototype, "click");
+    const anchorClickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => {});
     const openSpy = vi.spyOn(window, "open");
     const pushStateSpy = vi.spyOn(history, "pushState");
     const replaceStateSpy = vi.spyOn(history, "replaceState");
@@ -507,11 +539,12 @@ describe("App", () => {
 
     expect(fetchSpy).not.toHaveBeenCalled();
     expect(storageSpy).not.toHaveBeenCalled();
-    expect(anchorClickSpy).not.toHaveBeenCalled();
+    expect(anchorClickSpy).toHaveBeenCalledOnce();
     expect(openSpy).not.toHaveBeenCalled();
     expect(pushStateSpy).not.toHaveBeenCalled();
     expect(replaceStateSpy).not.toHaveBeenCalled();
-    expect(URL.createObjectURL).toHaveBeenCalledTimes(1);
+    expect(URL.createObjectURL).toHaveBeenCalledTimes(2);
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:app-preview");
     expect(document.querySelector("a[download]")).toBeNull();
   });
 

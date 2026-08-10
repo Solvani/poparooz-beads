@@ -11,6 +11,7 @@ import {
   resizeViewport,
   zoomPercentage,
   zoomViewport,
+  zoomViewportToMinimumScale,
   ZOOM_FACTOR,
 } from "./canvas-viewport";
 
@@ -61,6 +62,16 @@ describe("canvas viewport math", () => {
       1 / ZOOM_FACTOR,
     );
     expect(zoomPercentage(restored)).toBe(100);
+  });
+
+  it("zooms directly to a requested readable scale without shrinking an already readable view", () => {
+    const pattern = { width: 104, height: 104 };
+    const fit = fitPattern(pattern, 600, 420)!;
+    const readable = zoomViewportToMinimumScale(fit, pattern, 20);
+
+    expect(readable.scale).toBe(20);
+    expect(readable.fitMode).toBe(false);
+    expect(zoomViewportToMinimumScale(readable, pattern, 20)).toBe(readable);
   });
 
   it("clamps zoom at the minimum and 64 CSS pixels per cell maximum", () => {

@@ -2,7 +2,8 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { cleanup, render } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { PatternActions } from "./PatternActions";
 import type { PatternActionState } from "./pattern-action.types";
@@ -41,8 +42,32 @@ describe("PatternActions", () => {
     expect(
       view.getByRole("button", { name: "Get Beads for This Pattern" }),
     ).toBeDisabled();
-    expect(view.getAllByText("Coming later")).toHaveLength(2);
+    expect(view.getByText("Color code pattern · PNG")).toBeInTheDocument();
+    expect(view.getByText("Coming later")).toBeInTheDocument();
     expect(view.container.querySelector("a, [role='button']")).toBeNull();
+  });
+
+  it("downloads an available result and announces completion", async () => {
+    const onDownload = vi.fn().mockResolvedValue({ ok: true });
+    const view = render(
+      <PatternActions
+        state={actionState({
+          hasResult: true,
+          resultIdentity: 7,
+          resultScope: "current-result",
+          downloadEnabled: true,
+          availabilityMessage: "Download your color code pattern as a PNG.",
+        })}
+        onDownload={onDownload}
+      />,
+    );
+    await userEvent.click(
+      view.getByRole("button", { name: "Download Pattern" }),
+    );
+    expect(onDownload).toHaveBeenCalledOnce();
+    expect(await view.findByRole("status")).toHaveTextContent(
+      "Pattern download ready.",
+    );
   });
 
   it("preserves the future primary and secondary hierarchy", () => {

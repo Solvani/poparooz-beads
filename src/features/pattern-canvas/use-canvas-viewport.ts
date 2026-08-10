@@ -5,7 +5,6 @@ import {
   useState,
   type PointerEvent as ReactPointerEvent,
   type RefObject,
-  type WheelEvent as ReactWheelEvent,
 } from "react";
 
 import {
@@ -19,6 +18,7 @@ import {
   toggleGrid,
   zoomPercentage,
   zoomViewport,
+  zoomViewportToMinimumScale,
   ZOOM_FACTOR,
 } from "./canvas-viewport";
 import type {
@@ -112,6 +112,13 @@ export function useCanvasViewport(
       setViewport((current) => zoomViewport(current, pattern, 1 / ZOOM_FACTOR)),
     [pattern],
   );
+  const ensureMinimumScale = useCallback(
+    (minimumScale: number) =>
+      setViewport((current) =>
+        zoomViewportToMinimumScale(current, pattern, minimumScale),
+      ),
+    [pattern],
+  );
   const grid = useCallback(
     () => setViewport((current) => toggleGrid(current)),
     [],
@@ -157,7 +164,7 @@ export function useCanvasViewport(
     [],
   );
   const onWheel = useCallback(
-    (event: ReactWheelEvent<HTMLCanvasElement>) => {
+    (event: WheelEvent) => {
       event.preventDefault();
       setViewport((view) =>
         panViewport(view, pattern, -event.deltaX, -event.deltaY),
@@ -171,6 +178,7 @@ export function useCanvasViewport(
     viewport,
     zoomIn,
     zoomOut,
+    ensureMinimumScale,
     fit,
     toggleGrid: grid,
     canZoomIn: canZoomIn(viewport),
@@ -178,12 +186,12 @@ export function useCanvasViewport(
     zoomPercentage: zoomPercentage(viewport),
     gridNeedsZoom:
       viewport.gridVisible && viewport.scale < GRID_RENDER_THRESHOLD_CSS_PX,
+    wheelHandler: onWheel,
     pointerHandlers: {
       onPointerDown,
       onPointerMove,
       onPointerUp: endPointer,
       onPointerCancel: endPointer,
-      onWheel,
     },
   } as const;
 }

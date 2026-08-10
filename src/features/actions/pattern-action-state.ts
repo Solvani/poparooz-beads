@@ -10,7 +10,7 @@ import type {
 
 export const PRODUCTION_PATTERN_ACTION_CAPABILITIES: PatternActionCapabilities =
   Object.freeze({
-    downloadPattern: false,
+    downloadPattern: true,
     getBeads: false,
   });
 
@@ -18,6 +18,7 @@ const NO_RESULT_MESSAGE =
   "Create a pattern to access download and bead options.";
 const UNAVAILABLE_MESSAGE =
   "Download and bead options are not available in this preview.";
+const DOWNLOAD_AVAILABLE_MESSAGE = "Download your color code pattern as a PNG.";
 
 function previousResultMessage(state: GeneratorState): string | null {
   switch (state.status) {
@@ -56,7 +57,11 @@ export function toPatternActionState(
     resultScope: resultScope(state),
     downloadEnabled: hasResult && capabilities.downloadPattern,
     getBeadsEnabled: hasResult && capabilities.getBeads,
-    availabilityMessage: hasResult ? UNAVAILABLE_MESSAGE : NO_RESULT_MESSAGE,
+    availabilityMessage: hasResult
+      ? capabilities.downloadPattern
+        ? DOWNLOAD_AVAILABLE_MESSAGE
+        : UNAVAILABLE_MESSAGE
+      : NO_RESULT_MESSAGE,
     scopeMessage: previousResultMessage(state),
   };
 }

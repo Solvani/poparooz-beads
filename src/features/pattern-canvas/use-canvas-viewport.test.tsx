@@ -157,13 +157,13 @@ describe("useCanvasViewport", () => {
     expect(target.releasePointerCapture).toHaveBeenCalledWith(4);
 
     const beforeWheel = result.current.viewport.offsetY;
-    act(() =>
-      result.current.pointerHandlers.onWheel({
-        preventDefault: vi.fn(),
-        deltaX: 0,
-        deltaY: 20,
-      } as never),
-    );
+    const wheelEvent = {
+      preventDefault: vi.fn(),
+      deltaX: 0,
+      deltaY: 20,
+    } as unknown as WheelEvent;
+    act(() => result.current.wheelHandler(wheelEvent));
+    expect(wheelEvent.preventDefault).toHaveBeenCalledOnce();
     expect(result.current.viewport.offsetY).toBeLessThanOrEqual(beforeWheel);
     act(() => result.current.fit());
     expect(result.current.zoomPercentage).toBe(100);

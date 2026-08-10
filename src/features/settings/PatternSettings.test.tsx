@@ -17,7 +17,7 @@ const COLOR_SET_PROFILES = [
 afterEach(cleanup);
 
 describe("PatternSettings", () => {
-  it("renders no invented defaults and only supported background modes", () => {
+  it("renders the approved default preset and only supported background modes", () => {
     const view = render(
       <PatternSettings
         value={EMPTY_PATTERN_SETTINGS}
@@ -26,8 +26,10 @@ describe("PatternSettings", () => {
       />,
     );
 
-    expect(view.getByLabelText("Pattern Width")).toHaveValue(null);
-    expect(view.getByLabelText("Pattern Height")).toHaveValue(null);
+    expect(view.getByLabelText("Pattern Size")).toHaveValue("80");
+    expect(
+      view.getByText("Best for most photos · Recommended"),
+    ).toBeInTheDocument();
     expect(view.getByLabelText("Pattern Color Limit")).toHaveValue(32);
     expect(view.getByLabelText("Bead Color Set")).toHaveValue(
       "poparooz-set-221",
@@ -35,6 +37,10 @@ describe("PatternSettings", () => {
     expect(
       view.getAllByRole("option").map((option) => option.textContent),
     ).toEqual([
+      "40 × 40",
+      "60 × 60",
+      "80 × 80 — Recommended",
+      "104 × 104",
       "24-Color Set",
       "48-Color Set",
       "72-Color Set",
@@ -64,17 +70,21 @@ describe("PatternSettings", () => {
       />,
     );
 
-    fireEvent.change(view.getByLabelText("Pattern Width"), {
-      target: { value: "64" },
+    fireEvent.change(view.getByLabelText("Pattern Size"), {
+      target: { value: "60" },
     });
     await userEvent.click(view.getByRole("radio", { name: "White" }));
 
-    expect(onChange).toHaveBeenCalledWith({ ...value, width: "64" });
+    expect(onChange).toHaveBeenCalledWith({
+      ...value,
+      width: "60",
+      height: "60",
+    });
     expect(onChange).toHaveBeenCalledWith({ ...value, background: "white" });
     expect(value).toEqual(EMPTY_PATTERN_SETTINGS);
   });
 
-  it("exposes formal numeric min, max, and step boundaries", () => {
+  it("exposes only the four fixed sizes and preserves the color limit boundary", () => {
     const view = render(
       <PatternSettings
         value={EMPTY_PATTERN_SETTINGS}
@@ -83,9 +93,7 @@ describe("PatternSettings", () => {
       />,
     );
 
-    expect(view.getByLabelText("Pattern Width")).toHaveAttribute("min", "1");
-    expect(view.getByLabelText("Pattern Width")).toHaveAttribute("max", "4096");
-    expect(view.getByLabelText("Pattern Height")).toHaveAttribute("step", "1");
+    expect(view.getByLabelText("Pattern Size")).toHaveValue("80");
     expect(view.getByLabelText("Pattern Color Limit")).toHaveAttribute(
       "min",
       "2",
@@ -107,6 +115,22 @@ describe("PatternSettings", () => {
     );
 
     expect(view.queryByRole("button", { name: "Generate Pattern" })).toBeNull();
-    expect(view.getByLabelText("Pattern Width")).toBeInTheDocument();
+    expect(view.getByLabelText("Pattern Size")).toBeInTheDocument();
+  });
+
+  it.each([
+    ["40", "Best for icons and simple designs"],
+    ["60", "Best for simple portraits and pets"],
+    ["80", "Best for most photos · Recommended"],
+    ["104", "Best for detailed photos"],
+  ])("shows guidance for preset %s", (size, guidance) => {
+    const view = render(
+      <PatternSettings
+        value={{ ...EMPTY_PATTERN_SETTINGS, width: size, height: size }}
+        onChange={() => {}}
+        colorSetProfiles={COLOR_SET_PROFILES}
+      />,
+    );
+    expect(view.getByText(guidance)).toBeInTheDocument();
   });
 });

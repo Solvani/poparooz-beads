@@ -9,6 +9,7 @@ describe("PatternSummary", () => {
   it("renders result values as a semantic definition list", () => {
     render(
       <PatternSummary
+        selectedColorSetLabel="72-Color Set"
         summary={{
           width: 40,
           height: 30,
@@ -23,12 +24,13 @@ describe("PatternSummary", () => {
         }}
       />,
     );
-    expect(screen.getAllByRole("term")).toHaveLength(4);
-    expect(screen.getAllByRole("definition")).toHaveLength(4);
+    expect(screen.getAllByRole("term")).toHaveLength(5);
+    expect(screen.getAllByRole("definition")).toHaveLength(5);
     expect(screen.getByText("Pattern Size")).toBeInTheDocument();
     expect(screen.getByText("40 × 30")).toBeInTheDocument();
     expect(screen.getByText("1,199")).toBeInTheDocument();
     expect(screen.getByText("2 boards")).toBeInTheDocument();
+    expect(screen.getByText("72-Color Set")).toBeInTheDocument();
     expect(screen.getByText("1 transparent position")).toBeInTheDocument();
   });
 });

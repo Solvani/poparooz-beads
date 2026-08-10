@@ -1,11 +1,34 @@
+import { useState } from "react";
+
+import type { PatternDownloadResult } from "../download/pattern-download";
 import { PatternActionButton } from "./PatternActionButton";
 import type { PatternActionState } from "./pattern-action.types";
 
 export interface PatternActionsProps {
   readonly state: PatternActionState;
+  readonly onDownload?: () => Promise<PatternDownloadResult>;
 }
 
-export function PatternActions({ state }: PatternActionsProps) {
+export function PatternActions({ state, onDownload }: PatternActionsProps) {
+  const [downloadFeedback, setDownloadFeedback] = useState<{
+    readonly resultIdentity: number | null;
+    readonly message: string;
+  } | null>(null);
+  const [downloading, setDownloading] = useState(false);
+
+  const download = async () => {
+    if (!state.downloadEnabled || onDownload === undefined || downloading)
+      return;
+    setDownloading(true);
+    setDownloadFeedback(null);
+    const result = await onDownload();
+    setDownloading(false);
+    setDownloadFeedback({
+      resultIdentity: state.resultIdentity,
+      message: result.ok ? "Pattern download ready." : result.message,
+    });
+  };
+
   return (
     <section
       className="summary-section pattern-actions"
@@ -24,14 +47,23 @@ export function PatternActions({ state }: PatternActionsProps) {
         <PatternActionButton
           enabled={state.downloadEnabled}
           label="Download Pattern"
+          note="Color code pattern · PNG"
           variant="secondary"
+          busy={downloading}
+          onClick={() => void download()}
         />
         <PatternActionButton
           enabled={state.getBeadsEnabled}
           label="Get Beads for This Pattern"
+          note="Coming later"
           variant="primary"
         />
       </div>
+      {downloadFeedback?.resultIdentity === state.resultIdentity ? (
+        <p className="pattern-actions__download-status" role="status">
+          {downloadFeedback.message}
+        </p>
+      ) : null}
     </section>
   );
 }

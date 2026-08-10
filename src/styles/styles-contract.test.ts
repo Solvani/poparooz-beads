@@ -51,4 +51,11 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
     );
     expect(workspace).toContain("@supports not (container-type: inline-size)");
   });
+
+  it("keeps the code-view Canvas square without changing the base preview viewport", () => {
+    expect(workspace).toContain(".pattern-canvas__viewport--code");
+    expect(workspace).toContain("aspect-ratio: 1 / 1");
+    expect(workspace).toContain("width: min(100%, 720px)");
+    expect(workspace).toContain("height: clamp(280px, 52vh, 720px)");
+  });
 });

@@ -12,6 +12,7 @@ describe("PatternActionButton", () => {
       <PatternActionButton
         enabled={false}
         label="Download Pattern"
+        note="Coming later"
         variant="secondary"
       />,
     );

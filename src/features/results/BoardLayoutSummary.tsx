@@ -19,7 +19,7 @@ export function BoardLayoutSummary({
       <h3 id="board-layout-heading">Board Layout</h3>
       <p className="board-layout__count">{layout.boardCountLabel}</p>
       <p className="result-secondary">{layout.dimensionsLabel}</p>
-      {layout.previewKind === "tiles" ? (
+      {layout.boardCount === 1 ? null : layout.previewKind === "tiles" ? (
         <ul
           className="board-layout-preview board-layout-preview--tiles"
           style={previewStyle}

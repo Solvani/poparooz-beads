@@ -86,6 +86,21 @@ export function zoomViewport(
   );
 }
 
+export function zoomViewportToMinimumScale(
+  viewport: CanvasViewportState,
+  pattern: PatternDimensions,
+  minimumScale: number,
+): CanvasViewportState {
+  if (
+    !Number.isFinite(minimumScale) ||
+    minimumScale <= 0 ||
+    viewport.scale >= minimumScale
+  ) {
+    return viewport;
+  }
+  return zoomViewport(viewport, pattern, minimumScale / viewport.scale);
+}
+
 export function panViewport(
   viewport: CanvasViewportState,
   pattern: PatternDimensions,

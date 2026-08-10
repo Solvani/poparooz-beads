@@ -129,7 +129,7 @@ Commit message: feat: compile formal Poparooz palette source
 
 ```text
 P3-A01.4 Runtime Palette Artifact and Production Gate
-Status: Completed and Frozen
+Status: Completed / Frozen
 Runtime Artifact SHA-256: 86a742ed45b1dc06eb4e4cec64e6a4d35ece07b9ad11f7c01208909986337d70
 Runtime Lock SHA-256: 36302e25510d8b46afdc6cbaceea06ca8905c9456d006bc70cc3164cf8e6a648
 Runtime Palette: 221 records / 221 active / 221 auto-match eligible
@@ -261,8 +261,14 @@ Commit message: refactor: wire generation palette into pattern pipeline
 
 ```text
 P3-A02-A04 BoardProfile Provider and Generation Input Wiring
-Status: Contract Frozen / Implementation Pending
+Status: Completed and Frozen
 Authority: POPAROOZ_P3_A02_A04_BOARD_PROFILE_PROVIDER_AND_GENERATION_INPUT_CONTRACT.md
+Final implementation HEAD: aecdc575ca244cd4b2f6ef1c9a237b0a812fb3e5
+Commit chain:
+- 2cbca5e docs: freeze board profile provider contract
+- 93cb571 docs: format board profile provider contract
+- c9c60c7 feat: wire approved board profile into generation
+- aecdc57 fix: complete board profile generation wiring
 Production GenerationRuntime: Unavailable
 ```
 
@@ -271,14 +277,14 @@ Production GenerationRuntime: Unavailable
 ```text
 Phase: Phase 3
 Status: active
-Current contract task: P3-A02-A04 BoardProfile Provider and Generation Input Wiring
-Contract status: frozen
-Implementation status: pending and not authorized
+Current implementation task: none authorized
+Next planning focus: Fixed Color Set Profiles
+Fixed Color Set status: not implemented
 ```
 
 P3-A01.4 and its D01 and A01 through A06 tasks are completed and frozen. The Runtime Artifact and Runtime Lock are deterministic and approved, every Vite build passes the fail-closed Production Gate during configuration resolution, and application startup synchronously validates and initializes the approved immutable Provider before React render. The real production module graph and emitted bundle expose only the approved Runtime Artifact as Palette-generated data. Build or Startup Gate failures do not fall back. Chrome smoke verification passed with generation remaining safely unavailable.
 
-P3-A02-D01 freezes the accepted production Runtime activation contract and implementation boundaries in [`POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md`](POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md) at contract commit `da631da7e58ed43815a27a90b7de386fa2742007`. P3-A02-A01 through P3-A02-A03 have completed the Generation Palette adapter, generation-safe matcher core, and Pattern color-identity wiring without activating Production `GenerationRuntime`. BoardProfile production wiring, ProcessingPolicy production wiring, and complete generator activation remain unfinished. P3-A02 as a whole is not completed or activated.
+P3-A02-D01 freezes the accepted production Runtime activation contract and implementation boundaries in [`POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md`](POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md) at contract commit `da631da7e58ed43815a27a90b7de386fa2742007`. P3-A02-A01 through P3-A02-A04 have completed the Generation Palette adapter, generation-safe matcher core, Pattern color-identity wiring, and BoardProfile production wiring without activating Production `GenerationRuntime`. ProcessingPolicy production wiring, Worker wiring, and complete generator activation remain unfinished. P3-A02 as a whole is not completed or activated.
 
 ### P3-A02-D01 frozen contract
 
@@ -503,7 +509,7 @@ P3-A02-D01 Production Generation Runtime Activation Contract — contract frozen
 P3-A02-A01 Generation Palette Adapter             Completed
 P3-A02-A02 Generation-safe Matcher Core            Completed
 P3-A02-A03 Pattern Color Identity and Palette Wiring Completed
-P3-A02-A04 BoardProfile Provider and Generation Input Wiring — contract frozen / implementation pending
+P3-A02-A04 BoardProfile Provider and Generation Input Wiring — Completed / Frozen
 P3-A02     Production Generation Runtime Activation — implementation in progress / not activated
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
@@ -521,7 +527,7 @@ approved Runtime Palette Provider
 -> complete Production GenerationRuntime activation review
 ```
 
-P3-A01.4 and the P3-A02-D01 contract are frozen. P3-A02-A01 through P3-A02-A03 are completed. Only the P3-A02-A04 contract is frozen in the current stage; its implementation is pending and not authorized by this governance task. P3-A02 and Runtime activation are not completed or activated. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
+P3-A01.4 and the P3-A02-D01 contract are frozen. P3-A02-A01 through P3-A02-A04 are completed, and P3-A02-A04 is frozen at final implementation HEAD `aecdc575ca244cd4b2f6ef1c9a237b0a812fb3e5`. ProcessingPolicy and Worker wiring remain unimplemented, Fixed Color Set Profiles have not been implemented, and no next implementation task is authorized. P3-A02 and Runtime activation are not completed or activated. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
 
 ## Known Issues
 

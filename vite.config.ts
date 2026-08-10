@@ -4,6 +4,7 @@ import { fileURLToPath, URL } from "node:url";
 import type { UserConfig } from "vite";
 
 import { verifyRuntimePaletteProductionGate } from "./scripts/palette/runtime/verify-runtime-palette-production-gate.ts";
+import { verifyColorSetProductionGate } from "./scripts/palette/color-set/verify-color-set-production-gate.ts";
 
 export type RuntimePaletteGateVerifier = (
   repositoryRoot: string,
@@ -13,9 +14,11 @@ export async function createViteConfig(
   environment: ConfigEnv,
   verifyProductionGate: RuntimePaletteGateVerifier = verifyRuntimePaletteProductionGate,
   repositoryRoot = fileURLToPath(new URL(".", import.meta.url)),
+  verifyColorSetGate: RuntimePaletteGateVerifier = verifyColorSetProductionGate,
 ): Promise<UserConfig> {
   if (environment.command === "build") {
     await verifyProductionGate(repositoryRoot);
+    await verifyColorSetGate(repositoryRoot);
   }
 
   return {

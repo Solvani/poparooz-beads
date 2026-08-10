@@ -4,6 +4,8 @@ import { describe, expect, it, vi } from "vitest";
 
 import { RuntimePaletteBrowserError } from "../palette/runtime-palette.errors";
 import { createApprovedRuntimePaletteProvider } from "../palette/approved-runtime-palette";
+import { createApprovedColorSetProvider } from "../color-set/approved-color-set";
+import { adaptColorSetToGeneration } from "../generation-color-set/color-set-to-generation.adapter";
 import { createApprovedBoardProfileProvider } from "../board-profile/approved-board-profile";
 import { BoardProfileBrowserError } from "../board-profile/board-profile.errors";
 import { adaptBoardProfileToGeneration } from "../generation-board-profile/board-profile-to-generation.adapter";
@@ -22,6 +24,8 @@ function approvedDependencies(
   return {
     createPaletteProvider: createApprovedRuntimePaletteProvider,
     adaptPalette: adaptRuntimePaletteToGeneration,
+    createColorSetProvider: createApprovedColorSetProvider,
+    adaptColorSets: adaptColorSetToGeneration,
     createBoardProfileProvider: createApprovedBoardProfileProvider,
     adaptBoardProfile: adaptBoardProfileToGeneration,
     ...overrides,
@@ -58,6 +62,10 @@ describe("Application Runtime Bootstrap", () => {
       autoMatchEligibleCount: 221,
     });
     expect(result.generationPalette.colors).toHaveLength(221);
+    expect(result.colorSetProvider.getSnapshot().profiles).toHaveLength(6);
+    expect(
+      result.generationColorSets.profiles.map((profile) => profile.size),
+    ).toEqual([24, 48, 72, 120, 168, 221]);
     expect(result.boardProfileProvider.getSnapshot()).toMatchObject({
       id: "poparooz-board-104",
       version: "1.0.0",
@@ -109,6 +117,8 @@ describe("Application Runtime Bootstrap", () => {
       status: "palette-unavailable",
       paletteProvider: null,
       generationPalette: null,
+      colorSetProvider: null,
+      generationColorSets: null,
       boardProfileProvider: null,
       generationBoardProfile: null,
       generationRuntime: {
@@ -141,6 +151,8 @@ describe("Application Runtime Bootstrap", () => {
         status: "palette-unavailable",
         paletteProvider: null,
         generationPalette: null,
+        colorSetProvider: null,
+        generationColorSets: null,
         boardProfileProvider: null,
         generationBoardProfile: null,
         errorCode: "APPLICATION_RUNTIME_INITIALIZATION_FAILED",
@@ -196,6 +208,14 @@ describe("Application Runtime Bootstrap", () => {
           events.push("palette-adapter");
           return adaptRuntimePaletteToGeneration(snapshot);
         },
+        createColorSetProvider: () => {
+          events.push("color-set-provider");
+          return createApprovedColorSetProvider();
+        },
+        adaptColorSets: (snapshot) => {
+          events.push("color-set-adapter");
+          return adaptColorSetToGeneration(snapshot);
+        },
         createBoardProfileProvider: () => {
           events.push("board-provider");
           return createApprovedBoardProfileProvider();
@@ -210,6 +230,8 @@ describe("Application Runtime Bootstrap", () => {
     expect(events).toEqual([
       "palette-provider",
       "palette-adapter",
+      "color-set-provider",
+      "color-set-adapter",
       "board-provider",
       "board-adapter",
     ]);
@@ -217,6 +239,30 @@ describe("Application Runtime Bootstrap", () => {
       available: false,
       reason: "production-runtime-unavailable",
     });
+  });
+
+  it("fails closed on Color Set Provider failure without partial dependencies", () => {
+    const result = createApplicationRuntimeBootstrap(
+      approvedDependencies({
+        createColorSetProvider: () => {
+          throw new Error("private Color Set detail");
+        },
+      }),
+    );
+    expect(result).toMatchObject({
+      status: "color-set-unavailable",
+      paletteProvider: null,
+      generationPalette: null,
+      colorSetProvider: null,
+      generationColorSets: null,
+      boardProfileProvider: null,
+      generationBoardProfile: null,
+      errorCode: "APPLICATION_RUNTIME_INITIALIZATION_FAILED",
+      generationRuntime: { availability: { available: false } },
+    });
+    expect(JSON.stringify(result)).not.toMatch(
+      /private Color Set detail|stack|hash|path/i,
+    );
   });
 
   it("fails closed on BoardProfile failure without returning partial dependencies", () => {
@@ -231,6 +277,8 @@ describe("Application Runtime Bootstrap", () => {
       status: "board-profile-unavailable",
       paletteProvider: null,
       generationPalette: null,
+      colorSetProvider: null,
+      generationColorSets: null,
       boardProfileProvider: null,
       generationBoardProfile: null,
       generationRuntime: {
@@ -260,6 +308,8 @@ describe("Application Runtime Bootstrap", () => {
       status: "board-profile-unavailable",
       paletteProvider: null,
       generationPalette: null,
+      colorSetProvider: null,
+      generationColorSets: null,
       boardProfileProvider: null,
       generationBoardProfile: null,
       generationRuntime: {
@@ -285,6 +335,8 @@ describe("Application Runtime Bootstrap", () => {
       status: "board-profile-unavailable",
       paletteProvider: null,
       generationPalette: null,
+      colorSetProvider: null,
+      generationColorSets: null,
       boardProfileProvider: null,
       generationBoardProfile: null,
       generationRuntime: {

@@ -33,18 +33,23 @@ describe("Vite Runtime Palette Production Gate integration", () => {
     "awaits the Gate for command=build in %s mode",
     async (mode) => {
       const gate = vi.fn().mockResolvedValue({ verified: true });
+      const colorSetGate = vi.fn().mockResolvedValue({ verified: true });
       await createViteConfig(
         { command: "build", mode, isSsrBuild: false, isPreview: false },
         gate,
         repositoryRoot,
+        colorSetGate,
       );
       expect(gate).toHaveBeenCalledOnce();
       expect(gate).toHaveBeenCalledWith(repositoryRoot);
+      expect(colorSetGate).toHaveBeenCalledOnce();
+      expect(colorSetGate).toHaveBeenCalledWith(repositoryRoot);
     },
   );
 
   it("does not invoke the Production Build Gate for serve", async () => {
     const gate = vi.fn().mockResolvedValue({ verified: true });
+    const colorSetGate = vi.fn().mockResolvedValue({ verified: true });
     await createViteConfig(
       {
         command: "serve",
@@ -54,8 +59,10 @@ describe("Vite Runtime Palette Production Gate integration", () => {
       },
       gate,
       repositoryRoot,
+      colorSetGate,
     );
     expect(gate).not.toHaveBeenCalled();
+    expect(colorSetGate).not.toHaveBeenCalled();
   });
 
   it("rejects configuration before returning build config", async () => {

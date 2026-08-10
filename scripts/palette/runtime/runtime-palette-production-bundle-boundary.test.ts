@@ -8,6 +8,8 @@ import { build, type Plugin } from "vite";
 import { describe, expect, it } from "vitest";
 
 import approvedRuntimePalette from "../../../src/runtime/palette/artifacts/poparooz-standard/formal-1.0.0/runtime-1.0.0/runtime-palette.json";
+import approvedColorSets from "../../../src/runtime/color-set/artifacts/poparooz-fixed-color-sets/1.0.0/color-set-profiles.json";
+import { verifyColorSetProductionBundleBoundary } from "../color-set/color-set-production-bundle-boundary.ts";
 import {
   APPROVED_BOARD_PROFILE_ARTIFACT_MODULE,
   APPROVED_RUNTIME_ARTIFACT_MODULE,
@@ -32,11 +34,19 @@ describe("Runtime Palette production bundle boundary", () => {
         const runtimeArtifact = JSON.parse(
           await readFile(approvedArtifactPath, "utf8"),
         ) as unknown;
-        return verifyRuntimePaletteProductionBundleBoundary({
+        const runtimeBoundary = verifyRuntimePaletteProductionBundleBoundary({
           moduleIds,
           emittedFiles,
           runtimeArtifact,
         });
+        return {
+          ...runtimeBoundary,
+          colorSetBoundary: verifyColorSetProductionBundleBoundary({
+            moduleIds,
+            emittedFiles,
+            artifact: approvedColorSets,
+          }),
+        };
       },
     );
 
@@ -52,6 +62,12 @@ describe("Runtime Palette production bundle boundary", () => {
       verified: true,
     });
     expect(inspection.emittedFileCount).toBeGreaterThan(0);
+    expect(inspection.colorSetBoundary).toMatchObject({
+      requiredModuleCount: 6,
+      groupCount: 9,
+      profileCounts: [24, 48, 72, 120, 168, 221],
+      verified: true,
+    });
   }, 30_000);
 
   it.each([

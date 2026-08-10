@@ -21,12 +21,25 @@ const approvedBoardArtifact = path.join(
   "1.0.0",
   "board-profile.json",
 );
+const approvedColorSetArtifact = path.join(
+  sourceRoot,
+  "runtime",
+  "color-set",
+  "artifacts",
+  "poparooz-fixed-color-sets",
+  "1.0.0",
+  "color-set-profiles.json",
+);
 
 describe("Application Runtime Bootstrap boundary", () => {
   it("has a browser-only runtime graph with no service, Worker, fallback, or governance input", async () => {
     const graph = await collectRuntimeDependencyGraph(bootstrapEntry);
     expect(graph.externalSpecifiers).toEqual(["zod"]);
     expect(graph.files).toContain(approvedBoardArtifact);
+    expect(graph.files).toContain(approvedColorSetArtifact);
+    expect(
+      graph.files.filter((file) => file.endsWith("color-set-profiles.json")),
+    ).toEqual([approvedColorSetArtifact]);
     expect(
       graph.files.filter((file) => file.endsWith("board-profile.json")),
     ).toEqual([approvedBoardArtifact]);

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0.0",
+  "lockVersion": "1.0.0",
+  "colorSetId": "poparooz-fixed-color-sets",
+  "colorSetVersion": "1.0.0",
+  "approvedHashes": {
+    "sourceWorkbookSha256": "a32aac97868a8740c4e4d5bf981f434997708beea710a6493abaf15848179f0c",
+    "formalPaletteCanonicalSha256": "1474d8587f9959be876e5bdfc6f29373c68dd427b0c84ac1b474944d672872a4",
+    "canonicalMembershipsSha256": "0010d6e5084074a62869ea44abc4da874131177ac4c7c52375ae60ccd87f1639",
+    "publishedProfileDefinitionsSha256": "2d5338fe221cf21de68175edf93ac8d2705969f4c4139ca370b5b6fd6937a18b"
+  },
+  "inputs": {
+    "sourceWorkbook": {
+      "path": "data-source/color-sets/Poparooz色卡-套装明细.xlsx",
+      "sha256": "a32aac97868a8740c4e4d5bf981f434997708beea710a6493abaf15848179f0c",
+      "byteLength": 32885
+    },
+    "normalizedPalette": {
+      "path": "data-source/palettes/poparooz-standard/1.0.0/normalized-palette.json",
+      "sha256": "4b096a4e6d3d2ec4de85ab67e80ddf848f4def1498b497b951b5fa6b752fa89d",
+      "byteLength": 88138
+    },
+    "runtimePalette": {
+      "path": "src/runtime/palette/artifacts/poparooz-standard/formal-1.0.0/runtime-1.0.0/runtime-palette.json",
+      "sha256": "86a742ed45b1dc06eb4e4cec64e6a4d35ece07b9ad11f7c01208909986337d70",
+      "byteLength": 73595
+    }
+  },
+  "artifact": {
+    "path": "src/runtime/color-set/artifacts/poparooz-fixed-color-sets/1.0.0/color-set-profiles.json",
+    "sha256": "d3198bfd9a9507236946f5417354c7278b151d572bef7cd376fed5bbfa54b4d7",
+    "byteLength": 14211,
+    "groupCounts": [24, 24, 24, 24, 24, 24, 24, 24, 29],
+    "profileCounts": [24, 48, 72, 120, 168, 221],
+    "profileMembershipSha256": {
+      "poparooz-set-24": "ac97b53db5b7b9baab9ad37a156557e8f7edd911c6e3fe938000b8495f7f59c5",
+      "poparooz-set-48": "d5d082e467a9113a2a702d0b5d00fe1e248c7e016c1edb6f87323c9b381879c1",
+      "poparooz-set-72": "e76f71ffa76069dee6742a761ab8f49450bcf3c7e60bb762c7f5b494861a63eb",
+      "poparooz-set-120": "415f53de6840ee9e083da336199e944ac8c009e3aa44bb7370e8388f1f23deb5",
+      "poparooz-set-168": "3137b4e30aed1132f8cbc0e06eb4d76a34f0a5da98dd806c56346493317275e7",
+      "poparooz-set-221": "8097d031ba046eea3a3cc53ac373ce175a88a47060331ad0570835de14cb373f"
+    }
+  }
+}

@@ -274,14 +274,19 @@ Production GenerationRuntime: Unavailable
 
 ```text
 P3-A02-A05 Fixed Color Set Profiles
-Status: Contract Frozen / Implementation Pending
+Status: Runtime implementation complete / review pending
 Authority: POPAROOZ_P3_A02_A05_FIXED_COLOR_SET_PROFILE_DATA_CONTRACT.md
 Source workbook SHA-256: a32aac97868a8740c4e4d5bf981f434997708beea710a6493abaf15848179f0c
 Canonical Memberships SHA-256: 0010d6e5084074a62869ea44abc4da874131177ac4c7c52375ae60ccd87f1639
 Published Profile Definitions SHA-256: 2d5338fe221cf21de68175edf93ac8d2705969f4c4139ca370b5b6fd6937a18b
 Published v1 Profiles: 24 / 48 / 72 / 120 / 168 / 221
 Unpublished cumulative boundaries: 96 / 144 / 192
-Implementation: Not started and not authorized
+Runtime Artifact: src/runtime/color-set/artifacts/poparooz-fixed-color-sets/1.0.0/color-set-profiles.json
+Runtime Artifact SHA-256: d3198bfd9a9507236946f5417354c7278b151d572bef7cd376fed5bbfa54b4d7
+Runtime Lock: data-source/runtime-locks/poparooz-fixed-color-sets/1.0.0/color-set-profiles.lock.json
+Runtime Lock SHA-256: fbad3ba0e2efcea0f1ac07e42b946e097778ca98904dc9e6433be55e4b3c1d79
+Candidate counts: 24 / 48 / 72 / 120 / 168 / 221
+Implementation: Completed locally and awaiting review; not yet accepted or frozen
 Production GenerationRuntime: Unavailable
 ```
 
@@ -290,15 +295,16 @@ Production GenerationRuntime: Unavailable
 ```text
 Phase: Phase 3
 Status: active
-Current implementation task: none authorized
+Current implementation task: P3-A02-A05 Runtime Implementation review
 Current contract: P3-A02-A05 Fixed Color Set Profiles
 Fixed Color Set contract: frozen
-Fixed Color Set implementation: not started and not authorized
+Fixed Color Set implementation: complete locally / review pending
+Next planned boundary: ProcessingPolicy and Production Generation Service composition; not started or authorized
 ```
 
 P3-A01.4 and its D01 and A01 through A06 tasks are completed and frozen. The Runtime Artifact and Runtime Lock are deterministic and approved, every Vite build passes the fail-closed Production Gate during configuration resolution, and application startup synchronously validates and initializes the approved immutable Provider before React render. The real production module graph and emitted bundle expose only the approved Runtime Artifact as Palette-generated data. Build or Startup Gate failures do not fall back. Chrome smoke verification passed with generation remaining safely unavailable.
 
-P3-A02-D01 freezes the accepted production Runtime activation contract and implementation boundaries in [`POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md`](POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md) at contract commit `da631da7e58ed43815a27a90b7de386fa2742007`. P3-A02-A01 through P3-A02-A04 have completed the Generation Palette adapter, generation-safe matcher core, Pattern color-identity wiring, and BoardProfile production wiring without activating Production `GenerationRuntime`. P3-A02-A05 freezes nine canonical membership groups, six published v1 fixed Color Set Profiles, and three unpublished cumulative boundaries; its implementation has not started and is not authorized. ProcessingPolicy production wiring, Worker wiring, and complete generator activation remain unfinished. P3-A02 as a whole is not completed or activated.
+P3-A02-D01 freezes the accepted production Runtime activation contract and implementation boundaries in [`POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md`](POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md) at contract commit `da631da7e58ed43815a27a90b7de386fa2742007`. P3-A02-A01 through P3-A02-A04 have completed the Generation Palette adapter, generation-safe matcher core, Pattern color-identity wiring, and BoardProfile production wiring without activating Production `GenerationRuntime`. P3-A02-A05 freezes nine canonical membership groups, six published v1 fixed Color Set Profiles, and three unpublished cumulative boundaries; its local Runtime implementation now deterministically compiles the approved membership Artifact and Lock, exposes an immutable browser Provider and Generation eligibility projection, and awaits review. ProcessingPolicy production wiring, Worker wiring, and complete generator activation remain unfinished. P3-A02 as a whole is not completed or activated.
 
 ### P3-A02-D01 frozen contract
 
@@ -524,7 +530,7 @@ P3-A02-A01 Generation Palette Adapter             Completed
 P3-A02-A02 Generation-safe Matcher Core            Completed
 P3-A02-A03 Pattern Color Identity and Palette Wiring Completed
 P3-A02-A04 BoardProfile Provider and Generation Input Wiring — Completed / Frozen
-P3-A02-A05 Fixed Color Set Profiles            — Contract Frozen / Implementation Pending
+P3-A02-A05 Fixed Color Set Profiles            — Runtime implementation review pending
 P3-A02     Production Generation Runtime Activation — implementation in progress / not activated
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
@@ -542,7 +548,7 @@ approved Runtime Palette Provider
 -> complete Production GenerationRuntime activation review
 ```
 
-P3-A01.4 and the P3-A02-D01 contract are frozen. P3-A02-A01 through P3-A02-A04 are completed, and P3-A02-A04 is frozen at final implementation HEAD `aecdc575ca244cd4b2f6ef1c9a237b0a812fb3e5`. The P3-A02-A05 fixed Color Set data contract is frozen, but its Artifact, compiler, Provider, Runtime wiring, Worker wiring, and UI have not been implemented or authorized. ProcessingPolicy also remains unimplemented. P3-A02 and Runtime activation are not completed or activated. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
+P3-A01.4 and the P3-A02-D01 contract are frozen. P3-A02-A01 through P3-A02-A04 are completed, and P3-A02-A04 is frozen at final implementation HEAD `aecdc575ca244cd4b2f6ef1c9a237b0a812fb3e5`. The P3-A02-A05 fixed Color Set data contract is frozen; its local Artifact, compiler, Lock, build Gate, browser Provider, Generation adapter, eligibility projection, and bootstrap dependency exposure are implemented and awaiting review. No UI selection, Worker wiring, or Production Runtime activation was added. ProcessingPolicy also remains unimplemented. P3-A02 and Runtime activation are not completed or activated. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
 
 ## Known Issues
 

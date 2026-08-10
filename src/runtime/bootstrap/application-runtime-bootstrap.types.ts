@@ -6,6 +6,11 @@ import type {
 import type { GenerationBoardProfileSnapshot } from "../generation-board-profile/generation-board-profile.types";
 import type { GenerationPaletteSnapshot } from "../generation-palette/generation-palette.types";
 import type {
+  ColorSetProvider,
+  ColorSetSnapshot,
+} from "../color-set/color-set.types";
+import type { GenerationColorSetSnapshot } from "../generation-color-set/generation-color-set.types";
+import type {
   RuntimePaletteProvider,
   RuntimePaletteSnapshot,
 } from "../palette/runtime-palette.types";
@@ -16,6 +21,8 @@ export type ApplicationRuntimeBootstrapResult =
       readonly status: "dependencies-ready";
       readonly paletteProvider: RuntimePaletteProvider;
       readonly generationPalette: GenerationPaletteSnapshot;
+      readonly colorSetProvider: ColorSetProvider;
+      readonly generationColorSets: GenerationColorSetSnapshot;
       readonly boardProfileProvider: ApprovedBoardProfileProvider;
       readonly generationBoardProfile: GenerationBoardProfileSnapshot;
       readonly generationRuntime: GenerationRuntime;
@@ -24,6 +31,19 @@ export type ApplicationRuntimeBootstrapResult =
       readonly status: "palette-unavailable";
       readonly paletteProvider: null;
       readonly generationPalette: null;
+      readonly colorSetProvider: null;
+      readonly generationColorSets: null;
+      readonly boardProfileProvider: null;
+      readonly generationBoardProfile: null;
+      readonly generationRuntime: GenerationRuntime;
+      readonly errorCode: SafeApplicationBootstrapErrorCode;
+    }
+  | {
+      readonly status: "color-set-unavailable";
+      readonly paletteProvider: null;
+      readonly generationPalette: null;
+      readonly colorSetProvider: null;
+      readonly generationColorSets: null;
       readonly boardProfileProvider: null;
       readonly generationBoardProfile: null;
       readonly generationRuntime: GenerationRuntime;
@@ -33,6 +53,8 @@ export type ApplicationRuntimeBootstrapResult =
       readonly status: "board-profile-unavailable";
       readonly paletteProvider: null;
       readonly generationPalette: null;
+      readonly colorSetProvider: null;
+      readonly generationColorSets: null;
       readonly boardProfileProvider: null;
       readonly generationBoardProfile: null;
       readonly generationRuntime: GenerationRuntime;
@@ -44,6 +66,10 @@ export interface ApplicationRuntimeBootstrapDependencies {
   readonly adaptPalette: (
     snapshot: RuntimePaletteSnapshot,
   ) => GenerationPaletteSnapshot;
+  readonly createColorSetProvider: () => ColorSetProvider;
+  readonly adaptColorSets: (
+    snapshot: ColorSetSnapshot,
+  ) => GenerationColorSetSnapshot;
   readonly createBoardProfileProvider: () => ApprovedBoardProfileProvider;
   readonly adaptBoardProfile: (
     snapshot: ApprovedBoardProfileSnapshot,

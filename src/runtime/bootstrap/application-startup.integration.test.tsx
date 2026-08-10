@@ -7,6 +7,8 @@ import { createApprovedBoardProfileProvider } from "../board-profile/approved-bo
 import { adaptBoardProfileToGeneration } from "../generation-board-profile/board-profile-to-generation.adapter";
 import { adaptRuntimePaletteToGeneration } from "../generation-palette/runtime-to-generation-palette.adapter";
 import { createApprovedRuntimePaletteProvider } from "../palette/approved-runtime-palette";
+import { createApprovedColorSetProvider } from "../color-set/approved-color-set";
+import { adaptColorSetToGeneration } from "../generation-color-set/color-set-to-generation.adapter";
 import { createApplicationRuntimeBootstrap } from "./application-runtime-bootstrap";
 
 afterEach(() => {
@@ -32,6 +34,8 @@ describe("Application startup integration", () => {
     const result = createApplicationRuntimeBootstrap({
       createPaletteProvider,
       adaptPalette: adaptRuntimePaletteToGeneration,
+      createColorSetProvider: createApprovedColorSetProvider,
+      adaptColorSets: adaptColorSetToGeneration,
       createBoardProfileProvider,
       adaptBoardProfile: adaptBoardProfileToGeneration,
     });
@@ -65,6 +69,8 @@ describe("Application startup integration", () => {
         throw new Error("internal initialization detail");
       },
       adaptPalette: adaptRuntimePaletteToGeneration,
+      createColorSetProvider: createApprovedColorSetProvider,
+      adaptColorSets: adaptColorSetToGeneration,
       createBoardProfileProvider: createApprovedBoardProfileProvider,
       adaptBoardProfile: adaptBoardProfileToGeneration,
     });
@@ -89,6 +95,8 @@ describe("Application startup integration", () => {
     const result = createApplicationRuntimeBootstrap({
       createPaletteProvider: createApprovedRuntimePaletteProvider,
       adaptPalette: adaptRuntimePaletteToGeneration,
+      createColorSetProvider: createApprovedColorSetProvider,
+      adaptColorSets: adaptColorSetToGeneration,
       createBoardProfileProvider: () => {
         throw new Error("private board evidence detail");
       },

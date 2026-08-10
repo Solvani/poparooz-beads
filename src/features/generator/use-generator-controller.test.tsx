@@ -12,6 +12,7 @@ const VALID_SETTINGS: PatternSettingsDraft = {
   height: "24",
   maxColors: "16",
   background: "white",
+  selectedColorSetProfileId: "poparooz-set-221",
 };
 const RESULT = { marker: "public" } as unknown as PublicPatternResult;
 
@@ -39,6 +40,7 @@ function runtime(queue: readonly Deferred<PublicPatternResult>[]) {
   const value: GenerationRuntime = {
     availability: { available: true },
     service,
+    colorSetProfiles: [{ profileId: "poparooz-set-221", size: 221 }],
   };
   return { value, service };
 }

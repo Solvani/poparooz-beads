@@ -24,6 +24,13 @@ const requiredProductionModules = [
   APPROVED_BOARD_PROFILE_ARTIFACT_MODULE,
   "/src/runtime/generation-board-profile/board-profile-to-generation.adapter.ts",
   "/src/runtime/generation-board-profile/generation-board-profile.schema.ts",
+  "/src/runtime/processing-policy/approved-processing-policy.ts",
+  "/src/runtime/processing-policy/processing-policy.provider.ts",
+  "/src/runtime/processing-policy/processing-policy.schema.ts",
+  "/src/features/generator/generation-service.ts",
+  "/src/runtime/generation-color-set/generation-palette-projection.ts",
+  "/src/lib/quantization-worker/quantization-worker.client.ts",
+  "/src/lib/quantization-worker/quantization-worker.factory.ts",
 ] as const;
 
 const topLevelArtifactFields = [

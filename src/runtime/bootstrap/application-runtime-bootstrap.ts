@@ -2,6 +2,8 @@ import {
   BOARD_PROFILE_UNAVAILABLE_GENERATION_RUNTIME,
   STARTUP_GATED_GENERATION_RUNTIME,
 } from "../../features/generator/generation.types";
+import { createGenerationRuntime } from "../../features/generator/generation-service";
+import { QuantizationWorkerClient } from "../../lib/quantization-worker/quantization-worker.client";
 import { createApprovedBoardProfileProvider } from "../board-profile/approved-board-profile";
 import { createApprovedColorSetProvider } from "../color-set/approved-color-set";
 import { ColorSetBrowserError } from "../color-set/color-set.errors";
@@ -18,6 +20,12 @@ import { createApprovedRuntimePaletteProvider } from "../palette/approved-runtim
 import { RuntimePaletteBrowserError } from "../palette/runtime-palette.errors";
 import type { GenerationPaletteSnapshot } from "../generation-palette/generation-palette.types";
 import type { RuntimePaletteProvider } from "../palette/runtime-palette.types";
+import { createApprovedProcessingPolicyProvider } from "../processing-policy/approved-processing-policy";
+import { ProcessingPolicyError } from "../processing-policy/processing-policy.errors";
+import type {
+  ProcessingPolicyProvider,
+  ProcessingPolicySnapshot,
+} from "../processing-policy/processing-policy.types";
 import type {
   ApplicationRuntimeBootstrapDependencies,
   ApplicationRuntimeBootstrapResult,
@@ -42,6 +50,8 @@ export function createApplicationRuntimeBootstrap(
       generationColorSets: null,
       boardProfileProvider: null,
       generationBoardProfile: null,
+      processingPolicyProvider: null,
+      processingPolicy: null,
       generationRuntime: STARTUP_GATED_GENERATION_RUNTIME,
       errorCode:
         error instanceof RuntimePaletteBrowserError ||
@@ -67,6 +77,8 @@ export function createApplicationRuntimeBootstrap(
       generationColorSets: null,
       boardProfileProvider: null,
       generationBoardProfile: null,
+      processingPolicyProvider: null,
+      processingPolicy: null,
       generationRuntime: STARTUP_GATED_GENERATION_RUNTIME,
       errorCode:
         error instanceof ColorSetBrowserError ||
@@ -81,6 +93,43 @@ export function createApplicationRuntimeBootstrap(
     const generationBoardProfile = dependencies.adaptBoardProfile(
       boardProfileProvider.getSnapshot(),
     );
+    let processingPolicyProvider: ProcessingPolicyProvider;
+    let processingPolicy: ProcessingPolicySnapshot;
+    try {
+      processingPolicyProvider = dependencies.createProcessingPolicyProvider();
+      processingPolicy = processingPolicyProvider.getSnapshot();
+    } catch (error) {
+      return Object.freeze({
+        status: "processing-policy-unavailable",
+        paletteProvider: null,
+        generationPalette: null,
+        colorSetProvider: null,
+        generationColorSets: null,
+        boardProfileProvider: null,
+        generationBoardProfile: null,
+        processingPolicyProvider: null,
+        processingPolicy: null,
+        generationRuntime: STARTUP_GATED_GENERATION_RUNTIME,
+        errorCode:
+          error instanceof ProcessingPolicyError
+            ? "APPLICATION_PROCESSING_POLICY_INVALID"
+            : "APPLICATION_RUNTIME_INITIALIZATION_FAILED",
+      });
+    }
+
+    let generationRuntime;
+    try {
+      generationRuntime = dependencies.createGenerationRuntime({
+        palette: generationPalette,
+        colorSets: generationColorSets,
+        boardProfile: generationBoardProfile,
+        processingPolicy,
+        createWorkerClient: dependencies.createWorkerClient,
+      });
+    } catch {
+      return runtimeUnavailable();
+    }
+    if (!generationRuntime.availability.available) return runtimeUnavailable();
     return Object.freeze({
       status: "dependencies-ready",
       paletteProvider,
@@ -89,8 +138,26 @@ export function createApplicationRuntimeBootstrap(
       generationColorSets,
       boardProfileProvider,
       generationBoardProfile,
-      generationRuntime: STARTUP_GATED_GENERATION_RUNTIME,
+      processingPolicyProvider,
+      processingPolicy,
+      generationRuntime,
     });
+
+    function runtimeUnavailable(): ApplicationRuntimeBootstrapResult {
+      return Object.freeze({
+        status: "runtime-unavailable",
+        paletteProvider: null,
+        generationPalette: null,
+        colorSetProvider: null,
+        generationColorSets: null,
+        boardProfileProvider: null,
+        generationBoardProfile: null,
+        processingPolicyProvider: null,
+        processingPolicy: null,
+        generationRuntime: STARTUP_GATED_GENERATION_RUNTIME,
+        errorCode: "APPLICATION_GENERATION_RUNTIME_UNAVAILABLE",
+      });
+    }
   } catch (error) {
     return Object.freeze({
       status: "board-profile-unavailable",
@@ -100,6 +167,8 @@ export function createApplicationRuntimeBootstrap(
       generationColorSets: null,
       boardProfileProvider: null,
       generationBoardProfile: null,
+      processingPolicyProvider: null,
+      processingPolicy: null,
       generationRuntime: BOARD_PROFILE_UNAVAILABLE_GENERATION_RUNTIME,
       errorCode:
         error instanceof BoardProfileBrowserError ||
@@ -118,5 +187,8 @@ export function bootstrapApprovedApplicationRuntime(): ApplicationRuntimeBootstr
     adaptColorSets: adaptColorSetToGeneration,
     createBoardProfileProvider: createApprovedBoardProfileProvider,
     adaptBoardProfile: adaptBoardProfileToGeneration,
+    createProcessingPolicyProvider: createApprovedProcessingPolicyProvider,
+    createWorkerClient: () => new QuantizationWorkerClient(),
+    createGenerationRuntime,
   });
 }

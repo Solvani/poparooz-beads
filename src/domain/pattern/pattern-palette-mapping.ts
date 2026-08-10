@@ -1,8 +1,8 @@
 import {
-  ColorMatchingError,
   matchNearestColor,
   prepareColorMatchCandidates,
-} from "../color";
+} from "../color/generation-color-matching";
+import { ColorMatchingError } from "../color/color-matching-errors";
 import type { QuantizedImage } from "../quantization/quantization.types";
 import type { GenerationPaletteColor } from "../../runtime/generation-palette/generation-palette.types";
 import { MAX_PATTERN_COLORS } from "./pattern-constants";

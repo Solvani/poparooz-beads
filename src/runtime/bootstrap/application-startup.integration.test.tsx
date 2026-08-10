@@ -10,6 +10,13 @@ import { createApprovedRuntimePaletteProvider } from "../palette/approved-runtim
 import { createApprovedColorSetProvider } from "../color-set/approved-color-set";
 import { adaptColorSetToGeneration } from "../generation-color-set/color-set-to-generation.adapter";
 import { createApplicationRuntimeBootstrap } from "./application-runtime-bootstrap";
+import { createApprovedProcessingPolicyProvider } from "../processing-policy/approved-processing-policy";
+import { createGenerationRuntime } from "../../features/generator/generation-service";
+
+const createWorkerClient = () => ({
+  quantize: vi.fn(),
+  dispose: vi.fn(),
+});
 
 afterEach(() => {
   cleanup();
@@ -18,7 +25,7 @@ afterEach(() => {
 });
 
 describe("Application startup integration", () => {
-  it("creates the Provider before StrictMode render and keeps generation disabled", () => {
+  it("creates the Runtime before StrictMode render while keeping Worker creation lazy", () => {
     const consoleError = vi
       .spyOn(console, "error")
       .mockImplementation(() => undefined);
@@ -38,6 +45,9 @@ describe("Application startup integration", () => {
       adaptColorSets: adaptColorSetToGeneration,
       createBoardProfileProvider,
       adaptBoardProfile: adaptBoardProfileToGeneration,
+      createProcessingPolicyProvider: createApprovedProcessingPolicyProvider,
+      createWorkerClient,
+      createGenerationRuntime,
     });
 
     const view = render(
@@ -57,9 +67,11 @@ describe("Application startup integration", () => {
     expect(
       screen.getByRole("button", { name: "Generate Pattern" }),
     ).toBeDisabled();
-    expect(
-      screen.getByText("Pattern generation is not available in this preview."),
-    ).toBeInTheDocument();
+    expect(result.generationRuntime.availability.available).toBe(true);
+    expect(screen.getByLabelText("Bead Color Set")).toHaveValue(
+      "poparooz-set-221",
+    );
+    expect(screen.queryByText(/not available in this preview/i)).toBeNull();
     expect(consoleError).not.toHaveBeenCalled();
   });
 
@@ -73,6 +85,9 @@ describe("Application startup integration", () => {
       adaptColorSets: adaptColorSetToGeneration,
       createBoardProfileProvider: createApprovedBoardProfileProvider,
       adaptBoardProfile: adaptBoardProfileToGeneration,
+      createProcessingPolicyProvider: createApprovedProcessingPolicyProvider,
+      createWorkerClient,
+      createGenerationRuntime,
     });
 
     render(<App generationRuntime={result.generationRuntime} />);
@@ -101,6 +116,9 @@ describe("Application startup integration", () => {
         throw new Error("private board evidence detail");
       },
       adaptBoardProfile: adaptBoardProfileToGeneration,
+      createProcessingPolicyProvider: createApprovedProcessingPolicyProvider,
+      createWorkerClient,
+      createGenerationRuntime,
     });
 
     render(<App generationRuntime={result.generationRuntime} />);

@@ -11,6 +11,9 @@ import { BoardProfileBrowserError } from "../board-profile/board-profile.errors"
 import { adaptBoardProfileToGeneration } from "../generation-board-profile/board-profile-to-generation.adapter";
 import { GenerationBoardProfileError } from "../generation-board-profile/generation-board-profile.errors";
 import { adaptRuntimePaletteToGeneration } from "../generation-palette/runtime-to-generation-palette.adapter";
+import { createApprovedProcessingPolicyProvider } from "../processing-policy/approved-processing-policy";
+import { ProcessingPolicyError } from "../processing-policy/processing-policy.errors";
+import { createGenerationRuntime } from "../../features/generator/generation-service";
 import {
   bootstrapApprovedApplicationRuntime,
   createApplicationRuntimeBootstrap,
@@ -28,12 +31,18 @@ function approvedDependencies(
     adaptColorSets: adaptColorSetToGeneration,
     createBoardProfileProvider: createApprovedBoardProfileProvider,
     adaptBoardProfile: adaptBoardProfileToGeneration,
+    createProcessingPolicyProvider: createApprovedProcessingPolicyProvider,
+    createWorkerClient: () => ({
+      quantize: vi.fn(),
+      dispose: vi.fn(),
+    }),
+    createGenerationRuntime,
     ...overrides,
   };
 }
 
 describe("Application Runtime Bootstrap", () => {
-  it("creates one approved Provider while keeping GenerationRuntime unavailable", () => {
+  it("creates approved Providers and an available GenerationRuntime without creating a Worker", () => {
     const provider = createApprovedRuntimePaletteProvider();
     const createPaletteProvider = vi.fn(() => provider);
 
@@ -78,17 +87,17 @@ describe("Application Runtime Bootstrap", () => {
       pegGrid: { columns: 104, rows: 104 },
       tiling: { supported: true, sharedEdgePegs: false },
     });
-    expect(result.generationRuntime).toEqual({
-      availability: {
-        available: false,
-        reason: "production-runtime-unavailable",
-      },
+    expect(result.processingPolicy).toMatchObject({
+      policyId: "poparooz-processing-policy",
+      policyVersion: "1.0.0",
     });
-    expect(result.generationRuntime.service).toBeUndefined();
+    expect(result.generationRuntime.availability).toEqual({ available: true });
+    expect(result.generationRuntime.service).toBeDefined();
+    expect(result.generationRuntime).toHaveProperty("colorSetProfiles");
     expect(Object.isFrozen(result)).toBe(true);
   });
 
-  it("boots with the real approved Provider and no Generation Service", () => {
+  it("boots with the real approved Providers and Generation Service", () => {
     const result = bootstrapApprovedApplicationRuntime();
     expect(result.status).toBe("dependencies-ready");
     expect(result.paletteProvider).not.toBeNull();
@@ -96,8 +105,8 @@ describe("Application Runtime Bootstrap", () => {
     expect(result.boardProfileProvider?.getSnapshot().id).toBe(
       "poparooz-board-104",
     );
-    expect(result.generationRuntime.availability.available).toBe(false);
-    expect(result.generationRuntime.service).toBeUndefined();
+    expect(result.generationRuntime.availability.available).toBe(true);
+    expect(result.generationRuntime.service).toBeDefined();
   });
 
   it("maps a known Provider failure to a safe palette failure result", () => {
@@ -121,6 +130,8 @@ describe("Application Runtime Bootstrap", () => {
       generationColorSets: null,
       boardProfileProvider: null,
       generationBoardProfile: null,
+      processingPolicyProvider: null,
+      processingPolicy: null,
       generationRuntime: {
         availability: {
           available: false,
@@ -196,7 +207,7 @@ describe("Application Runtime Bootstrap", () => {
     expect(render).toHaveBeenCalledOnce();
   });
 
-  it("creates Palette then Board dependencies synchronously before render", () => {
+  it("creates all dependencies synchronously before render without a Worker", () => {
     const events: string[] = [];
     const result = createApplicationRuntimeBootstrap(
       approvedDependencies({
@@ -224,6 +235,14 @@ describe("Application Runtime Bootstrap", () => {
           events.push("board-adapter");
           return adaptBoardProfileToGeneration(snapshot);
         },
+        createProcessingPolicyProvider: () => {
+          events.push("processing-policy-provider");
+          return createApprovedProcessingPolicyProvider();
+        },
+        createWorkerClient: () => {
+          events.push("worker");
+          throw new Error("must remain lazy");
+        },
       }),
     );
     expect(result.status).toBe("dependencies-ready");
@@ -234,11 +253,9 @@ describe("Application Runtime Bootstrap", () => {
       "color-set-adapter",
       "board-provider",
       "board-adapter",
+      "processing-policy-provider",
     ]);
-    expect(result.generationRuntime.availability).toEqual({
-      available: false,
-      reason: "production-runtime-unavailable",
-    });
+    expect(result.generationRuntime.availability).toEqual({ available: true });
   });
 
   it("fails closed on Color Set Provider failure without partial dependencies", () => {
@@ -281,6 +298,8 @@ describe("Application Runtime Bootstrap", () => {
       generationColorSets: null,
       boardProfileProvider: null,
       generationBoardProfile: null,
+      processingPolicyProvider: null,
+      processingPolicy: null,
       generationRuntime: {
         availability: {
           available: false,
@@ -312,6 +331,8 @@ describe("Application Runtime Bootstrap", () => {
       generationColorSets: null,
       boardProfileProvider: null,
       generationBoardProfile: null,
+      processingPolicyProvider: null,
+      processingPolicy: null,
       generationRuntime: {
         availability: {
           available: false,
@@ -339,6 +360,8 @@ describe("Application Runtime Bootstrap", () => {
       generationColorSets: null,
       boardProfileProvider: null,
       generationBoardProfile: null,
+      processingPolicyProvider: null,
+      processingPolicy: null,
       generationRuntime: {
         availability: {
           available: false,
@@ -350,5 +373,49 @@ describe("Application Runtime Bootstrap", () => {
     expect(JSON.stringify(result)).not.toMatch(
       /sensitive internal board adapter failure|stack/i,
     );
+  });
+
+  it("fails closed on an invalid ProcessingPolicy without partial dependencies", () => {
+    const result = createApplicationRuntimeBootstrap(
+      approvedDependencies({
+        createProcessingPolicyProvider: () => {
+          throw new ProcessingPolicyError("PROCESSING_POLICY_INVALID");
+        },
+      }),
+    );
+
+    expect(result).toMatchObject({
+      status: "processing-policy-unavailable",
+      paletteProvider: null,
+      generationPalette: null,
+      colorSetProvider: null,
+      generationColorSets: null,
+      boardProfileProvider: null,
+      generationBoardProfile: null,
+      processingPolicyProvider: null,
+      processingPolicy: null,
+      generationRuntime: { availability: { available: false } },
+      errorCode: "APPLICATION_PROCESSING_POLICY_INVALID",
+    });
+  });
+
+  it("fails closed when the Worker-client factory is structurally unavailable", () => {
+    const result = createApplicationRuntimeBootstrap(
+      approvedDependencies({ createWorkerClient: undefined as never }),
+    );
+
+    expect(result).toMatchObject({
+      status: "runtime-unavailable",
+      paletteProvider: null,
+      generationPalette: null,
+      colorSetProvider: null,
+      generationColorSets: null,
+      boardProfileProvider: null,
+      generationBoardProfile: null,
+      processingPolicyProvider: null,
+      processingPolicy: null,
+      generationRuntime: { availability: { available: false } },
+      errorCode: "APPLICATION_GENERATION_RUNTIME_UNAVAILABLE",
+    });
   });
 });

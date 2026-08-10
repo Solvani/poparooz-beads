@@ -1,6 +1,14 @@
 import { ImagePipelineError } from "../../domain/image/image-errors";
 import { PatternAssemblyError } from "../../domain/pattern/pattern-errors";
 import { QuantizationWorkerError } from "../../lib/quantization-worker/quantization-worker.errors";
+import { GenerationColorSetError } from "../../runtime/generation-color-set/generation-color-set.errors";
+
+export class GenerationRequestError extends Error {
+  constructor() {
+    super("The generation request is invalid.");
+    this.name = "GenerationRequestError";
+  }
+}
 
 export type SafeGenerationErrorCode =
   | "unsupported-image"
@@ -63,6 +71,15 @@ export function toSafeGenerationError(error: unknown): SafeGenerationError {
     return safe(
       "worker-failed",
       "The pattern processor could not complete this request.",
+    );
+  }
+  if (
+    error instanceof GenerationRequestError ||
+    error instanceof GenerationColorSetError
+  ) {
+    return safe(
+      "invalid-settings",
+      "These pattern settings cannot be applied to this image.",
     );
   }
   if (error instanceof PatternAssemblyError) {

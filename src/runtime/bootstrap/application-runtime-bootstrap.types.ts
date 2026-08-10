@@ -1,4 +1,8 @@
-import type { GenerationRuntime } from "../../features/generator/generation.types";
+import type {
+  GenerationDependencies,
+  GenerationRuntime,
+  GenerationWorkerClient,
+} from "../../features/generator/generation.types";
 import type {
   ApprovedBoardProfileProvider,
   ApprovedBoardProfileSnapshot,
@@ -15,6 +19,10 @@ import type {
   RuntimePaletteSnapshot,
 } from "../palette/runtime-palette.types";
 import type { SafeApplicationBootstrapErrorCode } from "./application-runtime-bootstrap.errors";
+import type {
+  ProcessingPolicyProvider,
+  ProcessingPolicySnapshot,
+} from "../processing-policy/processing-policy.types";
 
 export type ApplicationRuntimeBootstrapResult =
   | {
@@ -25,6 +33,8 @@ export type ApplicationRuntimeBootstrapResult =
       readonly generationColorSets: GenerationColorSetSnapshot;
       readonly boardProfileProvider: ApprovedBoardProfileProvider;
       readonly generationBoardProfile: GenerationBoardProfileSnapshot;
+      readonly processingPolicyProvider: ProcessingPolicyProvider;
+      readonly processingPolicy: ProcessingPolicySnapshot;
       readonly generationRuntime: GenerationRuntime;
     }
   | {
@@ -35,6 +45,8 @@ export type ApplicationRuntimeBootstrapResult =
       readonly generationColorSets: null;
       readonly boardProfileProvider: null;
       readonly generationBoardProfile: null;
+      readonly processingPolicyProvider: null;
+      readonly processingPolicy: null;
       readonly generationRuntime: GenerationRuntime;
       readonly errorCode: SafeApplicationBootstrapErrorCode;
     }
@@ -46,6 +58,8 @@ export type ApplicationRuntimeBootstrapResult =
       readonly generationColorSets: null;
       readonly boardProfileProvider: null;
       readonly generationBoardProfile: null;
+      readonly processingPolicyProvider: null;
+      readonly processingPolicy: null;
       readonly generationRuntime: GenerationRuntime;
       readonly errorCode: SafeApplicationBootstrapErrorCode;
     }
@@ -57,6 +71,21 @@ export type ApplicationRuntimeBootstrapResult =
       readonly generationColorSets: null;
       readonly boardProfileProvider: null;
       readonly generationBoardProfile: null;
+      readonly processingPolicyProvider: null;
+      readonly processingPolicy: null;
+      readonly generationRuntime: GenerationRuntime;
+      readonly errorCode: SafeApplicationBootstrapErrorCode;
+    }
+  | {
+      readonly status: "processing-policy-unavailable" | "runtime-unavailable";
+      readonly paletteProvider: null;
+      readonly generationPalette: null;
+      readonly colorSetProvider: null;
+      readonly generationColorSets: null;
+      readonly boardProfileProvider: null;
+      readonly generationBoardProfile: null;
+      readonly processingPolicyProvider: null;
+      readonly processingPolicy: null;
       readonly generationRuntime: GenerationRuntime;
       readonly errorCode: SafeApplicationBootstrapErrorCode;
     };
@@ -74,4 +103,9 @@ export interface ApplicationRuntimeBootstrapDependencies {
   readonly adaptBoardProfile: (
     snapshot: ApprovedBoardProfileSnapshot,
   ) => GenerationBoardProfileSnapshot;
+  readonly createProcessingPolicyProvider: () => ProcessingPolicyProvider;
+  readonly createWorkerClient: () => GenerationWorkerClient;
+  readonly createGenerationRuntime: (
+    dependencies: GenerationDependencies | Partial<GenerationDependencies>,
+  ) => GenerationRuntime;
 }

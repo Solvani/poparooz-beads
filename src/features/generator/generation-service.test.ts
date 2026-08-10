@@ -11,6 +11,10 @@ import { adaptRuntimePaletteToGeneration } from "../../runtime/generation-palett
 import { createApprovedBoardProfileProvider } from "../../runtime/board-profile/approved-board-profile";
 import { adaptBoardProfileToGeneration } from "../../runtime/generation-board-profile/board-profile-to-generation.adapter";
 import { createApprovedRuntimePaletteProvider } from "../../runtime/palette/approved-runtime-palette";
+import { createApprovedColorSetProvider } from "../../runtime/color-set/approved-color-set";
+import type { PublishedColorSetProfileId } from "../../runtime/color-set/color-set.types";
+import { adaptColorSetToGeneration } from "../../runtime/generation-color-set/color-set-to-generation.adapter";
+import { createApprovedProcessingPolicyProvider } from "../../runtime/processing-policy/approved-processing-policy";
 import {
   createGenerationRuntime,
   createGenerationService,
@@ -66,8 +70,16 @@ const GENERATION_PALETTE = adaptRuntimePaletteToGeneration(
 const GENERATION_BOARD_PROFILE = adaptBoardProfileToGeneration(
   createApprovedBoardProfileProvider().getSnapshot(),
 );
+const GENERATION_COLOR_SETS = adaptColorSetToGeneration(
+  createApprovedColorSetProvider().getSnapshot(),
+);
+const PROCESSING_POLICY =
+  createApprovedProcessingPolicyProvider().getSnapshot();
 
-function snapshot(maxColors = 512): GenerationInputSnapshot {
+function snapshot(
+  maxColors = 32,
+  selectedColorSetProfileId: PublishedColorSetProfileId = "poparooz-set-221",
+): GenerationInputSnapshot {
   return Object.freeze({
     jobId: 7,
     file: new File(["image"], "photo.png", { type: "image/png" }),
@@ -77,8 +89,9 @@ function snapshot(maxColors = 512): GenerationInputSnapshot {
       height: 30,
       maxColors,
       background: "transparent" as const,
+      selectedColorSetProfileId,
     }),
-    inputKey: `3:40:30:${maxColors}:transparent`,
+    inputKey: `3:40:30:${maxColors}:transparent:${selectedColorSetProfileId}`,
   });
 }
 
@@ -107,8 +120,9 @@ function setup() {
   };
   const dependencies: GenerationDependencies = {
     palette: GENERATION_PALETTE,
+    colorSets: GENERATION_COLOR_SETS,
     boardProfile: GENERATION_BOARD_PROFILE,
-    processingPolicy: { allowUpscale: false, alphaThreshold: 0 },
+    processingPolicy: PROCESSING_POLICY,
     createWorkerClient: vi.fn(() => worker),
   };
   return { order, worker, pipeline, dependencies };
@@ -135,7 +149,7 @@ describe("Generation Service", () => {
 
   it("passes the immutable size, background, color, and processing policies", async () => {
     const context = setup();
-    const input = snapshot(512);
+    const input = snapshot(64);
     const signal = new AbortController().signal;
     await createGenerationService(
       context.dependencies,
@@ -154,7 +168,7 @@ describe("Generation Service", () => {
     );
     expect(context.worker.quantize).toHaveBeenCalledWith(
       NORMALIZED.image,
-      { maxColors: 512, alphaThreshold: 0 },
+      { maxColors: 64, alphaThreshold: 16 },
       signal,
     );
     expect(context.pipeline.assemble).toHaveBeenCalledWith({
@@ -166,18 +180,63 @@ describe("Generation Service", () => {
     expect(Object.isFrozen(GENERATION_PALETTE.colors)).toBe(true);
   });
 
-  it("allows maxColors above the palette length without clipping", async () => {
+  it("keeps the full selected Color Set membership independent from maxColors", async () => {
     const context = setup();
-    expect(GENERATION_PALETTE.colors.length).toBeLessThan(512);
+    const profile72 = GENERATION_COLOR_SETS.profiles.find(
+      (profile) => profile.profileId === "poparooz-set-72",
+    );
     await createGenerationService(
       context.dependencies,
       context.pipeline,
-    ).generate(snapshot(512), new AbortController().signal);
+    ).generate(snapshot(24, "poparooz-set-72"), new AbortController().signal);
     expect(context.worker.quantize).toHaveBeenCalledWith(
       expect.anything(),
-      expect.objectContaining({ maxColors: 512 }),
+      expect.objectContaining({ maxColors: 24 }),
       expect.any(AbortSignal),
     );
+    expect(context.pipeline.assemble).toHaveBeenCalledWith(
+      expect.objectContaining({
+        paletteColors: expect.arrayContaining(
+          profile72!.memberCodes.map((code) =>
+            expect.objectContaining({ code }),
+          ),
+        ),
+      }),
+    );
+    const assemblyInput = vi.mocked(context.pipeline.assemble).mock
+      .calls[0]![0];
+    expect(assemblyInput.paletteColors).toHaveLength(72);
+  });
+
+  it.each([1, 65, 0, -1, 2.5, Number.NaN, Number.POSITIVE_INFINITY])(
+    "rejects product maxColors %s before creating a Worker",
+    async (maxColors) => {
+      const context = setup();
+      await expect(
+        createGenerationService(
+          context.dependencies,
+          context.pipeline,
+        ).generate(snapshot(maxColors), new AbortController().signal),
+      ).rejects.toThrow("The generation request is invalid.");
+      expect(context.dependencies.createWorkerClient).not.toHaveBeenCalled();
+    },
+  );
+
+  it.each([
+    "",
+    "poparooz-set-96",
+    "poparooz-set-144",
+    "poparooz-set-192",
+    "unknown",
+  ])("rejects unavailable Color Set %s without fallback", async (profileId) => {
+    const context = setup();
+    await expect(
+      createGenerationService(context.dependencies, context.pipeline).generate(
+        snapshot(32, profileId as PublishedColorSetProfileId),
+        new AbortController().signal,
+      ),
+    ).rejects.toThrow();
+    expect(context.dependencies.createWorkerClient).not.toHaveBeenCalled();
   });
 
   it("propagates decode, worker, and assembly failures and always disposes the worker", async () => {
@@ -225,7 +284,7 @@ describe("Generation Service", () => {
     });
     expect(
       createGenerationRuntime({ palette: GENERATION_PALETTE }).availability,
-    ).toEqual({ available: false, reason: "board-profile-unavailable" });
+    ).toEqual({ available: false, reason: "color-set-unavailable" });
   });
 
   it("fails closed on an invalid Generation Palette before creating a Worker", () => {

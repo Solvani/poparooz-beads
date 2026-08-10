@@ -22,6 +22,8 @@ interface ActiveGeneration {
   readonly controller: AbortController;
 }
 
+const NO_COLOR_SET_PROFILES = Object.freeze([]);
+
 export interface UseGeneratorControllerOptions {
   readonly file: File | null;
   readonly imageVersion: number;
@@ -42,10 +44,14 @@ export function useGeneratorController({
   const nextJobId = useRef(1);
   const active = useRef<ActiveGeneration | null>(null);
   const mounted = useRef(true);
+  const colorSetProfiles =
+    runtime.availability.available && "colorSetProfiles" in runtime
+      ? runtime.colorSetProfiles
+      : NO_COLOR_SET_PROFILES;
 
   const input = useMemo<CurrentGeneratorInput | null>(() => {
     if (file === null) return null;
-    const validation = validatePatternSettings(settings);
+    const validation = validatePatternSettings(settings, colorSetProfiles);
     if (!validation.valid) return { imageVersion, candidate: null };
     const stableSettings = Object.freeze({ ...validation.value });
     return Object.freeze({
@@ -57,7 +63,7 @@ export function useGeneratorController({
         inputKey: createInputKey(imageVersion, stableSettings),
       }),
     });
-  }, [file, imageVersion, settings]);
+  }, [colorSetProfiles, file, imageVersion, settings]);
   const inputRef = useRef(input);
 
   useEffect(() => {
@@ -167,6 +173,7 @@ function createInputKey(
     readonly height: number;
     readonly maxColors: number;
     readonly background: string;
+    readonly selectedColorSetProfileId: string;
   },
 ): string {
   return [
@@ -175,5 +182,6 @@ function createInputKey(
     settings.height,
     settings.maxColors,
     settings.background,
+    settings.selectedColorSetProfileId,
   ].join(":");
 }

@@ -6,12 +6,16 @@ import type {
 import type { RgbaImage } from "../../domain/image/image.types";
 import type { GenerationPaletteSnapshot } from "../../runtime/generation-palette/generation-palette.types";
 import type { GenerationBoardProfileSnapshot } from "../../runtime/generation-board-profile/generation-board-profile.types";
+import type { GenerationColorSetSnapshot } from "../../runtime/generation-color-set/generation-color-set.types";
 import type { PatternSettingsValue } from "../settings/settings.types";
+import type { ColorSetProfileOption } from "../settings/settings.types";
+import type { ProcessingPolicySnapshot } from "../../runtime/processing-policy/processing-policy.types";
 
 export type GenerationUnavailableReason =
   | "palette-unavailable"
   | "production-runtime-unavailable"
   | "board-profile-unavailable"
+  | "color-set-unavailable"
   | "processing-policy-unavailable"
   | "worker-unavailable";
 
@@ -42,15 +46,11 @@ export interface GenerationWorkerClient {
   dispose(): void;
 }
 
-export interface GenerationProcessingPolicy {
-  readonly allowUpscale: boolean;
-  readonly alphaThreshold: number;
-}
-
 export interface GenerationDependencies {
   readonly palette: GenerationPaletteSnapshot;
+  readonly colorSets: GenerationColorSetSnapshot;
   readonly boardProfile: GenerationBoardProfileSnapshot;
-  readonly processingPolicy: GenerationProcessingPolicy;
+  readonly processingPolicy: ProcessingPolicySnapshot;
   readonly createWorkerClient: () => GenerationWorkerClient;
 }
 
@@ -65,6 +65,7 @@ export type GenerationRuntime =
   | {
       readonly availability: { readonly available: true };
       readonly service: GenerationService;
+      readonly colorSetProfiles: readonly ColorSetProfileOption[];
     }
   | {
       readonly availability: {

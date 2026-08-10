@@ -3,8 +3,8 @@ import {
   MAX_TARGET_PIXELS,
   MIN_TARGET_DIMENSION,
 } from "../../domain/image";
-import { MAX_QUANTIZATION_COLORS } from "../../domain/quantization/quantization-options";
 import type {
+  ColorSetProfileOption,
   PatternSettingsDraft,
   PatternSettingsValue,
 } from "./settings.types";
@@ -14,6 +14,7 @@ export interface PatternSettingsErrors {
   readonly height?: string;
   readonly maxColors?: string;
   readonly background?: string;
+  readonly selectedColorSetProfileId?: string;
   readonly dimensions?: string;
 }
 
@@ -23,6 +24,7 @@ export type PatternSettingsValidation =
 
 export function validatePatternSettings(
   draft: PatternSettingsDraft,
+  colorSetProfiles: readonly ColorSetProfileOption[],
 ): PatternSettingsValidation {
   const width = parseContractInteger(draft.width);
   const height = parseContractInteger(draft.height);
@@ -36,10 +38,15 @@ export function validatePatternSettings(
       : { height: "Enter a whole number from 1 to 4096." }),
     ...(isColorCount(maxColors)
       ? {}
-      : { maxColors: "Enter a whole number from 1 to 512." }),
+      : { maxColors: "Enter a whole number from 2 to 64." }),
     ...(draft.background === "white" || draft.background === "transparent"
       ? {}
       : { background: "Choose White or Transparent." }),
+    ...(colorSetProfiles.some(
+      (profile) => profile.profileId === draft.selectedColorSetProfileId,
+    )
+      ? {}
+      : { selectedColorSetProfileId: "Choose an available Color Set." }),
     ...(isDimension(width) &&
     isDimension(height) &&
     width > Math.floor(MAX_TARGET_PIXELS / height)
@@ -55,6 +62,8 @@ export function validatePatternSettings(
       height: height!,
       maxColors: maxColors!,
       background: draft.background as PatternSettingsValue["background"],
+      selectedColorSetProfileId:
+        draft.selectedColorSetProfileId as PatternSettingsValue["selectedColorSetProfileId"],
     },
   };
 }
@@ -74,5 +83,5 @@ function isDimension(value: number | null): value is number {
 }
 
 function isColorCount(value: number | null): value is number {
-  return value !== null && value >= 1 && value <= MAX_QUANTIZATION_COLORS;
+  return value !== null && value >= 2 && value <= 64;
 }

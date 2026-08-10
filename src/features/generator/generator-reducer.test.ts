@@ -15,6 +15,7 @@ const SETTINGS: PatternSettingsValue = Object.freeze({
   height: 24,
   maxColors: 16,
   background: "white",
+  selectedColorSetProfileId: "poparooz-set-221",
 });
 
 function job(

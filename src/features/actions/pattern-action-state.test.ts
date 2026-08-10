@@ -23,6 +23,7 @@ function snapshot(jobId = 1): GenerationInputSnapshot {
       height: 24,
       maxColors: 16,
       background: "white",
+      selectedColorSetProfileId: "poparooz-set-221",
     },
     inputKey: `input-${jobId}`,
   };

@@ -32,11 +32,42 @@ const approvedColorSetArtifact = path.join(
 );
 
 describe("Application Runtime Bootstrap boundary", () => {
-  it("has a browser-only runtime graph with no service, Worker, fallback, or governance input", async () => {
+  it("has the approved browser-only production generation graph without legacy or governance input", async () => {
     const graph = await collectRuntimeDependencyGraph(bootstrapEntry);
     expect(graph.externalSpecifiers).toEqual(["zod"]);
     expect(graph.files).toContain(approvedBoardArtifact);
     expect(graph.files).toContain(approvedColorSetArtifact);
+    expect(graph.files).toEqual(
+      expect.arrayContaining([
+        path.join(sourceRoot, "features", "generator", "generation-service.ts"),
+        path.join(
+          sourceRoot,
+          "domain",
+          "color",
+          "generation-color-matching.ts",
+        ),
+        path.join(
+          sourceRoot,
+          "lib",
+          "quantization-worker",
+          "quantization-worker.client.ts",
+        ),
+        path.join(
+          sourceRoot,
+          "lib",
+          "quantization-worker",
+          "quantization-worker.factory.ts",
+        ),
+      ]),
+    );
+    expect(
+      graph.files.some((file) =>
+        file.endsWith(path.join("domain", "color", "color-matching.ts")),
+      ),
+    ).toBe(false);
+    expect(
+      graph.files.some((file) => file.includes(path.join("domain", "palette"))),
+    ).toBe(false);
     expect(
       graph.files.filter((file) => file.endsWith("color-set-profiles.json")),
     ).toEqual([approvedColorSetArtifact]);
@@ -46,20 +77,23 @@ describe("Application Runtime Bootstrap boundary", () => {
     for (const file of graph.files) {
       expect(file.startsWith(sourceRoot)).toBe(true);
       expect(file).not.toMatch(
-        /generation-service|workers?|quantization-worker|pattern-assembler|color-matching|fixture|benchmark|data-source|docs?[\\/]|evidence|scripts[\\/]palette|runtime-lock|runtime-policy|manifest|derivation-audit|validation-report|substitute|catalog|shopify|inventory|candidate/i,
+        /fixture|benchmark|data-source|docs?[\\/]|evidence|scripts[\\/]palette|runtime-lock|runtime-policy|manifest|derivation-audit|validation-report|substitute|catalog|shopify|inventory|candidate/i,
       );
     }
   });
 
-  it("contains no browser side effects or forbidden fallback calls", async () => {
+  it("contains no network, persistence, legacy matcher, fixture, or fallback calls", async () => {
     const graph = await collectRuntimeDependencyGraph(bootstrapEntry);
     for (const file of graph.files.filter((candidate) =>
       candidate.endsWith(".ts"),
     )) {
       const source = await readFile(file, "utf8");
       expect(source, file).not.toMatch(
-        /node:|fetch\(|XMLHttpRequest|localStorage|indexedDB|document\.cookie|new Worker|createGenerationService|assemblePattern|matchNearestPaletteColor|TEST_PALETTE_DEFINITION|palette\.fixture|board-profile\.fixture|BENCHMARK_BOARD_PROFILE/i,
+        /node:|fetch\(|XMLHttpRequest|localStorage|indexedDB|document\.cookie|matchNearestPaletteColor|TEST_PALETTE_DEFINITION|palette\.fixture|board-profile\.fixture|BENCHMARK_BOARD_PROFILE|main-thread fallback|fixture fallback/i,
       );
+      if (!file.endsWith("quantization-worker.factory.ts")) {
+        expect(source, file).not.toMatch(/new Worker\s*\(/);
+      }
     }
   });
 

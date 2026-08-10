@@ -117,6 +117,12 @@ export function App({
     <PatternSettings
       value={settings}
       onChange={setSettings}
+      colorSetProfiles={
+        generationRuntime.availability.available &&
+        "colorSetProfiles" in generationRuntime
+          ? generationRuntime.colorSetProfiles
+          : []
+      }
       generationControls={
         omitGenerationControls ? null : generationStatus(insideSheet)
       }

@@ -34,10 +34,10 @@ The generator is not a general image editor, AI image platform, bead-art communi
 
 ## Frozen architecture direction
 
-The formal MVP deployment architecture is **an independently deployed Vercel generator embedded in a Shopify page by iframe**:
+The formal MVP deployment architecture is **an independently deployed static generator embedded in a Shopify page by iframe**. A08 freezes Cloudflare Pages as the production host:
 
 ```text
-https://www.poparooz.com/pages/fuse-bead-pattern-maker
+https://poparooz.com/pages/fuse-bead-pattern-maker
 └── Shopify content and iframe container
     └── https://generator.poparooz.com
         └── Poparooz Fuse Bead Pattern Generator
@@ -45,7 +45,7 @@ https://www.poparooz.com/pages/fuse-bead-pattern-maker
 
 The generator remains a standalone application with its complete core generation flow when opened directly at `https://generator.poparooz.com`. The intended implementation direction is React, TypeScript, Vite, Canvas, Web Worker, and browser-local image processing. This is a Phase 0 architecture decision, not an assertion that those technologies currently exist in the repository.
 
-Shopify owns its header, navigation, SEO and explanatory copy, FAQ, privacy explanation, product entry points, cart, iframe container, resize handling, full-screen fallback, and any future same-origin Cart API bridge. Vercel owns upload, local image processing, internal-reference matching, pattern generation, the Canvas workspace, bead/board statistics, PNG/CSV downloads, and controlled messages to the parent.
+Shopify owns its header, navigation, SEO and explanatory copy, FAQ, privacy explanation, product entry points, cart, iframe container, resize handling, full-screen fallback, and any future same-origin Cart API bridge. The independently deployed generator owns upload, local image processing, internal-reference matching, pattern generation, the Canvas workspace, bead/board statistics, PNG/CSV downloads, and controlled messages to the parent.
 
 The generator and Shopify parent communicate through a versioned `postMessage` protocol with exact origin validation. Images and image-derived content never cross that boundary.
 

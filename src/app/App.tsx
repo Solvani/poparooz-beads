@@ -34,6 +34,7 @@ import {
 import { ImagePreview } from "../features/upload/ImagePreview";
 import { ImageUpload } from "../features/upload/ImageUpload";
 import { useImageSource } from "../features/upload/use-image-source";
+import { useGeneratorEmbedBridge } from "../runtime/embed/generator-embed-bridge";
 
 export interface AppProps {
   readonly generationRuntime?: GenerationRuntime;
@@ -42,6 +43,7 @@ export interface AppProps {
 export function App({
   generationRuntime = UNAVAILABLE_GENERATION_RUNTIME,
 }: AppProps) {
+  useGeneratorEmbedBridge();
   const image = useImageSource();
   const { containerRef, mode: workspaceMode } = useWorkspaceMode();
   const {

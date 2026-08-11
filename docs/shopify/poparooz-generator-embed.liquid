@@ -1,0 +1,71 @@
+<div id="poparooz-generator-container">
+  <iframe
+    id="poparooz-generator-frame"
+    src="https://generator.poparooz.com/"
+    title="Poparooz Fuse Bead Pattern Generator"
+    loading="lazy"
+    referrerpolicy="strict-origin-when-cross-origin"
+    sandbox="allow-scripts allow-same-origin allow-downloads"
+    style="display: block; width: 100%; min-height: 800px; border: 0"
+  ></iframe>
+  <p>
+    <a
+      href="https://generator.poparooz.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Open Pattern Maker Full Screen
+    </a>
+  </p>
+</div>
+
+<script>
+  (() => {
+    const generatorOrigin = "https://generator.poparooz.com";
+    const frame = document.getElementById("poparooz-generator-frame");
+    if (!(frame instanceof HTMLIFrameElement)) return;
+
+    const hasExactKeys = (value, keys) => {
+      if (value === null || typeof value !== "object" || Array.isArray(value)) {
+        return false;
+      }
+      const actual = Object.keys(value).sort();
+      const expected = [...keys].sort();
+      return (
+        actual.length === expected.length &&
+        actual.every((key, index) => key === expected[index])
+      );
+    };
+
+    window.addEventListener("message", (event) => {
+      if (
+        event.origin !== generatorOrigin ||
+        event.source !== frame.contentWindow ||
+        !hasExactKeys(event.data, ["source", "version", "type", "payload"]) ||
+        event.data.source !== "poparooz-generator" ||
+        event.data.version !== 1
+      ) {
+        return;
+      }
+
+      if (
+        event.data.type === "generator.ready" &&
+        hasExactKeys(event.data.payload, [])
+      ) {
+        frame.dataset.ready = "true";
+        return;
+      }
+
+      if (
+        event.data.type !== "generator.resize" ||
+        !hasExactKeys(event.data.payload, ["height"])
+      ) {
+        return;
+      }
+
+      const height = event.data.payload.height;
+      if (!Number.isInteger(height) || height < 320 || height > 8192) return;
+      frame.style.height = `${height}px`;
+    });
+  })();
+</script>

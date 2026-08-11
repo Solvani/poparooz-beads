@@ -91,11 +91,11 @@ Accounts, cloud projects, publishing, galleries, search, favorites, comments, au
 
 ## Deployment and Shopify integration
 
-- The generator is independently deployed to Vercel and embedded on `https://www.poparooz.com/pages/fuse-bead-pattern-maker`.
+- The generator is independently deployed to Cloudflare Pages and embedded on `https://poparooz.com/pages/fuse-bead-pattern-maker`.
 - The production generator URL is `https://generator.poparooz.com` and must also provide the full core experience when opened directly.
 - Shopify remains responsible for the theme, SEO content, navigation, FAQ, privacy copy, collection entry, cart, iframe container, height updates, and full-screen fallback.
 - The generator remains responsible for local upload/processing, pattern generation, Canvas, internal reference-based color/material calculations, Public Presentation mapping, downloads, and allowlisted messages.
 - MVP-A does not create a Shopify App, Embedded/Admin App, App Proxy, Shopify CLI project, deep theme integration, or Cart API bridge.
 - Configuration is centralized. Candidate names are `VITE_SHOP_URL`, `VITE_BEADS_COLLECTION_URL`, `VITE_ALLOWED_PARENT_ORIGINS`, and `VITE_GENERATOR_PUBLIC_URL`; final names may follow the Phase 1 project convention without weakening the contract.
-- Vercel preview addresses are for validation only. Production Shopify references the custom generator domain, and preview origins are excluded from the production allowlist by default.
+- Cloudflare Pages preview addresses are for validation only. Production Shopify references the custom generator domain, and preview origins are excluded from the production allowlist by default.
 - Mobile always exposes `Open Pattern Maker Full Screen` to avoid nested-scroll, upload, download, virtual-keyboard, fixed-header, and Canvas gesture failures.

@@ -1,6 +1,6 @@
 # Poparooz Iframe and Shopify Contract
 
-Status: **Frozen Phase 0 architecture contract; no deployment code implemented**
+Status: **A08 Cloudflare Pages implementation target frozen; deployment pending**
 
 Contract version: **1**
 
@@ -8,18 +8,18 @@ Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SO
 
 ## Deployment decision
 
-Poparooz Generator formally uses **an independently deployed Vercel application embedded in a Shopify page by iframe**.
+Phase 0 froze the independent iframe architecture, but it did not freeze a hosting vendor. A08-D01 evaluated multiple static hosts, and its first implementation path recommended Vercel without freezing that choice. Before deployment, the user selected Cloudflare Pages. P3-A02-A08-I01 now freezes **GitHub `main` -> Cloudflare Pages static hosting -> `generator.poparooz.com` at the generator root -> Shopify iframe** as the implementation target. Vercel remains an unimplemented fallback only.
 
 | Boundary | Production target |
 | --- | --- |
-| Shopify store | `https://www.poparooz.com` |
-| Shopify tool page | `https://www.poparooz.com/pages/fuse-bead-pattern-maker` |
+| Shopify store | `https://poparooz.com` |
+| Shopify tool page | `https://poparooz.com/pages/fuse-bead-pattern-maker` |
 | Generator | `https://generator.poparooz.com` |
-| Vercel default/preview URLs | Development and deployment verification only; not the lasting public entry |
+| Cloudflare Pages preview URLs | Development and deployment verification only; not the lasting public entry |
 
 The generator must retain its complete core flow when opened directly. Loading through Shopify may add surrounding content and commerce navigation, but cannot be required for uploading, generating, reviewing materials, or downloading MVP-A outputs.
 
-This contract does not deploy Vercel, bind a domain, modify a Shopify theme, or create an iframe implementation during Phase 0.
+This contract did not deploy a hosting platform, bind a domain, modify a Shopify theme, or create an iframe implementation during Phase 0.
 
 ## Responsibility boundary
 
@@ -31,7 +31,7 @@ This contract does not deploy Vercel, bind a domain, modify a Shopify theme, or 
 - iframe container, verified height application, loading/error state, and full-screen fallback;
 - any later same-origin Shopify Cart API bridge.
 
-### Vercel generator owns
+### Cloudflare Pages generator owns
 
 - image selection and browser-local decoding/processing;
 - MARD matching and pattern generation;
@@ -68,7 +68,7 @@ Names may follow the project's eventual configuration convention. Secrets must n
 
 ## Shopify Custom Liquid structural baseline
 
-The following is an implementation reference, not Phase 0 production code:
+The reviewed implementation reference is [`shopify/poparooz-generator-embed.liquid`](shopify/poparooz-generator-embed.liquid). Its structural baseline is:
 
 ```html
 <div
@@ -77,16 +77,16 @@ The following is an implementation reference, not Phase 0 production code:
 >
   <iframe
     id="poparooz-generator-frame"
-    src="https://generator.poparooz.com"
+    src="https://generator.poparooz.com/"
     title="Poparooz Fuse Bead Pattern Generator"
     loading="lazy"
-    allow="clipboard-write; fullscreen"
     referrerpolicy="strict-origin-when-cross-origin"
+    sandbox="allow-scripts allow-same-origin allow-downloads"
   ></iframe>
 
   <p>
     <a
-      href="https://generator.poparooz.com"
+      href="https://generator.poparooz.com/"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -96,7 +96,7 @@ The following is an implementation reference, not Phase 0 production code:
 </div>
 ```
 
-The final implementation must additionally decide and test sandbox tokens, CSP, `frame-ancestors`, download/new-window/full-screen permissions, development and preview origins, failure UI, and canonical/index behavior.
+P3-A02-A08-I01 implements and tests the sandbox tokens, generator CSP, exact `frame-ancestors`, download permission, production origins, and bounded ready/resize protocol. Deployment, Shopify insertion, custom-domain binding, iframe load-failure UI, and canonical/index decisions remain external or subsequent release actions.
 
 ## Versioned messages
 
@@ -149,9 +149,9 @@ Negative, string, non-finite, extreme, or unknown values are rejected. The ifram
 ## Origin and environment policy
 
 - Production child origin: exactly `https://generator.poparooz.com`.
-- Production parent origin: exactly `https://www.poparooz.com`, unless an additional canonical Shopify origin is explicitly verified and approved.
+- Production parent origin: exactly `https://poparooz.com`. The redirecting `https://www.poparooz.com` origin is not allowlisted.
 - Production `postMessage` never uses `targetOrigin="*"`.
-- Vercel preview origins are denied by production by default. A test environment may use an explicit, short-lived allowlist separate from production.
+- Cloudflare Pages preview origins are denied by production by default. A test environment may use an explicit, short-lived allowlist separate from production.
 - Development origins are explicit configuration values, never permissive wildcards.
 - The child validates inbound parent origin before accepting control messages; the parent validates child origin and window identity.
 

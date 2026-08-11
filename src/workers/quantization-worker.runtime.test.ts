@@ -26,6 +26,23 @@ function request(
 }
 
 describe("quantization worker runtime", () => {
+  it("returns success for an exact opaque-white image", () => {
+    const white = new Uint8ClampedArray(2 * 2 * 4);
+    white.fill(255);
+    const output = processQuantizationWorkerMessage(request(white));
+
+    expect(output.response.type).toBe("QUANTIZATION_SUCCEEDED");
+    if (output.response.type !== "QUANTIZATION_SUCCEEDED") return;
+    expect(output.response.result.colors).toHaveLength(1);
+    expect(output.response.result.colors[0]).toMatchObject({
+      rgb: { r: 255, g: 255, b: 255 },
+      lab: { l: 100 },
+      pixelCount: 4,
+    });
+    expect(output.response.result.opaquePixelCount).toBe(4);
+    expect(output.response.result.transparentPixelCount).toBe(0);
+  });
+
   it("quantizes a 2x2 image and transfers only its index buffer", () => {
     const input = request();
     const before = new Uint8ClampedArray(input.payload.rgbaBuffer).slice();

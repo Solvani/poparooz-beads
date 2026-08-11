@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { excludeStrictEdgeConnectedLightBackground } from "../../domain/image/edge-connected-light-background";
 import type { NormalizedImageResult } from "../../domain/image/image.types";
 import { refineOpaqueSourceMatteBackground } from "../../domain/image/opaque-source-matte-background";
+import { normalizeRgbaImage } from "../../domain/image/normalize-rgba";
 import { resizeRgbaImage } from "../../domain/image/rgba-resize";
 import { assemblePattern } from "../../domain/pattern/pattern-assembler";
 import { toPublicPatternResult } from "../../domain/pattern/public-pattern.mapper";
@@ -56,6 +57,8 @@ function input(
   selectedColorSetProfileId: PublishedColorSetProfileId,
   maxColors: number,
   background: "transparent" | "white" = "white",
+  width = 8,
+  height = 8,
 ): GenerationInputSnapshot {
   return Object.freeze({
     jobId: 1,
@@ -64,17 +67,118 @@ function input(
     }),
     imageVersion: 1,
     settings: Object.freeze({
-      width: 8,
-      height: 8,
+      width,
+      height,
       maxColors,
       background,
       selectedColorSetProfileId,
     }),
-    inputKey: `1:8:8:${maxColors}:${background}:${selectedColorSetProfileId}`,
+    inputKey: `1:${width}:${height}:${maxColors}:${background}:${selectedColorSetProfileId}`,
   });
 }
 
+function createNearSquareNormalized(
+  size: 80 | 104,
+  background: "transparent" | "white",
+): NormalizedImageResult {
+  const width = 201;
+  const height = 200;
+  const data = new Uint8ClampedArray(width * height * 4);
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const offset = (y * width + x) * 4;
+      data[offset] = 20 + ((x * 17 + y * 3) % 200);
+      data[offset + 1] = 20 + ((x * 7 + y * 29) % 200);
+      data[offset + 2] = 20 + ((x * 31 + y * 11) % 200);
+      data[offset + 3] = 255;
+    }
+  }
+  return normalizeRgbaImage(
+    { width, height, data },
+    {
+      format: "png",
+      originalWidth: width,
+      originalHeight: height,
+      orientedWidth: width,
+      orientedHeight: height,
+      exifOrientation: 1,
+      hasAlpha: false,
+    },
+    {
+      targetWidth: size,
+      targetHeight: size,
+      preserveAspectRatio: true,
+      fit: "contain",
+      background,
+      allowUpscale: false,
+    },
+  );
+}
+
 describe("production generation composition", () => {
+  it.each([
+    [80, "white", 80, 6_400],
+    [104, "white", 103, 10_816],
+    [104, "transparent", 103, 10_712],
+  ] as const)(
+    "generates a %sx%s %s Pattern across the contain-padding boundary",
+    async (size, background, expectedDrawHeight, expectedBeads) => {
+      const normalized = createNearSquareNormalized(size, background);
+      const quantize = vi.fn(async (image, options) =>
+        quantizeImage(image, options),
+      );
+      const service = createGenerationService(
+        {
+          palette: adaptRuntimePaletteToGeneration(
+            createApprovedRuntimePaletteProvider().getSnapshot(),
+          ),
+          colorSets: adaptColorSetToGeneration(
+            createApprovedColorSetProvider().getSnapshot(),
+          ),
+          boardProfile: adaptBoardProfileToGeneration(
+            createApprovedBoardProfileProvider().getSnapshot(),
+          ),
+          processingPolicy:
+            createApprovedProcessingPolicyProvider().getSnapshot(),
+          createWorkerClient: () => ({ quantize, dispose: vi.fn() }),
+        },
+        {
+          decode: vi.fn(async () => normalized),
+          assemble: assemblePattern,
+          toPublic: toPublicPatternResult,
+        },
+      );
+
+      const result = await service.generate(
+        input("poparooz-set-221", 32, background, size, size),
+        new AbortController().signal,
+      );
+      let exactWhitePixels = 0;
+      for (let offset = 0; offset < normalized.image.data.length; offset += 4) {
+        if (
+          normalized.image.data[offset] === 255 &&
+          normalized.image.data[offset + 1] === 255 &&
+          normalized.image.data[offset + 2] === 255 &&
+          normalized.image.data[offset + 3] === 255
+        ) {
+          exactWhitePixels += 1;
+        }
+      }
+
+      expect(normalized.target.drawHeight).toBe(expectedDrawHeight);
+      expect(exactWhitePixels).toBe(
+        background === "white" ? size * (size - expectedDrawHeight) : 0,
+      );
+      expect(result.totals).toMatchObject({
+        totalPositions: size * size,
+        totalBeads: expectedBeads,
+        transparentPositions: size * size - expectedBeads,
+      });
+      expect(result.totals.colorCount).toBeLessThanOrEqual(32);
+      expect(quantize).toHaveBeenCalledOnce();
+    },
+  );
+
   it.each([
     ["poparooz-set-24", 24],
     ["poparooz-set-72", 72],

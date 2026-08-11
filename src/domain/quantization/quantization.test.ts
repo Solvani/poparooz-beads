@@ -127,6 +127,22 @@ describe("quantization input and options", () => {
 });
 
 describe("alpha and exact RGB histogram", () => {
+  it("quantizes exact opaque white as a valid endpoint color", () => {
+    const result = quantizeImage(solidImage(2, 2, [255, 255, 255, 255]), {
+      maxColors: 32,
+      alphaThreshold: 16,
+    });
+
+    expect(result.colors).toHaveLength(1);
+    expect(result.colors[0]).toMatchObject({
+      rgb: { r: 255, g: 255, b: 255 },
+      lab: { l: 100 },
+      pixelCount: 4,
+    });
+    expect(result.opaquePixelCount).toBe(4);
+    expect(result.transparentPixelCount).toBe(0);
+  });
+
   it("treats alpha equal to the threshold as transparent", () => {
     const result = quantizeImage(
       image(2, 1, [

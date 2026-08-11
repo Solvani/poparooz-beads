@@ -233,6 +233,16 @@ describe("RGB8 composition and golden references", () => {
     expectLabClose(rgb8ToLab(rgb), expected);
   });
 
+  it("normalizes only floating-point lightness noise at RGB8 endpoints", () => {
+    const black = rgb8ToLab({ r: 0, g: 0, b: 0 });
+    const white = rgb8ToLab({ r: 255, g: 255, b: 255 });
+    const ordinary = { r: 19, g: 127, b: 241 };
+
+    expect(black).toEqual({ l: 0, a: 0, b: 0 });
+    expect(white.l).toBe(100);
+    expect(rgb8ToLab(ordinary)).toEqual(xyzD65ToLab(rgb8ToXyzD65(ordinary)));
+  });
+
   it("reuses the same staged conversion result", () => {
     const input = { r: 19, g: 127, b: 241 };
     expect(rgb8ToXyzD65(input)).toEqual(

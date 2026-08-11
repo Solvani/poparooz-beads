@@ -78,7 +78,7 @@ function input(
 }
 
 function createNearSquareNormalized(
-  size: 80 | 104,
+  size: 40 | 80 | 104,
   background: "transparent" | "white",
 ): NormalizedImageResult {
   const width = 201;
@@ -117,6 +117,7 @@ function createNearSquareNormalized(
 
 describe("production generation composition", () => {
   it.each([
+    [40, "white", 40, 1_600],
     [80, "white", 80, 6_400],
     [104, "white", 103, 10_816],
     [104, "transparent", 103, 10_712],

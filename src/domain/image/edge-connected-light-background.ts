@@ -32,6 +32,19 @@ export function excludeStrictEdgeConnectedLightBackground(
   return copyWithExcludedPixels(image, strict.exclusionState, false);
 }
 
+export function canonicalizeStrictEdgeConnectedLightBackgroundToWhite(
+  image: RgbaImage,
+): RgbaImage {
+  validateDecodedImage(image);
+  const strict = buildStrictEdgeExclusion(image);
+  if (
+    strict.excludedCount === 0 ||
+    strict.excludedCount === strict.quantizablePixelCount
+  )
+    return image;
+  return copyWithCanonicalizedWhitePixels(image, strict.exclusionState);
+}
+
 export function excludeEdgeConnectedLightBackground(
   image: RgbaImage,
 ): RgbaImage {
@@ -154,6 +167,33 @@ function copyWithExcludedPixels(
     }
   }
   return { width: image.width, height: image.height, data };
+}
+
+function copyWithCanonicalizedWhitePixels(
+  image: RgbaImage,
+  exclusionState: Uint8Array,
+): RgbaImage {
+  let data: Uint8ClampedArray | undefined;
+  for (
+    let pixelIndex = 0;
+    pixelIndex < exclusionState.length;
+    pixelIndex += 1
+  ) {
+    if (exclusionState[pixelIndex] !== STRICT_EXCLUDED) continue;
+    const offset = pixelIndex * 4;
+    if (
+      image.data[offset] === 255 &&
+      image.data[offset + 1] === 255 &&
+      image.data[offset + 2] === 255 &&
+      image.data[offset + 3] === 255
+    )
+      continue;
+    data ??= new Uint8ClampedArray(image.data);
+    data.fill(255, offset, offset + 4);
+  }
+  return data === undefined
+    ? image
+    : { width: image.width, height: image.height, data };
 }
 
 function isOpaqueLightNeutralFringe(

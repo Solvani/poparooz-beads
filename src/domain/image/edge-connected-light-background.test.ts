@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { RgbaImage } from "./image.types";
 import {
+  canonicalizeStrictEdgeConnectedLightBackgroundToWhite,
   excludeEdgeConnectedLightBackground,
   excludeStrictEdgeConnectedLightBackground,
 } from "./edge-connected-light-background";
@@ -151,6 +152,107 @@ describe("excludeStrictEdgeConnectedLightBackground", () => {
 
       expect(first).toMatchObject({ width: size, height: size });
       expect(first.data).toEqual(second.data);
+      expect(source.data).toEqual(before);
+    }
+  });
+});
+
+describe("canonicalizeStrictEdgeConnectedLightBackgroundToWhite", () => {
+  it("canonicalizes only strict edge-connected near-white background", () => {
+    const nearWhite: Pixel = [248, 249, 254, 255];
+    const source = image(5, 5, [
+      nearWhite,
+      nearWhite,
+      nearWhite,
+      nearWhite,
+      nearWhite,
+      nearWhite,
+      DARK,
+      DARK,
+      DARK,
+      nearWhite,
+      nearWhite,
+      DARK,
+      WHITE,
+      DARK,
+      nearWhite,
+      nearWhite,
+      DARK,
+      [255, 245, 220, 255],
+      DARK,
+      nearWhite,
+      nearWhite,
+      nearWhite,
+      nearWhite,
+      nearWhite,
+      nearWhite,
+    ]);
+    const before = new Uint8ClampedArray(source.data);
+
+    const result =
+      canonicalizeStrictEdgeConnectedLightBackgroundToWhite(source);
+
+    expect(pixelAt(result, 0, 0)).toEqual(WHITE);
+    expect(pixelAt(result, 2, 2)).toEqual(WHITE);
+    expect(pixelAt(result, 1, 2)).toEqual(DARK);
+    expect(pixelAt(result, 2, 3)).toEqual([255, 245, 220, 255]);
+    expect(source.data).toEqual(before);
+  });
+
+  it("preserves colored, black, disconnected light, and out-of-contract matte pixels", () => {
+    const nearWhite: Pixel = [249, 250, 251, 255];
+    const matte: Pixel = [247, 247, 247, 255];
+    const source = image(4, 3, [
+      nearWhite,
+      DARK,
+      DARK,
+      RED,
+      nearWhite,
+      DARK,
+      WHITE,
+      RED,
+      nearWhite,
+      matte,
+      RED,
+      RED,
+    ]);
+
+    const result =
+      canonicalizeStrictEdgeConnectedLightBackgroundToWhite(source);
+
+    expect(pixelAt(result, 0, 0)).toEqual(WHITE);
+    expect(pixelAt(result, 0, 1)).toEqual(WHITE);
+    expect(pixelAt(result, 0, 2)).toEqual(WHITE);
+    expect(pixelAt(result, 1, 0)).toEqual(DARK);
+    expect(pixelAt(result, 2, 1)).toEqual(WHITE);
+    expect(pixelAt(result, 1, 2)).toEqual(matte);
+    expect(pixelAt(result, 3, 0)).toEqual(RED);
+  });
+
+  it("fails open when the strict identity covers the complete source", () => {
+    const nearWhite: Pixel = [249, 250, 251, 255];
+    const source = image(2, 2, [nearWhite, nearWhite, nearWhite, nearWhite]);
+
+    expect(canonicalizeStrictEdgeConnectedLightBackgroundToWhite(source)).toBe(
+      source,
+    );
+  });
+
+  it("is deterministic and immutable at each supported Pattern size", () => {
+    const nearWhite: Pixel = [249, 250, 251, 255];
+    for (const size of [40, 80, 104]) {
+      const pixels = Array.from({ length: size * size }, () => nearWhite);
+      pixels[Math.floor(pixels.length / 2)] = RED;
+      const source = image(size, size, pixels);
+      const before = new Uint8ClampedArray(source.data);
+
+      const first =
+        canonicalizeStrictEdgeConnectedLightBackgroundToWhite(source);
+      const second =
+        canonicalizeStrictEdgeConnectedLightBackgroundToWhite(source);
+
+      expect(first.data).toEqual(second.data);
+      expect(pixelAt(first, 0, 0)).toEqual(WHITE);
       expect(source.data).toEqual(before);
     }
   });

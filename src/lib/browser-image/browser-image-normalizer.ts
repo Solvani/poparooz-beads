@@ -9,7 +9,10 @@ import {
   validateImageMime,
 } from "../../domain/image/image-signature";
 import { readExifOrientation } from "../../domain/image/exif-orientation";
-import { excludeStrictEdgeConnectedLightBackground } from "../../domain/image/edge-connected-light-background";
+import {
+  canonicalizeStrictEdgeConnectedLightBackgroundToWhite,
+  excludeStrictEdgeConnectedLightBackground,
+} from "../../domain/image/edge-connected-light-background";
 import { refineOpaqueSourceMatteBackground } from "../../domain/image/opaque-source-matte-background";
 import { normalizeRgbaImage } from "../../domain/image/normalize-rgba";
 import type {
@@ -120,7 +123,9 @@ export async function decodeAndNormalizeImage(
     const strictSource =
       options.background === "transparent"
         ? excludeStrictEdgeConnectedLightBackground(pixels)
-        : pixels;
+        : options.background === "white" && !source.hasAlpha
+          ? canonicalizeStrictEdgeConnectedLightBackgroundToWhite(pixels)
+          : pixels;
     const normalizationSource =
       options.background === "transparent" &&
       !source.hasAlpha &&

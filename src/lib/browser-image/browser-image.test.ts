@@ -345,11 +345,11 @@ describe("decodeAndNormalizeImage service", () => {
     }
   });
 
-  it("keeps white-mode source bytes unchanged by source masking", async () => {
+  it("canonicalizes strict opaque White-mode source background before resize", async () => {
     const source = rgbaImage(3, 1, [
-      [255, 255, 255, 255],
-      [255, 255, 255, 255],
+      [249, 250, 251, 255],
       [210, 20, 30, 255],
+      [249, 250, 251, 255],
     ]);
     const before = new Uint8ClampedArray(source.data);
     const result = await decodeAndNormalizeImage(
@@ -366,8 +366,132 @@ describe("decodeAndNormalizeImage service", () => {
       }),
     );
 
-    expect(result.image.data).toEqual(before);
+    expect(rgbaPixels(result.image)).toEqual([
+      [255, 255, 255, 255],
+      [210, 20, 30, 255],
+      [255, 255, 255, 255],
+    ]);
     expect(source.data).toEqual(before);
+  });
+
+  it("does not apply opaque White-mode source cleanup to an alpha-bearing image", async () => {
+    const source = rgbaImage(3, 1, [
+      [249, 250, 251, 255],
+      [210, 20, 30, 254],
+      [249, 250, 251, 255],
+    ]);
+    const result = await decodeAndNormalizeImage(
+      blob(),
+      { ...options, targetWidth: 3, background: "white" },
+      undefined,
+      normalizerDependencies({
+        decoded: decodedRaster(3, 1),
+        rasterize: async () => source,
+      }),
+    );
+
+    expect(result.source.hasAlpha).toBe(true);
+    expect(pixelAt(result.image, 0, 0)).toEqual([249, 250, 251, 255]);
+    expect(pixelAt(result.image, 2, 0)).toEqual([249, 250, 251, 255]);
+  });
+
+  it("canonicalizes opaque White-mode source background deterministically at 40, 80, and 104", async () => {
+    for (const size of [40, 80, 104]) {
+      const values = Array.from(
+        { length: size * size },
+        (): [number, number, number, number] => [249, 250, 251, 255],
+      );
+      const center = Math.floor(values.length / 2);
+      values[center] = [210, 20, 30, 255];
+      const source = rgbaImage(size, size, values);
+      const before = new Uint8ClampedArray(source.data);
+      const dependencies = normalizerDependencies({
+        decoded: decodedRaster(size, size),
+        rasterize: async () => source,
+      });
+
+      const first = await decodeAndNormalizeImage(
+        blob(),
+        {
+          ...options,
+          targetWidth: size,
+          targetHeight: size,
+          background: "white",
+        },
+        undefined,
+        dependencies,
+      );
+      const second = await decodeAndNormalizeImage(
+        blob(),
+        {
+          ...options,
+          targetWidth: size,
+          targetHeight: size,
+          background: "white",
+        },
+        undefined,
+        dependencies,
+      );
+
+      expect(first.image.data).toEqual(second.image.data);
+      expect(pixelAt(first.image, 0, 0)).toEqual([255, 255, 255, 255]);
+      expect(
+        pixelAt(first.image, center % size, Math.floor(center / size)),
+      ).toEqual([210, 20, 30, 255]);
+      expect(source.data).toEqual(before);
+    }
+  });
+
+  it("removes detected production-style background colors before White-mode quantization", async () => {
+    const background: [number, number, number, number] = [249, 250, 251, 255];
+    const subject: [number, number, number, number] = [20, 180, 80, 255];
+    const source = rgbaImage(8, 2, [
+      background,
+      background,
+      background,
+      background,
+      background,
+      background,
+      subject,
+      subject,
+      background,
+      background,
+      background,
+      background,
+      background,
+      background,
+      subject,
+      subject,
+    ]);
+    const result = await decodeAndNormalizeImage(
+      blob(),
+      {
+        ...options,
+        targetWidth: 4,
+        targetHeight: 1,
+        background: "white",
+      },
+      undefined,
+      normalizerDependencies({
+        decoded: decodedRaster(8, 2),
+        rasterize: async () => source,
+      }),
+    );
+    const quantized = quantizeImage(result.image, {
+      maxColors: 2,
+      alphaThreshold: 16,
+    });
+
+    expect(rgbaPixels(result.image)).toEqual([
+      [255, 255, 255, 255],
+      [255, 255, 255, 255],
+      [255, 255, 255, 255],
+      [20, 180, 80, 255],
+    ]);
+    expect(quantized.colors.map(({ lab }) => matchCode(lab)).sort()).toEqual([
+      "B8",
+      "H2",
+    ]);
   });
 
   it("creates contain padding after source masking and leaves it transparent", async () => {
@@ -682,6 +806,11 @@ function rgbaPixels(image: RgbaImage): number[][] {
   return Array.from({ length: image.width * image.height }, (_, index) => [
     ...image.data.slice(index * 4, index * 4 + 4),
   ]);
+}
+
+function pixelAt(image: RgbaImage, x: number, y: number): number[] {
+  const offset = (y * image.width + x) * 4;
+  return [...image.data.slice(offset, offset + 4)];
 }
 
 const generationCandidates = prepareColorMatchCandidates(

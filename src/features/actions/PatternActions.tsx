@@ -52,12 +52,6 @@ export function PatternActions({ state, onDownload }: PatternActionsProps) {
           busy={downloading}
           onClick={() => void download()}
         />
-        <PatternActionButton
-          enabled={state.getBeadsEnabled}
-          label="Get Beads for This Pattern"
-          note="Coming later"
-          variant="primary"
-        />
       </div>
       {downloadFeedback?.resultIdentity === state.resultIdentity ? (
         <p className="pattern-actions__download-status" role="status">

@@ -234,13 +234,14 @@ Matrix dimensions, and board counts continue to use `104 × 104` cells per board
 The minimal versioned production ProcessingPolicy is:
 
 ```text
-policyId
-policyVersion
+policyId = poparooz-processing-policy
+policyVersion = 1.1.0
 
 imageNormalization:
   preserveAspectRatio = true
   fit = contain
   allowUpscale = false
+  transparentOccupancyThresholdByte = 32
 
 quantization:
   alphaThresholdByte = 16
@@ -259,6 +260,55 @@ alpha > 16  -> quantization participant
 
 Background mode and target dimensions are customer settings and are not fixed
 ProcessingPolicy fields.
+
+For `background = transparent`, version `1.1.0` freezes a conservative,
+deterministic, browser-local cleanup pipeline:
+
+```text
+browser source raster
+-> strict source edge-connected near-white mask
+-> bounded source matte refinement when the source has no alpha
+-> deterministic contain resize
+-> one-layer post-resize edge-connected light-fringe cleanup
+-> transparent occupancy canonicalization
+-> existing quantization
+```
+
+The strict source mask uses four-connectivity and requires `alpha = 255`, every
+RGB channel at least `248`, and channel spread at most `6`. It fails open when
+there is no strict edge-connected ownership or when exclusion would remove the
+entire quantizable image.
+
+For opaque sources only, the bounded source matte refinement may extend from
+the strict mask through four-connected neutral candidates whose channels are
+at least `242`, whose channel spread is at most `6`, and whose RGB sum is at
+least `3` greater than a retained opaque neighbor. Values below `242`, including
+`241`, are not candidates. The refinement is not applied if it would remove
+every source pixel beyond the strict mask.
+
+After resize, strict edge-connected cleanup retains the `248` / `6` rule. One
+additional four-connected fringe layer may exclude neutral candidates whose
+channels are at least `232`, whose channel spread is at most `8`, and whose RGB
+sum is at least `48` greater than a retained opaque neighbor. No additional
+growth layer is allowed.
+
+Transparent occupancy is then canonicalized independently of quantization:
+
+```text
+alpha <= 32 -> RGBA 0 / transparent Pattern position / no bead
+alpha >= 33 -> original RGB retained / alpha canonicalized to 255 / occupied
+```
+
+`background = white` bypasses this transparent-only cleanup. The quantizer's
+existing `alphaThresholdByte = 16` remains unchanged and is not a substitute
+for the occupancy policy.
+
+Tinted matte contamination that cannot be distinguished safely from legitimate
+subject color is an accepted v1 limitation. Option D tinted-white-matte
+reconstruction was investigated and stopped because no safe parameter window
+was established. It is not implemented, and this contract does not authorize
+reconstruction, decontamination, relaxed thresholds, additional growth layers,
+or changes to the Matcher, Palette, Color Set, or Maximum Colors semantics.
 
 The following are Runtime invariants rather than configurable ProcessingPolicy
 fields:

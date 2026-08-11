@@ -205,6 +205,41 @@ describe("Generation Service", () => {
     );
   });
 
+  it("binarizes transparent occupancy before invoking one Worker with threshold 16", async () => {
+    const context = setup();
+    const normalized = {
+      ...NORMALIZED,
+      image: {
+        width: 3,
+        height: 1,
+        data: new Uint8ClampedArray([
+          20, 180, 80, 32, 20, 180, 80, 33, 20, 180, 80, 128,
+        ]),
+      },
+    };
+    const original = new Uint8ClampedArray(normalized.image.data);
+    vi.mocked(context.pipeline.decode).mockResolvedValueOnce(normalized);
+
+    await createGenerationService(
+      context.dependencies,
+      context.pipeline,
+    ).generate(snapshot(), new AbortController().signal);
+
+    expect(context.worker.quantize).toHaveBeenCalledOnce();
+    expect(context.worker.quantize).toHaveBeenCalledWith(
+      expect.objectContaining({
+        width: 3,
+        height: 1,
+        data: new Uint8ClampedArray([
+          0, 0, 0, 0, 20, 180, 80, 255, 20, 180, 80, 255,
+        ]),
+      }),
+      { maxColors: 32, alphaThreshold: 16 },
+      expect.any(AbortSignal),
+    );
+    expect(normalized.image.data).toEqual(original);
+  });
+
   it("passes the original normalized image through in white-background mode", async () => {
     const context = setup();
     const input = snapshot();
@@ -220,6 +255,35 @@ describe("Generation Service", () => {
 
     expect(vi.mocked(context.worker.quantize).mock.calls[0]![0]).toBe(
       NORMALIZED.image,
+    );
+  });
+
+  it("bypasses transparent occupancy for partial-alpha white-mode input", async () => {
+    const context = setup();
+    const normalized = {
+      ...NORMALIZED,
+      image: {
+        width: 2,
+        height: 1,
+        data: new Uint8ClampedArray([20, 180, 80, 16, 1, 2, 3, 33]),
+      },
+    };
+    vi.mocked(context.pipeline.decode).mockResolvedValueOnce(normalized);
+    const input = snapshot();
+
+    await createGenerationService(
+      context.dependencies,
+      context.pipeline,
+    ).generate(
+      {
+        ...input,
+        settings: { ...input.settings, background: "white" },
+      },
+      new AbortController().signal,
+    );
+
+    expect(vi.mocked(context.worker.quantize).mock.calls[0]![0]).toBe(
+      normalized.image,
     );
   });
 

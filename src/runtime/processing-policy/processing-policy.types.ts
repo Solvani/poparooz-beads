@@ -1,10 +1,11 @@
 export interface ProcessingPolicySnapshot {
   readonly policyId: "poparooz-processing-policy";
-  readonly policyVersion: "1.0.0";
+  readonly policyVersion: "1.1.0";
   readonly imageNormalization: {
     readonly preserveAspectRatio: true;
     readonly fit: "contain";
     readonly allowUpscale: false;
+    readonly transparentOccupancyThresholdByte: 32;
   };
   readonly quantization: {
     readonly alphaThresholdByte: 16;

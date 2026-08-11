@@ -3,11 +3,12 @@ import type { ProcessingPolicySnapshot } from "./processing-policy.types";
 
 const APPROVED_PROCESSING_POLICY = {
   policyId: "poparooz-processing-policy",
-  policyVersion: "1.0.0",
+  policyVersion: "1.1.0",
   imageNormalization: {
     preserveAspectRatio: true,
     fit: "contain",
     allowUpscale: false,
+    transparentOccupancyThresholdByte: 32,
   },
   quantization: {
     alphaThresholdByte: 16,

@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { excludeStrictEdgeConnectedLightBackground } from "../../domain/image/edge-connected-light-background";
 import type { NormalizedImageResult } from "../../domain/image/image.types";
+import { refineOpaqueSourceMatteBackground } from "../../domain/image/opaque-source-matte-background";
+import { resizeRgbaImage } from "../../domain/image/rgba-resize";
 import { assemblePattern } from "../../domain/pattern/pattern-assembler";
 import { toPublicPatternResult } from "../../domain/pattern/public-pattern.mapper";
 import { quantizeImage } from "../../domain/quantization/quantize-image";
@@ -240,5 +243,363 @@ describe("production generation composition", () => {
     expect(
       result.materials.reduce((sum, material) => sum + material.beadCount, 0),
     ).toBe(result.totals.totalBeads);
+  });
+
+  it("removes an H02 fringe from Pattern and material counts while retaining cream", async () => {
+    const normalized: NormalizedImageResult = {
+      ...NORMALIZED,
+      target: {
+        ...NORMALIZED.target,
+        width: 4,
+        height: 1,
+        drawWidth: 4,
+        drawHeight: 1,
+      },
+      image: {
+        width: 4,
+        height: 1,
+        data: new Uint8ClampedArray([
+          255, 255, 255, 255, 235, 235, 235, 255, 30, 30, 30, 255, 255, 255,
+          213, 255,
+        ]),
+      },
+    };
+    const service = createGenerationService(
+      {
+        palette: adaptRuntimePaletteToGeneration(
+          createApprovedRuntimePaletteProvider().getSnapshot(),
+        ),
+        colorSets: adaptColorSetToGeneration(
+          createApprovedColorSetProvider().getSnapshot(),
+        ),
+        boardProfile: adaptBoardProfileToGeneration(
+          createApprovedBoardProfileProvider().getSnapshot(),
+        ),
+        processingPolicy:
+          createApprovedProcessingPolicyProvider().getSnapshot(),
+        createWorkerClient: () => ({
+          quantize: async (image, options) => quantizeImage(image, options),
+          dispose: vi.fn(),
+        }),
+      },
+      {
+        decode: vi.fn(async () => normalized),
+        assemble: assemblePattern,
+        toPublic: toPublicPatternResult,
+      },
+    );
+
+    const result = await service.generate(
+      input("poparooz-set-221", 2, "transparent"),
+      new AbortController().signal,
+    );
+    const creamColor = result.colors.find(({ color }) => color.code === "A2");
+
+    expect(result.totals).toMatchObject({
+      totalPositions: 4,
+      totalBeads: 2,
+      transparentPositions: 2,
+    });
+    expect([...result.matrix.colorIndices.slice(0, 2)]).toEqual([
+      result.matrix.transparentIndex,
+      result.matrix.transparentIndex,
+    ]);
+    expect(creamColor?.beadCount).toBe(1);
+    expect(
+      result.materials.find(({ color }) => color.code === "A2")?.beadCount,
+    ).toBe(1);
+    expect(result.colors.reduce((sum, color) => sum + color.beadCount, 0)).toBe(
+      result.totals.totalBeads,
+    );
+    expect(
+      result.materials.reduce((sum, material) => sum + material.beadCount, 0),
+    ).toBe(result.totals.totalBeads);
+  });
+
+  it("keeps source-masked green free of a synthetic white-blend Palette code", async () => {
+    const source = {
+      width: 6,
+      height: 1,
+      data: new Uint8ClampedArray([
+        255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 20, 180, 80,
+        255, 20, 180, 80, 255, 20, 180, 80, 255,
+      ]),
+    };
+    const resized = resizeRgbaImage(
+      excludeStrictEdgeConnectedLightBackground(source),
+      3,
+      1,
+    );
+    const normalized: NormalizedImageResult = {
+      ...NORMALIZED,
+      target: {
+        ...NORMALIZED.target,
+        width: 3,
+        height: 1,
+        drawWidth: 3,
+        drawHeight: 1,
+      },
+      image: resized,
+    };
+    const service = createGenerationService(
+      {
+        palette: adaptRuntimePaletteToGeneration(
+          createApprovedRuntimePaletteProvider().getSnapshot(),
+        ),
+        colorSets: adaptColorSetToGeneration(
+          createApprovedColorSetProvider().getSnapshot(),
+        ),
+        boardProfile: adaptBoardProfileToGeneration(
+          createApprovedBoardProfileProvider().getSnapshot(),
+        ),
+        processingPolicy:
+          createApprovedProcessingPolicyProvider().getSnapshot(),
+        createWorkerClient: () => ({
+          quantize: async (image, options) => quantizeImage(image, options),
+          dispose: vi.fn(),
+        }),
+      },
+      {
+        decode: vi.fn(async () => normalized),
+        assemble: assemblePattern,
+        toPublic: toPublicPatternResult,
+      },
+    );
+
+    const result = await service.generate(
+      input("poparooz-set-221", 2, "transparent"),
+      new AbortController().signal,
+    );
+
+    expect([...resized.data]).toEqual([
+      0, 0, 0, 0, 20, 180, 80, 128, 20, 180, 80, 255,
+    ]);
+    expect(result.totals).toMatchObject({
+      totalPositions: 3,
+      totalBeads: 2,
+      transparentPositions: 1,
+      colorCount: 1,
+    });
+    expect(result.colors.map(({ color }) => color.code)).toEqual(["B8"]);
+    expect(result.colors.some(({ color }) => color.code === "B28")).toBe(false);
+    expect(result.colors[0]?.beadCount).toBe(2);
+    expect(result.materials[0]?.color.code).toBe("B8");
+    expect(result.materials[0]?.beadCount).toBe(2);
+    expect(result.colors.reduce((sum, color) => sum + color.beadCount, 0)).toBe(
+      result.totals.totalBeads,
+    );
+    expect(
+      result.materials.reduce((sum, material) => sum + material.beadCount, 0),
+    ).toBe(result.totals.totalBeads);
+  });
+
+  it("excludes refined source matte from Pattern and material quantities", async () => {
+    const source = {
+      width: 8,
+      height: 1,
+      data: new Uint8ClampedArray([
+        255, 255, 255, 255, 247, 247, 247, 255, 246, 246, 246, 255, 245, 245,
+        245, 255, 244, 244, 244, 255, 243, 243, 243, 255, 242, 242, 242, 255,
+        20, 20, 20, 255,
+      ]),
+    };
+    const strict = excludeStrictEdgeConnectedLightBackground(source);
+    const resized = resizeRgbaImage(
+      refineOpaqueSourceMatteBackground(source, strict),
+      4,
+      1,
+    );
+    const normalized: NormalizedImageResult = {
+      ...NORMALIZED,
+      target: {
+        ...NORMALIZED.target,
+        width: 4,
+        height: 1,
+        drawWidth: 4,
+        drawHeight: 1,
+      },
+      image: resized,
+    };
+    const service = createGenerationService(
+      {
+        palette: adaptRuntimePaletteToGeneration(
+          createApprovedRuntimePaletteProvider().getSnapshot(),
+        ),
+        colorSets: adaptColorSetToGeneration(
+          createApprovedColorSetProvider().getSnapshot(),
+        ),
+        boardProfile: adaptBoardProfileToGeneration(
+          createApprovedBoardProfileProvider().getSnapshot(),
+        ),
+        processingPolicy:
+          createApprovedProcessingPolicyProvider().getSnapshot(),
+        createWorkerClient: () => ({
+          quantize: async (image, options) => quantizeImage(image, options),
+          dispose: vi.fn(),
+        }),
+      },
+      {
+        decode: vi.fn(async () => normalized),
+        assemble: assemblePattern,
+        toPublic: toPublicPatternResult,
+      },
+    );
+
+    const result = await service.generate(
+      input("poparooz-set-221", 2, "transparent"),
+      new AbortController().signal,
+    );
+
+    expect([...resized.data]).toEqual([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 20, 128,
+    ]);
+    expect(result.totals).toMatchObject({
+      totalPositions: 4,
+      totalBeads: 1,
+      transparentPositions: 3,
+      colorCount: 1,
+    });
+    expect(result.colors).toHaveLength(1);
+    expect(result.colors[0]?.beadCount).toBe(1);
+    expect(result.materials).toHaveLength(1);
+    expect(result.materials[0]?.beadCount).toBe(1);
+    expect(result.colors.reduce((sum, color) => sum + color.beadCount, 0)).toBe(
+      result.totals.totalBeads,
+    );
+    expect(
+      result.materials.reduce((sum, material) => sum + material.beadCount, 0),
+    ).toBe(result.totals.totalBeads);
+  });
+
+  it("turns alpha occupancy into exact Pattern and material quantities", async () => {
+    const normalized: NormalizedImageResult = {
+      ...NORMALIZED,
+      target: {
+        ...NORMALIZED.target,
+        width: 3,
+        height: 1,
+        drawWidth: 3,
+        drawHeight: 1,
+      },
+      image: {
+        width: 3,
+        height: 1,
+        data: new Uint8ClampedArray([
+          20, 180, 80, 17, 20, 180, 80, 33, 20, 180, 80, 255,
+        ]),
+      },
+    };
+    const quantize = vi.fn(async (image, options) =>
+      quantizeImage(image, options),
+    );
+    const service = createGenerationService(
+      {
+        palette: adaptRuntimePaletteToGeneration(
+          createApprovedRuntimePaletteProvider().getSnapshot(),
+        ),
+        colorSets: adaptColorSetToGeneration(
+          createApprovedColorSetProvider().getSnapshot(),
+        ),
+        boardProfile: adaptBoardProfileToGeneration(
+          createApprovedBoardProfileProvider().getSnapshot(),
+        ),
+        processingPolicy:
+          createApprovedProcessingPolicyProvider().getSnapshot(),
+        createWorkerClient: () => ({ quantize, dispose: vi.fn() }),
+      },
+      {
+        decode: vi.fn(async () => normalized),
+        assemble: assemblePattern,
+        toPublic: toPublicPatternResult,
+      },
+    );
+
+    const result = await service.generate(
+      input("poparooz-set-221", 2, "transparent"),
+      new AbortController().signal,
+    );
+    const workerImage = quantize.mock.calls[0]![0];
+
+    expect(quantize).toHaveBeenCalledOnce();
+    expect(quantize.mock.calls[0]![1]).toEqual({
+      maxColors: 2,
+      alphaThreshold: 16,
+    });
+    expect([...workerImage.data]).toEqual([
+      0, 0, 0, 0, 20, 180, 80, 255, 20, 180, 80, 255,
+    ]);
+    expect([...result.matrix.colorIndices]).toEqual([
+      result.matrix.transparentIndex,
+      result.colors[0]!.index,
+      result.colors[0]!.index,
+    ]);
+    expect(result.totals).toMatchObject({
+      totalPositions: 3,
+      totalBeads: 2,
+      transparentPositions: 1,
+    });
+    expect(result.colors[0]?.beadCount).toBe(2);
+    expect(result.materials[0]?.beadCount).toBe(2);
+    expect(result.colors.reduce((sum, color) => sum + color.beadCount, 0)).toBe(
+      result.totals.totalBeads,
+    );
+    expect(
+      result.materials.reduce((sum, material) => sum + material.beadCount, 0),
+    ).toBe(result.totals.totalBeads);
+  });
+
+  it("fails closed when transparent occupancy excludes every position", async () => {
+    const normalized: NormalizedImageResult = {
+      ...NORMALIZED,
+      target: {
+        ...NORMALIZED.target,
+        width: 2,
+        height: 1,
+        drawWidth: 2,
+        drawHeight: 1,
+      },
+      image: {
+        width: 2,
+        height: 1,
+        data: new Uint8ClampedArray([20, 180, 80, 17, 20, 180, 80, 32]),
+      },
+    };
+    const quantize = vi.fn(async (image, options) =>
+      quantizeImage(image, options),
+    );
+    const dispose = vi.fn();
+    const service = createGenerationService(
+      {
+        palette: adaptRuntimePaletteToGeneration(
+          createApprovedRuntimePaletteProvider().getSnapshot(),
+        ),
+        colorSets: adaptColorSetToGeneration(
+          createApprovedColorSetProvider().getSnapshot(),
+        ),
+        boardProfile: adaptBoardProfileToGeneration(
+          createApprovedBoardProfileProvider().getSnapshot(),
+        ),
+        processingPolicy:
+          createApprovedProcessingPolicyProvider().getSnapshot(),
+        createWorkerClient: () => ({ quantize, dispose }),
+      },
+      {
+        decode: vi.fn(async () => normalized),
+        assemble: assemblePattern,
+        toPublic: toPublicPatternResult,
+      },
+    );
+
+    await expect(
+      service.generate(
+        input("poparooz-set-221", 2, "transparent"),
+        new AbortController().signal,
+      ),
+    ).rejects.toMatchObject({ code: "NO_QUANTIZABLE_PIXELS" });
+    expect(quantize).toHaveBeenCalledOnce();
+    expect([...quantize.mock.calls[0]![0].data]).toEqual([
+      0, 0, 0, 0, 0, 0, 0, 0,
+    ]);
+    expect(dispose).toHaveBeenCalledOnce();
   });
 });

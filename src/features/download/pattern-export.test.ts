@@ -114,6 +114,43 @@ describe("renderPatternExport", () => {
     expect(cellCodes).toEqual(["H2"]);
   });
 
+  it("renders no code for H02 fringe positions and retains a cream subject code", () => {
+    const target = exportCanvas();
+    const base = createPublicPattern(3, 1, [65535, 65535, 1]);
+    const cream = Object.freeze({
+      index: 1,
+      color: Object.freeze({
+        brand: "Poparooz" as const,
+        code: "A2",
+        hex: "#FFFFD5",
+      }),
+      beadCount: 1,
+    });
+    const pattern = Object.freeze({
+      ...base,
+      colors: Object.freeze([cream]),
+      materials: Object.freeze([
+        Object.freeze({
+          patternColorIndex: 1,
+          color: cream.color,
+          beadCount: 1,
+        }),
+      ]),
+    });
+
+    expect(
+      renderPatternExport(
+        { pattern, selectedColorSetLabel: "221-Color Set" },
+        () => target.canvas,
+      ).ok,
+    ).toBe(true);
+    const cellCodes = vi
+      .mocked(target.context.fillText)
+      .mock.calls.map(([text]) => String(text))
+      .filter((label) => /^[A-HM]\d{1,2}$/.test(label));
+    expect(cellCodes).toEqual(["A2"]);
+  });
+
   it("fails closed for unknown color indices and canvas failures", () => {
     expect(
       renderPatternExport(

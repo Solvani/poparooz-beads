@@ -17,6 +17,8 @@ export function createProcessingPolicyProvider(
         preserveAspectRatio: parsed.imageNormalization.preserveAspectRatio,
         fit: parsed.imageNormalization.fit,
         allowUpscale: parsed.imageNormalization.allowUpscale,
+        transparentOccupancyThresholdByte:
+          parsed.imageNormalization.transparentOccupancyThresholdByte,
       }),
       quantization: Object.freeze({
         alphaThresholdByte: parsed.quantization.alphaThresholdByte,

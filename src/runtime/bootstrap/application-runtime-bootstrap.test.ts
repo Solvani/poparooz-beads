@@ -89,7 +89,7 @@ describe("Application Runtime Bootstrap", () => {
     });
     expect(result.processingPolicy).toMatchObject({
       policyId: "poparooz-processing-policy",
-      policyVersion: "1.0.0",
+      policyVersion: "1.1.0",
     });
     expect(result.generationRuntime.availability).toEqual({ available: true });
     expect(result.generationRuntime.service).toBeDefined();

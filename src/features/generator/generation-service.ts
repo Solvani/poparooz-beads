@@ -1,5 +1,6 @@
 import type { NormalizedImageResult } from "../../domain/image/image.types";
 import { excludeEdgeConnectedLightBackground } from "../../domain/image/edge-connected-light-background";
+import { applyTransparentAlphaOccupancy } from "../../domain/image/transparent-alpha-occupancy";
 import { assemblePattern } from "../../domain/pattern/pattern-assembler";
 import type {
   AssemblePatternInput,
@@ -97,7 +98,11 @@ export function createGenerationService(
         );
         const quantizationImage =
           input.settings.background === "transparent"
-            ? excludeEdgeConnectedLightBackground(normalized.image)
+            ? applyTransparentAlphaOccupancy(
+                excludeEdgeConnectedLightBackground(normalized.image),
+                processingPolicy.imageNormalization
+                  .transparentOccupancyThresholdByte,
+              )
             : normalized.image;
         const quantized: QuantizedImage = await client.quantize(
           quantizationImage,

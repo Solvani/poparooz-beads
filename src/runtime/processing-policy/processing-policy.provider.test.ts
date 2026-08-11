@@ -12,11 +12,12 @@ describe("approved ProcessingPolicy Provider", () => {
     const snapshot = approved();
     expect(snapshot).toEqual({
       policyId: "poparooz-processing-policy",
-      policyVersion: "1.0.0",
+      policyVersion: "1.1.0",
       imageNormalization: {
         preserveAspectRatio: true,
         fit: "contain",
         allowUpscale: false,
+        transparentOccupancyThresholdByte: 32,
       },
       quantization: {
         alphaThresholdByte: 16,
@@ -54,6 +55,16 @@ describe("approved ProcessingPolicy Provider", () => {
         },
       }),
     ],
+    [
+      "wrong transparent occupancy threshold",
+      (value) => ({
+        ...value,
+        imageNormalization: {
+          ...value.imageNormalization,
+          transparentOccupancyThresholdByte: 48,
+        },
+      }),
+    ],
   ];
 
   it.each(invalidCases)("rejects %s without fallback", (_label, mutate) => {
@@ -66,7 +77,16 @@ describe("approved ProcessingPolicy Provider", () => {
     const source = structuredClone(approved());
     const provider = createProcessingPolicyProvider(source);
     Reflect.set(source.quantization, "alphaThresholdByte", 0);
+    Reflect.set(
+      source.imageNormalization,
+      "transparentOccupancyThresholdByte",
+      0,
+    );
     expect(provider.getSnapshot().quantization.alphaThresholdByte).toBe(16);
+    expect(
+      provider.getSnapshot().imageNormalization
+        .transparentOccupancyThresholdByte,
+    ).toBe(32);
     expect(provider.getSnapshot()).toBe(provider.getSnapshot());
   });
 });

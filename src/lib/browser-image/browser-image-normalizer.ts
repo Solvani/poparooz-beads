@@ -9,6 +9,8 @@ import {
   validateImageMime,
 } from "../../domain/image/image-signature";
 import { readExifOrientation } from "../../domain/image/exif-orientation";
+import { excludeStrictEdgeConnectedLightBackground } from "../../domain/image/edge-connected-light-background";
+import { refineOpaqueSourceMatteBackground } from "../../domain/image/opaque-source-matte-background";
 import { normalizeRgbaImage } from "../../domain/image/normalize-rgba";
 import type {
   ImageErrorDetails,
@@ -115,7 +117,17 @@ export async function decodeAndNormalizeImage(
       exifOrientation: exif.orientation,
       hasAlpha: containsAlpha(pixels.data),
     };
-    const result = normalizeRgbaImage(pixels, source, options);
+    const strictSource =
+      options.background === "transparent"
+        ? excludeStrictEdgeConnectedLightBackground(pixels)
+        : pixels;
+    const normalizationSource =
+      options.background === "transparent" &&
+      !source.hasAlpha &&
+      strictSource !== pixels
+        ? refineOpaqueSourceMatteBackground(pixels, strictSource)
+        : strictSource;
+    const result = normalizeRgbaImage(normalizationSource, source, options);
     throwIfAborted(signal);
     return result;
   } finally {

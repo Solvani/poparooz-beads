@@ -39,11 +39,11 @@ describe("PatternActions", () => {
     expect(
       view.getByRole("button", { name: "Download Pattern" }),
     ).toBeDisabled();
-    expect(
-      view.getByRole("button", { name: "Get Beads for This Pattern" }),
-    ).toBeDisabled();
     expect(view.getByText("Color code pattern · PNG")).toBeInTheDocument();
-    expect(view.getByText("Coming later")).toBeInTheDocument();
+    expect(
+      view.queryByRole("button", { name: "Get Beads for This Pattern" }),
+    ).not.toBeInTheDocument();
+    expect(view.queryByText("Coming later")).not.toBeInTheDocument();
     expect(view.container.querySelector("a, [role='button']")).toBeNull();
   });
 
@@ -70,7 +70,7 @@ describe("PatternActions", () => {
     );
   });
 
-  it("preserves the future primary and secondary hierarchy", () => {
+  it("keeps Download Pattern as the only customer action", () => {
     const view = render(
       <PatternActions
         state={actionState({
@@ -92,8 +92,9 @@ describe("PatternActions", () => {
       "button--secondary",
     );
     expect(
-      view.getByRole("button", { name: "Get Beads for This Pattern" }),
-    ).toHaveClass("button--primary");
+      view.queryByRole("button", { name: "Get Beads for This Pattern" }),
+    ).not.toBeInTheDocument();
+    expect(view.getAllByRole("button")).toHaveLength(1);
   });
 
   it.each([

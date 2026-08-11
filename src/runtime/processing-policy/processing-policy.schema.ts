@@ -6,12 +6,13 @@ import type { ProcessingPolicySnapshot } from "./processing-policy.types";
 export const ProcessingPolicySnapshotSchema = z
   .object({
     policyId: z.literal("poparooz-processing-policy"),
-    policyVersion: z.literal("1.0.0"),
+    policyVersion: z.literal("1.1.0"),
     imageNormalization: z
       .object({
         preserveAspectRatio: z.literal(true),
         fit: z.literal("contain"),
         allowUpscale: z.literal(false),
+        transparentOccupancyThresholdByte: z.literal(32),
       })
       .strict(),
     quantization: z

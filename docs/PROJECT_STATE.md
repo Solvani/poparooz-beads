@@ -290,16 +290,28 @@ Implementation: Completed locally and awaiting review; not yet accepted or froze
 Production GenerationRuntime: Unavailable
 ```
 
+```text
+P3-A02-A07-H02 Conservative Transparent Background Cleanup
+Status: Completed / Frozen / commit pending
+ProcessingPolicy: poparooz-processing-policy / 1.1.0
+Transparent occupancy threshold: 32
+Quantization alpha threshold: 16 (unchanged)
+Source behavior: Transparent mode uses conservative edge-connected source masking, bounded opaque matte refinement, deterministic resize, one-layer post-resize cleanup, and transparent occupancy canonicalization.
+Accepted limitation: Ambiguous tinted matte contamination may remain when it cannot be distinguished safely from legitimate subject color.
+Option D: Stopped; no safe parameter window was established and no reconstruction or decontamination was implemented.
+A08 Production Deployment: Not started
+```
+
 ## Current Phase
 
 ```text
 Phase: Phase 3
 Status: active
-Current implementation task: P3-A02-A05 Runtime Implementation review
-Current contract: P3-A02-A05 Fixed Color Set Profiles
-Fixed Color Set contract: frozen
-Fixed Color Set implementation: complete locally / review pending
-Next planned boundary: ProcessingPolicy and Production Generation Service composition; not started or authorized
+Current implementation task: P3-A02-A07-H02 Final Freeze / Governance / Pre-Commit Gate
+H02 status: Completed / Frozen / commit pending
+ProcessingPolicy: poparooz-processing-policy / 1.1.0
+Option D: Stopped / not implemented
+Next planned boundary: A08 Production Deployment; not started or authorized
 ```
 
 P3-A01.4 and its D01 and A01 through A06 tasks are completed and frozen. The Runtime Artifact and Runtime Lock are deterministic and approved, every Vite build passes the fail-closed Production Gate during configuration resolution, and application startup synchronously validates and initializes the approved immutable Provider before React render. The real production module graph and emitted bundle expose only the approved Runtime Artifact as Palette-generated data. Build or Startup Gate failures do not fall back. Chrome smoke verification passed with generation remaining safely unavailable.
@@ -369,6 +381,9 @@ cleaned up or reinterpreted by this governance patch.
 - Generation availability is independent from catalog inventory.
 - Runtime Policy is versioned, and each generation uses an immutable Runtime Snapshot.
 - Production inputs require strict build-time validation and lightweight browser-startup validation.
+- ProcessingPolicy `poparooz-processing-policy` version `1.1.0` freezes a Transparent-mode occupancy threshold of `32` while retaining the independent quantization alpha threshold of `16`.
+- Transparent-mode background cleanup is deterministic and browser-local: conservative edge-connected source masking, bounded opaque matte refinement, contain resize, one post-resize fringe layer, then occupancy canonicalization.
+- Tinted matte contamination that cannot be separated safely from legitimate subject color is an accepted v1 limitation. Option D reconstruction was stopped and is not implemented.
 - The alpha threshold is fixed at `16/255`.
 - Upscaling is deterministic and local only.
 - Maximum Colors has a minimum of `2`, a default of `32`, and a hard maximum of `64`.
@@ -532,6 +547,8 @@ P3-A02-A03 Pattern Color Identity and Palette Wiring Completed
 P3-A02-A04 BoardProfile Provider and Generation Input Wiring — Completed / Frozen
 P3-A02-A05 Fixed Color Set Profiles            — Runtime implementation review pending
 P3-A02     Production Generation Runtime Activation — implementation in progress / not activated
+P3-A02-A07-H02 Conservative Transparent Background Cleanup - Completed / Frozen / commit pending
+P3-A08     Production Deployment                  Not started
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
 ```
@@ -555,6 +572,7 @@ P3-A01.4 and the P3-A02-D01 contract are frozen. P3-A02-A01 through P3-A02-A04 a
 - Upstream is `origin/main [gone]`.
 - Accepted work has not been pushed.
 - Production Runtime remains unavailable.
+- Conservative Transparent-mode cleanup may retain tinted matte contamination when removing it cannot be distinguished safely from removing legitimate subject color.
 - Firefox, Safari, iOS, Android, and screen-reader gates remain open.
 
 ## Update Rules

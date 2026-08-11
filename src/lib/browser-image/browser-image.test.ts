@@ -5,6 +5,13 @@ import {
   createExifJpeg,
   MINIMAL_PNG_BYTES,
 } from "../../domain/image/image-test.fixture";
+import {
+  prepareColorMatchCandidates,
+  matchNearestColor,
+} from "../../domain/color/generation-color-matching";
+import { quantizeImage } from "../../domain/quantization/quantize-image";
+import { adaptRuntimePaletteToGeneration } from "../../runtime/generation-palette/runtime-to-generation-palette.adapter";
+import { createApprovedRuntimePaletteProvider } from "../../runtime/palette/approved-runtime-palette";
 import type {
   NormalizeImageOptions,
   RgbaImage,
@@ -178,6 +185,232 @@ describe("decodeAndNormalizeImage service", () => {
     expect([...result.image.data]).toEqual([255, 0, 0, 255, 0, 0, 0, 0]);
     expect(JSON.stringify(result)).not.toContain("name");
     expect(release).toHaveBeenCalledOnce();
+  });
+
+  it("removes strict source white before resize so a green edge maps only as B8", async () => {
+    const source = rgbaImage(6, 1, [
+      [255, 255, 255, 255],
+      [255, 255, 255, 255],
+      [255, 255, 255, 255],
+      [20, 180, 80, 255],
+      [20, 180, 80, 255],
+      [20, 180, 80, 255],
+    ]);
+    const result = await decodeAndNormalizeImage(
+      blob(),
+      { ...options, targetWidth: 3 },
+      undefined,
+      normalizerDependencies({
+        decoded: decodedRaster(6, 1),
+        rasterize: async () => source,
+      }),
+    );
+
+    expect(rgbaPixels(result.image)).toEqual([
+      [0, 0, 0, 0],
+      [20, 180, 80, 128],
+      [20, 180, 80, 255],
+    ]);
+    const quantized = quantizeImage(result.image, {
+      maxColors: 32,
+      alphaThreshold: 16,
+    });
+    expect(quantized.colors).toHaveLength(1);
+    expect(quantized.colors[0]?.rgb).toEqual({ r: 20, g: 180, b: 80 });
+    expect(matchCode(quantized.colors[0]!.lab)).toBe("B8");
+  });
+
+  it("eliminates the distinct white-cyan blend before resize", async () => {
+    const source = rgbaImage(6, 1, [
+      [255, 255, 255, 255],
+      [255, 255, 255, 255],
+      [255, 255, 255, 255],
+      [215, 255, 255, 255],
+      [215, 255, 255, 255],
+      [215, 255, 255, 255],
+    ]);
+    const result = await decodeAndNormalizeImage(
+      blob(),
+      { ...options, targetWidth: 3 },
+      undefined,
+      normalizerDependencies({
+        decoded: decodedRaster(6, 1),
+        rasterize: async () => source,
+      }),
+    );
+
+    expect(rgbaPixels(result.image)).toEqual([
+      [0, 0, 0, 0],
+      [215, 255, 255, 128],
+      [215, 255, 255, 255],
+    ]);
+    const quantized = quantizeImage(result.image, {
+      maxColors: 32,
+      alphaThreshold: 16,
+    });
+    expect(quantized.colors).toHaveLength(1);
+    expect(quantized.colors[0]?.rgb).toEqual({ r: 215, g: 255, b: 255 });
+    expect(matchCode(quantized.colors[0]!.lab)).toBe("C14");
+  });
+
+  it("refines opaque source matte before resize", async () => {
+    const source = rgbaImage(8, 1, [
+      [255, 255, 255, 255],
+      [247, 247, 247, 255],
+      [246, 246, 246, 255],
+      [245, 245, 245, 255],
+      [244, 244, 244, 255],
+      [243, 243, 243, 255],
+      [242, 242, 242, 255],
+      [20, 20, 20, 255],
+    ]);
+    const before = new Uint8ClampedArray(source.data);
+    const result = await decodeAndNormalizeImage(
+      blob(),
+      { ...options, targetWidth: 4 },
+      undefined,
+      normalizerDependencies({
+        decoded: decodedRaster(8, 1),
+        rasterize: async () => source,
+      }),
+    );
+
+    expect(rgbaPixels(result.image)).toEqual([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [20, 20, 20, 128],
+    ]);
+    expect(source.data).toEqual(before);
+  });
+
+  it("bypasses opaque matte refinement for sources that already contain alpha", async () => {
+    const source = rgbaImage(4, 1, [
+      [255, 255, 255, 255],
+      [247, 247, 247, 255],
+      [242, 242, 242, 255],
+      [20, 20, 20, 0],
+    ]);
+    const result = await decodeAndNormalizeImage(
+      blob(),
+      { ...options, targetWidth: 4 },
+      undefined,
+      normalizerDependencies({
+        decoded: decodedRaster(4, 1),
+        rasterize: async () => source,
+      }),
+    );
+
+    expect(rgbaPixels(result.image)).toEqual([
+      [0, 0, 0, 0],
+      [247, 247, 247, 255],
+      [242, 242, 242, 255],
+      [0, 0, 0, 0],
+    ]);
+  });
+
+  it("applies opaque source matte semantics deterministically at 40, 80, and 104", async () => {
+    for (const size of [40, 80, 104]) {
+      const values = Array.from(
+        { length: size * size },
+        (): [number, number, number, number] => [255, 255, 255, 255],
+      );
+      const center = Math.floor(size / 2);
+      values[center * size + center - 2] = [247, 247, 247, 255];
+      values[center * size + center - 1] = [242, 242, 242, 255];
+      values[center * size + center] = [20, 20, 20, 255];
+      const source = rgbaImage(size, size, values);
+      const before = new Uint8ClampedArray(source.data);
+      const dependencies = normalizerDependencies({
+        decoded: decodedRaster(size, size),
+        rasterize: async () => source,
+      });
+
+      const first = await decodeAndNormalizeImage(
+        blob(),
+        { ...options, targetWidth: size, targetHeight: size },
+        undefined,
+        dependencies,
+      );
+      const second = await decodeAndNormalizeImage(
+        blob(),
+        { ...options, targetWidth: size, targetHeight: size },
+        undefined,
+        dependencies,
+      );
+
+      expect(first.image).toMatchObject({ width: size, height: size });
+      expect(first.image.data).toEqual(second.image.data);
+      expect(source.data).toEqual(before);
+    }
+  });
+
+  it("keeps white-mode source bytes unchanged by source masking", async () => {
+    const source = rgbaImage(3, 1, [
+      [255, 255, 255, 255],
+      [255, 255, 255, 255],
+      [210, 20, 30, 255],
+    ]);
+    const before = new Uint8ClampedArray(source.data);
+    const result = await decodeAndNormalizeImage(
+      blob(),
+      {
+        ...options,
+        targetWidth: 3,
+        background: "white",
+      },
+      undefined,
+      normalizerDependencies({
+        decoded: decodedRaster(3, 1),
+        rasterize: async () => source,
+      }),
+    );
+
+    expect(result.image.data).toEqual(before);
+    expect(source.data).toEqual(before);
+  });
+
+  it("creates contain padding after source masking and leaves it transparent", async () => {
+    const source = rgbaImage(6, 2, [
+      [255, 255, 255, 255],
+      [255, 255, 255, 255],
+      [210, 20, 30, 255],
+      [210, 20, 30, 255],
+      [255, 255, 255, 255],
+      [255, 255, 255, 255],
+      [255, 255, 255, 255],
+      [255, 255, 255, 255],
+      [210, 20, 30, 255],
+      [210, 20, 30, 255],
+      [255, 255, 255, 255],
+      [255, 255, 255, 255],
+    ]);
+    const result = await decodeAndNormalizeImage(
+      blob(),
+      { ...options, targetWidth: 3, targetHeight: 3 },
+      undefined,
+      normalizerDependencies({
+        decoded: decodedRaster(6, 2),
+        rasterize: async () => source,
+      }),
+    );
+
+    expect(result.target).toMatchObject({
+      drawX: 0,
+      drawY: 1,
+      drawWidth: 3,
+      drawHeight: 1,
+    });
+    expect(rgbaPixels(result.image).slice(0, 3)).toEqual([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    expect(rgbaPixels(result.image).slice(6, 9)).toEqual([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
   });
 
   it("allows an empty MIME when the signature is valid", async () => {
@@ -431,6 +664,38 @@ function fakeImageElement(
 
 function decodedSource(release = vi.fn()): BrowserRasterSource {
   return { source: {}, width: 1, height: 1, release };
+}
+
+function decodedRaster(width: number, height: number): BrowserRasterSource {
+  return { source: {}, width, height, release: vi.fn() };
+}
+
+function rgbaImage(
+  width: number,
+  height: number,
+  pixels: readonly (readonly [number, number, number, number])[],
+): RgbaImage {
+  return { width, height, data: new Uint8ClampedArray(pixels.flat()) };
+}
+
+function rgbaPixels(image: RgbaImage): number[][] {
+  return Array.from({ length: image.width * image.height }, (_, index) => [
+    ...image.data.slice(index * 4, index * 4 + 4),
+  ]);
+}
+
+const generationCandidates = prepareColorMatchCandidates(
+  adaptRuntimePaletteToGeneration(
+    createApprovedRuntimePaletteProvider().getSnapshot(),
+  ).colors,
+);
+
+function matchCode(lab: {
+  readonly l: number;
+  readonly a: number;
+  readonly b: number;
+}): string {
+  return matchNearestColor(lab, generationCandidates).color.code;
 }
 
 function fakeCanvas(pixels: Uint8ClampedArray): {

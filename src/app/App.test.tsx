@@ -140,8 +140,8 @@ describe("App", () => {
       screen.getByRole("button", { name: "Download Pattern" }),
     ).toBeDisabled();
     expect(
-      screen.getByRole("button", { name: "Get Beads for This Pattern" }),
-    ).toBeDisabled();
+      screen.queryByRole("button", { name: "Get Beads for This Pattern" }),
+    ).not.toBeInTheDocument();
   });
 
   it("contains no synthetic pattern values or internal customer-forbidden fields", () => {
@@ -506,11 +506,11 @@ describe("App", () => {
       screen.getByRole("button", { name: "Download Pattern" }),
     ).toBeEnabled();
     expect(
-      screen.getByRole("button", { name: "Get Beads for This Pattern" }),
-    ).toBeDisabled();
+      screen.queryByRole("button", { name: "Get Beads for This Pattern" }),
+    ).not.toBeInTheDocument();
   });
 
-  it("downloads locally while keeping the future bead action inert", async () => {
+  it("downloads locally without commerce side effects", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
     const storageSpy = vi.spyOn(Storage.prototype, "setItem");
     const anchorClickSpy = vi
@@ -533,10 +533,6 @@ describe("App", () => {
     await userEvent.click(
       screen.getByRole("button", { name: "Download Pattern" }),
     );
-    await userEvent.click(
-      screen.getByRole("button", { name: "Get Beads for This Pattern" }),
-    );
-
     expect(fetchSpy).not.toHaveBeenCalled();
     expect(storageSpy).not.toHaveBeenCalled();
     expect(anchorClickSpy).toHaveBeenCalledOnce();

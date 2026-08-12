@@ -35,7 +35,7 @@ export function validatePatternSettings(
       : { maxColors: "Enter a whole number from 2 to 64." }),
     ...(draft.background === "white" || draft.background === "transparent"
       ? {}
-      : { background: "Choose White or Transparent." }),
+      : { background: "Choose Full Background or Remove Background." }),
     ...(colorSetProfiles.some(
       (profile) => profile.profileId === draft.selectedColorSetProfileId,
     )

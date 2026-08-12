@@ -681,6 +681,17 @@
   margin: 0;
 }
 
+.background-setting__copy {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.background-setting__copy span {
+  color: var(--text-tertiary);
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
 .generate-placeholder {
   width: 100%;
 }

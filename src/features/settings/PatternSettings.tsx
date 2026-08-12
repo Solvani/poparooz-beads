@@ -54,8 +54,8 @@ export function PatternSettings({
           aria-invalid={errors.selectedColorSetProfileId ? "true" : undefined}
           aria-describedby={
             errors.selectedColorSetProfileId
-              ? "color-set-profile-error"
-              : undefined
+              ? "color-set-profile-help color-set-profile-error"
+              : "color-set-profile-help"
           }
           onChange={(event) =>
             update(
@@ -74,6 +74,9 @@ export function PatternSettings({
             </option>
           ))}
         </select>
+        <p id="color-set-profile-help" className="form-help">
+          Choose the Poparooz color range available for matching.
+        </p>
         {errors.selectedColorSetProfileId ? (
           <p id="color-set-profile-error" className="form-error" role="alert">
             {errors.selectedColorSetProfileId}
@@ -82,8 +85,8 @@ export function PatternSettings({
       </div>
       <NumberSetting
         id="maximum-colors"
-        label="Pattern Color Limit"
-        help="Maximum number of colors used in the generated pattern."
+        label="Maximum Colors"
+        help="Maximum number of colors used in the generated pattern. This does not change the selected Bead Color Set."
         value={value.maxColors}
         min={2}
         max={64}
@@ -91,7 +94,7 @@ export function PatternSettings({
         onChange={(nextValue) => update("maxColors", nextValue)}
       />
       <fieldset className="background-setting">
-        <legend>Background</legend>
+        <legend>Pattern Background</legend>
         <label>
           <input
             type="radio"
@@ -100,7 +103,10 @@ export function PatternSettings({
             checked={value.background === "white"}
             onChange={() => update("background", "white")}
           />
-          White
+          <span className="background-setting__copy">
+            <strong>Full Background</strong>
+            <span>Fill the entire pattern area with beads.</span>
+          </span>
         </label>
         <label>
           <input
@@ -110,7 +116,10 @@ export function PatternSettings({
             checked={value.background === "transparent"}
             onChange={() => update("background", "transparent")}
           />
-          Transparent
+          <span className="background-setting__copy">
+            <strong>Remove Background</strong>
+            <span>Keep only the main subject where possible.</span>
+          </span>
         </label>
       </fieldset>
       {generationControls === undefined ? (
@@ -157,8 +166,7 @@ function PatternSizeSetting({
         ) : null}
         {PATTERN_SIZE_PRESETS.map((preset) => (
           <option key={preset.size} value={preset.size}>
-            {preset.size} × {preset.size}
-            {preset.size === 80 ? " — Recommended" : ""}
+            {preset.size} × {preset.size} — {preset.label}
           </option>
         ))}
       </select>

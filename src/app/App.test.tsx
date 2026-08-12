@@ -71,9 +71,9 @@ async function completeInputs() {
     screen.getByLabelText("Choose an Image"),
     new File(["image"], "photo.png", { type: "image/png" }),
   );
-  await userEvent.clear(screen.getByLabelText("Pattern Color Limit"));
-  await userEvent.type(screen.getByLabelText("Pattern Color Limit"), "16");
-  await userEvent.click(screen.getByRole("radio", { name: "White" }));
+  await userEvent.clear(screen.getByLabelText("Maximum Colors"));
+  await userEvent.type(screen.getByLabelText("Maximum Colors"), "16");
+  await userEvent.click(screen.getByRole("radio", { name: /Full Background/ }));
 }
 
 beforeEach(() => {
@@ -278,8 +278,8 @@ describe("App", () => {
       "poparooz-set-221",
     );
     expect(within(packageRow).getByText("72-Color Set")).toBeInTheDocument();
-    await userEvent.clear(screen.getByLabelText("Pattern Color Limit"));
-    await userEvent.type(screen.getByLabelText("Pattern Color Limit"), "20");
+    await userEvent.clear(screen.getByLabelText("Maximum Colors"));
+    await userEvent.type(screen.getByLabelText("Maximum Colors"), "20");
     expect(screen.getByText("Settings changed")).toBeInTheDocument();
     expect(
       screen.getByText("These details belong to your previous pattern."),
@@ -374,8 +374,8 @@ describe("App", () => {
     await userEvent.click(screen.getByRole("button", { name: "Zoom in" }));
     expect(screen.getByText("125%")).toBeInTheDocument();
 
-    await userEvent.clear(screen.getByLabelText("Pattern Color Limit"));
-    await userEvent.type(screen.getByLabelText("Pattern Color Limit"), "20");
+    await userEvent.clear(screen.getByLabelText("Maximum Colors"));
+    await userEvent.type(screen.getByLabelText("Maximum Colors"), "20");
     await userEvent.click(
       screen.getByRole("button", { name: "Regenerate Pattern" }),
     );
@@ -391,8 +391,8 @@ describe("App", () => {
     expect(screen.getByText("10 × 5")).toBeInTheDocument();
     expect(screen.getByText("50")).toBeInTheDocument();
 
-    await userEvent.clear(screen.getByLabelText("Pattern Color Limit"));
-    await userEvent.type(screen.getByLabelText("Pattern Color Limit"), "24");
+    await userEvent.clear(screen.getByLabelText("Maximum Colors"));
+    await userEvent.type(screen.getByLabelText("Maximum Colors"), "24");
     await userEvent.click(
       screen.getByRole("button", { name: "Regenerate Pattern" }),
     );
@@ -662,8 +662,8 @@ describe("App", () => {
     expect(colorsLauncher).toHaveFocus();
 
     await userEvent.click(screen.getByRole("button", { name: "Settings" }));
-    await userEvent.clear(screen.getByLabelText("Pattern Color Limit"));
-    await userEvent.type(screen.getByLabelText("Pattern Color Limit"), "20");
+    await userEvent.clear(screen.getByLabelText("Maximum Colors"));
+    await userEvent.type(screen.getByLabelText("Maximum Colors"), "20");
     expect(
       within(screen.getByRole("dialog", { name: "Settings" })).getByText(
         "Settings changed",

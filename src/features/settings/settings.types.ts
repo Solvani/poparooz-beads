@@ -9,19 +9,23 @@ export interface ColorSetProfileOption {
 export const PATTERN_SIZE_PRESETS = Object.freeze([
   Object.freeze({
     size: 40,
-    guidance: "Best for icons and simple designs",
+    label: "Small",
+    guidance: "Best for icons and simple designs.",
   }),
   Object.freeze({
     size: 60,
-    guidance: "Best for simple portraits and pets",
+    label: "Medium",
+    guidance: "Best for simple portraits and pets.",
   }),
   Object.freeze({
     size: 80,
-    guidance: "Best for most photos · Recommended",
+    label: "Recommended",
+    guidance: "Best for most photos.",
   }),
   Object.freeze({
     size: 104,
-    guidance: "Best for detailed photos",
+    label: "Detailed",
+    guidance: "Best for detailed photos.",
   }),
 ] as const);
 

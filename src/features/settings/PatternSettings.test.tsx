@@ -27,20 +27,18 @@ describe("PatternSettings", () => {
     );
 
     expect(view.getByLabelText("Pattern Size")).toHaveValue("80");
-    expect(
-      view.getByText("Best for most photos · Recommended"),
-    ).toBeInTheDocument();
-    expect(view.getByLabelText("Pattern Color Limit")).toHaveValue(32);
+    expect(view.getByText("Best for most photos.")).toBeInTheDocument();
+    expect(view.getByLabelText("Maximum Colors")).toHaveValue(32);
     expect(view.getByLabelText("Bead Color Set")).toHaveValue(
       "poparooz-set-221",
     );
     expect(
       view.getAllByRole("option").map((option) => option.textContent),
     ).toEqual([
-      "40 × 40",
-      "60 × 60",
+      "40 × 40 — Small",
+      "60 × 60 — Medium",
       "80 × 80 — Recommended",
-      "104 × 104",
+      "104 × 104 — Detailed",
       "24-Color Set",
       "48-Color Set",
       "72-Color Set",
@@ -49,10 +47,22 @@ describe("PatternSettings", () => {
       "221-Color Set",
     ]);
     expect(
-      view.getByText("Maximum number of colors used in the generated pattern."),
+      view.getByText("Choose the Poparooz color range available for matching."),
     ).toBeInTheDocument();
-    expect(view.getByRole("radio", { name: "White" })).not.toBeChecked();
-    expect(view.getByRole("radio", { name: "Transparent" })).not.toBeChecked();
+    expect(
+      view.getByText(
+        "Maximum number of colors used in the generated pattern. This does not change the selected Bead Color Set.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      view.getByRole("group", { name: "Pattern Background" }),
+    ).toBeInTheDocument();
+    expect(
+      view.getByRole("radio", { name: /Full Background/ }),
+    ).not.toBeChecked();
+    expect(
+      view.getByRole("radio", { name: /Remove Background/ }),
+    ).not.toBeChecked();
     expect(view.queryByRole("radio", { name: "Keep Original" })).toBeNull();
     expect(
       view.getByRole("button", { name: "Generate Pattern" }),
@@ -73,7 +83,7 @@ describe("PatternSettings", () => {
     fireEvent.change(view.getByLabelText("Pattern Size"), {
       target: { value: "60" },
     });
-    await userEvent.click(view.getByRole("radio", { name: "White" }));
+    await userEvent.click(view.getByRole("radio", { name: /Full Background/ }));
 
     expect(onChange).toHaveBeenCalledWith({
       ...value,
@@ -94,14 +104,8 @@ describe("PatternSettings", () => {
     );
 
     expect(view.getByLabelText("Pattern Size")).toHaveValue("80");
-    expect(view.getByLabelText("Pattern Color Limit")).toHaveAttribute(
-      "min",
-      "2",
-    );
-    expect(view.getByLabelText("Pattern Color Limit")).toHaveAttribute(
-      "max",
-      "64",
-    );
+    expect(view.getByLabelText("Maximum Colors")).toHaveAttribute("min", "2");
+    expect(view.getByLabelText("Maximum Colors")).toHaveAttribute("max", "64");
   });
 
   it("can omit generation controls when the responsive shell owns their placement", () => {
@@ -119,10 +123,10 @@ describe("PatternSettings", () => {
   });
 
   it.each([
-    ["40", "Best for icons and simple designs"],
-    ["60", "Best for simple portraits and pets"],
-    ["80", "Best for most photos · Recommended"],
-    ["104", "Best for detailed photos"],
+    ["40", "Best for icons and simple designs."],
+    ["60", "Best for simple portraits and pets."],
+    ["80", "Best for most photos."],
+    ["104", "Best for detailed photos."],
   ])("shows guidance for preset %s", (size, guidance) => {
     const view = render(
       <PatternSettings
@@ -132,5 +136,45 @@ describe("PatternSettings", () => {
       />,
     );
     expect(view.getByText(guidance)).toBeInTheDocument();
+  });
+
+  it("preserves Color Set, Maximum Colors, and background semantics", async () => {
+    const onChange = vi.fn();
+    const value = { ...EMPTY_PATTERN_SETTINGS };
+    const view = render(
+      <PatternSettings
+        value={value}
+        onChange={onChange}
+        colorSetProfiles={COLOR_SET_PROFILES}
+      />,
+    );
+
+    fireEvent.change(view.getByLabelText("Maximum Colors"), {
+      target: { value: "24" },
+    });
+    await userEvent.click(view.getByRole("radio", { name: /Full Background/ }));
+    await userEvent.click(
+      view.getByRole("radio", { name: /Remove Background/ }),
+    );
+
+    expect(value.selectedColorSetProfileId).toBe("poparooz-set-221");
+    expect(onChange).toHaveBeenCalledWith({ ...value, maxColors: "24" });
+    expect(onChange).toHaveBeenCalledWith({ ...value, background: "white" });
+    expect(onChange).toHaveBeenCalledWith({
+      ...value,
+      background: "transparent",
+    });
+  });
+
+  it("shows the recommendation only once for the recommended preset", () => {
+    const view = render(
+      <PatternSettings
+        value={EMPTY_PATTERN_SETTINGS}
+        onChange={() => {}}
+        colorSetProfiles={COLOR_SET_PROFILES}
+      />,
+    );
+
+    expect(view.getAllByText(/Recommended/)).toHaveLength(1);
   });
 });

@@ -38,16 +38,20 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
 
   it("defines all four layouts and a media-query fallback", () => {
     expect(workspace).toContain("container-type: inline-size");
-    expect(workspace).toContain("max-width: 1600px");
+    expect(workspace).toContain("max-width: 1440px");
     expect(workspace).toContain("min-width: 0");
     expect(workspace).toContain("min-width: 768px");
-    expect(workspace).toContain("min-width: 1100px");
-    expect(workspace).toContain(
-      "grid-template-columns: 280px minmax(0, 1fr) 300px",
-    );
-    expect(workspace).toContain("min-width: 1440px");
+    expect(workspace).toContain("min-width: 900px");
+    expect(workspace).toContain("grid-template-columns: 320px minmax(0, 1fr)");
+    expect(workspace).toContain("min-width: 1400px");
     expect(workspace).toContain(
       "grid-template-columns: 320px minmax(560px, 1fr) 340px",
+    );
+    expect(workspace).toContain("gap: var(--space-6)");
+    expect(workspace).toContain("box-shadow: none");
+    expect(workspace).toContain("box-shadow: var(--shadow-small)");
+    expect(workspace).toMatch(
+      /\.canvas-toolbar__views\s*{[^}]*min-width: 0;[^}]*flex-wrap: wrap;/s,
     );
     expect(workspace).toContain("@supports not (container-type: inline-size)");
   });

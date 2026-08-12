@@ -12,7 +12,7 @@
 .app-header__inner,
 .page-frame {
   width: 100%;
-  max-width: 1600px;
+  max-width: 1440px;
   margin-inline: auto;
   padding-inline: var(--space-4);
 }
@@ -62,7 +62,7 @@
     "settings"
     "canvas"
     "results";
-  gap: var(--space-4);
+  gap: var(--space-6);
   align-items: start;
 }
 
@@ -85,11 +85,12 @@
   border: 1px solid var(--border-default);
   border-radius: var(--radius-large);
   background: var(--surface-primary);
-  box-shadow: var(--shadow-small);
+  box-shadow: none;
 }
 
 .panel--canvas {
   min-height: 420px;
+  box-shadow: var(--shadow-small);
 }
 
 .panel__eyebrow {
@@ -151,6 +152,8 @@
 .canvas-toolbar__views {
   display: flex;
   flex: 1 1 100%;
+  min-width: 0;
+  flex-wrap: wrap;
   gap: var(--space-2);
 }
 
@@ -243,7 +246,7 @@
 
 .pattern-results {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-4);
 }
 
 .result-section + .result-section {
@@ -512,7 +515,7 @@
 
 .settings-region-content {
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-4);
 }
 
 .image-upload {
@@ -688,10 +691,6 @@
     padding-inline: var(--space-6);
   }
 
-  .workspace-shell {
-    gap: var(--space-5);
-  }
-
   .button {
     min-height: var(--control-height-desktop);
   }
@@ -706,24 +705,19 @@
   }
 }
 
-@container poparooz-app (min-width: 900px) and (max-width: 1099px) {
-  .settings-region-content,
-  .pattern-results {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .settings-region-content > .form-error,
-  .result-retention-status,
-  .pattern-summary {
-    grid-column: 1 / -1;
-  }
-}
-
-@container poparooz-app (min-width: 1100px) {
+@container poparooz-app (min-width: 900px) and (max-width: 1399px) {
   .workspace-shell {
-    grid-template-areas: "settings canvas results";
-    grid-template-columns: 280px minmax(0, 1fr) 300px;
-    gap: 16px;
+    grid-template-areas:
+      "lifecycle lifecycle"
+      "settings canvas";
+    grid-template-columns: 320px minmax(0, 1fr);
+  }
+
+  .workspace-shell--has-results {
+    grid-template-areas:
+      "lifecycle lifecycle"
+      "settings canvas"
+      "settings results";
   }
 
   .pattern-results {
@@ -751,10 +745,19 @@
   }
 }
 
-@container poparooz-app (min-width: 1440px) {
+@container poparooz-app (min-width: 1400px) {
   .workspace-shell {
+    grid-template-areas:
+      "lifecycle lifecycle"
+      "settings canvas";
+    grid-template-columns: 320px minmax(560px, 1fr);
+  }
+
+  .workspace-shell--has-results {
+    grid-template-areas:
+      "lifecycle lifecycle lifecycle"
+      "settings canvas results";
     grid-template-columns: 320px minmax(560px, 1fr) 340px;
-    gap: 20px;
   }
 }
 
@@ -770,24 +773,19 @@
     }
   }
 
-  @media (min-width: 900px) and (max-width: 1099px) {
-    .settings-region-content,
-    .pattern-results {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .settings-region-content > .form-error,
-    .result-retention-status,
-    .pattern-summary {
-      grid-column: 1 / -1;
-    }
-  }
-
-  @media (min-width: 1100px) {
+  @media (min-width: 900px) and (max-width: 1399px) {
     .workspace-shell {
-      grid-template-areas: "settings canvas results";
-      grid-template-columns: 280px minmax(0, 1fr) 300px;
-      gap: 16px;
+      grid-template-areas:
+        "lifecycle lifecycle"
+        "settings canvas";
+      grid-template-columns: 320px minmax(0, 1fr);
+    }
+
+    .workspace-shell--has-results {
+      grid-template-areas:
+        "lifecycle lifecycle"
+        "settings canvas"
+        "settings results";
     }
 
     .pattern-results {
@@ -815,10 +813,19 @@
     }
   }
 
-  @media (min-width: 1440px) {
+  @media (min-width: 1400px) {
     .workspace-shell {
+      grid-template-areas:
+        "lifecycle lifecycle"
+        "settings canvas";
+      grid-template-columns: 320px minmax(560px, 1fr);
+    }
+
+    .workspace-shell--has-results {
+      grid-template-areas:
+        "lifecycle lifecycle lifecycle"
+        "settings canvas results";
       grid-template-columns: 320px minmax(560px, 1fr) 340px;
-      gap: 20px;
     }
   }
 }

@@ -16,11 +16,13 @@ afterEach(() => {
 
 describe("workspace mode", () => {
   it.each([
-    [0, "compact"],
+    [320, "compact"],
     [767, "compact"],
     [768, "medium"],
-    [1099, "medium"],
-    [1100, "desktop"],
+    [899, "medium"],
+    [900, "medium"],
+    [1399, "medium"],
+    [1400, "desktop"],
     [1600, "desktop"],
   ] as const)("maps %ipx to %s", (width, expected) => {
     expect(getWorkspaceMode(width)).toBe(expected);
@@ -56,7 +58,7 @@ describe("workspace mode", () => {
         [
           {
             target: root,
-            contentRect: { width: 1100 },
+            contentRect: { width: 1400 },
           } as unknown as ResizeObserverEntry,
         ],
         {} as ResizeObserver,

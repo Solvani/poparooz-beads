@@ -244,7 +244,7 @@ export function App({
             workspaceMode === "medium" ? generationStatus() : undefined
           }
           actionsContent={
-            compactResultMode ? undefined : (
+            compactResultMode || visiblePattern === undefined ? undefined : (
               <PatternActions
                 state={patternActionState}
                 onDownload={() => downloadLastSuccess()}

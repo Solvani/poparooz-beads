@@ -23,7 +23,7 @@
 
 .compact-result-content {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-4);
 }
 
 .bottom-sheet-backdrop {

@@ -26,11 +26,17 @@ export function GeneratorWorkspaceShell({
   showSettingsRegion = true,
   workspaceMode = "desktop",
 }: GeneratorWorkspaceShellProps) {
+  const hasResults =
+    resultsContent !== undefined || actionsContent !== undefined;
+
   return (
     <main
-      className={`workspace-shell workspace-shell--${workspaceMode}`}
+      className={`workspace-shell workspace-shell--${workspaceMode}${
+        hasResults ? " workspace-shell--has-results" : ""
+      }`}
       aria-label="Pattern maker workspace"
       data-workspace-mode={workspaceMode}
+      data-has-results={hasResults ? "true" : "false"}
     >
       {lifecycleContent ? (
         <section
@@ -72,37 +78,18 @@ export function GeneratorWorkspaceShell({
         )}
       </Panel>
 
-      <Panel
-        as="aside"
-        title={
-          resultsContent === undefined
-            ? "Your pattern details will appear here."
-            : "Pattern details"
-        }
-        titleId="summary-heading"
-        eyebrow="Pattern Summary"
-        className="workspace-shell__results"
-      >
-        {resultsContent ?? (
-          <>
-            <section
-              className="summary-section"
-              aria-labelledby="colors-heading"
-            >
-              <h3 id="colors-heading">Colors</h3>
-              <p>Color quantities will appear after generation.</p>
-            </section>
-            <section
-              className="summary-section"
-              aria-labelledby="boards-heading"
-            >
-              <h3 id="boards-heading">Board Layout</h3>
-              <p>Board placement will appear after generation.</p>
-            </section>
-          </>
-        )}
-        {actionsContent}
-      </Panel>
+      {hasResults ? (
+        <Panel
+          as="aside"
+          title="Pattern details"
+          titleId="summary-heading"
+          eyebrow="Pattern Summary"
+          className="workspace-shell__results"
+        >
+          {resultsContent}
+          {actionsContent}
+        </Panel>
+      ) : null}
     </main>
   );
 }

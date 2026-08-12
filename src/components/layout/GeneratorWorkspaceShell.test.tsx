@@ -6,7 +6,7 @@ import { GeneratorWorkspaceShell } from "./GeneratorWorkspaceShell";
 afterEach(cleanup);
 
 describe("GeneratorWorkspaceShell", () => {
-  it("renders three accessible workspace regions", () => {
+  it("renders only Settings and Canvas before generation", () => {
     const view = render(<GeneratorWorkspaceShell />);
 
     expect(
@@ -15,11 +15,8 @@ describe("GeneratorWorkspaceShell", () => {
     expect(
       view.getByRole("region", { name: "Your pattern will appear here." }),
     ).toHaveClass("workspace-shell__canvas");
-    expect(
-      view.getByRole("complementary", {
-        name: "Your pattern details will appear here.",
-      }),
-    ).toHaveClass("workspace-shell__results");
+    expect(view.queryByRole("complementary")).toBeNull();
+    expect(view.getByRole("main")).toHaveAttribute("data-has-results", "false");
   });
 
   it("accepts a dedicated actions region without owning action behavior", () => {
@@ -48,9 +45,7 @@ describe("GeneratorWorkspaceShell", () => {
         "Your image is ready. Generate the pattern in the next step.",
       ),
     ).toBeInTheDocument();
-    expect(
-      view.getByText("Your pattern details will appear here."),
-    ).toBeInTheDocument();
+    expect(view.queryByRole("complementary")).toBeNull();
   });
 
   it("replaces only the Canvas empty state with supplied preview content", () => {
@@ -61,9 +56,7 @@ describe("GeneratorWorkspaceShell", () => {
     expect(
       view.queryByText("Upload an image and generate a pattern to begin."),
     ).toBeNull();
-    expect(
-      view.getByText("Your pattern details will appear here."),
-    ).toBeInTheDocument();
+    expect(view.queryByRole("complementary")).toBeNull();
   });
 
   it("replaces result placeholders while retaining supplied actions", () => {
@@ -77,8 +70,10 @@ describe("GeneratorWorkspaceShell", () => {
     expect(
       view.getByRole("complementary", { name: "Pattern details" }),
     ).toBeInTheDocument();
+    expect(view.getByRole("main")).toHaveClass("workspace-shell--has-results");
+    expect(view.getByRole("main")).toHaveAttribute("data-has-results", "true");
     expect(
-      view.queryByText("Color quantities will appear after generation."),
+      view.queryByText("Your pattern details will appear here."),
     ).toBeNull();
     expect(view.getByText("Stable actions")).toBeInTheDocument();
   });

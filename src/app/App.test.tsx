@@ -117,7 +117,7 @@ afterEach(() => {
 });
 
 describe("App", () => {
-  it("renders the Poparooz header and three empty workspace regions", () => {
+  it("renders the Poparooz header without a permanent pre-generation Summary", () => {
     render(<App />);
 
     expect(screen.getByRole("banner")).toHaveTextContent("Poparooz");
@@ -128,17 +128,13 @@ describe("App", () => {
     expect(
       screen.getByText("Your pattern will appear here."),
     ).toBeInTheDocument();
+    expect(screen.queryByRole("complementary")).toBeNull();
     expect(
-      screen.getByText("Your pattern details will appear here."),
-    ).toBeInTheDocument();
+      screen.queryByRole("region", { name: "Pattern Options" }),
+    ).toBeNull();
     expect(
-      screen.getByRole("region", { name: "Pattern Options" }),
-    ).toHaveTextContent(
-      "Create a pattern to access download and bead options.",
-    );
-    expect(
-      screen.getByRole("button", { name: "Download Pattern" }),
-    ).toBeDisabled();
+      screen.queryByRole("button", { name: "Download Pattern" }),
+    ).toBeNull();
     expect(
       screen.queryByRole("button", { name: "Get Beads for This Pattern" }),
     ).not.toBeInTheDocument();
@@ -241,10 +237,8 @@ describe("App", () => {
       screen.queryByRole("img", { name: /Bead pattern preview/ }),
     ).toBeNull();
     expect(
-      screen.getByRole("region", { name: "Pattern Options" }),
-    ).toHaveTextContent(
-      "Create a pattern to access download and bead options.",
-    );
+      screen.queryByRole("region", { name: "Pattern Options" }),
+    ).toBeNull();
     expect(
       screen.queryByText("These actions apply to your previous pattern."),
     ).toBeNull();
@@ -348,10 +342,8 @@ describe("App", () => {
       screen.queryByRole("heading", { name: "Pattern Summary" }),
     ).toBeNull();
     expect(
-      screen.getByRole("region", { name: "Pattern Options" }),
-    ).toHaveTextContent(
-      "Create a pattern to access download and bead options.",
-    );
+      screen.queryByRole("region", { name: "Pattern Options" }),
+    ).toBeNull();
     expect(screen.queryByText(/These actions (apply|still apply)/)).toBeNull();
   });
 
@@ -465,10 +457,8 @@ describe("App", () => {
       screen.queryByRole("navigation", { name: "Pattern detail panels" }),
     ).toBeNull();
     expect(
-      screen.getByRole("region", { name: "Pattern Options" }),
-    ).toHaveTextContent(
-      "Create a pattern to access download and bead options.",
-    );
+      screen.queryByRole("region", { name: "Pattern Options" }),
+    ).toBeNull();
   });
 
   it("never shows packaging, pricing, Shopify, or internal result fields", async () => {
@@ -594,10 +584,8 @@ describe("App", () => {
       screen.queryByRole("navigation", { name: "Pattern detail panels" }),
     ).toBeNull();
     expect(
-      screen.getByRole("region", { name: "Pattern Options" }),
-    ).toHaveTextContent(
-      "Create a pattern to access download and bead options.",
-    );
+      screen.queryByRole("region", { name: "Pattern Options" }),
+    ).toBeNull();
   });
 
   it("runs the compact result-first flow through all four sheet panels", async () => {

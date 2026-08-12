@@ -1,6 +1,6 @@
 # Poparooz Product Decisions
 
-Status: **Frozen for Phase 0**
+Status: **Frozen through A08 production acceptance**
 
 Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md)
 
@@ -55,7 +55,7 @@ Poparooz owns the shopping, website, and customer-visible color presentation. MA
 
 ### Shopify parent page
 
-The iframe is not the page's only content. The later Shopify Custom Liquid parent must include:
+The production iframe is hosted by a dedicated `pattern-maker` page template and `poparooz-generator` theme section. The frozen Shopify parent content boundary includes:
 
 - H1 `Free Fuse Bead Pattern Maker`;
 - concise product and browser-local privacy explanations;
@@ -93,6 +93,8 @@ Accounts, cloud projects, publishing, galleries, search, favorites, comments, au
 
 - The generator is independently deployed to Cloudflare Pages and embedded on `https://poparooz.com/pages/fuse-bead-pattern-maker`.
 - The production generator URL is `https://generator.poparooz.com` and must also provide the full core experience when opened directly.
+- Cloudflare Pages, the custom domain, HTTPS, direct generation, and desktop/mobile Shopify embedding are active and production verified.
+- The live Shopify theme template, section, `PATTERN MAKER` navigation entry, and image-gallery schema correction were completed manually in Shopify Admin and remain external platform state rather than repository implementation.
 - Shopify remains responsible for the theme, SEO content, navigation, FAQ, privacy copy, collection entry, cart, iframe container, height updates, and full-screen fallback.
 - The generator remains responsible for local upload/processing, pattern generation, Canvas, internal reference-based color/material calculations, Public Presentation mapping, downloads, and allowlisted messages.
 - MVP-A does not create a Shopify App, Embedded/Admin App, App Proxy, Shopify CLI project, deep theme integration, or Cart API bridge.

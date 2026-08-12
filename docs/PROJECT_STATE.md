@@ -9,15 +9,15 @@ Repository: poparooz-beads
 Root: D:\Projects\poparooz-beads
 Remote: https://github.com/Solvani/poparooz-beads.git
 Branch: main
-Accepted implementation HEAD: a3d11880603b430d8dc476b202968eb1b0accc62
-Accepted implementation commit: feat: compile formal Poparooz palette source
-Live HEAD: a3d11880603b430d8dc476b202968eb1b0accc62
+Accepted implementation HEAD: 4fdac1d8f4e119c03736e02b999b9c6363d2461e
+Accepted implementation commit: fix: canonicalize white edge background
+Live HEAD: 4fdac1d8f4e119c03736e02b999b9c6363d2461e
 Live worktree: clean
-Upstream: origin/main [gone]
-Push: not executed
+Upstream: origin/main
+Push: executed; local main and origin/main synchronized
 ```
 
-`9b2c98e0a1d716243025359d4070ff8c7582a4e3` is the P3-A01.3-U01 ExcelJS dependency-gate commit. `a3d11880603b430d8dc476b202968eb1b0accc62` is the accepted P3-A01.3 formal Palette compilation commit and the latest accepted product implementation baseline. Documentation or governance commits may advance the live repository HEAD without changing that implementation baseline.
+`9b2c98e0a1d716243025359d4070ff8c7582a4e3` is the P3-A01.3-U01 ExcelJS dependency-gate commit. `a3d11880603b430d8dc476b202968eb1b0accc62` is the accepted P3-A01.3 formal Palette compilation commit. `4fdac1d8f4e119c03736e02b999b9c6363d2461e` is the latest accepted product implementation baseline after the A08 deployment hotfix chain. Documentation or governance commits may advance the live repository HEAD without changing that implementation baseline.
 
 Every task must verify the actual Git branch, HEAD, worktree, remote, and upstream state. When a formal task prompt provides an Expected HEAD, that explicitly specified task baseline governs. A live HEAD that differs from the accepted implementation baseline is not a conflict by itself; Codex must evaluate the commit history and the task baseline together.
 
@@ -274,7 +274,7 @@ Production GenerationRuntime: Unavailable
 
 ```text
 P3-A02-A05 Fixed Color Set Profiles
-Status: Runtime implementation complete / review pending
+Status: Completed / Frozen
 Authority: POPAROOZ_P3_A02_A05_FIXED_COLOR_SET_PROFILE_DATA_CONTRACT.md
 Source workbook SHA-256: a32aac97868a8740c4e4d5bf981f434997708beea710a6493abaf15848179f0c
 Canonical Memberships SHA-256: 0010d6e5084074a62869ea44abc4da874131177ac4c7c52375ae60ccd87f1639
@@ -286,8 +286,8 @@ Runtime Artifact SHA-256: d3198bfd9a9507236946f5417354c7278b151d572bef7cd376fed5
 Runtime Lock: data-source/runtime-locks/poparooz-fixed-color-sets/1.0.0/color-set-profiles.lock.json
 Runtime Lock SHA-256: fbad3ba0e2efcea0f1ac07e42b946e097778ca98904dc9e6433be55e4b3c1d79
 Candidate counts: 24 / 48 / 72 / 120 / 168 / 221
-Implementation: Completed locally and awaiting review; not yet accepted or frozen
-Production GenerationRuntime: Unavailable
+Implementation: Accepted and production verified through the A08 generation flow
+Production GenerationRuntime: Available
 ```
 
 ```text
@@ -299,24 +299,49 @@ Quantization alpha threshold: 16 (unchanged)
 Source behavior: Transparent mode uses conservative edge-connected source masking, bounded opaque matte refinement, deterministic resize, one-layer post-resize cleanup, and transparent occupancy canonicalization.
 Accepted limitation: Ambiguous tinted matte contamination may remain when it cannot be distinguished safely from legitimate subject color.
 Option D: Stopped; no safe parameter window was established and no reconstruction or decontamination was implemented.
-A08 Production Deployment: Not started
+A08 Production Deployment: Completed / Frozen / Production Active
+```
+
+```text
+P3-A02-A08 Production Deployment and Shopify Embed
+Status: Completed / Frozen / Production Active
+Hosting: Cloudflare Pages static hosting
+Production branch: main
+Build command: npm run build
+Build output: dist
+Production URL: https://generator.poparooz.com/
+Shopify page: https://poparooz.com/pages/fuse-bead-pattern-maker
+Shopify integration: Dedicated pattern-maker page template and poparooz-generator theme section
+Desktop smoke: Passed
+Mobile smoke: Passed
+Generation flow: Production verified
+Production smoke: HTTPS, Poparooz branding, upload, White and Transparent generation at 40 x 40, 80 x 80, and 104 x 104, 221-color generation, Maximum Colors, Pattern preview, material totals, package display, PNG download, Worker execution, direct refresh, Shopify navigation, and responsive embedding passed
+Browser-local privacy: Preserved
+Image path: Upload -> browser decode -> resize/normalization -> local Worker -> Pattern -> local preview -> local PNG download
+iframe bridge: Protocol v1 ready/resize metadata only; no image or Pattern content
+Backend required: No
+Commit: 2d384f49277fd17b99e70a88c0ca6010a4920d18 feat: prepare cloudflare pages shopify embed
+Hotfix: cf08a7b8ffda9ae336db623e01e61020b3f3c875 fix: normalize lab white endpoint
+Hotfix: 4fdac1d8f4e119c03736e02b999b9c6363d2461e fix: canonicalize white edge background
+A08-H01: Closed; corrected exact-white RGB-to-Lab L-star floating-point endpoint overshoot with a narrow 1e-5 theoretical endpoint normalization, without changing matcher or CIEDE2000 semantics
+A08-H02: Closed; corrected opaque near-white source-background contamination by canonicalizing strict four-connected edge-identified eligible White-mode source pixels to RGBA(255,255,255,255), without changing subject-color matching
 ```
 
 ## Current Phase
 
 ```text
 Phase: Phase 3
-Status: active
-Current implementation task: P3-A02-A07-H02 Final Freeze / Governance / Pre-Commit Gate
-H02 status: Completed / Frozen / commit pending
-ProcessingPolicy: poparooz-processing-policy / 1.1.0
-Option D: Stopped / not implemented
-Next planned boundary: A08 Production Deployment; not started or authorized
+Status: production active
+Current accepted stage: P3-A02-A08 Completed / Frozen / Production Active
+Production GenerationRuntime: Available and production verified
+Cloudflare Pages: Active
+Shopify embed: Active
+Next implementation task: not authorized
 ```
 
-P3-A01.4 and its D01 and A01 through A06 tasks are completed and frozen. The Runtime Artifact and Runtime Lock are deterministic and approved, every Vite build passes the fail-closed Production Gate during configuration resolution, and application startup synchronously validates and initializes the approved immutable Provider before React render. The real production module graph and emitted bundle expose only the approved Runtime Artifact as Palette-generated data. Build or Startup Gate failures do not fall back. Chrome smoke verification passed with generation remaining safely unavailable.
+P3-A01.4 and its D01 and A01 through A06 tasks are completed and frozen. The Runtime Artifact and Runtime Lock are deterministic and approved, every Vite build passes the fail-closed Production Gate during configuration resolution, and application startup synchronously validates and initializes the approved immutable Provider before React render. The real production module graph and emitted bundle expose only the approved Runtime Artifact as Palette-generated data. Build or Startup Gate failures do not fall back.
 
-P3-A02-D01 freezes the accepted production Runtime activation contract and implementation boundaries in [`POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md`](POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md) at contract commit `da631da7e58ed43815a27a90b7de386fa2742007`. P3-A02-A01 through P3-A02-A04 have completed the Generation Palette adapter, generation-safe matcher core, Pattern color-identity wiring, and BoardProfile production wiring without activating Production `GenerationRuntime`. P3-A02-A05 freezes nine canonical membership groups, six published v1 fixed Color Set Profiles, and three unpublished cumulative boundaries; its local Runtime implementation now deterministically compiles the approved membership Artifact and Lock, exposes an immutable browser Provider and Generation eligibility projection, and awaits review. ProcessingPolicy production wiring, Worker wiring, and complete generator activation remain unfinished. P3-A02 as a whole is not completed or activated.
+P3-A02-D01 freezes the accepted production Runtime activation contract and implementation boundaries in [`POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md`](POPAROOZ_PRODUCTION_GENERATION_RUNTIME_ACTIVATION_CONTRACT.md) at contract commit `da631da7e58ed43815a27a90b7de386fa2742007`. The accepted implementation chain now composes the approved Palette, Color Set, BoardProfile, ProcessingPolicy, generation service, and lazy Worker into the production `GenerationRuntime`. A08 production acceptance verified the complete browser-local generation flow directly and through the Shopify iframe.
 
 ### P3-A02-D01 frozen contract
 
@@ -374,7 +399,7 @@ cleaned up or reinterpreted by this governance patch.
 - Physical color status is `unverified`.
 - Source Manifest, Normalized Schema, Canonical Serialization, and separate source/canonical SHA-256 boundaries are established.
 - The formal 221-color source Palette is compiled, accepted, committed, and frozen as `poparooz-standard` version `1.0.0`.
-- The deterministic Runtime Palette Artifact and startup Palette Provider are enabled only for strict Palette validation; Production `GenerationRuntime` remains unavailable.
+- The deterministic Runtime Palette Artifact and startup Palette Provider feed the available, fail-closed Production `GenerationRuntime`.
 - Runtime Policy uses a versioned local Palette Provider.
 - Production availability uses a fail-closed gate.
 - Test palettes cannot be used as a production fallback.
@@ -391,8 +416,10 @@ cleaned up or reinterpreted by this governance patch.
 - Partial results never enter public state; successful results are published atomically.
 - Internal technical details never enter customer errors.
 - Logs must not contain user images or pixel data.
-- Production Runtime has not been activated.
-- Download, Get Beads, and Shopify remain blocked.
+- Production Runtime is activated and production verified.
+- Local PNG download and the Shopify iframe are active. Get Beads commerce remains outside this acceptance.
+- White-mode exact-white Lab endpoint normalization is frozen at the narrow `1e-5` theoretical endpoint tolerance.
+- Eligible fully opaque White-mode sources reuse the strict four-connected edge identity and canonicalize only identified pixels to exact opaque white. Thresholds remain `alpha = 255`, minimum RGB channel `248`, and maximum channel spread `6`, with existing no-background and all-background fail-open behavior.
 
 ### Formal Palette v1
 
@@ -518,7 +545,7 @@ Default for v1: true
 - Seam spacing does not change the Pattern Matrix cell count.
 - Board counts continue to use `104 × 104` cells per board.
 - `78 × 78` (`210 × 210 × 2 mm`) and `52 × 52` (`140 × 140 × 2 mm`) are future candidates only and are not enabled in v1.
-- Production Runtime has not been activated.
+- Production Runtime is activated and production verified.
 - The formal 221-color Palette is compiled and frozen, but the Formal Package does not enter the browser production graph directly.
 
 ## Current Roadmap
@@ -545,10 +572,12 @@ P3-A02-A01 Generation Palette Adapter             Completed
 P3-A02-A02 Generation-safe Matcher Core            Completed
 P3-A02-A03 Pattern Color Identity and Palette Wiring Completed
 P3-A02-A04 BoardProfile Provider and Generation Input Wiring — Completed / Frozen
-P3-A02-A05 Fixed Color Set Profiles            — Runtime implementation review pending
-P3-A02     Production Generation Runtime Activation — implementation in progress / not activated
-P3-A02-A07-H02 Conservative Transparent Background Cleanup - Completed / Frozen / commit pending
-P3-A08     Production Deployment                  Not started
+P3-A02-A05 Fixed Color Set Profiles            — Completed / Frozen
+P3-A02     Production Generation Runtime Activation — Completed / Frozen / Production Active
+P3-A02-A07-H02 Conservative Transparent Background Cleanup - Completed / Frozen / Pushed
+P3-A02-A08 Production Deployment and Shopify Embed - Completed / Frozen / Production Active
+P3-A02-A08-H01 Lab White Endpoint Hotfix          Closed
+P3-A02-A08-H02 White Opaque Background Cleanup    Closed
 P3-D03     Pattern Annotation and Export          Not started
 P3-D04     Get Beads and Catalog Boundary         Not started
 ```
@@ -565,15 +594,13 @@ approved Runtime Palette Provider
 -> complete Production GenerationRuntime activation review
 ```
 
-P3-A01.4 and the P3-A02-D01 contract are frozen. P3-A02-A01 through P3-A02-A04 are completed, and P3-A02-A04 is frozen at final implementation HEAD `aecdc575ca244cd4b2f6ef1c9a237b0a812fb3e5`. The P3-A02-A05 fixed Color Set data contract is frozen; its local Artifact, compiler, Lock, build Gate, browser Provider, Generation adapter, eligibility projection, and bootstrap dependency exposure are implemented and awaiting review. No UI selection, Worker wiring, or Production Runtime activation was added. ProcessingPolicy also remains unimplemented. P3-A02 and Runtime activation are not completed or activated. Catalog sellability, `packSize`, Shopify fields, Download, and Get Beads remain outside the authorized scope and must not be implemented early.
+P3-A01.4, the P3-A02-D01 contract, and the accepted P3-A02 implementation chain are frozen. P3-A02-A08 completed production deployment through Cloudflare Pages and the manually configured Shopify iframe. Production generation, local PNG download, desktop/mobile embedding, direct URL refresh, custom-domain HTTPS, and browser-local privacy passed production acceptance. Catalog sellability, `packSize`, inventory, Cart API, Shopify App/App Proxy, and Get Beads commerce remain outside this acceptance.
 
 ## Known Issues
 
-- Upstream is `origin/main [gone]`.
-- Accepted work has not been pushed.
-- Production Runtime remains unavailable.
 - Conservative Transparent-mode cleanup may retain tinted matte contamination when removing it cannot be distinguished safely from removing legitimate subject color.
 - Firefox, Safari, iOS, Android, and screen-reader gates remain open.
+- The live Shopify theme is external platform state. Its dedicated template, section, navigation entry, and corrected image-gallery schema value are not represented automatically by this repository.
 
 ## Update Rules
 

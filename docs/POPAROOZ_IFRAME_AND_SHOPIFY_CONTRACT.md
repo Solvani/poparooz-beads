@@ -1,6 +1,6 @@
 # Poparooz Iframe and Shopify Contract
 
-Status: **A08 Cloudflare Pages implementation target frozen; deployment pending**
+Status: **A08 completed and frozen; production active**
 
 Contract version: **1**
 
@@ -96,7 +96,7 @@ The reviewed implementation reference is [`shopify/poparooz-generator-embed.liqu
 </div>
 ```
 
-P3-A02-A08-I01 implements and tests the sandbox tokens, generator CSP, exact `frame-ancestors`, download permission, production origins, and bounded ready/resize protocol. Deployment, Shopify insertion, custom-domain binding, iframe load-failure UI, and canonical/index decisions remain external or subsequent release actions.
+P3-A02-A08-I01 implements and tests the sandbox tokens, generator CSP, exact `frame-ancestors`, download permission, production origins, and bounded ready/resize protocol. Cloudflare Pages deployment, custom-domain HTTPS, direct generator operation, and desktop/mobile Shopify embedding have passed production acceptance. The live Shopify theme insertion remains external platform state and is not implicitly represented by this repository.
 
 ## Versioned messages
 
@@ -106,21 +106,14 @@ Messages use the envelope defined in [`POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md`
 interface GeneratorMessage<T = unknown> {
   source: "poparooz-generator";
   version: 1;
-  type:
-    | "generator.ready"
-    | "generator.resize"
-    | "generator.shop"
-    | "generator.analytics"
-    | "generator.error";
+  type: "generator.ready" | "generator.resize";
   payload: T;
 }
 ```
 
 Every payload has an exact runtime schema and bounded values. Unknown versions/types/fields are rejected or ignored without side effects. Messages never contain images, file names, paths, pixels, thumbnails, Base64, fingerprints, or image features.
 
-`generator.shop` carries an allowlisted collection key plus evidence of a current explicit user gesture—not an arbitrary URL. The parent maps that key to its own trusted configuration.
-
-When running standalone without an embedding parent, the same explicit action may navigate using the generator's own centrally validated collection configuration. Embedded mode delegates navigation to the verified parent; neither mode accepts a message-provided or component-hard-coded destination.
+The accepted A08 production bridge implements only `generator.ready` and bounded `generator.resize` messages. It does not transfer images, Pattern content, filenames, colors, materials, or download data. Shop, analytics, error, cart, or material-requirement messages require a separately accepted protocol extension and are not active in version 1.
 
 ## Resize contract
 
@@ -157,18 +150,31 @@ Negative, string, non-finite, extreme, or unknown values are rejected. The ifram
 
 ## CSP, frame and capability policy
 
-Before Phase 3 release:
+The frozen production state is:
 
-- generator CSP `frame-ancestors` lists only approved Shopify parent origins;
-- the Shopify page permits frames only from the production generator origin;
-- HTTPS and the custom domain are verified;
-- sandbox behavior is tested with the minimum required tokens. The current candidate is `allow-scripts allow-same-origin allow-downloads`; every addition needs a recorded reason;
+- generator CSP `frame-ancestors` lists only the approved Shopify parent origin;
+- the Shopify page embeds only the production generator origin;
+- HTTPS and the custom domain are active and verified;
+- sandbox behavior passed desktop and mobile production smoke with `allow-scripts allow-same-origin allow-downloads`; every addition needs a recorded reason;
 - download, clipboard, new-window, and full-screen capabilities are minimized and tested across target browsers;
 - popup permission is absent unless an accepted user flow requires it;
 - the full-screen link uses `noopener noreferrer`;
 - iframe load timeout/failure reveals an explanatory state and direct full-screen link.
 
-Canonical URL and search indexing behavior for the standalone generator versus Shopify content page are decided during deployment; neither is assumed in Phase 0.
+This A08 closure records no additional canonical or search-indexing decision beyond the accepted production URLs.
+
+## Accepted external Shopify state
+
+The following operations were completed manually in Shopify Admin and are external to this repository:
+
+- the published Fuse Bead Pattern Maker page at `/pages/fuse-bead-pattern-maker`;
+- the dedicated `pattern-maker` page template;
+- the dedicated `poparooz-generator` theme section;
+- the iframe targeting `https://generator.poparooz.com/`;
+- the `PATTERN MAKER` main-menu entry; and
+- desktop and mobile production verification.
+
+During Shopify theme integration, the existing image-gallery app block used numeric `columns: 4` while the current schema required the string `columns: "4"`. That live-theme value was corrected manually, and gallery regression passed. This repository does not claim to contain that external theme edit.
 
 ## Mobile and full-screen fallback
 

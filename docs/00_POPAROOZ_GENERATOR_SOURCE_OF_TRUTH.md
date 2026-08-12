@@ -1,10 +1,10 @@
 # Poparooz Generator Source of Truth
 
-Status: **Phase 2 completed and frozen**
+Status: **A08 completed and frozen; production active**
 
-Baseline version: **2.0**
+Baseline version: **3.0**
 
-Last reviewed: **2026-07-30**
+Last reviewed: **2026-08-12**
 
 ## Authority
 
@@ -43,7 +43,7 @@ https://poparooz.com/pages/fuse-bead-pattern-maker
         └── Poparooz Fuse Bead Pattern Generator
 ```
 
-The generator remains a standalone application with its complete core generation flow when opened directly at `https://generator.poparooz.com`. The intended implementation direction is React, TypeScript, Vite, Canvas, Web Worker, and browser-local image processing. This is a Phase 0 architecture decision, not an assertion that those technologies currently exist in the repository.
+The generator remains a standalone application with its complete core generation flow when opened directly at `https://generator.poparooz.com`. Production uses React, TypeScript, Vite, Canvas, a lazy Web Worker, and browser-local image processing.
 
 Shopify owns its header, navigation, SEO and explanatory copy, FAQ, privacy explanation, product entry points, cart, iframe container, resize handling, full-screen fallback, and any future same-origin Cart API bridge. The independently deployed generator owns upload, local image processing, internal-reference matching, pattern generation, the Canvas workspace, bead/board statistics, PNG/CSV downloads, and controlled messages to the parent.
 
@@ -148,12 +148,28 @@ No upstream project, Fork relationship, LICENSE, or third-party dependency is pr
 
 Before implementation begins, read this file and every formal document relevant to the task. A task must remain within one accepted roadmap stage, include tests proportionate to its risk, and pass that stage's acceptance gate. Unknown supplier, board, Shopify, browser-support, domain, or deployment facts remain tracked dependencies rather than guessed defaults.
 
-## Phase 1 and Phase 2 freeze
+## Current production state
+
+- P3-A02-A08: **Completed / Frozen / Production Active**
+- Production Launch Readiness: **Accepted for the deployed MVP scope**
+- Production Generation Runtime: **Available and production verified**
+- Cloudflare Pages: **Active**, static `dist` deployment from GitHub `main`
+- Production generator: `https://generator.poparooz.com/`
+- Shopify page: `https://poparooz.com/pages/fuse-bead-pattern-maker`
+- Desktop and mobile Shopify embed smoke: **Passed**
+- Browser-local privacy: **Preserved**
+- Backend, database, Pages Functions, Cloudflare runtime Worker, Shopify App, App Proxy, and OAuth backend: **Not used**
+
+The production acceptance includes upload, 40/80/104 White and Transparent generation, the 221-color set, Maximum Colors, Pattern preview, bead/material totals, selected package display, local PNG download, production Worker execution, desktop/mobile Shopify embedding, direct refresh, custom-domain HTTPS, Poparooz-only customer branding, and gallery regression after the external Shopify schema correction.
+
+User images remain browser-local through upload, browser decode, resize/normalization, local Worker execution, Pattern creation, local preview, and local PNG download. There is no image-upload backend, photo database, persistent photo storage, or deployment-introduced image logging. The production iframe bridge sends only bounded protocol-version-1 readiness and height metadata; it does not transfer images or Pattern content.
+
+## Historical Phase 1 and Phase 2 freeze
 
 - Phase 2 UI Implementation: **Completed and Frozen**
 - Phase 2 Code Validation: **Passed with external device gates open**
-- Production Launch Readiness: **Blocked**
-- Production Generation Runtime: **Unavailable**
+- Production Launch Readiness at the Phase 2 freeze: **Blocked**
+- Production Generation Runtime at the Phase 2 freeze: **Unavailable**
 
 P2-D01/P2-D02 and P2-I01 through P2-I10 are complete. The accepted experience includes the responsive shell, local upload and preview, settings, generation lifecycle, `PublicPatternResult` Canvas and results, disabled Pattern Options, Compact Bottom Sheet, Medium tablet workspace, and P2-I09 hardening. Download and Get Beads remain disabled placeholders without behavior. External browser/device/accessibility evidence, verified production data, the production generation runtime, export, commerce, Shopify, and deployment remain outside this freeze and must not be inferred as accepted.
 

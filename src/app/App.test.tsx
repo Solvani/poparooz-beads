@@ -266,7 +266,12 @@ describe("App", () => {
     await userEvent.click(
       screen.getByRole("button", { name: "Color Code View" }),
     );
-    await userEvent.click(screen.getByRole("button", { name: "Fit Pattern" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Fit to Screen" }),
+    );
+    await userEvent.click(
+      screen.getByRole("button", { name: "More controls" }),
+    );
     await userEvent.click(screen.getByRole("button", { name: "Read Codes" }));
     await userEvent.click(
       screen.getByRole("button", { name: "Color Preview" }),
@@ -371,6 +376,9 @@ describe("App", () => {
     await act(async () =>
       resolveFirst(createPublicPattern(20, 20, new Uint16Array(400))),
     );
+    await userEvent.click(
+      screen.getByRole("button", { name: "More controls" }),
+    );
     await userEvent.click(screen.getByRole("button", { name: "Zoom in" }));
     expect(screen.getByText("125%")).toBeInTheDocument();
 
@@ -387,6 +395,9 @@ describe("App", () => {
         name: "Bead pattern preview, 10 columns by 5 rows.",
       }),
     ).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole("button", { name: "More controls" }),
+    );
     expect(screen.getByText("100%")).toBeInTheDocument();
     expect(screen.getByText("10 × 5")).toBeInTheDocument();
     expect(screen.getByText("50")).toBeInTheDocument();
@@ -730,6 +741,9 @@ describe("App", () => {
       await screen.findByRole("button", { name: "Generate Pattern" }),
     );
     await screen.findByText("Actual Colors");
+    await userEvent.click(
+      screen.getByRole("button", { name: "More controls" }),
+    );
     await userEvent.click(screen.getByRole("button", { name: "Zoom in" }));
     expect(screen.getByText("125%")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Colors" }));

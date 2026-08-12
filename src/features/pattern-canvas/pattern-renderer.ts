@@ -1,4 +1,3 @@
-import { GRID_RENDER_THRESHOLD_CSS_PX } from "./canvas-viewport";
 import type {
   CanvasViewportState,
   PatternRaster,
@@ -62,10 +61,7 @@ export function renderPattern(options: RenderPatternOptions): boolean {
       visible.destinationWidth,
       visible.destinationHeight,
     );
-    if (
-      viewport.gridVisible &&
-      viewport.scale >= GRID_RENDER_THRESHOLD_CSS_PX
-    ) {
+    if (viewport.gridVisible) {
       drawVisibleGrid(
         context,
         raster,

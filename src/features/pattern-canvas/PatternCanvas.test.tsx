@@ -4,6 +4,7 @@ import {
   fireEvent,
   render,
   screen,
+  within,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -138,6 +139,10 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+async function openMoreControls() {
+  await userEvent.click(screen.getByRole("button", { name: "More controls" }));
+}
+
 describe("PatternCanvas", () => {
   it("renders one accessible Canvas and the complete toolbar", () => {
     const setup = environment();
@@ -154,15 +159,16 @@ describe("PatternCanvas", () => {
         name: "Bead pattern preview, 20 columns by 20 rows.",
       }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Zoom in" })).toBeEnabled();
+    const primary = screen.getByRole("group", {
+      name: "Primary pattern controls",
+    });
+    expect(within(primary).getAllByRole("button")).toHaveLength(3);
     expect(
       screen.getByRole("button", { name: "Color Preview" }),
     ).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("button", { name: "Fit Pattern" })).toBeEnabled();
-    expect(screen.getByRole("button", { name: "Grid" })).toHaveAttribute(
-      "aria-pressed",
-      "false",
-    );
+    expect(screen.getByRole("button", { name: "Fit to Screen" })).toBeEnabled();
+    expect(screen.queryByRole("button", { name: "Zoom in" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Grid" })).toBeNull();
     expect(document.querySelectorAll("canvas")).toHaveLength(1);
     expect(
       document.querySelector(".pattern-canvas__viewport--code"),
@@ -225,10 +231,12 @@ describe("PatternCanvas", () => {
         "Poparooz color codes are aligned with their pattern cells.",
       ),
     ).toBeInTheDocument();
+    vi.mocked(displayContext.stroke).mockClear();
     await userEvent.click(
       screen.getByRole("button", { name: "Color Preview" }),
     );
     setup.flush();
+    expect(displayContext.stroke).not.toHaveBeenCalled();
     expect(setup.createRasterSurface).toHaveBeenCalledOnce();
     expect(pattern.matrix.colorIndices).toEqual(new Uint16Array(400));
     expect(
@@ -251,13 +259,12 @@ describe("PatternCanvas", () => {
         />,
       );
       setup.flush();
-      expect(screen.getByLabelText("Current zoom")).toHaveTextContent("100%");
-
       await userEvent.click(
         screen.getByRole("button", { name: "Color Code View" }),
       );
       setup.notifyResize();
 
+      await openMoreControls();
       expect(screen.getByLabelText("Current zoom")).toHaveTextContent("100%");
       const canvas = screen.getByRole("img") as HTMLCanvasElement;
       expect(canvas.width).toBe(canvas.height);
@@ -302,7 +309,7 @@ describe("PatternCanvas", () => {
     },
   );
 
-  it("allows Fit Pattern to return Code View to the low-scale hint", async () => {
+  it("allows Fit to Screen to return Code View to the low-scale hint", async () => {
     const setup = environment();
     render(
       <PatternCanvas
@@ -317,12 +324,15 @@ describe("PatternCanvas", () => {
     setup.notifyResize();
     expect(displayContext.fillText).not.toHaveBeenCalled();
 
+    await openMoreControls();
     await userEvent.click(screen.getByRole("button", { name: "Read Codes" }));
     setup.flush();
     expect(displayContext.fillText).toHaveBeenCalled();
 
     vi.mocked(displayContext.fillText).mockClear();
-    await userEvent.click(screen.getByRole("button", { name: "Fit Pattern" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Fit to Screen" }),
+    );
     setup.flush();
     expect(displayContext.fillText).not.toHaveBeenCalled();
     const canvas = screen.getByRole("img") as HTMLCanvasElement;
@@ -332,7 +342,7 @@ describe("PatternCanvas", () => {
     ).toBeInTheDocument();
   });
 
-  it("shows and hides grid lines in Color Code View without hiding codes", async () => {
+  it("sets grid visibility deterministically from the selected view", async () => {
     const setup = environment();
     render(
       <PatternCanvas
@@ -345,22 +355,28 @@ describe("PatternCanvas", () => {
       screen.getByRole("button", { name: "Color Code View" }),
     );
     setup.notifyResize();
+    expect(displayContext.stroke).toHaveBeenCalled();
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Color Preview" }),
+    );
+    vi.mocked(displayContext.stroke).mockClear();
+    setup.flush();
+    expect(displayContext.stroke).not.toHaveBeenCalled();
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Color Code View" }),
+    );
+    setup.notifyResize();
+    expect(displayContext.stroke).toHaveBeenCalled();
+
+    await openMoreControls();
     await userEvent.click(screen.getByRole("button", { name: "Read Codes" }));
     setup.flush();
 
     expect(displayContext.fillText).toHaveBeenCalled();
-    expect(displayContext.stroke).not.toHaveBeenCalled();
-
-    await userEvent.click(screen.getByRole("button", { name: "Grid" }));
-    setup.flush();
     expect(displayContext.stroke).toHaveBeenCalled();
-
-    vi.mocked(displayContext.stroke).mockClear();
-    vi.mocked(displayContext.fillText).mockClear();
-    await userEvent.click(screen.getByRole("button", { name: "Grid" }));
-    setup.flush();
-    expect(displayContext.stroke).not.toHaveBeenCalled();
-    expect(displayContext.fillText).toHaveBeenCalled();
+    expect(screen.queryByRole("button", { name: "Grid" })).toBeNull();
   });
 
   it("caches a raster across zoom, pan, and grid changes and invalidates on a new result", async () => {
@@ -372,8 +388,11 @@ describe("PatternCanvas", () => {
     setup.flush();
     expect(setup.createRasterSurface).toHaveBeenCalledOnce();
 
+    await openMoreControls();
     await userEvent.click(screen.getByRole("button", { name: "Zoom in" }));
-    await userEvent.click(screen.getByRole("button", { name: "Grid" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Color Code View" }),
+    );
     fireEvent.wheel(screen.getByRole("img"), { deltaX: 10, deltaY: 20 });
     expect(setup.createRasterSurface).toHaveBeenCalledOnce();
     expect(setup.drawFrames.callbacks.size).toBeLessThanOrEqual(1);

@@ -92,7 +92,7 @@ describe("pattern renderer", () => {
     expect(effectiveDevicePixelRatio(3)).toBe(2);
   });
 
-  it("draws grid only when selected and each cell is at least six CSS pixels", () => {
+  it("draws grid exactly when the explicit view state selects it", () => {
     const off = context();
     renderPattern({
       canvas: document.createElement("canvas"),
@@ -104,28 +104,17 @@ describe("pattern renderer", () => {
     });
     expect(off.stroke).not.toHaveBeenCalled();
 
-    const tooSmall = context();
+    const selected = context();
     renderPattern({
       canvas: document.createElement("canvas"),
-      context: tooSmall,
+      context: selected,
       raster: raster(),
       viewport: viewport({ gridVisible: true, scale: 5 }),
-      gridColor: "#000000",
-      backgroundColor: "#EEEEEE",
-    });
-    expect(tooSmall.stroke).not.toHaveBeenCalled();
-
-    const visible = context();
-    renderPattern({
-      canvas: document.createElement("canvas"),
-      context: visible,
-      raster: raster(),
-      viewport: viewport({ gridVisible: true, scale: 6 }),
       gridColor: "#123456",
       backgroundColor: "#EEEEEE",
     });
-    expect(visible.stroke).toHaveBeenCalledOnce();
-    expect(visible.strokeStyle).toBe("#123456");
+    expect(selected.stroke).toHaveBeenCalledOnce();
+    expect(selected.strokeStyle).toBe("#123456");
   });
 
   it("safely rejects unmeasured viewports and context failures", () => {

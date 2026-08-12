@@ -50,9 +50,9 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
     expect(workspace).toContain("gap: var(--space-6)");
     expect(workspace).toContain("box-shadow: none");
     expect(workspace).toContain("box-shadow: var(--shadow-small)");
-    expect(workspace).toMatch(
-      /\.canvas-toolbar__views\s*{[^}]*min-width: 0;[^}]*flex-wrap: wrap;/s,
-    );
+    expect(workspace).toContain(".canvas-toolbar__primary");
+    expect(workspace).toContain(".canvas-toolbar__secondary");
+    expect(workspace).toContain("flex-wrap: wrap");
     expect(workspace).toContain("@supports not (container-type: inline-size)");
   });
 

@@ -66,7 +66,7 @@ function measuredElement(width = 500, height = 400) {
 }
 
 describe("useCanvasViewport", () => {
-  it("fits after measurement and keeps grid changes local to the view", () => {
+  it("fits after measurement and sets grid visibility deterministically", () => {
     const frames = controlledFrames();
     const observers = observerFactory();
     const measured = measuredElement();
@@ -93,8 +93,12 @@ describe("useCanvasViewport", () => {
 
     expect(result.current.viewport.fitMode).toBe(true);
     expect(result.current.zoomPercentage).toBe(100);
-    act(() => result.current.toggleGrid());
+    act(() => result.current.setGridVisible(true));
     expect(result.current.viewport.gridVisible).toBe(true);
+    act(() => result.current.setGridVisible(true));
+    expect(result.current.viewport.gridVisible).toBe(true);
+    act(() => result.current.setGridVisible(false));
+    expect(result.current.viewport.gridVisible).toBe(false);
   });
 
   it("zooms, fits, drags, cancels pointer capture, and pans by wheel", () => {

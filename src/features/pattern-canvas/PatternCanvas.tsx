@@ -51,21 +51,21 @@ export function PatternCanvas({
     zoomOut,
     ensureMinimumScale,
     fit,
-    toggleGrid,
+    setGridVisible,
     canZoomIn,
     canZoomOut,
     zoomPercentage,
-    gridNeedsZoom,
     wheelHandler,
     pointerHandlers,
   } = useCanvasViewport(pattern.matrix, environment);
   const scheduler = environment.drawScheduler ?? browserDrawScheduler;
   const changeViewMode = useCallback(
     (mode: "color" | "code") => {
+      setGridVisible(mode === "code");
       if (mode === "code") fit();
       setViewMode(mode);
     },
-    [fit],
+    [fit, setGridVisible],
   );
   const readCodes = useCallback(
     () => ensureMinimumScale(CODE_RENDER_THRESHOLD_CSS_PX),
@@ -146,13 +146,10 @@ export function PatternCanvas({
         zoomPercentage={zoomPercentage}
         canZoomIn={canZoomIn}
         canZoomOut={canZoomOut}
-        gridVisible={viewport.gridVisible}
-        gridNeedsZoom={gridNeedsZoom}
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
         onFit={fit}
         onReadCodes={readCodes}
-        onToggleGrid={toggleGrid}
         onViewModeChange={changeViewMode}
       />
       <div

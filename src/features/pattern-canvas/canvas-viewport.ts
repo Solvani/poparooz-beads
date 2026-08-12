@@ -7,7 +7,6 @@ export const FIT_PADDING_CSS_PX = 24;
 export const ZOOM_FACTOR = 1.25;
 export const MAX_CELL_SCALE_CSS_PX = 64;
 export const MIN_CELL_SCALE_CSS_PX = 0.25;
-export const GRID_RENDER_THRESHOLD_CSS_PX = 6;
 
 export function createUnmeasuredViewport(): CanvasViewportState {
   return {
@@ -180,8 +179,13 @@ export function clampViewport(
   };
 }
 
-export function toggleGrid(viewport: CanvasViewportState): CanvasViewportState {
-  return { ...viewport, gridVisible: !viewport.gridVisible };
+export function setGridVisible(
+  viewport: CanvasViewportState,
+  gridVisible: boolean,
+): CanvasViewportState {
+  return viewport.gridVisible === gridVisible
+    ? viewport
+    : { ...viewport, gridVisible };
 }
 
 export function zoomPercentage(viewport: CanvasViewportState): number {

@@ -9,6 +9,7 @@ import {
   MAX_CELL_SCALE_CSS_PX,
   panViewport,
   resizeViewport,
+  setGridVisible,
   zoomPercentage,
   zoomViewport,
   zoomViewportToMinimumScale,
@@ -72,6 +73,15 @@ describe("canvas viewport math", () => {
     expect(readable.scale).toBe(20);
     expect(readable.fitMode).toBe(false);
     expect(zoomViewportToMinimumScale(readable, pattern, 20)).toBe(readable);
+  });
+
+  it("sets grid visibility explicitly and idempotently", () => {
+    const fit = fitPattern({ width: 20, height: 20 }, 400, 400)!;
+    const visible = setGridVisible(fit, true);
+
+    expect(visible.gridVisible).toBe(true);
+    expect(setGridVisible(visible, true)).toBe(visible);
+    expect(setGridVisible(visible, false).gridVisible).toBe(false);
   });
 
   it("clamps zoom at the minimum and 64 CSS pixels per cell maximum", () => {

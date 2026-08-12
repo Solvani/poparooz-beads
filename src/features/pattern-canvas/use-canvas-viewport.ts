@@ -12,10 +12,9 @@ import {
   canZoomOut,
   createUnmeasuredViewport,
   fitPattern,
-  GRID_RENDER_THRESHOLD_CSS_PX,
   panViewport,
   resizeViewport,
-  toggleGrid,
+  setGridVisible,
   zoomPercentage,
   zoomViewport,
   zoomViewportToMinimumScale,
@@ -120,7 +119,8 @@ export function useCanvasViewport(
     [pattern],
   );
   const grid = useCallback(
-    () => setViewport((current) => toggleGrid(current)),
+    (visible: boolean) =>
+      setViewport((current) => setGridVisible(current, visible)),
     [],
   );
 
@@ -180,12 +180,10 @@ export function useCanvasViewport(
     zoomOut,
     ensureMinimumScale,
     fit,
-    toggleGrid: grid,
+    setGridVisible: grid,
     canZoomIn: canZoomIn(viewport),
     canZoomOut: canZoomOut(viewport),
     zoomPercentage: zoomPercentage(viewport),
-    gridNeedsZoom:
-      viewport.gridVisible && viewport.scale < GRID_RENDER_THRESHOLD_CSS_PX,
     wheelHandler: onWheel,
     pointerHandlers: {
       onPointerDown,

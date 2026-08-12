@@ -13,10 +13,12 @@ export function renderPatternCodes({
   context,
   pattern,
   viewport,
+  focusedColorIndex = null,
 }: {
   readonly context: CanvasRenderingContext2D;
   readonly pattern: PublicPatternResult;
   readonly viewport: CanvasViewportState;
+  readonly focusedColorIndex?: number | null;
 }): PatternCodeRenderResult {
   if (viewport.scale < CODE_RENDER_THRESHOLD_CSS_PX) {
     return { ok: true, codesVisible: false };
@@ -53,6 +55,9 @@ export function renderPatternCodes({
         const x = viewport.offsetX + column * viewport.scale;
         const y = viewport.offsetY + row * viewport.scale;
         context.save();
+        if (focusedColorIndex !== null && colorIndex !== focusedColorIndex) {
+          context.globalAlpha = 0.38;
+        }
         context.beginPath();
         context.rect(x, y, viewport.scale, viewport.scale);
         context.clip();

@@ -20,12 +20,18 @@ export interface PatternResultsProps {
   readonly pattern: PublicPatternResult;
   readonly status: ResultLifecycleStatus;
   readonly selectedColorSetLabel: string;
+  readonly focusedColorIndex: number | null;
+  readonly onFocusColor: (colorIndex: number) => void;
+  readonly onClearHighlight: () => void;
 }
 
 export function PatternResults({
   pattern,
   status,
   selectedColorSetLabel,
+  focusedColorIndex,
+  onFocusColor,
+  onClearHighlight,
 }: PatternResultsProps) {
   const result = useMemo(() => toPatternResultView(pattern), [pattern]);
   if (!result.ok) {
@@ -42,7 +48,12 @@ export function PatternResults({
         summary={result.view.summary}
         selectedColorSetLabel={selectedColorSetLabel}
       />
-      <ColorList colors={result.view.colors} />
+      <ColorList
+        colors={result.view.colors}
+        focusedColorIndex={focusedColorIndex}
+        onFocusColor={onFocusColor}
+        onClearHighlight={onClearHighlight}
+      />
       <BoardLayoutSummary layout={result.view.boardLayout} />
     </div>
   );

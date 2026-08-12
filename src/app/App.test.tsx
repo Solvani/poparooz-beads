@@ -511,6 +511,56 @@ describe("App", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("keeps color focus presentation-only and clears it without regeneration", async () => {
+    const result = createPublicPattern();
+    const runtime = availableRuntime([Promise.resolve(result)]);
+    const originalMatrix = Array.from(result.matrix.colorIndices);
+    render(<App generationRuntime={runtime} />);
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await screen.findByRole("heading", { name: "Pattern Summary" });
+
+    const first = screen.getByRole("button", { name: "A1, 2 beads" });
+    const second = screen.getByRole("button", { name: "B1, 1 bead" });
+    expect(first).toHaveAttribute("aria-pressed", "false");
+    expect(second).toHaveAttribute("aria-pressed", "false");
+    expect(
+      screen.queryByRole("button", { name: "Clear Highlight" }),
+    ).toBeNull();
+
+    await userEvent.click(first);
+    expect(first).toHaveAttribute("aria-pressed", "true");
+    expect(second).toHaveAttribute("aria-pressed", "false");
+    expect(screen.getByText("Highlighted")).toBeInTheDocument();
+
+    await userEvent.click(first);
+    expect(first).toHaveAttribute("aria-pressed", "true");
+
+    await userEvent.click(second);
+    expect(first).toHaveAttribute("aria-pressed", "false");
+    expect(second).toHaveAttribute("aria-pressed", "true");
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Clear Highlight" }),
+    );
+    expect(first).toHaveAttribute("aria-pressed", "false");
+    expect(second).toHaveAttribute("aria-pressed", "false");
+    expect(runtime.service.generate).toHaveBeenCalledOnce();
+    expect(Array.from(result.matrix.colorIndices)).toEqual(originalMatrix);
+    expect(
+      screen.getByText("Total Beads").nextElementSibling,
+    ).toHaveTextContent("3");
+    expect(screen.getByText("Boards").nextElementSibling).toHaveTextContent(
+      "1",
+    );
+    expect(screen.getByText("72-Color Set")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Download Pattern" }),
+    ).toBeEnabled();
+  });
+
   it("downloads locally without commerce side effects", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
     const storageSpy = vi.spyOn(Storage.prototype, "setItem");
@@ -520,16 +570,16 @@ describe("App", () => {
     const openSpy = vi.spyOn(window, "open");
     const pushStateSpy = vi.spyOn(history, "pushState");
     const replaceStateSpy = vi.spyOn(history, "replaceState");
-    render(
-      <App
-        generationRuntime={availableRuntime([Promise.resolve(PUBLIC_RESULT)])}
-      />,
-    );
+    const runtime = availableRuntime([Promise.resolve(PUBLIC_RESULT)]);
+    render(<App generationRuntime={runtime} />);
     await completeInputs();
     await userEvent.click(
       await screen.findByRole("button", { name: "Generate Pattern" }),
     );
     await screen.findByRole("heading", { name: "Pattern Summary" });
+    const focusedRow = screen.getByRole("button", { name: "A1, 2 beads" });
+    await userEvent.click(focusedRow);
+    expect(focusedRow).toHaveAttribute("aria-pressed", "true");
 
     await userEvent.click(
       screen.getByRole("button", { name: "Download Pattern" }),
@@ -540,6 +590,8 @@ describe("App", () => {
     expect(openSpy).not.toHaveBeenCalled();
     expect(pushStateSpy).not.toHaveBeenCalled();
     expect(replaceStateSpy).not.toHaveBeenCalled();
+    expect(runtime.service.generate).toHaveBeenCalledOnce();
+    expect(focusedRow).toHaveAttribute("aria-pressed", "true");
     expect(URL.createObjectURL).toHaveBeenCalledTimes(2);
     expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:app-preview");
     expect(document.querySelector("a[download]")).toBeNull();
@@ -656,6 +708,18 @@ describe("App", () => {
     await userEvent.click(colorsLauncher);
     expect(screen.getByRole("dialog", { name: "Colors" })).toBeInTheDocument();
     expect(screen.getByText("A1")).toBeInTheDocument();
+    const compactColorRow = screen.getByRole("button", {
+      name: "A1, 2 beads",
+    });
+    await userEvent.click(compactColorRow);
+    expect(compactColorRow).toHaveAttribute("aria-pressed", "true");
+    expect(
+      screen.getByRole("button", { name: "Clear Highlight" }),
+    ).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Clear Highlight" }),
+    );
+    expect(compactColorRow).toHaveAttribute("aria-pressed", "false");
     expect(document.querySelector(".app-root")).toHaveAttribute("inert");
 
     await userEvent.click(screen.getByRole("tab", { name: "Boards" }));

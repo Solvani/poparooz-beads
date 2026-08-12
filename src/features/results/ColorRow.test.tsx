@@ -1,5 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { ColorRow } from "./ColorRow";
 
@@ -18,6 +19,8 @@ describe("ColorRow", () => {
             beadCount: 1,
             beadCountLabel: "1 bead",
           }}
+          selected={false}
+          onSelect={vi.fn()}
         />
       </ul>,
     );
@@ -41,6 +44,8 @@ describe("ColorRow", () => {
             beadCount: 1,
             beadCountLabel: "1 bead",
           }}
+          selected={false}
+          onSelect={vi.fn()}
         />
       </ul>,
     );
@@ -52,5 +57,30 @@ describe("ColorRow", () => {
     ).toBeNull();
     expect(view.container.textContent).not.toContain("undefined");
     expect(view.container.textContent).not.toContain("Unknown Color");
+  });
+
+  it("exposes an accessible selected control and keeps repeated activation explicit", async () => {
+    const onSelect = vi.fn();
+    render(
+      <ul>
+        <ColorRow
+          row={{
+            index: 3,
+            code: "A4",
+            hex: "#123456",
+            beadCount: 12,
+            beadCountLabel: "12 beads",
+          }}
+          selected
+          onSelect={onSelect}
+        />
+      </ul>,
+    );
+
+    const row = screen.getByRole("button", { name: "A4, 12 beads" });
+    expect(row).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("Highlighted")).toBeInTheDocument();
+    await userEvent.click(row);
+    expect(onSelect).toHaveBeenCalledWith(3);
   });
 });

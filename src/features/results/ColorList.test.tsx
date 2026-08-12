@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { ColorList, DEFAULT_VISIBLE_COLORS } from "./ColorList";
 import type { ColorRowView } from "./result.types";
@@ -18,9 +18,25 @@ function rows(count: number): readonly ColorRowView[] {
   }));
 }
 
+function renderList(
+  colors: readonly ColorRowView[],
+  focusedColorIndex: number | null = null,
+  onFocusColor = vi.fn(),
+  onClearHighlight = vi.fn(),
+) {
+  return render(
+    <ColorList
+      colors={colors}
+      focusedColorIndex={focusedColorIndex}
+      onFocusColor={onFocusColor}
+      onClearHighlight={onClearHighlight}
+    />,
+  );
+}
+
 describe("ColorList", () => {
   it("shows only eight rows by default while announcing the total", () => {
-    render(<ColorList colors={rows(10)} />);
+    renderList(rows(10));
     expect(DEFAULT_VISIBLE_COLORS).toBe(8);
     expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
       8,
@@ -29,7 +45,7 @@ describe("ColorList", () => {
   });
 
   it("expands and collapses all colors with accessible native controls", async () => {
-    render(<ColorList colors={rows(10)} />);
+    renderList(rows(10));
     const toggle = screen.getByRole("button", { name: "Show all colors" });
     expect(toggle).toHaveAttribute("aria-expanded", "false");
     await userEvent.click(toggle);
@@ -47,12 +63,15 @@ describe("ColorList", () => {
   });
 
   it("does not render a toggle for eight or fewer colors", () => {
-    render(<ColorList colors={rows(8)} />);
-    expect(screen.queryByRole("button")).toBeNull();
+    renderList(rows(8));
+    expect(
+      screen.queryByRole("button", { name: "Show all colors" }),
+    ).toBeNull();
+    expect(screen.getAllByRole("button")).toHaveLength(8);
   });
 
   it("bounds the collapsed DOM for 512 colors and expands only on request", async () => {
-    render(<ColorList colors={rows(512)} />);
+    renderList(rows(512));
     expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
       8,
     );
@@ -62,5 +81,26 @@ describe("ColorList", () => {
     expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
       512,
     );
+  });
+
+  it("selects one color and provides the canonical clear action", async () => {
+    const onFocusColor = vi.fn();
+    const onClearHighlight = vi.fn();
+    renderList(rows(3), 1, onFocusColor, onClearHighlight);
+
+    expect(screen.getByRole("button", { name: "P2, 2 beads" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(screen.getAllByText("P2")).toHaveLength(2);
+    expect(screen.getByText("Highlighted")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "P3, 3 beads" }));
+    expect(onFocusColor).toHaveBeenCalledWith(2);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Clear Highlight" }),
+    );
+    expect(onClearHighlight).toHaveBeenCalledOnce();
   });
 });

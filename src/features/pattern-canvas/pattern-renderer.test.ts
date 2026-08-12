@@ -16,6 +16,8 @@ function context() {
     clearRect: vi.fn(),
     fillRect: vi.fn(),
     drawImage: vi.fn(),
+    save: vi.fn(),
+    restore: vi.fn(),
     beginPath: vi.fn(),
     moveTo: vi.fn(),
     lineTo: vi.fn(),
@@ -24,6 +26,7 @@ function context() {
     fillStyle: "",
     strokeStyle: "",
     lineWidth: 1,
+    globalAlpha: 1,
   } as unknown as CanvasRenderingContext2D;
 }
 
@@ -115,6 +118,36 @@ describe("pattern renderer", () => {
     });
     expect(selected.stroke).toHaveBeenCalledOnce();
     expect(selected.strokeStyle).toBe("#123456");
+  });
+
+  it("dims only non-focused occupied cells without changing transparent cells", () => {
+    const target = context();
+    const colorIndices = new Uint16Array(20 * 20).fill(65_535);
+    colorIndices[0] = 0;
+    colorIndices[1] = 1;
+
+    expect(
+      renderPattern({
+        canvas: document.createElement("canvas"),
+        context: target,
+        raster: raster(),
+        viewport: viewport(),
+        gridColor: "#000000",
+        backgroundColor: "#EEEEEE",
+        focus: {
+          colorIndex: 0,
+          colorIndices,
+          transparentIndex: 65_535,
+        },
+      }),
+    ).toBe(true);
+
+    expect(target.save).toHaveBeenCalledOnce();
+    expect(target.restore).toHaveBeenCalledOnce();
+    expect(target.fillRect).toHaveBeenCalledWith(10, 0, 10, 10);
+    expect(target.fillRect).not.toHaveBeenCalledWith(0, 0, 10, 10);
+    expect(target.fillRect).not.toHaveBeenCalledWith(20, 0, 10, 10);
+    expect(target.globalAlpha).toBe(0.72);
   });
 
   it("safely rejects unmeasured viewports and context failures", () => {

@@ -15,6 +15,7 @@ function context() {
     rect: vi.fn(),
     clip: vi.fn(),
     fillText: vi.fn(),
+    globalAlpha: 1,
   } as unknown as CanvasRenderingContext2D;
 }
 
@@ -88,5 +89,21 @@ describe("renderPatternCodes", () => {
     expect(target.fillText).toHaveBeenCalledTimes(2);
     expect(target.fillText).toHaveBeenCalledWith("B1", 12, 12, 20);
     expect(target.fillText).toHaveBeenCalledWith("A1", 12, 36, 20);
+  });
+
+  it("keeps focused codes prominent while dimming other occupied codes", () => {
+    const target = context();
+    const result = renderPatternCodes({
+      context: target,
+      pattern: createPublicPattern(),
+      viewport: viewport(),
+      focusedColorIndex: 0,
+    });
+
+    expect(result).toEqual({ ok: true, codesVisible: true });
+    expect(
+      vi.mocked(target.fillText).mock.calls.map(([value]) => value),
+    ).toEqual(["A1", "B1", "A1"]);
+    expect(target.globalAlpha).toBe(0.38);
   });
 });

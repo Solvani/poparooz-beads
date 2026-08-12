@@ -1,16 +1,23 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { PatternResults } from "./PatternResults";
 import { createManyColors, createResultFixture } from "./test/result-fixture";
 
 afterEach(cleanup);
 
+const focusProps = {
+  focusedColorIndex: null,
+  onFocusColor: vi.fn(),
+  onClearHighlight: vi.fn(),
+} as const;
+
 describe("PatternResults", () => {
   it("renders summary, colors, and board layout from one public result", () => {
     render(
       <PatternResults
+        {...focusProps}
         pattern={createResultFixture()}
         status="success"
         selectedColorSetLabel="72-Color Set"
@@ -44,6 +51,7 @@ describe("PatternResults", () => {
   ] as const)("announces retained details while %s", (status, message) => {
     render(
       <PatternResults
+        {...focusProps}
         pattern={createResultFixture()}
         status={status}
         selectedColorSetLabel="72-Color Set"
@@ -67,6 +75,7 @@ describe("PatternResults", () => {
     });
     const view = render(
       <PatternResults
+        {...focusProps}
         key="first"
         pattern={first}
         status="success"
@@ -81,6 +90,7 @@ describe("PatternResults", () => {
     );
     view.rerender(
       <PatternResults
+        {...focusProps}
         key="first"
         pattern={first}
         status="dirty"
@@ -92,6 +102,7 @@ describe("PatternResults", () => {
     );
     view.rerender(
       <PatternResults
+        {...focusProps}
         key="second"
         pattern={second}
         status="success"
@@ -107,6 +118,7 @@ describe("PatternResults", () => {
     const pattern = createResultFixture();
     render(
       <PatternResults
+        {...focusProps}
         pattern={{
           ...pattern,
           totals: { ...pattern.totals, totalBeads: -1 },

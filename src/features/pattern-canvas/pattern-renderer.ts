@@ -24,6 +24,11 @@ export interface RenderPatternOptions {
   readonly devicePixelRatio?: number;
   readonly gridColor: string;
   readonly backgroundColor: string;
+  readonly focus?: {
+    readonly colorIndex: number;
+    readonly colorIndices: Uint16Array;
+    readonly transparentIndex: number;
+  };
 }
 
 export function renderPattern(options: RenderPatternOptions): boolean {
@@ -61,6 +66,16 @@ export function renderPattern(options: RenderPatternOptions): boolean {
       visible.destinationWidth,
       visible.destinationHeight,
     );
+    if (options.focus !== undefined) {
+      drawFocusDimming(
+        context,
+        raster,
+        viewport,
+        visible,
+        options.focus,
+        options.backgroundColor,
+      );
+    }
     if (viewport.gridVisible) {
       drawVisibleGrid(
         context,
@@ -75,6 +90,49 @@ export function renderPattern(options: RenderPatternOptions): boolean {
   } catch {
     return false;
   }
+}
+
+function drawFocusDimming(
+  context: CanvasRenderingContext2D,
+  raster: PatternRaster,
+  viewport: CanvasViewportState,
+  visible: VisiblePatternRect,
+  focus: NonNullable<RenderPatternOptions["focus"]>,
+  backgroundColor: string,
+) {
+  if (focus.colorIndices.length !== raster.width * raster.height) return;
+  const firstColumn = Math.max(0, Math.floor(visible.sourceX));
+  const lastColumn = Math.min(
+    raster.width,
+    Math.ceil(visible.sourceX + visible.sourceWidth),
+  );
+  const firstRow = Math.max(0, Math.floor(visible.sourceY));
+  const lastRow = Math.min(
+    raster.height,
+    Math.ceil(visible.sourceY + visible.sourceHeight),
+  );
+  context.save();
+  context.globalAlpha = 0.72;
+  context.fillStyle = backgroundColor;
+  for (let row = firstRow; row < lastRow; row += 1) {
+    for (let column = firstColumn; column < lastColumn; column += 1) {
+      const colorIndex = focus.colorIndices[row * raster.width + column];
+      if (
+        colorIndex === undefined ||
+        colorIndex === focus.transparentIndex ||
+        colorIndex === focus.colorIndex
+      ) {
+        continue;
+      }
+      context.fillRect(
+        viewport.offsetX + column * viewport.scale,
+        viewport.offsetY + row * viewport.scale,
+        viewport.scale,
+        viewport.scale,
+      );
+    }
+  }
+  context.restore();
 }
 
 export function calculateVisiblePatternRect(

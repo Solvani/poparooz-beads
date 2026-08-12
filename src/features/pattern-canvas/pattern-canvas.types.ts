@@ -24,6 +24,7 @@ export interface PatternRaster {
 
 export interface PatternCanvasProps {
   readonly pattern: PublicPatternResult;
+  readonly focusedColorIndex?: number | null;
 }
 
 export interface CanvasFrameScheduler {

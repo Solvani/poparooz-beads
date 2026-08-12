@@ -36,6 +36,7 @@ function context() {
     rect: vi.fn(),
     clip: vi.fn(),
     fillText: vi.fn(),
+    globalAlpha: 1,
   } as unknown as CanvasRenderingContext2D;
 }
 
@@ -242,6 +243,51 @@ describe("PatternCanvas", () => {
     expect(
       document.querySelector(".pattern-canvas__viewport--code"),
     ).toBeNull();
+  });
+
+  it("applies the same presentation-only focus in preview and code views", async () => {
+    const setup = environment();
+    const pattern = createPublicPattern();
+    const originalIndices = Array.from(pattern.matrix.colorIndices);
+    const view = render(
+      <PatternCanvas pattern={pattern} environment={setup.value} />,
+    );
+    setup.flush();
+    const normalFillCount = vi.mocked(displayContext.fillRect).mock.calls
+      .length;
+
+    view.rerender(
+      <PatternCanvas
+        pattern={pattern}
+        focusedColorIndex={0}
+        environment={setup.value}
+      />,
+    );
+    setup.flush();
+    expect(
+      vi.mocked(displayContext.fillRect).mock.calls.length,
+    ).toBeGreaterThan(normalFillCount);
+    expect(displayContext.globalAlpha).toBe(0.72);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Color Code View" }),
+    );
+    setup.notifyResize();
+    expect(displayContext.fillText).toHaveBeenCalledWith(
+      "A1",
+      expect.any(Number),
+      expect.any(Number),
+      expect.any(Number),
+    );
+    expect(displayContext.fillText).toHaveBeenCalledWith(
+      "B1",
+      expect.any(Number),
+      expect.any(Number),
+      expect.any(Number),
+    );
+    expect(displayContext.globalAlpha).toBe(0.38);
+    expect(Array.from(pattern.matrix.colorIndices)).toEqual(originalIndices);
+    expect(setup.createRasterSurface).toHaveBeenCalledOnce();
   });
 
   it.each([40, 80, 104])(

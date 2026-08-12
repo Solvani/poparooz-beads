@@ -31,6 +31,7 @@ export interface PatternCanvasComponentProps extends PatternCanvasProps {
 
 export function PatternCanvas({
   pattern,
+  focusedColorIndex = null,
   environment = {},
 }: PatternCanvasComponentProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -59,6 +60,11 @@ export function PatternCanvas({
     pointerHandlers,
   } = useCanvasViewport(pattern.matrix, environment);
   const scheduler = environment.drawScheduler ?? browserDrawScheduler;
+  const effectiveFocusedColorIndex = pattern.colors.some(
+    (entry) => entry.index === focusedColorIndex,
+  )
+    ? focusedColorIndex
+    : null;
   const changeViewMode = useCallback(
     (mode: "color" | "code") => {
       setGridVisible(mode === "code");
@@ -103,13 +109,26 @@ export function PatternCanvas({
           styles.getPropertyValue("--border-strong").trim() || "#BBC4BF",
         backgroundColor:
           styles.getPropertyValue("--surface-secondary").trim() || "#F3F4F1",
+        focus:
+          effectiveFocusedColorIndex === null
+            ? undefined
+            : {
+                colorIndex: effectiveFocusedColorIndex,
+                colorIndices: pattern.matrix.colorIndices,
+                transparentIndex: pattern.matrix.transparentIndex,
+              },
       });
       if (!rendered) {
         setViewFailed(true);
         return;
       }
       if (viewMode === "code") {
-        const codeResult = renderPatternCodes({ context, pattern, viewport });
+        const codeResult = renderPatternCodes({
+          context,
+          pattern,
+          viewport,
+          focusedColorIndex: effectiveFocusedColorIndex,
+        });
         if (!codeResult.ok) setViewFailed(true);
         else setCodesVisible(codeResult.codesVisible);
       } else {
@@ -129,6 +148,7 @@ export function PatternCanvas({
     scheduler,
     viewMode,
     viewport,
+    effectiveFocusedColorIndex,
   ]);
 
   if (!rasterResult.ok || viewFailed) {

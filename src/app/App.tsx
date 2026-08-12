@@ -55,6 +55,9 @@ export function App({
   const [settings, setSettings] = useState<PatternSettingsDraft>(
     EMPTY_PATTERN_SETTINGS,
   );
+  const [focusedColorIndex, setFocusedColorIndex] = useState<number | null>(
+    null,
+  );
   const generator = useGeneratorController({
     file: image.source?.file ?? null,
     imageVersion: image.revision,
@@ -96,6 +99,7 @@ export function App({
 
   const removeImage = () => {
     closeSheet();
+    setFocusedColorIndex(null);
     generator.reset();
     image.removeImage();
   };
@@ -107,6 +111,7 @@ export function App({
       canGenerate={generator.canGenerate}
       canRegenerate={generator.canRegenerate}
       onGenerate={() => {
+        setFocusedColorIndex(null);
         generator.generate();
         if (closeAfterGenerate) closeSheet();
       }}
@@ -157,6 +162,9 @@ export function App({
           <ColorList
             key={lastSuccess?.snapshot.jobId}
             colors={compactResult.view.colors}
+            focusedColorIndex={focusedColorIndex}
+            onFocusColor={setFocusedColorIndex}
+            onClearHighlight={() => setFocusedColorIndex(null)}
           />
         ) : (
           <ResultViewError />
@@ -256,6 +264,7 @@ export function App({
               <PatternCanvas
                 key={lastSuccess?.snapshot.jobId}
                 pattern={visiblePattern}
+                focusedColorIndex={focusedColorIndex}
               />
             )
           }
@@ -268,6 +277,9 @@ export function App({
                 pattern={visiblePattern}
                 status={generator.state.status}
                 selectedColorSetLabel={selectedColorSetLabel ?? "Unavailable"}
+                focusedColorIndex={focusedColorIndex}
+                onFocusColor={setFocusedColorIndex}
+                onClearHighlight={() => setFocusedColorIndex(null)}
               />
             )
           }

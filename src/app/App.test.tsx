@@ -114,6 +114,7 @@ afterEach(() => {
     value: 1024,
   });
   document.body.removeAttribute("style");
+  Reflect.deleteProperty(HTMLImageElement.prototype, "decode");
 });
 
 describe("App", () => {
@@ -562,6 +563,18 @@ describe("App", () => {
   });
 
   it("downloads locally without commerce side effects", async () => {
+    Object.defineProperty(HTMLImageElement.prototype, "decode", {
+      configurable: true,
+      value: vi.fn(async () => {}),
+    });
+    vi.spyOn(HTMLImageElement.prototype, "naturalWidth", "get").mockReturnValue(
+      1154,
+    );
+    vi.spyOn(
+      HTMLImageElement.prototype,
+      "naturalHeight",
+      "get",
+    ).mockReturnValue(428);
     const fetchSpy = vi.spyOn(globalThis, "fetch");
     const storageSpy = vi.spyOn(Storage.prototype, "setItem");
     const anchorClickSpy = vi
@@ -584,9 +597,9 @@ describe("App", () => {
     await userEvent.click(
       screen.getByRole("button", { name: "Download Pattern" }),
     );
+    await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledOnce());
     expect(fetchSpy).not.toHaveBeenCalled();
     expect(storageSpy).not.toHaveBeenCalled();
-    expect(anchorClickSpy).toHaveBeenCalledOnce();
     expect(openSpy).not.toHaveBeenCalled();
     expect(pushStateSpy).not.toHaveBeenCalled();
     expect(replaceStateSpy).not.toHaveBeenCalled();

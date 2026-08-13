@@ -1,6 +1,9 @@
+import poparoozLogoUrl from "../../assets/branding/poparooz-logo.png";
+
 import {
   renderPatternExport,
   type PatternExportInput,
+  type PatternExportLogo,
   type PatternExportResult,
 } from "./pattern-export";
 
@@ -8,7 +11,11 @@ export type PatternDownloadResult =
   { readonly ok: true } | { readonly ok: false; readonly message: string };
 
 export interface PatternDownloadEnvironment {
-  readonly render: (input: PatternExportInput) => PatternExportResult;
+  readonly loadLogo: () => Promise<PatternExportLogo>;
+  readonly render: (
+    input: PatternExportInput,
+    logo: PatternExportLogo,
+  ) => PatternExportResult;
   readonly createObjectURL: (blob: Blob) => string;
   readonly revokeObjectURL: (url: string) => void;
   readonly triggerDownload: (url: string, filename: string) => void;
@@ -35,7 +42,8 @@ export function createPatternDownloader(
       inProgress = true;
       let objectUrl: string | null = null;
       try {
-        const rendered = environment.render(input);
+        const logo = await environment.loadLogo();
+        const rendered = environment.render(input, logo);
         if (!rendered.ok) return rendered;
         const blob = await canvasToPngBlob(rendered.canvas);
         if (blob === null || blob.type !== "image/png") {
@@ -54,11 +62,41 @@ export function createPatternDownloader(
   });
 }
 
+export function createPatternExportLogoLoader(
+  assetUrl = poparoozLogoUrl,
+  createImage: () => HTMLImageElement = () => new Image(),
+): () => Promise<PatternExportLogo> {
+  let cached: Promise<PatternExportLogo> | undefined;
+  return () => {
+    cached ??= decodePatternExportLogo(assetUrl, createImage);
+    return cached;
+  };
+}
+
+async function decodePatternExportLogo(
+  assetUrl: string,
+  createImage: () => HTMLImageElement,
+): Promise<PatternExportLogo> {
+  const image = createImage();
+  image.decoding = "async";
+  image.src = assetUrl;
+  await image.decode();
+  if (image.naturalWidth <= 0 || image.naturalHeight <= 0) {
+    throw new Error("Invalid official logo dimensions.");
+  }
+  return Object.freeze({
+    source: image,
+    width: image.naturalWidth,
+    height: image.naturalHeight,
+  });
+}
+
 function canvasToPngBlob(canvas: HTMLCanvasElement): Promise<Blob | null> {
   return new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
 }
 
 const browserEnvironment: PatternDownloadEnvironment = {
+  loadLogo: createPatternExportLogoLoader(),
   render: renderPatternExport,
   createObjectURL: (blob) => URL.createObjectURL(blob),
   revokeObjectURL: (url) => URL.revokeObjectURL(url),

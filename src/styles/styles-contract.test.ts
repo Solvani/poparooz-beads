@@ -70,6 +70,22 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
     );
   });
 
+  it("uses whole-card background selection and a compact Generate action", () => {
+    expect(workspace).toContain(".background-setting input");
+    expect(workspace).toContain("clip-path: inset(50%)");
+    expect(workspace).toContain(
+      ".background-setting label:has(input:focus-visible)",
+    );
+    expect(workspace).toContain("min-height: 52px");
+    expect(workspace).toContain("grid-template-columns: minmax(0, 1fr)");
+    expect(workspace).toContain(
+      ".pattern-settings > .generation-status .button",
+    );
+    expect(workspace).toContain("border-radius: 9px");
+    expect(workspace).toContain("box-shadow: none");
+    expect(workspace).not.toContain("background-setting__icon");
+  });
+
   it("keeps the code-view Canvas square without changing the base preview viewport", () => {
     expect(workspace).toContain(".pattern-canvas__viewport--code");
     expect(workspace).toContain("aspect-ratio: 1 / 1");

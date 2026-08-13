@@ -113,12 +113,6 @@ export function PatternSettings({
             checked={value.background === "white"}
             onChange={() => update("background", "white")}
           />
-          <span
-            className="background-setting__icon background-setting__icon--full"
-            aria-hidden="true"
-          >
-            &#9673;
-          </span>
           <span className="background-setting__copy">
             <strong>Full Background</strong>
             <span>White</span>
@@ -132,12 +126,6 @@ export function PatternSettings({
             checked={value.background === "transparent"}
             onChange={() => update("background", "transparent")}
           />
-          <span
-            className="background-setting__icon background-setting__icon--transparent"
-            aria-hidden="true"
-          >
-            &#9642;
-          </span>
           <span className="background-setting__copy">
             <strong>Remove Background</strong>
             <span>Transparent</span>

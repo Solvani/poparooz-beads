@@ -54,9 +54,19 @@ describe("PatternSettings", () => {
         "Maximum number of colors used in the generated pattern. This does not change the selected Bead Color Set.",
       ),
     ).toBeInTheDocument();
+    expect(view.getByText("Bead Size")).toBeInTheDocument();
+    expect(view.getByText("2.6 mm")).toBeInTheDocument();
     expect(
-      view.getByRole("group", { name: "Pattern Background" }),
+      view.getByLabelText("Bead Size: 2.6 millimeters"),
+    ).not.toHaveAttribute("contenteditable");
+    expect(view.queryByRole("textbox", { name: /Bead Size/ })).toBeNull();
+    expect(view.queryByRole("combobox", { name: /Bead Size/ })).toBeNull();
+    expect(view.getByRole("group", { name: "Background" })).toBeInTheDocument();
+    expect(
+      view.getByRole("heading", { name: "2. Settings" }),
     ).toBeInTheDocument();
+    expect(view.getByText("White")).toBeInTheDocument();
+    expect(view.getByText("Transparent")).toBeInTheDocument();
     expect(
       view.getByRole("radio", { name: /Full Background/ }),
     ).not.toBeChecked();
@@ -92,6 +102,35 @@ describe("PatternSettings", () => {
     });
     expect(onChange).toHaveBeenCalledWith({ ...value, background: "white" });
     expect(value).toEqual(EMPTY_PATTERN_SETTINGS);
+  });
+
+  it("uses four equal desktop buttons without changing preset semantics", async () => {
+    const onChange = vi.fn();
+    const value = { ...EMPTY_PATTERN_SETTINGS };
+    const view = render(
+      <PatternSettings
+        value={value}
+        onChange={onChange}
+        colorSetProfiles={COLOR_SET_PROFILES}
+        useDesktopPatternSizeSelector
+      />,
+    );
+
+    expect(view.getByRole("group", { name: "Pattern Size" })).toHaveClass(
+      "pattern-size-setting",
+    );
+    expect(view.queryByRole("combobox", { name: "Pattern Size" })).toBeNull();
+    expect(view.getByRole("button", { name: "80 × 80" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+
+    await userEvent.click(view.getByRole("button", { name: "104 × 104" }));
+    expect(onChange).toHaveBeenCalledWith({
+      ...value,
+      width: "104",
+      height: "104",
+    });
   });
 
   it("exposes only the four fixed sizes and preserves the color limit boundary", () => {
@@ -164,6 +203,9 @@ describe("PatternSettings", () => {
       ...value,
       background: "transparent",
     });
+    expect(onChange).not.toHaveBeenCalledWith(
+      expect.objectContaining({ beadSize: expect.anything() }),
+    );
   });
 
   it("shows the recommendation only once for the recommended preset", () => {

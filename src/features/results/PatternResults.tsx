@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 
+import type { ImageBackground } from "../../domain/image";
 import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
-import { BoardLayoutSummary } from "./BoardLayoutSummary";
 import { ColorList } from "./ColorList";
 import { PatternSummary } from "./PatternSummary";
+import { ResultRecommendations } from "./ResultRecommendations";
 import { toPatternResultView } from "./pattern-result-view";
 
 export type ResultLifecycleStatus =
@@ -20,6 +21,7 @@ export interface PatternResultsProps {
   readonly pattern: PublicPatternResult;
   readonly status: ResultLifecycleStatus;
   readonly selectedColorSetLabel: string;
+  readonly patternBackground: ImageBackground;
   readonly focusedColorIndex: number | null;
   readonly onFocusColor: (colorIndex: number) => void;
   readonly onClearHighlight: () => void;
@@ -29,6 +31,7 @@ export function PatternResults({
   pattern,
   status,
   selectedColorSetLabel,
+  patternBackground,
   focusedColorIndex,
   onFocusColor,
   onClearHighlight,
@@ -47,6 +50,11 @@ export function PatternResults({
       <PatternSummary
         summary={result.view.summary}
         selectedColorSetLabel={selectedColorSetLabel}
+        patternBackground={patternBackground}
+      />
+      <ResultRecommendations
+        summary={result.view.summary}
+        colors={result.view.colors}
       />
       <ColorList
         colors={result.view.colors}
@@ -54,7 +62,6 @@ export function PatternResults({
         onFocusColor={onFocusColor}
         onClearHighlight={onClearHighlight}
       />
-      <BoardLayoutSummary layout={result.view.boardLayout} />
     </div>
   );
 }

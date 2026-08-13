@@ -26,6 +26,11 @@
   gap: var(--space-4);
 }
 
+.compact-result-content .color-list {
+  max-height: none;
+  overflow: visible;
+}
+
 .bottom-sheet-backdrop {
   position: fixed;
   z-index: 1000;
@@ -84,7 +89,7 @@
 
 .bottom-sheet-tabs {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   padding-inline: var(--space-2);
   border-block: 1px solid var(--border-subtle);
   overflow-x: auto;

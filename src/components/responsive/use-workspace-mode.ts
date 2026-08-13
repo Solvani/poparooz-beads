@@ -28,7 +28,7 @@ export function useWorkspaceMode(environment: WorkspaceModeEnvironment = {}) {
 
     const update = (width: number) => {
       if (Number.isFinite(width) && width >= 0) {
-        setMode(getWorkspaceMode(width));
+        setMode(getWorkspaceMode(toViewportEquivalentWidth(width)));
       }
     };
     const measure = () => update(container.clientWidth || safeWindowWidth());
@@ -58,6 +58,17 @@ export function useWorkspaceMode(environment: WorkspaceModeEnvironment = {}) {
 
 function safeWindowWidth(): number {
   return typeof window === "undefined" ? 1100 : window.innerWidth;
+}
+
+function toViewportEquivalentWidth(containerWidth: number): number {
+  if (typeof document === "undefined") return containerWidth;
+
+  const viewportWidth = safeWindowWidth();
+  const documentWidth = document.documentElement.clientWidth;
+  const verticalScrollbarWidth =
+    documentWidth > 0 ? Math.max(0, viewportWidth - documentWidth) : 0;
+
+  return containerWidth + verticalScrollbarWidth;
 }
 
 function defaultResizeObserverFactory(): WorkspaceResizeObserverFactory | null {

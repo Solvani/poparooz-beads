@@ -12,6 +12,10 @@ afterEach(() => {
     configurable: true,
     value: 1024,
   });
+  Object.defineProperty(document.documentElement, "clientWidth", {
+    configurable: true,
+    value: 0,
+  });
 });
 
 describe("workspace mode", () => {
@@ -68,6 +72,52 @@ describe("workspace mode", () => {
 
     view.unmount();
     expect(disconnect).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps a 1400px viewport in desktop mode when the vertical scrollbar narrows the app container", () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 1400,
+    });
+    Object.defineProperty(document.documentElement, "clientWidth", {
+      configurable: true,
+      value: 1385,
+    });
+
+    let resizeCallback!: ResizeObserverCallback;
+    const createResizeObserver = vi.fn((callback: ResizeObserverCallback) => {
+      resizeCallback = callback;
+      return { observe: vi.fn(), disconnect: vi.fn() };
+    });
+
+    function Harness() {
+      const workspace = useWorkspaceMode({
+        createResizeObserver,
+        initialWidth: 1400,
+      });
+      return (
+        <div ref={workspace.containerRef} data-testid="root">
+          {workspace.mode}
+        </div>
+      );
+    }
+
+    const view = render(<Harness />);
+    const root = view.getByTestId("root");
+
+    act(() =>
+      resizeCallback(
+        [
+          {
+            target: root,
+            contentRect: { width: 1385 },
+          } as unknown as ResizeObserverEntry,
+        ],
+        {} as ResizeObserver,
+      ),
+    );
+
+    expect(root).toHaveTextContent("desktop");
   });
 
   it("uses a window resize fallback and removes its listener", () => {

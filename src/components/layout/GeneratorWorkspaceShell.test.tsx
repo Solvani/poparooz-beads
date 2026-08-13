@@ -6,16 +6,25 @@ import { GeneratorWorkspaceShell } from "./GeneratorWorkspaceShell";
 afterEach(cleanup);
 
 describe("GeneratorWorkspaceShell", () => {
-  it("renders only Settings and Canvas before generation", () => {
+  it("renders the stable desktop three-column shell before generation", () => {
     const view = render(<GeneratorWorkspaceShell />);
 
+    expect(view.getByRole("region", { name: "1. Upload Image" })).toHaveClass(
+      "workspace-shell__settings",
+    );
+    expect(view.getByRole("region", { name: "Pattern Canvas" })).toHaveClass(
+      "workspace-shell__canvas",
+    );
     expect(
-      view.getByRole("region", { name: "Start with an image" }),
-    ).toHaveClass("workspace-shell__settings");
+      view.getByRole("complementary", { name: "Results" }),
+    ).toHaveTextContent("Your results will appear here");
     expect(
-      view.getByRole("region", { name: "Your pattern will appear here." }),
-    ).toHaveClass("workspace-shell__canvas");
-    expect(view.queryByRole("complementary")).toBeNull();
+      view.getByRole("complementary", { name: "Results" }),
+    ).toHaveTextContent("After you generate a pattern");
+    expect(
+      view.getByRole("button", { name: "Save / Download Pattern" }),
+    ).toBeDisabled();
+    expect(view.queryByText("Pattern Size")).toBeNull();
     expect(view.getByRole("main")).toHaveAttribute("data-has-results", "false");
   });
 
@@ -45,7 +54,9 @@ describe("GeneratorWorkspaceShell", () => {
         "Your image is ready. Generate the pattern in the next step.",
       ),
     ).toBeInTheDocument();
-    expect(view.queryByRole("complementary")).toBeNull();
+    expect(
+      view.getByRole("complementary", { name: "Results" }),
+    ).toHaveTextContent("Your results will appear here");
   });
 
   it("replaces only the Canvas empty state with supplied preview content", () => {
@@ -56,7 +67,9 @@ describe("GeneratorWorkspaceShell", () => {
     expect(
       view.queryByText("Upload an image and generate a pattern to begin."),
     ).toBeNull();
-    expect(view.queryByRole("complementary")).toBeNull();
+    expect(
+      view.getByRole("complementary", { name: "Results" }),
+    ).toHaveTextContent("Your results will appear here");
   });
 
   it("replaces result placeholders while retaining supplied actions", () => {
@@ -68,7 +81,7 @@ describe("GeneratorWorkspaceShell", () => {
     );
     expect(view.getByText("Public result details")).toBeInTheDocument();
     expect(
-      view.getByRole("complementary", { name: "Pattern details" }),
+      view.getByRole("complementary", { name: "Results" }),
     ).toBeInTheDocument();
     expect(view.getByRole("main")).toHaveClass("workspace-shell--has-results");
     expect(view.getByRole("main")).toHaveAttribute("data-has-results", "true");
@@ -93,7 +106,7 @@ describe("GeneratorWorkspaceShell", () => {
       "data-workspace-mode",
       "compact",
     );
-    expect(view.queryByText("Start with an image")).toBeNull();
+    expect(view.queryByText("1. Upload Image")).toBeNull();
     expect(
       view.getByRole("region", { name: "Pattern status" }),
     ).toHaveTextContent("Updating result");
@@ -110,7 +123,7 @@ describe("GeneratorWorkspaceShell", () => {
       />,
     );
     const canvas = view.getByRole("region", {
-      name: "Your pattern will appear here.",
+      name: "Pattern Canvas",
     });
 
     expect(view.getByRole("main")).toHaveAttribute(
@@ -119,5 +132,6 @@ describe("GeneratorWorkspaceShell", () => {
     );
     expect(canvas).toHaveTextContent("Medium generation status");
     expect(canvas).toHaveTextContent("Medium Canvas");
+    expect(view.queryByRole("complementary")).toBeNull();
   });
 });

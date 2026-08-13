@@ -40,9 +40,14 @@ export function ImageUpload({ error, onSelectFiles }: ImageUploadProps) {
       }}
       onDrop={handleDrop}
     >
+      <span className="image-upload__icon" aria-hidden="true">
+        &uarr;
+      </span>
       <p id={descriptionId} className="image-upload__instructions">
-        Drag and drop a JPEG, PNG, or WebP image here, or choose an image from
-        your device.
+        <strong>Drag &amp; drop an image here</strong>
+        <span>or click to browse</span>
+        <small>Supports JPG, PNG, WEBP</small>
+        <small>Max 20 MB</small>
       </p>
       <input
         id={inputId}
@@ -60,7 +65,7 @@ export function ImageUpload({ error, onSelectFiles }: ImageUploadProps) {
         className="button button--primary image-upload__button"
         htmlFor={inputId}
       >
-        Choose an Image
+        Choose Image
       </label>
       {error ? (
         <p id={errorId} className="form-error" role="alert" aria-live="polite">

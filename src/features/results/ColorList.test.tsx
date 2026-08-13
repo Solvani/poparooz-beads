@@ -35,48 +35,57 @@ function renderList(
 }
 
 describe("ColorList", () => {
-  it("shows only eight rows by default while announcing the total", () => {
+  it("shows a compact six-row preview with table labels and the total", () => {
     renderList(rows(10));
-    expect(DEFAULT_VISIBLE_COLORS).toBe(8);
+    expect(DEFAULT_VISIBLE_COLORS).toBe(6);
     expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
-      8,
+      6,
     );
-    expect(screen.getByText("10 total")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Bead Requirements" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("10 colors")).toBeInTheDocument();
+    expect(document.querySelector(".color-list__header")).toHaveTextContent(
+      "ColorPoparooz CodeBeads",
+    );
   });
 
   it("expands and collapses all colors with accessible native controls", async () => {
     renderList(rows(10));
-    const toggle = screen.getByRole("button", { name: "Show all colors" });
+    const toggle = screen.getByRole("button", {
+      name: "Show All Colors (10)",
+    });
     expect(toggle).toHaveAttribute("aria-expanded", "false");
     await userEvent.click(toggle);
     expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
       10,
     );
-    expect(screen.getByRole("button", { name: "Show fewer" })).toHaveAttribute(
-      "aria-expanded",
-      "true",
+    expect(
+      screen.getByRole("button", { name: "Show Fewer Colors (10)" }),
+    ).toHaveAttribute("aria-expanded", "true");
+    await userEvent.click(
+      screen.getByRole("button", { name: "Show Fewer Colors (10)" }),
     );
-    await userEvent.click(screen.getByRole("button", { name: "Show fewer" }));
     expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
-      8,
+      6,
     );
   });
 
-  it("does not render a toggle for eight or fewer colors", () => {
-    renderList(rows(8));
+  it("does not render a toggle for six or fewer colors", () => {
+    renderList(rows(6));
     expect(
-      screen.queryByRole("button", { name: "Show all colors" }),
+      screen.queryByRole("button", { name: /Show All Colors/ }),
     ).toBeNull();
-    expect(screen.getAllByRole("button")).toHaveLength(8);
+    expect(screen.getAllByRole("button")).toHaveLength(6);
   });
 
   it("bounds the collapsed DOM for 512 colors and expands only on request", async () => {
     renderList(rows(512));
     expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
-      8,
+      6,
     );
     await userEvent.click(
-      screen.getByRole("button", { name: "Show all colors" }),
+      screen.getByRole("button", { name: "Show All Colors (512)" }),
     );
     expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
       512,

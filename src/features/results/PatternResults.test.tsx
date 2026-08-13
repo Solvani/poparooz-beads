@@ -8,17 +8,23 @@ import { createManyColors, createResultFixture } from "./test/result-fixture";
 afterEach(cleanup);
 
 const focusProps = {
+  patternBackground: "white",
   focusedColorIndex: null,
   onFocusColor: vi.fn(),
   onClearHighlight: vi.fn(),
 } as const;
 
 describe("PatternResults", () => {
-  it("renders summary, colors, and board layout from one public result", () => {
+  it("renders the frozen result hierarchy from one public result", () => {
     render(
       <PatternResults
         {...focusProps}
-        pattern={createResultFixture()}
+        pattern={createResultFixture({
+          colors: [
+            { index: 0, beadCount: 5, code: "A4" },
+            { index: 1, beadCount: 2, code: "A10" },
+          ],
+        })}
         status="success"
         selectedColorSetLabel="72-Color Set"
       />,
@@ -26,11 +32,19 @@ describe("PatternResults", () => {
     expect(
       screen.getByRole("heading", { name: "Pattern Summary" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Colors" })).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Board Layout" }),
+      screen.getByRole("heading", { name: "Recommended Bead Set" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Selected Bead Color Set")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Recommended Board Setup" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Bead Requirements" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Board Layout" })).toBeNull();
+    expect(screen.getByText("48-Color Set")).toBeInTheDocument();
+    expect(screen.getByText("Bead Color Set")).toBeInTheDocument();
+    expect(screen.getByText("Full Background")).toBeInTheDocument();
     expect(screen.getByText("72-Color Set")).toBeInTheDocument();
   });
 
@@ -83,7 +97,7 @@ describe("PatternResults", () => {
       />,
     );
     await userEvent.click(
-      screen.getByRole("button", { name: "Show all colors" }),
+      screen.getByRole("button", { name: /Show All Colors/ }),
     );
     expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
       10,
@@ -110,7 +124,7 @@ describe("PatternResults", () => {
       />,
     );
     expect(document.querySelectorAll("#pattern-color-list > li")).toHaveLength(
-      8,
+      6,
     );
   });
 

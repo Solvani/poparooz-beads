@@ -1,13 +1,20 @@
+import type { ImageBackground } from "../../domain/image";
 import type { PatternSummaryView } from "./result.types";
+
+const BACKGROUND_LABELS: Readonly<Record<ImageBackground, string>> =
+  Object.freeze({
+    white: "Full Background",
+    transparent: "Remove Background",
+  });
 
 export function PatternSummary({
   summary,
   selectedColorSetLabel,
-  variant = "full",
+  patternBackground,
 }: {
   readonly summary: PatternSummaryView;
   readonly selectedColorSetLabel: string;
-  readonly variant?: "full" | "compact";
+  readonly patternBackground: ImageBackground;
 }) {
   return (
     <section
@@ -21,7 +28,7 @@ export function PatternSummary({
           <dd>{summary.patternSize}</dd>
         </div>
         <div>
-          <dt>{variant === "compact" ? "Actual Colors" : "Colors"}</dt>
+          <dt>Colors Used</dt>
           <dd>{summary.actualColorsLabel}</dd>
         </div>
         <div>
@@ -29,17 +36,14 @@ export function PatternSummary({
           <dd>{summary.totalBeadsLabel}</dd>
         </div>
         <div>
-          <dt>Boards</dt>
-          <dd>{summary.boardsLabel}</dd>
-        </div>
-        <div>
-          <dt>Selected Bead Color Set</dt>
+          <dt>Bead Color Set</dt>
           <dd>{selectedColorSetLabel}</dd>
         </div>
+        <div>
+          <dt>Pattern Background</dt>
+          <dd>{BACKGROUND_LABELS[patternBackground]}</dd>
+        </div>
       </dl>
-      {summary.transparentPositionsLabel ? (
-        <p className="result-secondary">{summary.transparentPositionsLabel}</p>
-      ) : null}
     </section>
   );
 }

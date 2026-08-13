@@ -66,9 +66,28 @@ function availableRuntime(
   };
 }
 
+function withSingleColorCode(
+  pattern: PublicPatternResult,
+  code: string,
+): PublicPatternResult {
+  const source = pattern.colors[0]!;
+  const color = Object.freeze({ ...source.color, code });
+  const entry = Object.freeze({ ...source, color });
+  return Object.freeze({
+    ...pattern,
+    colors: Object.freeze([entry]),
+    materials: Object.freeze([
+      Object.freeze({
+        ...pattern.materials[0]!,
+        color,
+      }),
+    ]),
+  });
+}
+
 async function completeInputs() {
   await userEvent.upload(
-    screen.getByLabelText("Choose an Image"),
+    screen.getByLabelText("Choose Image"),
     new File(["image"], "photo.png", { type: "image/png" }),
   );
   await userEvent.clear(screen.getByLabelText("Maximum Colors"));
@@ -121,29 +140,37 @@ describe("App", () => {
   it("renders the Poparooz header without a permanent pre-generation Summary", () => {
     render(<App />);
 
-    expect(screen.getByRole("banner")).toHaveTextContent("Poparooz");
+    expect(
+      screen.getByRole("banner").querySelector("img[alt='Poparooz']"),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole("main", { name: "Pattern maker workspace" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Start with an image")).toBeInTheDocument();
-    expect(
-      screen.getByText("Your pattern will appear here."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("1. Upload Image")).toBeInTheDocument();
+    expect(screen.getByText("Pattern Canvas")).toBeInTheDocument();
     expect(screen.queryByRole("complementary")).toBeNull();
     expect(
-      screen.queryByRole("region", { name: "Pattern Options" }),
+      screen.queryByRole("region", { name: "Save / Download" }),
     ).toBeNull();
     expect(
-      screen.queryByRole("button", { name: "Download Pattern" }),
+      screen.queryByRole("button", { name: "Save / Download Pattern" }),
     ).toBeNull();
     expect(
       screen.queryByRole("button", { name: "Get Beads for This Pattern" }),
     ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Recommended Bead Set" }),
+    ).toBeNull();
+    expect(
+      screen.queryByRole("heading", { name: "Recommended Board Setup" }),
+    ).toBeNull();
   });
 
   it("contains no synthetic pattern values or internal customer-forbidden fields", () => {
     const { container } = render(<App />);
     const page = container.textContent ?? "";
+
+    expect(page).not.toMatch(/[\u3400-\u9fff]/u);
 
     for (const forbidden of [
       "MARD",
@@ -163,7 +190,7 @@ describe("App", () => {
     render(<App />);
     await userEvent.selectOptions(screen.getByLabelText("Pattern Size"), "60");
     await userEvent.upload(
-      screen.getByLabelText("Choose an Image"),
+      screen.getByLabelText("Choose Image"),
       new File(["image"], "photo.png", { type: "image/png" }),
     );
 
@@ -179,7 +206,7 @@ describe("App", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "Remove Image" }));
 
-    expect(screen.getByLabelText("Choose an Image")).toBeInTheDocument();
+    expect(screen.getByLabelText("Choose Image")).toBeInTheDocument();
     expect(screen.getByLabelText("Pattern Size")).toHaveValue("60");
     expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:app-preview");
   });
@@ -190,7 +217,7 @@ describe("App", () => {
     render(<App />);
 
     await userEvent.upload(
-      screen.getByLabelText("Choose an Image"),
+      screen.getByLabelText("Choose Image"),
       new File(["image"], "photo.webp", { type: "image/webp" }),
     );
 
@@ -238,7 +265,7 @@ describe("App", () => {
       screen.queryByRole("img", { name: /Bead pattern preview/ }),
     ).toBeNull();
     expect(
-      screen.queryByRole("region", { name: "Pattern Options" }),
+      screen.queryByRole("region", { name: "Save / Download" }),
     ).toBeNull();
     expect(
       screen.queryByText("These actions apply to your previous pattern."),
@@ -256,14 +283,26 @@ describe("App", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("2 × 2")).toBeInTheDocument();
     expect(screen.getByText("3")).toBeInTheDocument();
-    expect(screen.getAllByText("1 board")).toHaveLength(2);
+    expect(screen.getByText("1 × 52×52 Board")).toBeInTheDocument();
     expect(
-      screen.getByRole("region", { name: "Pattern Options" }),
+      screen.getByRole("region", { name: "Save / Download" }),
     ).toHaveTextContent("Download your color code pattern as a PNG.");
-    const packageRow = screen
-      .getByText("Selected Bead Color Set")
+    const summarySection = screen
+      .getByRole("heading", { name: "Pattern Summary" })
+      .closest("section")!;
+    const packageRow = within(summarySection)
+      .getByText("Bead Color Set")
       .closest("div")!;
+    const beadRecommendation = screen
+      .getByRole("heading", { name: "Recommended Bead Set" })
+      .closest("section")!;
     expect(within(packageRow).getByText("72-Color Set")).toBeInTheDocument();
+    expect(
+      within(summarySection).getByText("Full Background"),
+    ).toBeInTheDocument();
+    expect(
+      within(beadRecommendation).getByText("120-Color Set"),
+    ).toBeInTheDocument();
     await userEvent.click(
       screen.getByRole("button", { name: "Color Code View" }),
     );
@@ -283,7 +322,22 @@ describe("App", () => {
       screen.getByLabelText("Bead Color Set"),
       "poparooz-set-221",
     );
+    await userEvent.click(
+      screen.getByRole("radio", { name: /Remove Background/ }),
+    );
     expect(within(packageRow).getByText("72-Color Set")).toBeInTheDocument();
+    expect(
+      within(summarySection).getByText("Full Background"),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText("Remove Background", {
+        selector: ".pattern-summary-list dd",
+      }),
+    ).toBeNull();
+    expect(
+      within(beadRecommendation).getByText("120-Color Set"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("1 × 52×52 Board")).toBeInTheDocument();
     await userEvent.clear(screen.getByLabelText("Maximum Colors"));
     await userEvent.type(screen.getByLabelText("Maximum Colors"), "20");
     expect(screen.getByText("Settings changed")).toBeInTheDocument();
@@ -296,6 +350,10 @@ describe("App", () => {
     expect(
       screen.getByRole("img", { name: /Bead pattern preview/ }),
     ).toBeInTheDocument();
+    expect(
+      within(beadRecommendation).getByText("120-Color Set"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("1 × 52×52 Board")).toBeInTheDocument();
     const regenerate = screen.getByRole("button", {
       name: "Regenerate Pattern",
     });
@@ -348,7 +406,7 @@ describe("App", () => {
       screen.queryByRole("heading", { name: "Pattern Summary" }),
     ).toBeNull();
     expect(
-      screen.queryByRole("region", { name: "Pattern Options" }),
+      screen.queryByRole("region", { name: "Save / Download" }),
     ).toBeNull();
     expect(screen.queryByText(/These actions (apply|still apply)/)).toBeNull();
   });
@@ -389,19 +447,32 @@ describe("App", () => {
       screen.getByRole("button", { name: "Regenerate Pattern" }),
     );
     await act(async () =>
-      resolveSecond(createPublicPattern(10, 5, new Uint16Array(50))),
+      resolveSecond(
+        withSingleColorCode(
+          createPublicPattern(60, 60, new Uint16Array(3_600)),
+          "A20",
+        ),
+      ),
     );
     expect(
       screen.getByRole("img", {
-        name: "Bead pattern preview, 10 columns by 5 rows.",
+        name: "Bead pattern preview, 60 columns by 60 rows.",
       }),
     ).toBeInTheDocument();
     await userEvent.click(
       screen.getByRole("button", { name: "More controls" }),
     );
     expect(screen.getByText("100%")).toBeInTheDocument();
-    expect(screen.getByText("10 × 5")).toBeInTheDocument();
-    expect(screen.getByText("50")).toBeInTheDocument();
+    expect(screen.getByText("60 × 60")).toBeInTheDocument();
+    expect(screen.getByText("3,600")).toBeInTheDocument();
+    expect(screen.getByText("1 × 78×78 Board")).toBeInTheDocument();
+    expect(
+      within(
+        screen
+          .getByRole("heading", { name: "Recommended Bead Set" })
+          .closest("section")!,
+      ).getByText("221-Color Set"),
+    ).toBeInTheDocument();
 
     await userEvent.clear(screen.getByLabelText("Maximum Colors"));
     await userEvent.type(screen.getByLabelText("Maximum Colors"), "24");
@@ -413,9 +484,10 @@ describe("App", () => {
     );
     expect(
       screen.getByRole("img", {
-        name: "Bead pattern preview, 10 columns by 5 rows.",
+        name: "Bead pattern preview, 60 columns by 60 rows.",
       }),
     ).toBeInTheDocument();
+    expect(screen.getByText("1 × 78×78 Board")).toBeInTheDocument();
     expect(screen.queryByText("private regeneration detail")).toBeNull();
     expect(
       screen.getByText(
@@ -463,13 +535,13 @@ describe("App", () => {
       screen.queryByRole("heading", { name: "Pattern Summary" }),
     ).toBeNull();
     expect(
-      screen.getByRole("region", { name: "Start with an image" }),
+      screen.getByRole("region", { name: "1. Upload Image" }),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("navigation", { name: "Pattern detail panels" }),
     ).toBeNull();
     expect(
-      screen.queryByRole("region", { name: "Pattern Options" }),
+      screen.queryByRole("region", { name: "Save / Download" }),
     ).toBeNull();
   });
 
@@ -505,7 +577,7 @@ describe("App", () => {
       expect(visible).not.toContain(forbidden);
     }
     expect(
-      screen.getByRole("button", { name: "Download Pattern" }),
+      screen.getByRole("button", { name: "Save / Download Pattern" }),
     ).toBeEnabled();
     expect(
       screen.queryByRole("button", { name: "Get Beads for This Pattern" }),
@@ -525,6 +597,10 @@ describe("App", () => {
 
     const first = screen.getByRole("button", { name: "A1, 2 beads" });
     const second = screen.getByRole("button", { name: "B1, 1 bead" });
+    const recommendationsBeforeHighlight = Array.from(
+      document.querySelectorAll(".result-recommendation"),
+      (section) => section.textContent,
+    );
     expect(first).toHaveAttribute("aria-pressed", "false");
     expect(second).toHaveAttribute("aria-pressed", "false");
     expect(
@@ -551,14 +627,23 @@ describe("App", () => {
     expect(runtime.service.generate).toHaveBeenCalledOnce();
     expect(Array.from(result.matrix.colorIndices)).toEqual(originalMatrix);
     expect(
+      Array.from(
+        document.querySelectorAll(".result-recommendation"),
+        (section) => section.textContent,
+      ),
+    ).toEqual(recommendationsBeforeHighlight);
+    expect(
       screen.getByText("Total Beads").nextElementSibling,
     ).toHaveTextContent("3");
-    expect(screen.getByText("Boards").nextElementSibling).toHaveTextContent(
-      "1",
-    );
+    const boardSection = screen
+      .getByRole("heading", { name: "Recommended Board Setup" })
+      .closest("section")!;
+    expect(
+      within(boardSection).getByText("1 × 52×52 Board"),
+    ).toBeInTheDocument();
     expect(screen.getByText("72-Color Set")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Download Pattern" }),
+      screen.getByRole("button", { name: "Save / Download Pattern" }),
     ).toBeEnabled();
   });
 
@@ -595,7 +680,7 @@ describe("App", () => {
     expect(focusedRow).toHaveAttribute("aria-pressed", "true");
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Download Pattern" }),
+      screen.getByRole("button", { name: "Save / Download Pattern" }),
     );
     await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledOnce());
     expect(fetchSpy).not.toHaveBeenCalled();
@@ -654,17 +739,17 @@ describe("App", () => {
     ).toBeNull();
     expect(screen.queryByText("A1")).toBeNull();
     expect(
-      screen.getByRole("region", { name: "Start with an image" }),
+      screen.getByRole("region", { name: "1. Upload Image" }),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("navigation", { name: "Pattern detail panels" }),
     ).toBeNull();
     expect(
-      screen.queryByRole("region", { name: "Pattern Options" }),
+      screen.queryByRole("region", { name: "Save / Download" }),
     ).toBeNull();
   });
 
-  it("runs the compact result-first flow through all four sheet panels", async () => {
+  it("runs the compact result-first flow with inline bead requirements and recovery sheets", async () => {
     Object.defineProperty(window, "innerWidth", {
       configurable: true,
       value: 600,
@@ -685,7 +770,7 @@ describe("App", () => {
     await completeInputs();
 
     expect(
-      screen.getByRole("region", { name: "Start with an image" }),
+      screen.getByRole("region", { name: "1. Upload Image" }),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("navigation", { name: "Pattern detail panels" }),
@@ -696,7 +781,7 @@ describe("App", () => {
     await act(async () => resolveFirst(PUBLIC_RESULT));
 
     expect(
-      screen.queryByRole("region", { name: "Start with an image" }),
+      screen.queryByRole("region", { name: "1. Upload Image" }),
     ).toBeNull();
     expect(
       screen.getByRole("region", { name: "Pattern status" }),
@@ -705,9 +790,54 @@ describe("App", () => {
       screen.getByRole("img", { name: /Bead pattern preview/ }),
     ).toBeInTheDocument();
     expect(screen.getByText("2 × 2")).toBeInTheDocument();
-    expect(screen.getByText("Actual Colors")).toBeInTheDocument();
+    expect(screen.getByText("Colors Used")).toBeInTheDocument();
     expect(screen.getByText("3")).toBeInTheDocument();
-    expect(screen.getByText("1 board")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Bead Requirements" }),
+    ).toBeInTheDocument();
+    const compactContent = document.querySelector<HTMLElement>(
+      ".compact-result-content",
+    )!;
+    const compactSummary = within(compactContent).getByRole("heading", {
+      name: "Pattern Summary",
+    });
+    const compactBeadSet = within(compactContent).getByRole("heading", {
+      name: "Recommended Bead Set",
+    });
+    const compactBoardSetup = within(compactContent).getByRole("heading", {
+      name: "Recommended Board Setup",
+    });
+    const compactRequirements = within(compactContent).getByRole("heading", {
+      name: "Bead Requirements",
+    });
+    const compactDownload = within(compactContent).getByRole("button", {
+      name: "Save / Download Pattern",
+    });
+    expect(
+      compactSummary.compareDocumentPosition(compactRequirements) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      compactSummary.compareDocumentPosition(compactBeadSet) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      compactBeadSet.compareDocumentPosition(compactBoardSetup) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      compactBoardSetup.compareDocumentPosition(compactRequirements) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      compactRequirements.compareDocumentPosition(compactDownload) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      within(compactContent).getAllByRole("heading", {
+        name: "Bead Requirements",
+      }),
+    ).toHaveLength(1);
     const launchers = screen.getByRole("navigation", {
       name: "Pattern detail panels",
     });
@@ -715,11 +845,8 @@ describe("App", () => {
       Array.from(launchers.querySelectorAll("button")).map((button) =>
         button.textContent?.replace("›", ""),
       ),
-    ).toEqual(["Settings", "Colors", "Boards", "Original"]);
+    ).toEqual(["Settings", "Original"]);
 
-    const colorsLauncher = screen.getByRole("button", { name: "Colors" });
-    await userEvent.click(colorsLauncher);
-    expect(screen.getByRole("dialog", { name: "Colors" })).toBeInTheDocument();
     expect(screen.getByText("A1")).toBeInTheDocument();
     const compactColorRow = screen.getByRole("button", {
       name: "A1, 2 beads",
@@ -733,12 +860,12 @@ describe("App", () => {
       screen.getByRole("button", { name: "Clear Highlight" }),
     );
     expect(compactColorRow).toHaveAttribute("aria-pressed", "false");
-    expect(document.querySelector(".app-root")).toHaveAttribute("inert");
 
-    await userEvent.click(screen.getByRole("tab", { name: "Boards" }));
-    expect(screen.getByRole("dialog", { name: "Boards" })).toBeInTheDocument();
-    expect(screen.getByText("Board Layout")).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("tab", { name: "Original" }));
+    const originalLauncher = screen.getByRole("button", { name: "Original" });
+    await userEvent.click(originalLauncher);
+    expect(
+      screen.getByRole("dialog", { name: "Original" }),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole("img", { name: "Preview of the selected image" }),
     ).toHaveAttribute("src", "blob:app-preview");
@@ -747,7 +874,7 @@ describe("App", () => {
     await new Promise(requestAnimationFrame);
     expect(screen.queryByRole("dialog")).toBeNull();
     expect(document.querySelector(".app-root")).not.toHaveAttribute("inert");
-    expect(colorsLauncher).toHaveFocus();
+    expect(originalLauncher).toHaveFocus();
 
     await userEvent.click(screen.getByRole("button", { name: "Settings" }));
     await userEvent.clear(screen.getByLabelText("Maximum Colors"));
@@ -763,7 +890,6 @@ describe("App", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
     expect(screen.getByText("Updating your pattern…")).toBeInTheDocument();
 
-    await userEvent.click(screen.getByRole("button", { name: "Colors" }));
     expect(screen.getByText("A1")).toBeInTheDocument();
     await act(async () =>
       resolveSecond(createPublicPattern(2, 2, [1, 1, 65535, 1])),
@@ -771,7 +897,7 @@ describe("App", () => {
     expect(screen.getByText("B1")).toBeInTheDocument();
     expect(screen.queryByText("A1")).toBeNull();
 
-    await userEvent.click(screen.getByRole("tab", { name: "Original" }));
+    await userEvent.click(screen.getByRole("button", { name: "Original" }));
     await userEvent.upload(
       screen.getByLabelText("Replace Image"),
       new File(["next"], "next.webp", { type: "image/webp" }),
@@ -782,7 +908,7 @@ describe("App", () => {
     await userEvent.click(screen.getByRole("button", { name: "Remove Image" }));
     expect(screen.queryByRole("dialog")).toBeNull();
     expect(
-      screen.getByRole("region", { name: "Start with an image" }),
+      screen.getByRole("region", { name: "1. Upload Image" }),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("navigation", { name: "Pattern detail panels" }),
@@ -817,14 +943,16 @@ describe("App", () => {
     await userEvent.click(
       await screen.findByRole("button", { name: "Generate Pattern" }),
     );
-    await screen.findByText("Actual Colors");
+    await screen.findByText("Colors Used");
     await userEvent.click(
       screen.getByRole("button", { name: "More controls" }),
     );
     await userEvent.click(screen.getByRole("button", { name: "Zoom in" }));
     expect(screen.getByText("125%")).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: "Colors" }));
-    expect(screen.getByRole("dialog", { name: "Colors" })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Original" }));
+    expect(
+      screen.getByRole("dialog", { name: "Original" }),
+    ).toBeInTheDocument();
 
     Object.defineProperty(window, "innerWidth", {
       configurable: true,
@@ -839,12 +967,14 @@ describe("App", () => {
       screen.getByRole("main", { name: "Pattern maker workspace" }),
     ).toHaveAttribute("data-workspace-mode", "medium");
     expect(
-      screen.getByRole("region", { name: "Start with an image" }),
+      screen.getByRole("region", { name: "1. Upload Image" }),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("navigation", { name: "Pattern detail panels" }),
     ).toBeNull();
     expect(screen.getByText("125%")).toBeInTheDocument();
-    expect(screen.getByText("Board Layout")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Recommended Board Setup" }),
+    ).toBeInTheDocument();
   });
 });

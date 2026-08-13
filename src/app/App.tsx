@@ -22,9 +22,9 @@ import {
   PatternResults,
   ResultRetentionStatus,
 } from "../features/results/PatternResults";
-import { BoardLayoutSummary } from "../features/results/BoardLayoutSummary";
 import { ColorList } from "../features/results/ColorList";
 import { PatternSummary } from "../features/results/PatternSummary";
+import { ResultRecommendations } from "../features/results/ResultRecommendations";
 import { toPatternResultView } from "../features/results/pattern-result-view";
 import { PatternSettings } from "../features/settings/PatternSettings";
 import {
@@ -82,6 +82,7 @@ export function App({
     );
     return selected ? `${selected.size}-Color Set` : null;
   }, [generationRuntime, lastSuccess]);
+  const patternBackground = lastSuccess?.snapshot.settings.background ?? null;
   const patternActionState = toPatternActionState(generator.state);
   const compactResultMode =
     workspaceMode === "compact" && visiblePattern !== undefined;
@@ -147,6 +148,7 @@ export function App({
           ? generationRuntime.colorSetProfiles
           : []
       }
+      useDesktopPatternSizeSelector={workspaceMode === "desktop"}
       generationControls={
         omitGenerationControls ? null : generationStatus(insideSheet)
       }
@@ -157,27 +159,6 @@ export function App({
     switch (panel) {
       case "settings":
         return settingsPanel(true);
-      case "colors":
-        return compactResult?.ok ? (
-          <ColorList
-            key={lastSuccess?.snapshot.jobId}
-            colors={compactResult.view.colors}
-            focusedColorIndex={focusedColorIndex}
-            onFocusColor={setFocusedColorIndex}
-            onClearHighlight={() => setFocusedColorIndex(null)}
-          />
-        ) : (
-          <ResultViewError />
-        );
-      case "boards":
-        return compactResult?.ok ? (
-          <BoardLayoutSummary
-            key={lastSuccess?.snapshot.jobId}
-            layout={compactResult.view.boardLayout}
-          />
-        ) : (
-          <ResultViewError />
-        );
       case "original":
         return imagePreview(true);
     }
@@ -195,29 +176,41 @@ export function App({
     </div>
   );
 
-  const compactResults = compactResult?.ok ? (
-    <div className="compact-result-content">
-      <PatternSummary
-        summary={compactResult.view.summary}
-        selectedColorSetLabel={selectedColorSetLabel ?? "Unavailable"}
-        variant="compact"
-      />
-      <MobilePanelLaunchers onOpen={openSheet} />
-      <PatternActions
-        state={patternActionState}
-        onDownload={() => downloadLastSuccess()}
-      />
-    </div>
-  ) : (
-    <div className="compact-result-content">
-      <ResultViewError />
-      <MobilePanelLaunchers onOpen={openSheet} />
-      <PatternActions
-        state={patternActionState}
-        onDownload={() => downloadLastSuccess()}
-      />
-    </div>
-  );
+  const compactResults =
+    compactResult?.ok && patternBackground !== null ? (
+      <div className="compact-result-content">
+        <PatternSummary
+          summary={compactResult.view.summary}
+          selectedColorSetLabel={selectedColorSetLabel ?? "Unavailable"}
+          patternBackground={patternBackground}
+        />
+        <ResultRecommendations
+          summary={compactResult.view.summary}
+          colors={compactResult.view.colors}
+        />
+        <ColorList
+          key={lastSuccess?.snapshot.jobId}
+          colors={compactResult.view.colors}
+          focusedColorIndex={focusedColorIndex}
+          onFocusColor={setFocusedColorIndex}
+          onClearHighlight={() => setFocusedColorIndex(null)}
+        />
+        <PatternActions
+          state={patternActionState}
+          onDownload={() => downloadLastSuccess()}
+        />
+        <MobilePanelLaunchers onOpen={openSheet} />
+      </div>
+    ) : (
+      <div className="compact-result-content">
+        <ResultViewError />
+        <MobilePanelLaunchers onOpen={openSheet} />
+        <PatternActions
+          state={patternActionState}
+          onDownload={() => downloadLastSuccess()}
+        />
+      </div>
+    );
 
   function downloadLastSuccess() {
     if (lastSuccess === undefined || selectedColorSetLabel === null) {
@@ -271,12 +264,14 @@ export function App({
           resultsContent={
             compactResultMode ? (
               compactResults
-            ) : visiblePattern === undefined ? undefined : (
+            ) : visiblePattern === undefined ||
+              patternBackground === null ? undefined : (
               <PatternResults
                 key={lastSuccess?.snapshot.jobId}
                 pattern={visiblePattern}
                 status={generator.state.status}
                 selectedColorSetLabel={selectedColorSetLabel ?? "Unavailable"}
+                patternBackground={patternBackground}
                 focusedColorIndex={focusedColorIndex}
                 onFocusColor={setFocusedColorIndex}
                 onClearHighlight={() => setFocusedColorIndex(null)}

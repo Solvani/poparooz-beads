@@ -14,9 +14,9 @@ describe("useBottomSheet", () => {
         <div>
           <button
             type="button"
-            onClick={(event) => sheet.open("boards", event.currentTarget)}
+            onClick={(event) => sheet.open("original", event.currentTarget)}
           >
-            Open boards
+            Open original
           </button>
           <button type="button" onClick={sheet.close}>
             Close sheet
@@ -27,9 +27,9 @@ describe("useBottomSheet", () => {
     }
 
     const view = render(<Harness />);
-    const opener = view.getByRole("button", { name: "Open boards" });
+    const opener = view.getByRole("button", { name: "Open original" });
     await userEvent.click(opener);
-    expect(view.getByText("boards")).toBeInTheDocument();
+    expect(view.getByText("original")).toBeInTheDocument();
     await userEvent.click(view.getByRole("button", { name: "Close sheet" }));
     expect(view.getByText("closed")).toBeInTheDocument();
     await new Promise(requestAnimationFrame);

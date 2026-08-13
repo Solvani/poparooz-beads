@@ -28,6 +28,7 @@ export function GeneratorWorkspaceShell({
 }: GeneratorWorkspaceShellProps) {
   const hasResults =
     resultsContent !== undefined || actionsContent !== undefined;
+  const showResultsRegion = hasResults || workspaceMode === "desktop";
 
   return (
     <main
@@ -49,9 +50,8 @@ export function GeneratorWorkspaceShell({
 
       {showSettingsRegion ? (
         <Panel
-          title="Start with an image"
+          title="1. Upload Image"
           titleId="create-heading"
-          eyebrow="Create"
           className="workspace-shell__settings"
         >
           {settingsContent ?? (
@@ -61,14 +61,18 @@ export function GeneratorWorkspaceShell({
       ) : null}
 
       <Panel
-        title="Your pattern will appear here."
+        title="Pattern Canvas"
         titleId="canvas-heading"
-        eyebrow="Pattern Canvas"
+        eyebrow={hasResults ? "Pattern" : undefined}
         className="workspace-shell__canvas panel--canvas"
       >
         {canvasStatusContent}
         {canvasContent ?? (
           <div className="empty-state">
+            <span className="empty-state__icon" aria-hidden="true">
+              &#9638;
+            </span>
+            <h3>Your pattern preview will appear here</h3>
             <p>
               {imageReady
                 ? "Your image is ready. Generate the pattern in the next step."
@@ -78,16 +82,39 @@ export function GeneratorWorkspaceShell({
         )}
       </Panel>
 
-      {hasResults ? (
+      {showResultsRegion ? (
         <Panel
           as="aside"
-          title="Pattern details"
+          title="Results"
           titleId="summary-heading"
-          eyebrow="Pattern Summary"
           className="workspace-shell__results"
         >
-          {resultsContent}
-          {actionsContent}
+          {hasResults ? (
+            <>
+              {resultsContent}
+              {actionsContent}
+            </>
+          ) : (
+            <div className="results-empty-state">
+              <div className="results-empty-state__message">
+                <span className="results-empty-state__icon" aria-hidden="true">
+                  &#9638;
+                </span>
+                <h3>Your results will appear here</h3>
+                <p>
+                  After you generate a pattern, you’ll see your pattern summary,
+                  recommendations, bead requirements, and download options.
+                </p>
+              </div>
+              <button
+                type="button"
+                className="button button--primary results-empty-state__action"
+                disabled
+              >
+                Save / Download Pattern
+              </button>
+            </div>
+          )}
         </Panel>
       ) : null}
     </main>

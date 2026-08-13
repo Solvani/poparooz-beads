@@ -34,7 +34,7 @@ export function PatternActions({ state, onDownload }: PatternActionsProps) {
       className="summary-section pattern-actions"
       aria-labelledby="pattern-options-heading"
     >
-      <h3 id="pattern-options-heading">Pattern Options</h3>
+      <h3 id="pattern-options-heading">Save / Download</h3>
       <p className="pattern-actions__availability">
         {state.availabilityMessage}
       </p>
@@ -46,9 +46,9 @@ export function PatternActions({ state, onDownload }: PatternActionsProps) {
       <div className="pattern-actions__buttons">
         <PatternActionButton
           enabled={state.downloadEnabled}
-          label="Download Pattern"
+          label="Save / Download Pattern"
           note="Color code pattern · PNG"
-          variant="secondary"
+          variant="primary"
           busy={downloading}
           onClick={() => void download()}
         />

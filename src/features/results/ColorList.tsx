@@ -4,7 +4,7 @@ import { Button } from "../../components/ui/Button";
 import { ColorRow } from "./ColorRow";
 import type { ColorRowView } from "./result.types";
 
-export const DEFAULT_VISIBLE_COLORS = 8;
+export const DEFAULT_VISIBLE_COLORS = 6;
 
 export function ColorList({
   colors,
@@ -29,8 +29,10 @@ export function ColorList({
       aria-labelledby="color-list-heading"
     >
       <div className="result-section__heading">
-        <h3 id="color-list-heading">Colors</h3>
-        <span>{colors.length} total</span>
+        <h3 id="color-list-heading">Bead Requirements</h3>
+        <span>
+          {colors.length} {colors.length === 1 ? "color" : "colors"}
+        </span>
       </div>
       {focusedColor === undefined ? null : (
         <div className="color-highlight-status">
@@ -42,6 +44,11 @@ export function ColorList({
           </Button>
         </div>
       )}
+      <div className="color-list__header" aria-hidden="true">
+        <span>Color</span>
+        <span>Poparooz Code</span>
+        <span>Beads</span>
+      </div>
       <ul className="color-list" id="pattern-color-list">
         {visibleColors.map((row) => (
           <ColorRow
@@ -60,7 +67,9 @@ export function ColorList({
           aria-controls="pattern-color-list"
           onClick={() => setExpanded((current) => !current)}
         >
-          {expanded ? "Show fewer" : "Show all colors"}
+          {expanded
+            ? `Show Fewer Colors (${colors.length})`
+            : `Show All Colors (${colors.length})`}
         </Button>
       ) : null}
     </section>

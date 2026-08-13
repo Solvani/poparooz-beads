@@ -13,6 +13,7 @@ export interface PatternSettingsProps {
   readonly onChange: (value: PatternSettingsDraft) => void;
   readonly generationControls?: ReactNode;
   readonly colorSetProfiles: readonly ColorSetProfileOption[];
+  readonly useDesktopPatternSizeSelector?: boolean;
 }
 
 export function PatternSettings({
@@ -20,6 +21,7 @@ export function PatternSettings({
   onChange,
   generationControls,
   colorSetProfiles,
+  useDesktopPatternSizeSelector = false,
 }: PatternSettingsProps) {
   const validation = validatePatternSettings(value, colorSetProfiles);
   const errors = validation.valid ? {} : validation.errors;
@@ -31,8 +33,12 @@ export function PatternSettings({
 
   return (
     <section className="pattern-settings" aria-labelledby="settings-heading">
-      <h3 id="settings-heading">Pattern Settings</h3>
-      <PatternSizeSetting value={value} onChange={onChange} />
+      <h3 id="settings-heading">2. Settings</h3>
+      <PatternSizeSetting
+        value={value}
+        onChange={onChange}
+        useButtonSelector={useDesktopPatternSizeSelector}
+      />
       {errors.dimensions ? (
         <p className="form-error" role="alert">
           {errors.dimensions}
@@ -93,8 +99,12 @@ export function PatternSettings({
         error={value.maxColors === "" ? undefined : errors.maxColors}
         onChange={(nextValue) => update("maxColors", nextValue)}
       />
+      <div className="bead-size-spec" aria-label="Bead Size: 2.6 millimeters">
+        <span>Bead Size</span>
+        <strong>2.6 mm</strong>
+      </div>
       <fieldset className="background-setting">
-        <legend>Pattern Background</legend>
+        <legend>Background</legend>
         <label>
           <input
             type="radio"
@@ -103,9 +113,15 @@ export function PatternSettings({
             checked={value.background === "white"}
             onChange={() => update("background", "white")}
           />
+          <span
+            className="background-setting__icon background-setting__icon--full"
+            aria-hidden="true"
+          >
+            &#9673;
+          </span>
           <span className="background-setting__copy">
             <strong>Full Background</strong>
-            <span>Fill the entire pattern area with beads.</span>
+            <span>White</span>
           </span>
         </label>
         <label>
@@ -116,9 +132,15 @@ export function PatternSettings({
             checked={value.background === "transparent"}
             onChange={() => update("background", "transparent")}
           />
+          <span
+            className="background-setting__icon background-setting__icon--transparent"
+            aria-hidden="true"
+          >
+            &#9642;
+          </span>
           <span className="background-setting__copy">
             <strong>Remove Background</strong>
-            <span>Keep only the main subject where possible.</span>
+            <span>Transparent</span>
           </span>
         </label>
       </fieldset>
@@ -141,14 +163,43 @@ export function PatternSettings({
 function PatternSizeSetting({
   value,
   onChange,
+  useButtonSelector,
 }: {
   readonly value: PatternSettingsDraft;
   readonly onChange: (value: PatternSettingsDraft) => void;
+  readonly useButtonSelector: boolean;
 }) {
   const selected = PATTERN_SIZE_PRESETS.find(
     (preset) =>
       String(preset.size) === value.width && value.width === value.height,
   );
+  if (useButtonSelector) {
+    return (
+      <fieldset className="pattern-size-setting">
+        <legend>Pattern Size</legend>
+        <div className="pattern-size-selector">
+          {PATTERN_SIZE_PRESETS.map((preset) => (
+            <button
+              key={preset.size}
+              type="button"
+              className="pattern-size-selector__option"
+              aria-pressed={selected?.size === preset.size}
+              onClick={() => {
+                const size = String(preset.size);
+                onChange({ ...value, width: size, height: size });
+              }}
+            >
+              {preset.size} × {preset.size}
+            </button>
+          ))}
+        </div>
+        <p className="form-help">
+          {selected?.guidance ?? "Choose a supported square Pattern Size."}
+        </p>
+      </fieldset>
+    );
+  }
+
   return (
     <div className="form-field">
       <label htmlFor="pattern-size">Pattern Size</label>

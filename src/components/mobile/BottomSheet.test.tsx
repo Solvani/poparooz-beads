@@ -23,7 +23,7 @@ function renderSheet(onClose = vi.fn()) {
         <button type="button">Background action</button>
       </main>
       <BottomSheet
-        activePanel="colors"
+        activePanel="original"
         onPanelChange={() => {}}
         onClose={onClose}
       >
@@ -37,14 +37,14 @@ function renderSheet(onClose = vi.fn()) {
 describe("BottomSheet", () => {
   it("uses a body portal and modal dialog semantics", () => {
     const { view } = renderSheet();
-    const dialog = view.getByRole("dialog", { name: "Colors" });
+    const dialog = view.getByRole("dialog", { name: "Original" });
 
     expect(dialog).toHaveAttribute("aria-modal", "true");
     expect(dialog.closest(".app-root")).toBeNull();
     expect(document.body.contains(dialog)).toBe(true);
     expect(view.getByRole("tabpanel")).toHaveAttribute(
       "aria-labelledby",
-      "bottom-sheet-tab-colors",
+      "bottom-sheet-tab-original",
     );
   });
 

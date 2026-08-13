@@ -167,6 +167,7 @@ describe("PatternCanvas", () => {
     expect(
       screen.getByRole("button", { name: "Color Preview" }),
     ).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("20 × 20 beads · 1 color")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Fit to Screen" })).toBeEnabled();
     expect(screen.queryByRole("button", { name: "Zoom in" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Grid" })).toBeNull();
@@ -309,6 +310,10 @@ describe("PatternCanvas", () => {
         screen.getByRole("button", { name: "Color Code View" }),
       );
       setup.notifyResize();
+
+      expect(
+        screen.getByText(`${size} × ${size} beads · 1 color`),
+      ).toBeInTheDocument();
 
       await openMoreControls();
       expect(screen.getByLabelText("Current zoom")).toHaveTextContent("100%");

@@ -12,17 +12,17 @@
 
   --page-background: #f7f6f2;
   --surface-primary: #ffffff;
-  --surface-secondary: #f3f4f1;
-  --surface-tertiary: #ecefea;
+  --surface-secondary: #faf8f2;
+  --surface-tertiary: #f1eee5;
 
   --text-primary: #1f2926;
   --text-secondary: #56615d;
   --text-tertiary: #77817d;
   --text-disabled: #a1aaa6;
 
-  --border-default: #d9deda;
-  --border-strong: #bbc4bf;
-  --border-subtle: #e8ebe8;
+  --border-default: #ded9ce;
+  --border-strong: #c8c0b1;
+  --border-subtle: #ece8df;
 
   --success: #247451;
   --success-background: #e9f6ef;

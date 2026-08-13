@@ -11,13 +11,13 @@ describe("BottomSheetTabs", () => {
   it("exposes standard tab semantics and click selection", async () => {
     const onChange = vi.fn();
     const view = render(
-      <BottomSheetTabs activePanel="colors" onChange={onChange} />,
+      <BottomSheetTabs activePanel="original" onChange={onChange} />,
     );
 
     expect(
       view.getByRole("tablist", { name: "Pattern panels" }),
     ).toBeInTheDocument();
-    expect(view.getByRole("tab", { name: "Colors" })).toHaveAttribute(
+    expect(view.getByRole("tab", { name: "Original" })).toHaveAttribute(
       "aria-selected",
       "true",
     );
@@ -25,12 +25,12 @@ describe("BottomSheetTabs", () => {
       "aria-selected",
       "false",
     );
-    await userEvent.click(view.getByRole("tab", { name: "Boards" }));
-    expect(onChange).toHaveBeenCalledWith("boards");
+    await userEvent.click(view.getByRole("tab", { name: "Original" }));
+    expect(onChange).toHaveBeenCalledWith("original");
   });
 
   it.each([
-    ["ArrowRight", "colors"],
+    ["ArrowRight", "original"],
     ["ArrowLeft", "original"],
     ["Home", "settings"],
     ["End", "original"],

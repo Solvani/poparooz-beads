@@ -31,13 +31,13 @@ describe("PatternActions", () => {
     const view = render(<PatternActions state={actionState()} />);
 
     expect(
-      view.getByRole("region", { name: "Pattern Options" }),
+      view.getByRole("region", { name: "Save / Download" }),
     ).toBeInTheDocument();
     expect(
       view.getByText("Create a pattern to access download and bead options."),
     ).toBeInTheDocument();
     expect(
-      view.getByRole("button", { name: "Download Pattern" }),
+      view.getByRole("button", { name: "Save / Download Pattern" }),
     ).toBeDisabled();
     expect(view.getByText("Color code pattern · PNG")).toBeInTheDocument();
     expect(
@@ -62,7 +62,7 @@ describe("PatternActions", () => {
       />,
     );
     await userEvent.click(
-      view.getByRole("button", { name: "Download Pattern" }),
+      view.getByRole("button", { name: "Save / Download Pattern" }),
     );
     expect(onDownload).toHaveBeenCalledOnce();
     expect(await view.findByRole("status")).toHaveTextContent(
@@ -70,7 +70,7 @@ describe("PatternActions", () => {
     );
   });
 
-  it("keeps Download Pattern as the only customer action", () => {
+  it("keeps Save / Download Pattern as the only customer action", () => {
     const view = render(
       <PatternActions
         state={actionState({
@@ -88,9 +88,9 @@ describe("PatternActions", () => {
         "Download and bead options are not available in this preview.",
       ),
     ).toBeInTheDocument();
-    expect(view.getByRole("button", { name: "Download Pattern" })).toHaveClass(
-      "button--secondary",
-    );
+    expect(
+      view.getByRole("button", { name: "Save / Download Pattern" }),
+    ).toHaveClass("button--primary");
     expect(
       view.queryByRole("button", { name: "Get Beads for This Pattern" }),
     ).not.toBeInTheDocument();
@@ -136,7 +136,12 @@ describe("PatternActions", () => {
 
     expect(css).toMatch(/\.pattern-actions__buttons\s*{\s*display: grid/);
     expect(css).toMatch(/\.pattern-action__button\s*{[^}]*width: 100%/s);
-    expect(css).toMatch(/\.pattern-action__button\s*{[^}]*min-height: 48px/s);
-    expect(css).toContain("grid-template-columns: repeat(2, minmax(0, 1fr))");
+    expect(css).toMatch(/\.pattern-action__button\s*{[^}]*min-height: 44px/s);
+    expect(css).toMatch(
+      /\.pattern-action__button\s*{[^}]*white-space: nowrap/s,
+    );
+    expect(css).toMatch(
+      /\.pattern-actions__buttons\s*{[^}]*grid-template-columns: minmax\(0, 1fr\)/s,
+    );
   });
 });

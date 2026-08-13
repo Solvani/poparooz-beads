@@ -161,17 +161,24 @@ export function PatternCanvas({
 
   return (
     <section className="pattern-canvas" aria-label="Pattern preview">
-      <CanvasToolbar
-        viewMode={viewMode}
-        zoomPercentage={zoomPercentage}
-        canZoomIn={canZoomIn}
-        canZoomOut={canZoomOut}
-        onZoomIn={zoomIn}
-        onZoomOut={zoomOut}
-        onFit={fit}
-        onReadCodes={readCodes}
-        onViewModeChange={changeViewMode}
-      />
+      <div className="pattern-canvas__topbar">
+        <p className="pattern-canvas__meta">
+          {pattern.matrix.width} × {pattern.matrix.height} beads ·{" "}
+          {pattern.colors.length}{" "}
+          {pattern.colors.length === 1 ? "color" : "colors"}
+        </p>
+        <CanvasToolbar
+          viewMode={viewMode}
+          zoomPercentage={zoomPercentage}
+          canZoomIn={canZoomIn}
+          canZoomOut={canZoomOut}
+          onZoomIn={zoomIn}
+          onZoomOut={zoomOut}
+          onFit={fit}
+          onReadCodes={readCodes}
+          onViewModeChange={changeViewMode}
+        />
+      </div>
       <div
         className={`pattern-canvas__viewport${
           viewMode === "code" ? " pattern-canvas__viewport--code" : ""

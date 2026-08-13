@@ -14,11 +14,11 @@ describe("P2-I08 responsive boundary", () => {
 
     expect(workspace).toContain("@container poparooz-app (min-width: 768px)");
     expect(workspace).toContain(
-      "@container poparooz-app (min-width: 900px) and (max-width: 1399px)",
+      "@container poparooz-app (min-width: 900px) and (max-width: 1384px)",
     );
-    expect(workspace).toContain("@container poparooz-app (min-width: 1400px)");
+    expect(workspace).toContain("@container poparooz-app (min-width: 1385px)");
     expect(workspace).toContain("320px minmax(0, 1fr)");
-    expect(workspace).toContain("320px minmax(560px, 1fr) 340px");
+    expect(workspace).toContain("336px minmax(0, 1fr) 336px");
     expect(workspace).toContain("workspace-shell--has-results");
     expect(mobile).toContain("max-height: 85dvh");
     expect(mobile).toContain("border-radius: 20px 20px 0 0");

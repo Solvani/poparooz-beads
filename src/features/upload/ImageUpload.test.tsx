@@ -15,8 +15,8 @@ describe("ImageUpload", () => {
     const view = render(
       <ImageUpload error={null} onSelectFiles={onSelectFiles} />,
     );
-    const input = view.getByLabelText("Choose an Image") as HTMLInputElement;
-    const visibleLabel = view.getByText("Choose an Image");
+    const input = view.getByLabelText("Choose Image") as HTMLInputElement;
+    const visibleLabel = view.getByText("Choose Image");
     const file = new File(["image"], "photo.png", { type: "image/png" });
 
     expect(input.nextElementSibling).toBe(visibleLabel);
@@ -27,6 +27,7 @@ describe("ImageUpload", () => {
     expect(input.accept).toContain("image/jpeg");
     expect(input.accept).toContain("image/png");
     expect(input.accept).toContain("image/webp");
+    expect(view.getByText("Max 20 MB")).toBeInTheDocument();
   });
 
   it("supports drag and drop with visible drag-over feedback", () => {
@@ -34,7 +35,8 @@ describe("ImageUpload", () => {
     const view = render(
       <ImageUpload error={null} onSelectFiles={onSelectFiles} />,
     );
-    const dropZone = view.getByText(/Drag and drop/).parentElement!;
+    const dropZone =
+      view.getByText(/Drag & drop/).parentElement!.parentElement!;
     const file = new File(["image"], "photo.jpg", { type: "image/jpeg" });
 
     fireEvent.dragEnter(dropZone);
@@ -56,7 +58,7 @@ describe("ImageUpload", () => {
       />,
     );
 
-    const input = view.getByLabelText("Choose an Image");
+    const input = view.getByLabelText("Choose Image");
     expect(input).toHaveAttribute("aria-invalid", "true");
     expect(view.getByRole("alert")).toHaveTextContent(
       "Choose one image at a time.",

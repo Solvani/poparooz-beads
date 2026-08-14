@@ -134,7 +134,10 @@ export function PatternSettings({
       </fieldset>
       {generationControls === undefined ? (
         <>
-          <Button className="generate-placeholder" disabled>
+          <Button
+            className="generate-placeholder generation-status__action"
+            disabled
+          >
             Generate Pattern
           </Button>
           <p className="form-help">

@@ -47,7 +47,11 @@ export function GenerationStatus({
         <p className="form-help">
           Regenerate the pattern to apply your new settings.
         </p>
-        <Button disabled={!canRegenerate} onClick={onGenerate}>
+        <Button
+          className="generation-status__action"
+          disabled={!canRegenerate}
+          onClick={onGenerate}
+        >
           Regenerate Pattern
         </Button>
       </div>
@@ -69,7 +73,11 @@ export function GenerationStatus({
             ? "Pattern update stopped. Your previous pattern is still available."
             : "Pattern generation stopped."}
         </p>
-        <Button disabled={!canGenerate && !canRegenerate} onClick={onGenerate}>
+        <Button
+          className="generation-status__action"
+          disabled={!canGenerate && !canRegenerate}
+          onClick={onGenerate}
+        >
           {hasPrevious ? "Regenerate Pattern" : "Try Again"}
         </Button>
       </div>
@@ -79,7 +87,11 @@ export function GenerationStatus({
     return (
       <div className="generation-status" role="alert">
         <p>{state.error.message}</p>
-        <Button disabled={!canGenerate && !canRegenerate} onClick={onGenerate}>
+        <Button
+          className="generation-status__action"
+          disabled={!canGenerate && !canRegenerate}
+          onClick={onGenerate}
+        >
           Try Again
         </Button>
       </div>
@@ -88,7 +100,11 @@ export function GenerationStatus({
 
   return (
     <div className="generation-status">
-      <Button disabled={!canGenerate} onClick={onGenerate}>
+      <Button
+        className="generation-status__action"
+        disabled={!canGenerate}
+        onClick={onGenerate}
+      >
         Generate Pattern
       </Button>
       <p className="form-help">

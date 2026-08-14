@@ -76,13 +76,24 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
     expect(workspace).toContain(
       ".background-setting label:has(input:focus-visible)",
     );
-    expect(workspace).toContain("min-height: 52px");
-    expect(workspace).toContain("grid-template-columns: minmax(0, 1fr)");
+    expect(workspace).toContain("height: 52px");
     expect(workspace).toContain(
+      "grid-template-columns: repeat(2, minmax(0, 1fr))",
+    );
+    expect(workspace).toContain("grid-template-columns: minmax(0, 1fr)");
+    expect(workspace).toMatch(
+      /@container poparooz-app \(max-width: 767px\)[\s\S]*?\.background-setting \{\s*grid-template-columns: minmax\(0, 1fr\);/,
+    );
+    expect(workspace).toContain(
+      "@container poparooz-app (min-width: 900px) and (max-width: 1384px)",
+    );
+    expect(workspace).toContain(".generation-status__action");
+    expect(workspace).not.toContain(
       ".pattern-settings > .generation-status .button",
     );
     expect(workspace).toContain("border-radius: 9px");
     expect(workspace).toContain("box-shadow: none");
+    expect(workspace).toContain("white-space: nowrap");
     expect(workspace).not.toContain("background-setting__icon");
   });
 

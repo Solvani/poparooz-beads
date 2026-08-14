@@ -74,6 +74,9 @@ describe("PatternSettings", () => {
       view.getByRole("radio", { name: /Remove Background/ }),
     ).not.toBeChecked();
     expect(view.queryByRole("radio", { name: "Keep Original" })).toBeNull();
+    expect(view.getByRole("button", { name: "Generate Pattern" })).toHaveClass(
+      "generation-status__action",
+    );
     expect(
       view.getByRole("button", { name: "Generate Pattern" }),
     ).toBeDisabled();

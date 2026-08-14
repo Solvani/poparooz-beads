@@ -36,6 +36,9 @@ describe("GenerationStatus", () => {
     );
     expect(
       screen.getByRole("button", { name: "Generate Pattern" }),
+    ).toHaveClass("generation-status__action");
+    expect(
+      screen.getByRole("button", { name: "Generate Pattern" }),
     ).toBeDisabled();
     expect(
       screen.getByText("Pattern generation is not available in this preview."),

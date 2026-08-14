@@ -9,8 +9,10 @@ import {
 } from "./generator-quality-baseline.ts";
 import { readGeneratorQualityManifest } from "./generator-quality-manifest.ts";
 import { resolveExternalCorpus } from "./generator-quality-resolver.ts";
+import { decodeGeneratorQualityPng } from "./generator-quality-png.ts";
 import {
   loadGeneratorQualityDependencies,
+  replayExternalQualityCase,
   replaySyntheticQualityCase,
   type GeneratorQualityPerformanceSample,
 } from "./generator-quality-replay.ts";
@@ -171,10 +173,48 @@ async function runCorpus(
         "POPAROOZ_QUALITY_CORPUS_DIR is required for external corpus mode.",
       );
     }
-    await resolveExternalCorpus(manifest, root);
-    throw new Error(
-      "External corpus files validated; curated image decoding belongs to Q01-A02 and is not installed yet.",
-    );
+    const resolved = await resolveExternalCorpus(manifest, root);
+    const byLogicalId = new Map(resolved.map((item) => [item.logicalId, item]));
+    const dependencies = loadGeneratorQualityDependencies(repositoryRoot);
+    const cases: GeneratorQualityCaseResult[] = [];
+    const performanceSamples: GeneratorQualityPerformanceSample[] = [];
+    for (const declaration of manifest.cases
+      .filter((item) => item.sourceKind === "external-curated")
+      .sort((left, right) => left.id.localeCompare(right.id))) {
+      const input = byLogicalId.get(declaration.input.logicalId);
+      if (input === undefined)
+        throw new Error("Resolved external input is missing.");
+      const source = decodeGeneratorQualityPng(input.bytes, declaration.input);
+      const reference =
+        declaration.reference.type === "trusted-alpha-pair"
+          ? decodeGeneratorQualityPng(
+              byLogicalId.get(declaration.reference.input.logicalId)?.bytes ??
+                missingReference(),
+              declaration.reference.input,
+            )
+          : undefined;
+      for (const background of declaration.supportedBackgrounds) {
+        for (const size of declaration.supportedPatternSizes) {
+          const replay = replayExternalQualityCase(
+            declaration,
+            source,
+            reference,
+            background,
+            size,
+            dependencies,
+          );
+          cases.push(replay.result);
+          performanceSamples.push(replay.performance);
+        }
+      }
+    }
+    if (cases.length === 0) {
+      throw new Error("The manifest has no external curated quality cases.");
+    }
+    return Object.freeze({
+      cases: Object.freeze(cases),
+      performanceSamples: Object.freeze(performanceSamples),
+    });
   }
 
   const declarations = manifest.cases
@@ -215,6 +255,10 @@ async function runCorpus(
     cases: Object.freeze(cases),
     performanceSamples: Object.freeze(performanceSamples),
   });
+}
+
+function missingReference(): never {
+  throw new Error("Resolved external reference is missing.");
 }
 
 async function writeAuthoritativeBaseline(

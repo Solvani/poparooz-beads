@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import { parseGeneratorQualityManifest } from "./generator-quality-manifest.ts";
 import {
   loadGeneratorQualityDependencies,
+  replayExternalQualityCase,
   replaySyntheticQualityCase,
 } from "./generator-quality-replay.ts";
 import {
@@ -79,6 +80,60 @@ describe("generator quality production replay", () => {
 
     expect(fixture.source.data).toEqual(before);
     expect(first).toEqual(second);
+  });
+
+  it("replays an external trusted pair without embedding physical filenames", () => {
+    const fixture = createSyntheticGeneratorQualityFixture("transparent-png");
+    const declaration = {
+      ...manifest.cases.find((item) => item.id === "opaque-white-background")!,
+      id: "external-pair",
+      sourceKind: "external-curated" as const,
+      input: {
+        logicalId: "pairs/example-opaque.png",
+        sha256: "a".repeat(64),
+        dimensions: {
+          width: fixture.source.width,
+          height: fixture.source.height,
+        },
+        alphaClassification: "opaque" as const,
+      },
+      reference: {
+        type: "trusted-alpha-pair" as const,
+        confidence: "strong" as const,
+        provenance: "user-approved-curated-pair" as const,
+        input: {
+          logicalId: "pairs/example-transparent.png",
+          sha256: "b".repeat(64),
+          dimensions: {
+            width: fixture.source.width,
+            height: fixture.source.height,
+          },
+          alphaClassification: "binary-alpha" as const,
+        },
+      },
+      supportedBackgrounds: ["transparent" as const],
+      supportedPatternSizes: [104 as const],
+    };
+    const opaque = {
+      ...fixture.source,
+      data: new Uint8ClampedArray(fixture.source.data),
+    };
+    for (let index = 3; index < opaque.data.length; index += 4) {
+      opaque.data[index] = 255;
+    }
+
+    const replay = replayExternalQualityCase(
+      declaration,
+      opaque,
+      fixture.source,
+      "transparent",
+      104,
+      dependencies,
+    );
+
+    expect(replay.result.sourceKind).toBe("external-curated");
+    expect(replay.result.referenceType).toBe("trusted-alpha-pair");
+    expect(replay.result.metrics.pattern.totalPositions).toBe(104 * 104);
   });
 });
 
@@ -164,7 +219,7 @@ function identity(): GeneratorQualityBaselineIdentity {
     colorSetLockSha256: "d".repeat(64),
     corpusManifestVersion: "0.1.0",
     corpusManifestSha256: "e".repeat(64),
-    metricImplementationVersion: "1.0.0",
+    metricImplementationVersion: "1.1.0",
     scorecardSchemaVersion: "1.0.0",
   };
 }

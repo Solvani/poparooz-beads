@@ -109,22 +109,69 @@ export function replaySyntheticQualityCase(
   result: GeneratorQualityCaseResult;
   performance: GeneratorQualityPerformanceSample;
 }> {
+  return replayQualityCase(
+    declaration,
+    fixture.source,
+    syntheticReferenceSource(fixture),
+    background,
+    size,
+    dependencies,
+  );
+}
+
+export function replayExternalQualityCase(
+  declaration: GeneratorQualityCaseDeclaration,
+  source: RgbaImage,
+  reference: RgbaImage | undefined,
+  background: GeneratorQualityBackground,
+  size: GeneratorQualitySize,
+  dependencies: QualityDependencies,
+): Readonly<{
+  result: GeneratorQualityCaseResult;
+  performance: GeneratorQualityPerformanceSample;
+}> {
+  if (background === "transparent" && reference === undefined) {
+    throw new Error(
+      "Transparent external quality replay requires a trusted alpha reference.",
+    );
+  }
+  return replayQualityCase(
+    declaration,
+    source,
+    reference,
+    background,
+    size,
+    dependencies,
+  );
+}
+
+function replayQualityCase(
+  declaration: GeneratorQualityCaseDeclaration,
+  source: RgbaImage,
+  referenceSource: RgbaImage | undefined,
+  background: GeneratorQualityBackground,
+  size: GeneratorQualitySize,
+  dependencies: QualityDependencies,
+): Readonly<{
+  result: GeneratorQualityCaseResult;
+  performance: GeneratorQualityPerformanceSample;
+}> {
   const totalStarted = performance.now();
-  const originalSourceBytes = new Uint8ClampedArray(fixture.source.data);
-  const sourceMetadata = metadataFor(fixture.source);
+  const originalSourceBytes = new Uint8ClampedArray(source.data);
+  const sourceMetadata = metadataFor(source);
 
   const sourceStarted = performance.now();
   const strictSource =
     background === "transparent"
-      ? excludeStrictEdgeConnectedLightBackground(fixture.source)
+      ? excludeStrictEdgeConnectedLightBackground(source)
       : background === "white" && !sourceMetadata.hasAlpha
-        ? canonicalizeStrictEdgeConnectedLightBackgroundToWhite(fixture.source)
-        : fixture.source;
+        ? canonicalizeStrictEdgeConnectedLightBackgroundToWhite(source)
+        : source;
   const normalizationSource =
     background === "transparent" &&
     !sourceMetadata.hasAlpha &&
-    strictSource !== fixture.source
-      ? refineOpaqueSourceMatteBackground(fixture.source, strictSource)
+    strictSource !== source
+      ? refineOpaqueSourceMatteBackground(source, strictSource)
       : strictSource;
   const sourcePreprocessingMs = performance.now() - sourceStarted;
 
@@ -199,7 +246,7 @@ export function replaySyntheticQualityCase(
     dependencies.processingPolicy.quantization.alphaThresholdByte,
   );
   const referenceImage = normalizedReference(
-    fixture,
+    referenceSource,
     size,
     background,
     dependencies.processingPolicy.imageNormalization.allowUpscale,
@@ -249,7 +296,7 @@ export function replaySyntheticQualityCase(
     exactByteIdentityGate(
       "source-input-immutability",
       originalSourceBytes,
-      fixture.source.data,
+      source.data,
     ),
   ]);
 
@@ -313,7 +360,7 @@ export function replaySyntheticQualityCase(
 }
 
 function normalizedReference(
-  fixture: SyntheticGeneratorQualityFixture,
+  referenceSource: RgbaImage | undefined,
   size: GeneratorQualitySize,
   background: GeneratorQualityBackground,
   allowUpscale: boolean,
@@ -323,22 +370,30 @@ function normalizedReference(
     data.fill(255);
     return { width: size, height: size, data };
   }
+  if (referenceSource === undefined) {
+    throw new Error("Transparent quality replay has no reference image.");
+  }
+  return normalizeRgbaImage(
+    referenceSource,
+    metadataFor(referenceSource),
+    normalizationOptions(size, "transparent", allowUpscale),
+  ).image;
+}
+
+function syntheticReferenceSource(
+  fixture: SyntheticGeneratorQualityFixture,
+): RgbaImage {
   const data = new Uint8ClampedArray(fixture.referenceOccupancy.length * 4);
   for (let index = 0; index < fixture.referenceOccupancy.length; index += 1) {
     if (fixture.referenceOccupancy[index] === 1) {
       data.set([0, 0, 0, 255], index * 4);
     }
   }
-  const image = {
+  return {
     width: fixture.source.width,
     height: fixture.source.height,
     data,
   };
-  return normalizeRgbaImage(
-    image,
-    metadataFor(image),
-    normalizationOptions(size, "transparent", allowUpscale),
-  ).image;
 }
 
 function metadataFor(image: RgbaImage): ImageSourceMetadata {

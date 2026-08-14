@@ -23,31 +23,40 @@ export async function resolveExternalCorpus(
     throw new Error("The manifest declares no external corpus inputs.");
   }
 
-  const actualLogicalIds = await listFiles(root);
+  const physicalFiles = await listFiles(root);
   const declaredLogicalIds = [...declarationByLogicalId.keys()].sort();
-  if (
-    actualLogicalIds.length !== declaredLogicalIds.length ||
-    actualLogicalIds.some((item, index) => item !== declaredLogicalIds[index])
-  ) {
+  if (physicalFiles.length !== declaredLogicalIds.length) {
     throw new Error(
       "The external corpus directory does not exactly match the manifest.",
     );
   }
 
+  const physicalBySha256 = new Map<string, Buffer>();
+  for (const filePath of physicalFiles) {
+    const bytes = await readFile(filePath);
+    const sha256 = createHash("sha256").update(bytes).digest("hex");
+    if (physicalBySha256.has(sha256)) {
+      throw new Error("The external corpus contains duplicate file bytes.");
+    }
+    physicalBySha256.set(sha256, bytes);
+  }
+
   const resolved: ResolvedExternalCorpusInput[] = [];
   for (const logicalId of declaredLogicalIds) {
     const declaration = declarationByLogicalId.get(logicalId)!;
-    const filePath = safeResolve(root, logicalId);
-    const fileStat = await stat(filePath);
-    if (!fileStat.isFile()) {
-      throw new Error("An external corpus input is not a regular file.");
-    }
-    const bytes = await readFile(filePath);
-    const sha256 = createHash("sha256").update(bytes).digest("hex");
-    if (sha256 !== declaration.sha256) {
+    const bytes = physicalBySha256.get(declaration.sha256);
+    if (bytes === undefined) {
       throw new Error("An external corpus input SHA-256 does not match.");
     }
-    resolved.push(Object.freeze({ logicalId, sha256, bytes }));
+    physicalBySha256.delete(declaration.sha256);
+    resolved.push(
+      Object.freeze({ logicalId, sha256: declaration.sha256, bytes }),
+    );
+  }
+  if (physicalBySha256.size !== 0) {
+    throw new Error(
+      "The external corpus directory does not exactly match the manifest.",
+    );
   }
   return Object.freeze(resolved);
 }
@@ -74,21 +83,6 @@ function externalDeclarations(
   }
 }
 
-function safeResolve(root: string, logicalId: string): string {
-  safeLogicalId(logicalId);
-  const candidate = path.resolve(root, ...logicalId.split("/"));
-  const relative = path.relative(root, candidate);
-  if (
-    relative === "" ||
-    relative.startsWith(`..${path.sep}`) ||
-    relative === ".." ||
-    path.isAbsolute(relative)
-  ) {
-    throw new Error("External corpus logical id escapes the configured root.");
-  }
-  return candidate;
-}
-
 function safeLogicalId(logicalId: string): void {
   if (
     logicalId.includes("\\") ||
@@ -102,23 +96,21 @@ function safeLogicalId(logicalId: string): void {
 
 async function listFiles(root: string): Promise<string[]> {
   const result: string[] = [];
-  await walk(root, "");
+  const rootStat = await stat(root);
+  if (!rootStat.isDirectory()) {
+    throw new Error("The external corpus root is not a directory.");
+  }
+  await walk(root);
   return result.sort();
 
-  async function walk(
-    directory: string,
-    relativeDirectory: string,
-  ): Promise<void> {
+  async function walk(directory: string): Promise<void> {
     const entries = await readdir(directory, { withFileTypes: true });
     for (const entry of entries.sort((left, right) =>
       left.name.localeCompare(right.name),
     )) {
-      const relative = relativeDirectory
-        ? `${relativeDirectory}/${entry.name}`
-        : entry.name;
       const absolute = path.join(directory, entry.name);
-      if (entry.isDirectory()) await walk(absolute, relative);
-      else if (entry.isFile()) result.push(relative);
+      if (entry.isDirectory()) await walk(absolute);
+      else if (entry.isFile()) result.push(absolute);
       else
         throw new Error("External corpus contains an unsupported entry type.");
     }

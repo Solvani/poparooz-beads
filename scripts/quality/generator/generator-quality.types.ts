@@ -30,6 +30,17 @@ export const GENERATOR_QUALITY_TAGS = [
   "protected-component",
   "synthetic",
   "external-curated",
+  "horizontal-non-square",
+  "vertical-non-square",
+  "portrait-subject",
+  "pet-fur",
+  "complex-scene",
+  "gradient-shading",
+  "fine-detail",
+  "high-saturation",
+  "low-contrast",
+  "opaque-background-input",
+  "transparent-reference",
 ] as const;
 
 export const GENERATOR_QUALITY_SIZES = [40, 60, 80, 104] as const;
@@ -64,6 +75,8 @@ export interface GeneratorQualityCaseDeclaration {
     | Readonly<{
         type: "trusted-alpha-pair";
         input: GeneratorQualityInputDeclaration;
+        confidence: "exact" | "strong";
+        provenance: "user-approved-curated-pair";
       }>
     | Readonly<{ type: "none" }>;
   readonly supportedBackgrounds: readonly GeneratorQualityBackground[];
@@ -211,7 +224,7 @@ export interface GeneratorQualityBaselineIdentity {
   readonly colorSetLockSha256: string;
   readonly corpusManifestVersion: string;
   readonly corpusManifestSha256: string;
-  readonly metricImplementationVersion: "1.0.0";
+  readonly metricImplementationVersion: "1.1.0";
   readonly scorecardSchemaVersion: "1.0.0";
 }
 

@@ -75,6 +75,36 @@ describe("generator quality harness boundaries", () => {
       ),
     ).toContain("evaluateBeadSetCandidateQuality");
   });
+
+  it("keeps curated corpus identity metadata path- and filename-safe", () => {
+    const manifestBytes = readFileSync(
+      path.join(
+        repositoryRoot,
+        "data-source/quality/generator-corpus/1.0.0/manifest.json",
+      ),
+      "utf8",
+    );
+    const manifest = parseGeneratorQualityManifest(JSON.parse(manifestBytes));
+    const logicalInputs = manifest.cases.flatMap((item) => [
+      item.input,
+      ...(item.reference.type === "trusted-alpha-pair"
+        ? [item.reference.input]
+        : []),
+    ]);
+
+    expect(manifest.corpusStatus).toBe("complete");
+    expect(manifest.cases).toHaveLength(24);
+    expect(logicalInputs).toHaveLength(29);
+    expect(
+      manifest.cases.filter(
+        (item) => item.reference.type === "trusted-alpha-pair",
+      ),
+    ).toHaveLength(5);
+    expect(manifestBytes).not.toMatch(/[A-Z]:\\|Users\\|[\u4e00-\u9fff]/);
+    expect(manifestBytes).not.toMatch(
+      /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.png/i,
+    );
+  });
 });
 
 function qualityFiles(): string[] {

@@ -1,0 +1,664 @@
+{
+  "schemaVersion": "1.0.0",
+  "corpusVersion": "1.0.0",
+  "corpusStatus": "complete",
+  "cases": [
+    {
+      "id": "landscape-lake-horizontal",
+      "primaryCategory": "complex-photo",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "horizontal-non-square",
+        "complex-scene",
+        "gradient-shading"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/landscape-lake-horizontal.png",
+        "sha256": "b1362cb6d3f31f007448a16edfb6910adaf304634dfc5574ffb1c669454bce81",
+        "dimensions": { "width": 1672, "height": 941 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "pet-dog-indoor-scene",
+      "primaryCategory": "pet-fur",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "horizontal-non-square",
+        "pet-fur",
+        "complex-scene",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/pet-dog-indoor-scene.png",
+        "sha256": "fd2349a04df51186b9ff8fcd6a06f727748e55e260124c371768f67fc742456d",
+        "dimensions": { "width": 1448, "height": 1086 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "pet-curly-dog-portrait",
+      "primaryCategory": "pet-fur",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "pet-fur",
+        "fine-detail",
+        "soft-shadow"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/pet-curly-dog-portrait.png",
+        "sha256": "4e9a30dff91e28496203fc8243b986a84d802a16a92843329c7b687880deb041",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "white-pump-bottle-pair",
+      "primaryCategory": "white-background-product",
+      "tags": [
+        "opaque",
+        "white-matte",
+        "trusted-pair",
+        "external-curated",
+        "opaque-background-input",
+        "transparent-reference",
+        "soft-shadow"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "pairs/pump-bottle-opaque.png",
+        "sha256": "0157f9eb4276b3302efb08f4c3d097da5b7a8d23da106b099d430d7b0e721914",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": {
+        "type": "trusted-alpha-pair",
+        "confidence": "exact",
+        "provenance": "user-approved-curated-pair",
+        "input": {
+          "logicalId": "pairs/pump-bottle-transparent.png",
+          "sha256": "8972403737464c90bd23c22141688cb03161ae3b06946c7af7d972826cd7359d",
+          "dimensions": { "width": 1254, "height": 1254 },
+          "alphaClassification": "partial-alpha"
+        }
+      },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "protectedFeatures": { "preserveComponents": true },
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "portrait-sweater-pair",
+      "primaryCategory": "portrait",
+      "tags": [
+        "opaque",
+        "trusted-pair",
+        "external-curated",
+        "opaque-background-input",
+        "transparent-reference",
+        "portrait-subject",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "pairs/portrait-sweater-opaque.png",
+        "sha256": "271a52ba6534ffbb704033d23d0c782b38ed67cf08961e5084c02efc40f13e15",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": {
+        "type": "trusted-alpha-pair",
+        "confidence": "strong",
+        "provenance": "user-approved-curated-pair",
+        "input": {
+          "logicalId": "pairs/portrait-sweater-transparent.png",
+          "sha256": "1e529345bad1969493487c80436a81f8c6887987d85993f491f75ca6c2ca9234",
+          "dimensions": { "width": 1254, "height": 1254 },
+          "alphaClassification": "partial-alpha"
+        }
+      },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "protectedFeatures": { "preserveComponents": true },
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "pale-teddy-bear-pair",
+      "primaryCategory": "pale-subject-light-background",
+      "tags": [
+        "opaque",
+        "white-matte",
+        "trusted-pair",
+        "external-curated",
+        "opaque-background-input",
+        "transparent-reference",
+        "fine-detail",
+        "soft-shadow"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "pairs/teddy-bear-opaque.png",
+        "sha256": "7dccc9b91cc4bc6cc1c64814e8569e4d4ed33c1b2135a4a1a3aeb146d3735c67",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": {
+        "type": "trusted-alpha-pair",
+        "confidence": "strong",
+        "provenance": "user-approved-curated-pair",
+        "input": {
+          "logicalId": "pairs/teddy-bear-transparent.png",
+          "sha256": "9fe897a9281d5c22d002465c2dc2fd139783c18dac5fb96131db0d175fca1aec",
+          "dimensions": { "width": 1254, "height": 1254 },
+          "alphaClassification": "partial-alpha"
+        }
+      },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "protectedFeatures": { "preserveComponents": true },
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "flat-dinosaur-illustration",
+      "primaryCategory": "flat-illustration",
+      "tags": ["opaque", "external-curated", "high-saturation", "fine-detail"],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/flat-dinosaur-illustration.png",
+        "sha256": "b5b002d2480018aab1168ac8f4122ae216131712ee0574e84e3f62cd370007cc",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "monochrome-logo-graphic",
+      "primaryCategory": "simple-graphic",
+      "tags": ["opaque", "external-curated", "white-matte", "fine-detail"],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/monochrome-logo-graphic.png",
+        "sha256": "f7d5d853574629a3c6e1fa220a46a1e08efee387c7988803b12256c425377dfe",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "portrait-window-vertical",
+      "primaryCategory": "portrait",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "vertical-non-square",
+        "portrait-subject",
+        "gradient-shading",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/portrait-window-vertical.png",
+        "sha256": "60c75bdfc9d047de5dc40f466ce7ef7ec85a6617e56539202480ffc53a2824cf",
+        "dimensions": { "width": 1024, "height": 1536 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "stylized-portrait-dark-female",
+      "primaryCategory": "flat-illustration",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "portrait-subject",
+        "high-saturation",
+        "gradient-shading",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/stylized-portrait-dark-female.png",
+        "sha256": "b471d79d9aa70619556e0b57da29d0de74df354fc93f3ec43970a0fb934d4c57",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "white-succulent-product",
+      "primaryCategory": "white-background-product",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "white-matte",
+        "soft-shadow",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/white-succulent-product.png",
+        "sha256": "b00e50a050486c694665cc0dc29baffd90a14ba491d405e31692165da184721d",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "golden-retriever-pair",
+      "primaryCategory": "pet-fur",
+      "tags": [
+        "opaque",
+        "trusted-pair",
+        "external-curated",
+        "opaque-background-input",
+        "transparent-reference",
+        "pet-fur",
+        "fine-detail",
+        "soft-shadow"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "pairs/golden-retriever-opaque.png",
+        "sha256": "5ccd587caa2ce73a98ca9e82e014f0997fde52032b4367ca3f83eb7f44f10882",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": {
+        "type": "trusted-alpha-pair",
+        "confidence": "strong",
+        "provenance": "user-approved-curated-pair",
+        "input": {
+          "logicalId": "pairs/golden-retriever-transparent.png",
+          "sha256": "e1691633cb534e1d9d8dc4d4228bbdd14b0b6832b1acfc9dbfc5b510cd012064",
+          "dimensions": { "width": 1254, "height": 1254 },
+          "alphaClassification": "partial-alpha"
+        }
+      },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "protectedFeatures": { "preserveComponents": true },
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "green-leaf-graphic",
+      "primaryCategory": "simple-graphic",
+      "tags": ["opaque", "external-curated", "white-matte", "high-saturation"],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/green-leaf-graphic.png",
+        "sha256": "a148a5de32471e5ae5dc4d5656442f5ee2487b21ca31ced3321dd474f4bad20d",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "dark-watch-product",
+      "primaryCategory": "dark-subject-background",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "low-contrast",
+        "gradient-shading",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/dark-watch-product.png",
+        "sha256": "94e9f829b357ac1c117a901c85bf0a46fe4d6ce443780b76d91a47c902096dbd",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "thin-botanical-line-art",
+      "primaryCategory": "fine-line",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "white-matte",
+        "thin-feature",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/thin-botanical-line-art.png",
+        "sha256": "4a880e1d053b89a8b645fc50c820c4274c5447e28f2698146e3d02538778390e",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "pale-white-cat-crop",
+      "primaryCategory": "pale-subject-light-background",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "pet-fur",
+        "low-contrast",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/pale-white-cat-crop.png",
+        "sha256": "5aded8ee8fb8a89646db389f0e2ef79e19f800b49564deb2e54f1960494850e9",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "pink-floral-illustration",
+      "primaryCategory": "flat-illustration",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "white-matte",
+        "high-saturation",
+        "gradient-shading",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/pink-floral-illustration.png",
+        "sha256": "f973901dea81bb1f7ccf2ad917cdead5e50952aa0589eb93653adb602ab67684",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "portrait-close-up",
+      "primaryCategory": "portrait",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "portrait-subject",
+        "gradient-shading",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/portrait-close-up.png",
+        "sha256": "f4c40528e946b7f01af8aff4313e65c84d288b2bb51d928a218c522afc8f7686",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "dark-camera-product",
+      "primaryCategory": "dark-subject-background",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "low-contrast",
+        "gradient-shading",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/dark-camera-product.png",
+        "sha256": "9e5ccb29f5ddc765c803db9c5052451ef6cd3aa64508d68993021a1eabb3d2bc",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "white-sneaker-product",
+      "primaryCategory": "white-background-product",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "white-matte",
+        "low-contrast",
+        "soft-shadow",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/white-sneaker-product.png",
+        "sha256": "ba0627e0e23917c01fee991e8ced4f125377ab525550ce7770980cfaadaa04e2",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "saturated-lake-landscape",
+      "primaryCategory": "high-saturation",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "complex-scene",
+        "high-saturation",
+        "gradient-shading",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/saturated-lake-landscape.png",
+        "sha256": "6d3baa5ccb1638e4bcdbc8e8a34bc403c8f0dbc732299f88b7a948ccda770807",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "stylized-portrait-dark-male",
+      "primaryCategory": "flat-illustration",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "portrait-subject",
+        "high-saturation",
+        "gradient-shading",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/stylized-portrait-dark-male.png",
+        "sha256": "2851ed41ed48d3c87dca6613dac96da78fbc0361f1dd5d4d167765a0def015f0",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "low-contrast-white-vase",
+      "primaryCategory": "low-contrast",
+      "tags": [
+        "opaque",
+        "external-curated",
+        "white-matte",
+        "low-contrast",
+        "gradient-shading",
+        "soft-shadow"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "real/low-contrast-white-vase.png",
+        "sha256": "0ff652be4f317e1a0887c88f567e87c6d03475765ada30036b9c679f115ca2f9",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "none" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "poparooz-logo-pair",
+      "primaryCategory": "opaque-background-removal",
+      "tags": [
+        "opaque",
+        "white-matte",
+        "trusted-pair",
+        "external-curated",
+        "opaque-background-input",
+        "transparent-reference",
+        "fine-detail"
+      ],
+      "sourceKind": "external-curated",
+      "input": {
+        "logicalId": "pairs/poparooz-logo-opaque.png",
+        "sha256": "e5a8111ea45ac68b636ace31d72a5d5df84486b9768dd84f575808ddcc194959",
+        "dimensions": { "width": 1254, "height": 1254 },
+        "alphaClassification": "opaque"
+      },
+      "reference": {
+        "type": "trusted-alpha-pair",
+        "confidence": "exact",
+        "provenance": "user-approved-curated-pair",
+        "input": {
+          "logicalId": "pairs/poparooz-logo-transparent.png",
+          "sha256": "7114d4204dfed136ea05ed6457a03aab74dc28269a91eb47c095eaa5d405f62d",
+          "dimensions": { "width": 1254, "height": 1254 },
+          "alphaClassification": "partial-alpha"
+        }
+      },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "protectedFeatures": { "preserveComponents": true },
+      "authorization": {
+        "storage": "external-local-only",
+        "status": "approved"
+      }
+    }
+  ]
+}

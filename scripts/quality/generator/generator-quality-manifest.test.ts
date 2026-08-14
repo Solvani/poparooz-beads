@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -71,8 +71,7 @@ describe("generator quality corpus governance", () => {
     const bytes = Buffer.from("approved local evidence");
     const sha256 = createHash("sha256").update(bytes).digest("hex");
     const root = await createRoot();
-    await mkdir(path.join(root, "inputs"));
-    await writeFile(path.join(root, "inputs", "case.png"), bytes);
+    await writeFile(path.join(root, "private-original-name.png"), bytes);
     const manifest = parseGeneratorQualityManifest(
       manifestFor("inputs/case.png", sha256),
     );
@@ -96,16 +95,14 @@ describe("generator quality corpus governance", () => {
     ).rejects.toThrow();
 
     const wrongRoot = await createRoot();
-    await mkdir(path.join(wrongRoot, "inputs"));
-    await writeFile(path.join(wrongRoot, "inputs", "case.png"), "wrong");
+    await writeFile(path.join(wrongRoot, "private-original-name.png"), "wrong");
     await expect(resolveExternalCorpus(manifest, wrongRoot)).rejects.toThrow(
       /SHA-256/,
     );
 
     const extraRoot = await createRoot();
-    await mkdir(path.join(extraRoot, "inputs"));
-    await writeFile(path.join(extraRoot, "inputs", "case.png"), bytes);
-    await writeFile(path.join(extraRoot, "inputs", "extra.png"), bytes);
+    await writeFile(path.join(extraRoot, "private-original-name.png"), bytes);
+    await writeFile(path.join(extraRoot, "another-private-name.png"), bytes);
     await expect(resolveExternalCorpus(manifest, extraRoot)).rejects.toThrow(
       /exactly match/,
     );

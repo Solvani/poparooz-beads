@@ -43,6 +43,8 @@ const caseSchema = z.strictObject({
     z.strictObject({
       type: z.literal("trusted-alpha-pair"),
       input: inputSchema,
+      confidence: z.enum(["exact", "strong"]),
+      provenance: z.literal("user-approved-curated-pair"),
     }),
     z.strictObject({ type: z.literal("none") }),
   ]),

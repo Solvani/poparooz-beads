@@ -2,7 +2,7 @@
 
 Contract stage: P3-A03-Q01-A01 Generator Quality Harness Foundation
 
-Status: implementation pending review; no authoritative production baseline is frozen.
+Status: Baseline 1.0.0 frozen; quality-tooling implementation accepted.
 
 ## Purpose
 
@@ -149,7 +149,7 @@ on hard-gate violations.
 Authoritative baseline writing requires an explicit external mode and version:
 
 ```text
-npm run quality:generator -- --corpus external --write-baseline 1.0.0
+npm run quality:generator:curated -- --write-baseline 1.0.0
 ```
 
 It is rejected unless the manifest is `complete`, every declared external input
@@ -159,8 +159,43 @@ or freeze a production baseline.
 
 ## Next Stage
 
-Q01-A02 may add the approved curated corpus, browser-compatible local decode
-runner, complete manifest, and initial baseline capture. Only after that
-baseline is reviewed may H03 Architecture C be evaluated as a candidate. E05
-evidence refresh remains later and E05-D02 stays blocked until background
-removal is frozen.
+Q01-A02 freezes the approved curated corpus, Node-local PNG decoder, replay
+runner, complete manifest, and Baseline 1.0.0. H03 Architecture C may next be
+evaluated as a candidate against the entire frozen Golden Corpus. E05 evidence
+refresh remains later and E05-D02 stays blocked until background removal is
+frozen.
+
+## Curated Corpus 1.0.0 Candidate
+
+Q01-A02 registers the first external curated corpus as 29 physical PNG files
+represented by 24 logical cases, including five opaque-to-transparent trusted
+reference pairs. The committed manifest contains only stable logical IDs,
+SHA-256 identities, dimensions, alpha classifications, taxonomy, evaluation
+settings, and local-authorization metadata. It contains no source pixels,
+physical filenames, absolute paths, thumbnails, or user identifiers.
+
+The external resolver matches physical files to logical declarations by
+approved SHA-256 rather than by private physical filename. It requires an exact
+one-to-one inventory, rejects missing, extra, duplicated, or mismatched bytes,
+and reads only from `POPAROOZ_QUALITY_CORPUS_DIR`.
+
+The curated review command is:
+
+```text
+POPAROOZ_QUALITY_CORPUS_DIR=<approved-local-root> npm run quality:generator:curated
+```
+
+Curated PNG decoding is Node-only quality tooling. It accepts only validated,
+non-interlaced, 8-bit RGB or RGBA PNG inputs, verifies PNG chunk CRC,
+dimensions, and alpha classification, and never enters the browser production
+module graph. Baseline version `1.0.0` is the frozen measurement of current
+production behavior for future regression and candidate comparison. It is not
+approval that current Background Removal quality is satisfactory.
+
+The frozen baseline intentionally preserves the accepted current-production
+defects: very large retained-background populations for the retriever and
+portrait cases, a portrait component merge, substantial pale-subject loss for
+the teddy and pump cases, a small pump residual island, and 23 candidate-only
+plus one reference-only Poparooz Logo positions at 104 x 104. These
+measurements are evidence, not release tolerances or candidate acceptance
+budgets.

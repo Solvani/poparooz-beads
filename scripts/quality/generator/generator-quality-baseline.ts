@@ -68,7 +68,7 @@ export function createGeneratorQualityBaselineIdentity(
     colorSetLockSha256: hashes.colorSetLock,
     corpusManifestVersion,
     corpusManifestSha256,
-    metricImplementationVersion: "1.0.0",
+    metricImplementationVersion: "1.1.0",
     scorecardSchemaVersion: "1.0.0",
   });
 }

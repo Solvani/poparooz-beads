@@ -15,6 +15,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "benchmark": "node scripts/benchmarks/run-benchmark.mjs --write",
+    "quality:generator": "node scripts/quality/generator/run-generator-quality.mjs --corpus synthetic",
     "color-set:compile": "node --experimental-strip-types --import ./scripts/palette/runtime/register-typescript-extension-loader.mjs scripts/palette/color-set/compile-color-set-profiles.ts",
     "color-set:lock": "node --experimental-strip-types --import ./scripts/palette/runtime/register-typescript-extension-loader.mjs scripts/palette/color-set/generate-color-set-lock.ts",
     "color-set:verify": "node --experimental-strip-types --import ./scripts/palette/runtime/register-typescript-extension-loader.mjs scripts/palette/color-set/verify-color-set-production-gate-cli.ts",

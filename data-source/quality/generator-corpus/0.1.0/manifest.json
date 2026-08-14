@@ -1,0 +1,374 @@
+{
+  "schemaVersion": "1.0.0",
+  "corpusVersion": "0.1.0",
+  "corpusStatus": "development",
+  "cases": [
+    {
+      "id": "opaque-white-background",
+      "primaryCategory": "opaque-background-removal",
+      "tags": ["opaque", "white-matte", "synthetic", "protected-component"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "opaque-white-background",
+        "sha256": "d525e0de815d544620b398f3447d090231d265aba5a9e72802c5d57579621df5",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["white", "transparent"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "protectedFeatures": { "preserveComponents": true },
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "pale-subject-light-background",
+      "primaryCategory": "pale-subject-light-background",
+      "tags": ["opaque", "synthetic", "protected-component"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "pale-subject-light-background",
+        "sha256": "cb65bac282cb71831cdc0717bb59a4a7bb4eb4e23f93dc2b15095c5f7deb303e",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": { "preserveComponents": true },
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "light-subject-touching-edge",
+      "primaryCategory": "pale-subject-light-background",
+      "tags": ["opaque", "thin-feature", "synthetic"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "light-subject-touching-edge",
+        "sha256": "88e077eeb5b781a6c36c65a1980f4c28ba966c5a6c230cccb31823e4378aa921",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": {},
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "transparent-png",
+      "primaryCategory": "transparent-png",
+      "tags": ["binary-alpha", "synthetic", "protected-component"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "transparent-png",
+        "sha256": "b78f9751fb8bf2ad3f83c39011cb419fc4bc5dca3181ef0046b5645d605fa711",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "binary-alpha"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent", "white"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "protectedFeatures": { "preserveComponents": true },
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "binary-alpha",
+      "primaryCategory": "transparent-png",
+      "tags": ["binary-alpha", "synthetic"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "binary-alpha",
+        "sha256": "b78f9751fb8bf2ad3f83c39011cb419fc4bc5dca3181ef0046b5645d605fa711",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "binary-alpha"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": {},
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "partial-alpha",
+      "primaryCategory": "soft-antialiased-edge",
+      "tags": ["partial-alpha", "synthetic", "soft-shadow"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "partial-alpha",
+        "sha256": "9d9aa0050214f40b0214b5bc6a266e01212e85b79b513b40a14093b8d0cd0e1b",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "partial-alpha"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": {},
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "thin-line",
+      "primaryCategory": "fine-line",
+      "tags": ["opaque", "thin-feature", "synthetic", "protected-component"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "thin-line",
+        "sha256": "9da223c88617967e38e9c8366d9194a1b527795913bbe38ea2d34f72d646fb37",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [40, 60, 80, 104],
+      "protectedFeatures": {
+        "preserveComponents": true,
+        "preserveThinFeature": true,
+        "preserveEndpoints": true
+      },
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "thin-endpoint",
+      "primaryCategory": "fine-line",
+      "tags": ["opaque", "thin-feature", "synthetic"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "thin-endpoint",
+        "sha256": "183af74f6430489969c286ba6b1dd8558e2416283dc82fe661ec7e042f6cdefc",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": {
+        "preserveThinFeature": true,
+        "preserveEndpoints": true
+      },
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "antialiased-diagonal",
+      "primaryCategory": "soft-antialiased-edge",
+      "tags": ["partial-alpha", "thin-feature", "synthetic"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "antialiased-diagonal",
+        "sha256": "4141f3674ac39c88fbed3390a716b4e3970c6f4aeb54f2874d629113f7222328",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "partial-alpha"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": {},
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "soft-curved-edge",
+      "primaryCategory": "soft-antialiased-edge",
+      "tags": ["partial-alpha", "soft-shadow", "synthetic"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "soft-curved-edge",
+        "sha256": "b7d548fa89383d8c4be6627dea73a152c473affbd6950977bd7080776af97c4f",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "partial-alpha"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": {},
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "gradient",
+      "primaryCategory": "gradient",
+      "tags": ["opaque", "synthetic"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "gradient",
+        "sha256": "010e08c20d56c5c8340101a0767ef4fedbf91de694253328a2c8ddcb0ebb25a9",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": {},
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "high-saturation",
+      "primaryCategory": "high-saturation",
+      "tags": ["opaque", "synthetic"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "high-saturation",
+        "sha256": "a9c51201d289520292e85cbf4bdefbd0505845c23c4931f269c7ee38385ea6d4",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": {},
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "low-contrast",
+      "primaryCategory": "low-contrast",
+      "tags": ["opaque", "synthetic"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "low-contrast",
+        "sha256": "9fcb529262f98e17dfbf3ba8c52bc19d9810f79c13d961fc42824b5029f48d14",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": {},
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "disconnected-light-region",
+      "primaryCategory": "simple-graphic",
+      "tags": ["opaque", "synthetic", "protected-component"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "disconnected-light-region",
+        "sha256": "986253df7ffa8503b62d919438dcc6508383c6141e9b784109c6d26e235bf258",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": { "preserveComponents": true },
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "neutral-fringe",
+      "primaryCategory": "opaque-background-removal",
+      "tags": ["opaque", "white-matte", "synthetic"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "neutral-fringe",
+        "sha256": "4bcfec735a11882105524bbf74090a565cd272133a0895c7d78c548abc15362e",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": {},
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "tinted-matte",
+      "primaryCategory": "opaque-background-removal",
+      "tags": ["opaque", "tinted-matte", "synthetic"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "tinted-matte",
+        "sha256": "43202f29f6fa8c46f4b2542b45478f7914c95a64de0ef7555675d1c27efaf3e5",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": {},
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "dark-subject",
+      "primaryCategory": "dark-subject-background",
+      "tags": ["opaque", "synthetic"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "dark-subject",
+        "sha256": "b4e0552bbf9df92d5cd369a9ffb74226b9e6b381ea541ed67dfc73ee9e7a2981",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["white"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": {},
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    },
+    {
+      "id": "flat-color-graphic",
+      "primaryCategory": "flat-illustration",
+      "tags": ["opaque", "synthetic", "protected-component"],
+      "sourceKind": "synthetic",
+      "input": {
+        "logicalId": "flat-color-graphic",
+        "sha256": "93456e79338031d535839116c2479d2c882e7cd314da5a8d22617505cf592dfb",
+        "dimensions": { "width": 120, "height": 120 },
+        "alphaClassification": "opaque"
+      },
+      "reference": { "type": "synthetic-mask" },
+      "supportedBackgrounds": ["transparent"],
+      "supportedPatternSizes": [104],
+      "protectedFeatures": { "preserveComponents": true },
+      "authorization": {
+        "storage": "synthetic-in-repository",
+        "status": "approved"
+      }
+    }
+  ]
+}

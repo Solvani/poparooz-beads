@@ -105,6 +105,16 @@ describe("generator quality harness boundaries", () => {
       /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.png/i,
     );
   });
+
+  it("keeps the H03 candidate seam outside the production source graph", () => {
+    const productionSource = repositoryFiles(path.join(repositoryRoot, "src"))
+      .filter((file) => file.endsWith(".ts") || file.endsWith(".tsx"))
+      .map((file) => readFileSync(file, "utf8"))
+      .join("\n");
+
+    expect(productionSource).not.toContain("generator-quality-h03-candidate");
+    expect(productionSource).not.toContain("h03-d02-architecture-c");
+  });
 });
 
 function qualityFiles(): string[] {
@@ -112,4 +122,11 @@ function qualityFiles(): string[] {
   return readdirSync(root, { withFileTypes: true })
     .filter((entry) => entry.isFile())
     .map((entry) => path.join(root, entry.name));
+}
+
+function repositoryFiles(root: string): string[] {
+  return readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
+    const target = path.join(root, entry.name);
+    return entry.isDirectory() ? repositoryFiles(target) : [target];
+  });
 }

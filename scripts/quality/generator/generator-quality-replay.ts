@@ -35,6 +35,7 @@ import {
   exactByteIdentityGate,
   exactValueGate,
 } from "./generator-quality-gates.ts";
+import { applyH03D02NormalizedFringeCandidate } from "./generator-quality-h03-candidate.ts";
 import type {
   GeneratorQualityBackground,
   GeneratorQualityCaseDeclaration,
@@ -126,6 +127,7 @@ export function replayExternalQualityCase(
   background: GeneratorQualityBackground,
   size: GeneratorQualitySize,
   dependencies: QualityDependencies,
+  candidate: "h03-d02" | undefined = undefined,
 ): Readonly<{
   result: GeneratorQualityCaseResult;
   performance: GeneratorQualityPerformanceSample;
@@ -142,6 +144,7 @@ export function replayExternalQualityCase(
     background,
     size,
     dependencies,
+    candidate,
   );
 }
 
@@ -152,6 +155,7 @@ function replayQualityCase(
   background: GeneratorQualityBackground,
   size: GeneratorQualitySize,
   dependencies: QualityDependencies,
+  candidate: "h03-d02" | undefined = undefined,
 ): Readonly<{
   result: GeneratorQualityCaseResult;
   performance: GeneratorQualityPerformanceSample;
@@ -188,10 +192,18 @@ function replayQualityCase(
   const normalizationAndResizeMs = performance.now() - normalizationStarted;
 
   const cleanupStarted = performance.now();
+  const candidateResult =
+    candidate === "h03-d02"
+      ? applyH03D02NormalizedFringeCandidate(normalized.image, {
+          background,
+          sourceHasAlpha: sourceMetadata.hasAlpha,
+        })
+      : undefined;
+  const candidateImage = candidateResult?.image ?? normalized.image;
   const cleaned =
     background === "transparent"
-      ? excludeEdgeConnectedLightBackground(normalized.image)
-      : normalized.image;
+      ? excludeEdgeConnectedLightBackground(candidateImage)
+      : candidateImage;
   const postResizeCleanupMs = performance.now() - cleanupStarted;
 
   const occupancyStarted = performance.now();
@@ -338,6 +350,10 @@ function replayQualityCase(
       normalizedDrawWidth: normalized.target.drawWidth,
       normalizedDrawHeight: normalized.target.drawHeight,
       quantizedColorCount: quantized.colors.length,
+      sourceHasAlpha: sourceMetadata.hasAlpha,
+      ...(candidateResult === undefined
+        ? {}
+        : { h03Candidate: candidateResult.diagnostics }),
     }),
   });
 

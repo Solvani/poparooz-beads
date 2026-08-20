@@ -129,11 +129,63 @@ describe("generator quality production replay", () => {
       "transparent",
       104,
       dependencies,
+      "h03-d02",
     );
 
     expect(replay.result.sourceKind).toBe("external-curated");
     expect(replay.result.referenceType).toBe("trusted-alpha-pair");
     expect(replay.result.metrics.pattern.totalPositions).toBe(104 * 104);
+    expect(replay.result.diagnostics.h03Candidate).toMatchObject({
+      activated: true,
+      bypassReason: "none",
+    });
+  });
+
+  it("bypasses H03-D02 exactly for an explicit-alpha external source", () => {
+    const fixture = createSyntheticGeneratorQualityFixture("transparent-png");
+    const declaration = {
+      ...manifest.cases.find((item) => item.id === "transparent-png")!,
+      id: "external-explicit-alpha",
+      sourceKind: "external-curated" as const,
+      reference: {
+        type: "trusted-alpha-pair" as const,
+        confidence: "exact" as const,
+        provenance: "user-approved-curated-pair" as const,
+        input: {
+          logicalId: "pairs/transparent-reference.png",
+          sha256: "b".repeat(64),
+          dimensions: {
+            width: fixture.source.width,
+            height: fixture.source.height,
+          },
+          alphaClassification: "partial-alpha" as const,
+        },
+      },
+    };
+    const baseline = replayExternalQualityCase(
+      declaration,
+      fixture.source,
+      fixture.source,
+      "transparent",
+      104,
+      dependencies,
+    );
+    const candidate = replayExternalQualityCase(
+      declaration,
+      fixture.source,
+      fixture.source,
+      "transparent",
+      104,
+      dependencies,
+      "h03-d02",
+    );
+
+    expect(candidate.result.metrics).toEqual(baseline.result.metrics);
+    expect(candidate.result.diagnostics.h03Candidate).toMatchObject({
+      activated: false,
+      bypassReason: "explicit-alpha-source",
+      removedCount: 0,
+    });
   });
 });
 

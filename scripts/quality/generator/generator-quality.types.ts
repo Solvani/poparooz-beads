@@ -187,6 +187,16 @@ export interface GeneratorQualityCaseResult {
     normalizedDrawWidth: number;
     normalizedDrawHeight: number;
     quantizedColorCount: number;
+    sourceHasAlpha?: boolean;
+    h03Candidate?: Readonly<{
+      activated: boolean;
+      bypassReason: "not-transparent" | "explicit-alpha-source" | "none";
+      candidateCount: number;
+      removedCount: number;
+      topologyGuardRejected: boolean;
+      componentCountBefore: number;
+      componentCountAfter: number;
+    }>;
   }>;
 }
 

@@ -1,0 +1,2147 @@
+{
+  "schemaVersion": "1.0.0",
+  "policyId": "poparooz-recommendation-policy",
+  "policyVersion": "1.0.0",
+  "stage": "P3-A03-E05-D02",
+  "decision": "recommended-profile-equals-required-profile",
+  "sourceEvidenceId": "poparooz-e05-actual-production-evidence",
+  "sourceEvidenceVersion": "1.0.0",
+  "sourceEvidenceCanonicalSha256": "1357999cf5eb9585da9315d5325f01131ea818383eb7dd9f86d12aea3ebdf1b8",
+  "sourceEvidenceCompleteJsonSha256": "d2ab1b40cad9e97f605f57a77d9d03cb04481cf33cd1cfebfde5d7cf17b8974c",
+  "sourceEvidenceFreezeCommit": "549711842369e876c1f06ccc8d85fe003f5ca8a1",
+  "productionCommit": "23c0cef3644de26ff7c1d923394a64b7efb2743c",
+  "profileOrder": [
+    24,
+    48,
+    72,
+    120,
+    168,
+    221
+  ],
+  "requiredDistribution": {
+    "24": 0,
+    "48": 0,
+    "72": 0,
+    "120": 0,
+    "168": 13,
+    "221": 41
+  },
+  "recommendedDistribution": {
+    "24": 0,
+    "48": 0,
+    "72": 0,
+    "120": 0,
+    "168": 13,
+    "221": 41
+  },
+  "runs": [
+    {
+      "runId": "dark-camera-product:white:104",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 6,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 3.666905900940063,
+        "weightedP95PaletteDeltaE00": 5.328119532492317,
+        "maximumPaletteDeltaE00": 11.511356949298747,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 6,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 3.666905900940063,
+        "weightedP95PaletteDeltaE00": 5.328119532492317,
+        "maximumPaletteDeltaE00": 11.511356949298747,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "dark-watch-product:white:104",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 5,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 3.891517120390508,
+        "weightedP95PaletteDeltaE00": 5.444047028385454,
+        "maximumPaletteDeltaE00": 10.397353500527771,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 5,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 3.891517120390508,
+        "weightedP95PaletteDeltaE00": 5.444047028385454,
+        "maximumPaletteDeltaE00": 10.397353500527771,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "dark-watch-product:white:40",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 5,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 3.9498329326686736,
+        "weightedP95PaletteDeltaE00": 5.911002978090614,
+        "maximumPaletteDeltaE00": 10.665585388505411,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 5,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 3.9498329326686736,
+        "weightedP95PaletteDeltaE00": 5.911002978090614,
+        "maximumPaletteDeltaE00": 10.665585388505411,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "dark-watch-product:white:60",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 5,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 3.884573293179228,
+        "weightedP95PaletteDeltaE00": 5.911002978090614,
+        "maximumPaletteDeltaE00": 10.202597111757735,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 5,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 3.884573293179228,
+        "weightedP95PaletteDeltaE00": 5.911002978090614,
+        "maximumPaletteDeltaE00": 10.202597111757735,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "dark-watch-product:white:80",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 5,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 3.8990474889539906,
+        "weightedP95PaletteDeltaE00": 5.911002978090614,
+        "maximumPaletteDeltaE00": 10.6974092440944,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 5,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 3.8990474889539906,
+        "weightedP95PaletteDeltaE00": 5.911002978090614,
+        "maximumPaletteDeltaE00": 10.6974092440944,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "flat-dinosaur-illustration:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 22,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 2.016402763635945,
+        "weightedP95PaletteDeltaE00": 7.17190384202315,
+        "maximumPaletteDeltaE00": 11.947380353086213,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 22,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 2.016402763635945,
+        "weightedP95PaletteDeltaE00": 7.17190384202315,
+        "maximumPaletteDeltaE00": 11.947380353086213,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "golden-retriever-pair:transparent:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 16,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 6.156698762488607,
+        "weightedP95PaletteDeltaE00": 11.87357602773526,
+        "maximumPaletteDeltaE00": 13.212109385759156,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 16,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 6.156698762488607,
+        "weightedP95PaletteDeltaE00": 11.87357602773526,
+        "maximumPaletteDeltaE00": 13.212109385759156,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "golden-retriever-pair:transparent:40",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 14,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 6.536637276422448,
+        "weightedP95PaletteDeltaE00": 11.096620793611429,
+        "maximumPaletteDeltaE00": 13.309305979739948,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 14,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 6.536637276422448,
+        "weightedP95PaletteDeltaE00": 11.096620793611429,
+        "maximumPaletteDeltaE00": 13.309305979739948,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "golden-retriever-pair:transparent:60",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 15,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 6.325504432244745,
+        "weightedP95PaletteDeltaE00": 10.82876007647453,
+        "maximumPaletteDeltaE00": 13.281554331268875,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 15,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 6.325504432244745,
+        "weightedP95PaletteDeltaE00": 10.82876007647453,
+        "maximumPaletteDeltaE00": 13.281554331268875,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "golden-retriever-pair:transparent:80",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 16,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 6.653175208700641,
+        "weightedP95PaletteDeltaE00": 11.70542692389225,
+        "maximumPaletteDeltaE00": 13.621007737010917,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 16,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 6.653175208700641,
+        "weightedP95PaletteDeltaE00": 11.70542692389225,
+        "maximumPaletteDeltaE00": 13.621007737010917,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "green-leaf-graphic:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 7,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 2.2168314588376883,
+        "weightedP95PaletteDeltaE00": 10.471376988163563,
+        "maximumPaletteDeltaE00": 10.54840841400269,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 7,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 2.2168314588376883,
+        "weightedP95PaletteDeltaE00": 10.471376988163563,
+        "maximumPaletteDeltaE00": 10.54840841400269,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "landscape-lake-horizontal:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 19,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 4.083808879160489,
+        "weightedP95PaletteDeltaE00": 10.964377444722002,
+        "maximumPaletteDeltaE00": 13.34673019151657,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 19,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 4.083808879160489,
+        "weightedP95PaletteDeltaE00": 10.964377444722002,
+        "maximumPaletteDeltaE00": 13.34673019151657,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "landscape-lake-horizontal:white:40",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 16,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 4.0682467652555605,
+        "weightedP95PaletteDeltaE00": 11.577599652026887,
+        "maximumPaletteDeltaE00": 13.193043762234714,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 16,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 4.0682467652555605,
+        "weightedP95PaletteDeltaE00": 11.577599652026887,
+        "maximumPaletteDeltaE00": 13.193043762234714,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "landscape-lake-horizontal:white:60",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 19,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 4.136380526542096,
+        "weightedP95PaletteDeltaE00": 12.278364095031007,
+        "maximumPaletteDeltaE00": 13.770726680449469,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 19,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 4.136380526542096,
+        "weightedP95PaletteDeltaE00": 12.278364095031007,
+        "maximumPaletteDeltaE00": 13.770726680449469,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "landscape-lake-horizontal:white:80",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 18,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 4.067914096036604,
+        "weightedP95PaletteDeltaE00": 10.872342570889087,
+        "maximumPaletteDeltaE00": 12.655836665738493,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 18,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 4.067914096036604,
+        "weightedP95PaletteDeltaE00": 10.872342570889087,
+        "maximumPaletteDeltaE00": 12.655836665738493,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "low-contrast-white-vase:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 6,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 6.17476797623111,
+        "weightedP95PaletteDeltaE00": 6.896991613189803,
+        "maximumPaletteDeltaE00": 10.49975293312135,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 6,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 6.17476797623111,
+        "weightedP95PaletteDeltaE00": 6.896991613189803,
+        "maximumPaletteDeltaE00": 10.49975293312135,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "monochrome-logo-graphic:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 10,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 0.6958688895236361,
+        "weightedP95PaletteDeltaE00": 1.0780164505483778,
+        "maximumPaletteDeltaE00": 10.833901991376683,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 10,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 0.6958688895236361,
+        "weightedP95PaletteDeltaE00": 1.0780164505483778,
+        "maximumPaletteDeltaE00": 10.833901991376683,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "pale-teddy-bear-pair:transparent:104",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 14,
+        "totalWeightedPixelCount": 4581,
+        "weightedMeanPaletteDeltaE00": 3.4605551559862766,
+        "weightedP95PaletteDeltaE00": 6.948129712855,
+        "maximumPaletteDeltaE00": 15.037731047539555,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 14,
+        "totalWeightedPixelCount": 4581,
+        "weightedMeanPaletteDeltaE00": 3.4605551559862766,
+        "weightedP95PaletteDeltaE00": 6.948129712855,
+        "maximumPaletteDeltaE00": 15.037731047539555,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "pale-teddy-bear-pair:transparent:40",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 10,
+        "totalWeightedPixelCount": 702,
+        "weightedMeanPaletteDeltaE00": 3.4013457999836962,
+        "weightedP95PaletteDeltaE00": 6.329515838354924,
+        "maximumPaletteDeltaE00": 12.973562215877978,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 10,
+        "totalWeightedPixelCount": 702,
+        "weightedMeanPaletteDeltaE00": 3.4013457999836962,
+        "weightedP95PaletteDeltaE00": 6.329515838354924,
+        "maximumPaletteDeltaE00": 12.973562215877978,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "pale-teddy-bear-pair:transparent:60",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 12,
+        "totalWeightedPixelCount": 1555,
+        "weightedMeanPaletteDeltaE00": 3.3722935817082162,
+        "weightedP95PaletteDeltaE00": 6.2439928588434785,
+        "maximumPaletteDeltaE00": 13.657916871992718,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 12,
+        "totalWeightedPixelCount": 1555,
+        "weightedMeanPaletteDeltaE00": 3.3722935817082162,
+        "weightedP95PaletteDeltaE00": 6.2439928588434785,
+        "maximumPaletteDeltaE00": 13.657916871992718,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "pale-teddy-bear-pair:transparent:80",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 15,
+        "totalWeightedPixelCount": 2732,
+        "weightedMeanPaletteDeltaE00": 3.425502196084234,
+        "weightedP95PaletteDeltaE00": 6.948129712855,
+        "maximumPaletteDeltaE00": 13.20335061548438,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 15,
+        "totalWeightedPixelCount": 2732,
+        "weightedMeanPaletteDeltaE00": 3.425502196084234,
+        "weightedP95PaletteDeltaE00": 6.948129712855,
+        "maximumPaletteDeltaE00": 13.20335061548438,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "pale-white-cat-crop:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 15,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 1.8371435094151434,
+        "weightedP95PaletteDeltaE00": 5.3509251894907255,
+        "maximumPaletteDeltaE00": 15.187637693364145,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 15,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 1.8371435094151434,
+        "weightedP95PaletteDeltaE00": 5.3509251894907255,
+        "maximumPaletteDeltaE00": 15.187637693364145,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "pet-curly-dog-portrait:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 16,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 5.270112281633711,
+        "weightedP95PaletteDeltaE00": 10.909303345093534,
+        "maximumPaletteDeltaE00": 13.508941797812424,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 16,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 5.270112281633711,
+        "weightedP95PaletteDeltaE00": 10.909303345093534,
+        "maximumPaletteDeltaE00": 13.508941797812424,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "pet-dog-indoor-scene:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 22,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 6.011049096260295,
+        "weightedP95PaletteDeltaE00": 13.28047330989491,
+        "maximumPaletteDeltaE00": 13.28047330989491,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 22,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 6.011049096260295,
+        "weightedP95PaletteDeltaE00": 13.28047330989491,
+        "maximumPaletteDeltaE00": 13.28047330989491,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "pink-floral-illustration:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 20,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 2.1426611408846887,
+        "weightedP95PaletteDeltaE00": 7.533430682359364,
+        "maximumPaletteDeltaE00": 9.40393141836969,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 20,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 2.1426611408846887,
+        "weightedP95PaletteDeltaE00": 7.533430682359364,
+        "maximumPaletteDeltaE00": 9.40393141836969,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "poparooz-logo-pair:transparent:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 19,
+        "totalWeightedPixelCount": 2355,
+        "weightedMeanPaletteDeltaE00": 3.8065877430407262,
+        "weightedP95PaletteDeltaE00": 9.333211745349912,
+        "maximumPaletteDeltaE00": 14.575545667134174,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 19,
+        "totalWeightedPixelCount": 2355,
+        "weightedMeanPaletteDeltaE00": 3.8065877430407262,
+        "weightedP95PaletteDeltaE00": 9.333211745349912,
+        "maximumPaletteDeltaE00": 14.575545667134174,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "poparooz-logo-pair:transparent:40",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 19,
+        "totalWeightedPixelCount": 381,
+        "weightedMeanPaletteDeltaE00": 5.504859478013659,
+        "weightedP95PaletteDeltaE00": 13.175339240259639,
+        "maximumPaletteDeltaE00": 14.239517749546506,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 19,
+        "totalWeightedPixelCount": 381,
+        "weightedMeanPaletteDeltaE00": 5.504859478013659,
+        "weightedP95PaletteDeltaE00": 13.175339240259639,
+        "maximumPaletteDeltaE00": 14.239517749546506,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "poparooz-logo-pair:transparent:60",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 21,
+        "totalWeightedPixelCount": 813,
+        "weightedMeanPaletteDeltaE00": 5.024593051272833,
+        "weightedP95PaletteDeltaE00": 13.879324211650369,
+        "maximumPaletteDeltaE00": 14.103872488552186,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 21,
+        "totalWeightedPixelCount": 813,
+        "weightedMeanPaletteDeltaE00": 5.024593051272833,
+        "weightedP95PaletteDeltaE00": 13.879324211650369,
+        "maximumPaletteDeltaE00": 14.103872488552186,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "poparooz-logo-pair:transparent:80",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 19,
+        "totalWeightedPixelCount": 1423,
+        "weightedMeanPaletteDeltaE00": 4.416686226876482,
+        "weightedP95PaletteDeltaE00": 11.673251361498963,
+        "maximumPaletteDeltaE00": 15.025690701577133,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 19,
+        "totalWeightedPixelCount": 1423,
+        "weightedMeanPaletteDeltaE00": 4.416686226876482,
+        "weightedP95PaletteDeltaE00": 11.673251361498963,
+        "maximumPaletteDeltaE00": 15.025690701577133,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "portrait-close-up:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 16,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 5.522675517098027,
+        "weightedP95PaletteDeltaE00": 9.596866523279337,
+        "maximumPaletteDeltaE00": 12.775809374476,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 16,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 5.522675517098027,
+        "weightedP95PaletteDeltaE00": 9.596866523279337,
+        "maximumPaletteDeltaE00": 12.775809374476,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "portrait-sweater-pair:transparent:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 17,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 6.4120757723979125,
+        "weightedP95PaletteDeltaE00": 11.60949205497866,
+        "maximumPaletteDeltaE00": 13.699892598852822,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 17,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 6.4120757723979125,
+        "weightedP95PaletteDeltaE00": 11.60949205497866,
+        "maximumPaletteDeltaE00": 13.699892598852822,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "portrait-sweater-pair:transparent:40",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 17,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 6.431397507404341,
+        "weightedP95PaletteDeltaE00": 13.198066083960814,
+        "maximumPaletteDeltaE00": 14.532244791231573,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 17,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 6.431397507404341,
+        "weightedP95PaletteDeltaE00": 13.198066083960814,
+        "maximumPaletteDeltaE00": 14.532244791231573,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "portrait-sweater-pair:transparent:60",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 16,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 6.37320720343829,
+        "weightedP95PaletteDeltaE00": 13.154398667139924,
+        "maximumPaletteDeltaE00": 14.283266079880079,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 16,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 6.37320720343829,
+        "weightedP95PaletteDeltaE00": 13.154398667139924,
+        "maximumPaletteDeltaE00": 14.283266079880079,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "portrait-sweater-pair:transparent:80",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 17,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 6.440824947573474,
+        "weightedP95PaletteDeltaE00": 10.736910585393208,
+        "maximumPaletteDeltaE00": 12.85696280604809,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 17,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 6.440824947573474,
+        "weightedP95PaletteDeltaE00": 10.736910585393208,
+        "maximumPaletteDeltaE00": 12.85696280604809,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "portrait-window-vertical:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 21,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 4.177264885578483,
+        "weightedP95PaletteDeltaE00": 9.850681437401938,
+        "maximumPaletteDeltaE00": 11.350939363463468,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 21,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 4.177264885578483,
+        "weightedP95PaletteDeltaE00": 9.850681437401938,
+        "maximumPaletteDeltaE00": 11.350939363463468,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "portrait-window-vertical:white:40",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 20,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 4.3873434299277125,
+        "weightedP95PaletteDeltaE00": 10.208131829506833,
+        "maximumPaletteDeltaE00": 11.780366166168715,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 20,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 4.3873434299277125,
+        "weightedP95PaletteDeltaE00": 10.208131829506833,
+        "maximumPaletteDeltaE00": 11.780366166168715,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "portrait-window-vertical:white:60",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 19,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 4.222311710278636,
+        "weightedP95PaletteDeltaE00": 9.866791202407697,
+        "maximumPaletteDeltaE00": 11.97794986863715,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 19,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 4.222311710278636,
+        "weightedP95PaletteDeltaE00": 9.866791202407697,
+        "maximumPaletteDeltaE00": 11.97794986863715,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "portrait-window-vertical:white:80",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 18,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 4.218534738982136,
+        "weightedP95PaletteDeltaE00": 9.961124527613102,
+        "maximumPaletteDeltaE00": 12.005921025240806,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 18,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 4.218534738982136,
+        "weightedP95PaletteDeltaE00": 9.961124527613102,
+        "maximumPaletteDeltaE00": 12.005921025240806,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "saturated-lake-landscape:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 22,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 7.102316839267854,
+        "weightedP95PaletteDeltaE00": 11.57004675875964,
+        "maximumPaletteDeltaE00": 12.943352410499724,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 22,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 7.102316839267854,
+        "weightedP95PaletteDeltaE00": 11.57004675875964,
+        "maximumPaletteDeltaE00": 12.943352410499724,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "saturated-lake-landscape:white:40",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 21,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 6.86784701118651,
+        "weightedP95PaletteDeltaE00": 11.534105221777976,
+        "maximumPaletteDeltaE00": 13.37995736577862,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 21,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 6.86784701118651,
+        "weightedP95PaletteDeltaE00": 11.534105221777976,
+        "maximumPaletteDeltaE00": 13.37995736577862,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "saturated-lake-landscape:white:60",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 20,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 7.329748644192699,
+        "weightedP95PaletteDeltaE00": 11.228890550730544,
+        "maximumPaletteDeltaE00": 13.45112902757452,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 20,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 7.329748644192699,
+        "weightedP95PaletteDeltaE00": 11.228890550730544,
+        "maximumPaletteDeltaE00": 13.45112902757452,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "saturated-lake-landscape:white:80",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 22,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 7.3707136028145825,
+        "weightedP95PaletteDeltaE00": 11.023725296000103,
+        "maximumPaletteDeltaE00": 13.94400034642803,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 22,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 7.3707136028145825,
+        "weightedP95PaletteDeltaE00": 11.023725296000103,
+        "maximumPaletteDeltaE00": 13.94400034642803,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "stylized-portrait-dark-female:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 14,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 4.849433955526325,
+        "weightedP95PaletteDeltaE00": 7.719580704145352,
+        "maximumPaletteDeltaE00": 9.904232302882594,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 14,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 4.849433955526325,
+        "weightedP95PaletteDeltaE00": 7.719580704145352,
+        "maximumPaletteDeltaE00": 9.904232302882594,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "stylized-portrait-dark-male:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 18,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 3.8655363811814496,
+        "weightedP95PaletteDeltaE00": 7.1390914084688415,
+        "maximumPaletteDeltaE00": 9.408252854387053,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 18,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 3.8655363811814496,
+        "weightedP95PaletteDeltaE00": 7.1390914084688415,
+        "maximumPaletteDeltaE00": 9.408252854387053,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "thin-botanical-line-art:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 8,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 0.8283658182556436,
+        "weightedP95PaletteDeltaE00": 4.270152494181936,
+        "maximumPaletteDeltaE00": 10.515269762971894,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 8,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 0.8283658182556436,
+        "weightedP95PaletteDeltaE00": 4.270152494181936,
+        "maximumPaletteDeltaE00": 10.515269762971894,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "thin-botanical-line-art:white:40",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 4,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 0.7980957626363552,
+        "weightedP95PaletteDeltaE00": 2.601807230001397,
+        "maximumPaletteDeltaE00": 5.172093423932335,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 4,
+        "totalWeightedPixelCount": 1600,
+        "weightedMeanPaletteDeltaE00": 0.7980957626363552,
+        "weightedP95PaletteDeltaE00": 2.601807230001397,
+        "maximumPaletteDeltaE00": 5.172093423932335,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "thin-botanical-line-art:white:60",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 6,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 0.808135129778378,
+        "weightedP95PaletteDeltaE00": 4.179788373011588,
+        "maximumPaletteDeltaE00": 6.084648224053944,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 6,
+        "totalWeightedPixelCount": 3600,
+        "weightedMeanPaletteDeltaE00": 0.808135129778378,
+        "weightedP95PaletteDeltaE00": 4.179788373011588,
+        "maximumPaletteDeltaE00": 6.084648224053944,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "thin-botanical-line-art:white:80",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 7,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 0.8208264484516803,
+        "weightedP95PaletteDeltaE00": 4.293028875896805,
+        "maximumPaletteDeltaE00": 6.315706975254576,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 7,
+        "totalWeightedPixelCount": 6400,
+        "weightedMeanPaletteDeltaE00": 0.8208264484516803,
+        "weightedP95PaletteDeltaE00": 4.293028875896805,
+        "maximumPaletteDeltaE00": 6.315706975254576,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "white-pump-bottle-pair:transparent:104",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 7,
+        "totalWeightedPixelCount": 1910,
+        "weightedMeanPaletteDeltaE00": 2.1688456200936566,
+        "weightedP95PaletteDeltaE00": 4.241433418720669,
+        "maximumPaletteDeltaE00": 7.0133680771963505,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 7,
+        "totalWeightedPixelCount": 1910,
+        "weightedMeanPaletteDeltaE00": 2.1688456200936566,
+        "weightedP95PaletteDeltaE00": 4.241433418720669,
+        "maximumPaletteDeltaE00": 7.0133680771963505,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "white-pump-bottle-pair:transparent:40",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 3,
+        "totalWeightedPixelCount": 301,
+        "weightedMeanPaletteDeltaE00": 2.060379898596239,
+        "weightedP95PaletteDeltaE00": 4.0328681629797165,
+        "maximumPaletteDeltaE00": 4.810019240454717,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 3,
+        "totalWeightedPixelCount": 301,
+        "weightedMeanPaletteDeltaE00": 2.060379898596239,
+        "weightedP95PaletteDeltaE00": 4.0328681629797165,
+        "maximumPaletteDeltaE00": 4.810019240454717,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "white-pump-bottle-pair:transparent:60",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 6,
+        "totalWeightedPixelCount": 661,
+        "weightedMeanPaletteDeltaE00": 2.1136031957907746,
+        "weightedP95PaletteDeltaE00": 4.088770082783931,
+        "maximumPaletteDeltaE00": 5.5506594628130985,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 6,
+        "totalWeightedPixelCount": 661,
+        "weightedMeanPaletteDeltaE00": 2.1136031957907746,
+        "weightedP95PaletteDeltaE00": 4.088770082783931,
+        "maximumPaletteDeltaE00": 5.5506594628130985,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "white-pump-bottle-pair:transparent:80",
+      "requiredProfile": 168,
+      "recommendedProfile": 168,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 6,
+        "totalWeightedPixelCount": 1144,
+        "weightedMeanPaletteDeltaE00": 2.2036386332420554,
+        "weightedP95PaletteDeltaE00": 4.241433418720669,
+        "maximumPaletteDeltaE00": 7.422958833146938,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-168",
+        "profileSize": 168,
+        "usedColorCount": 6,
+        "totalWeightedPixelCount": 1144,
+        "weightedMeanPaletteDeltaE00": 2.2036386332420554,
+        "weightedP95PaletteDeltaE00": 4.241433418720669,
+        "maximumPaletteDeltaE00": 7.422958833146938,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "white-sneaker-product:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 8,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 1.0012435907071682,
+        "weightedP95PaletteDeltaE00": 4.002428579503608,
+        "maximumPaletteDeltaE00": 10.567695660204608,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 8,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 1.0012435907071682,
+        "weightedP95PaletteDeltaE00": 4.002428579503608,
+        "maximumPaletteDeltaE00": 10.567695660204608,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    },
+    {
+      "runId": "white-succulent-product:white:104",
+      "requiredProfile": 221,
+      "recommendedProfile": 221,
+      "upgraded": false,
+      "requiredQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 11,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 1.4955109733470076,
+        "weightedP95PaletteDeltaE00": 5.113865640444765,
+        "maximumPaletteDeltaE00": 11.145064040906066,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "recommendedQuality": {
+        "profileId": "poparooz-set-221",
+        "profileSize": 221,
+        "usedColorCount": 11,
+        "totalWeightedPixelCount": 10816,
+        "weightedMeanPaletteDeltaE00": 1.4955109733470076,
+        "weightedP95PaletteDeltaE00": 5.113865640444765,
+        "maximumPaletteDeltaE00": 11.145064040906066,
+        "meanDeltaVs221": 0,
+        "p95DeltaVs221": 0
+      },
+      "qualityGain": {
+        "weightedMeanPaletteDeltaE00": 0,
+        "weightedP95PaletteDeltaE00": 0,
+        "maximumPaletteDeltaE00": 0
+      }
+    }
+  ],
+  "eligibleUpgradeAnalysis": {
+    "fromProfile": 168,
+    "toProfile": 221,
+    "eligibleRunCount": 13,
+    "upgradedRunCount": 0,
+    "allWeightedMeanGainsZero": true,
+    "allWeightedP95GainsZero": true,
+    "allMaximumGainsZero": true,
+    "eligibleRunIds": [
+      "dark-camera-product:white:104",
+      "dark-watch-product:white:104",
+      "dark-watch-product:white:40",
+      "dark-watch-product:white:60",
+      "dark-watch-product:white:80",
+      "pale-teddy-bear-pair:transparent:104",
+      "pale-teddy-bear-pair:transparent:40",
+      "pale-teddy-bear-pair:transparent:60",
+      "thin-botanical-line-art:white:40",
+      "white-pump-bottle-pair:transparent:104",
+      "white-pump-bottle-pair:transparent:40",
+      "white-pump-bottle-pair:transparent:60",
+      "white-pump-bottle-pair:transparent:80"
+    ]
+  },
+  "trustedPairSummary": [
+    {
+      "group": "golden-retriever-pair",
+      "runCount": 4,
+      "requiredDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 0,
+        "221": 4
+      },
+      "recommendedDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 0,
+        "221": 4
+      },
+      "allRecommendedEqualRequired": true
+    },
+    {
+      "group": "pale-teddy-bear-pair",
+      "runCount": 4,
+      "requiredDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 3,
+        "221": 1
+      },
+      "recommendedDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 3,
+        "221": 1
+      },
+      "allRecommendedEqualRequired": true
+    },
+    {
+      "group": "poparooz-logo-pair",
+      "runCount": 4,
+      "requiredDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 0,
+        "221": 4
+      },
+      "recommendedDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 0,
+        "221": 4
+      },
+      "allRecommendedEqualRequired": true
+    },
+    {
+      "group": "portrait-sweater-pair",
+      "runCount": 4,
+      "requiredDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 0,
+        "221": 4
+      },
+      "recommendedDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 0,
+        "221": 4
+      },
+      "allRecommendedEqualRequired": true
+    },
+    {
+      "group": "white-pump-bottle-pair",
+      "runCount": 4,
+      "requiredDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 4,
+        "221": 0
+      },
+      "recommendedDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 4,
+        "221": 0
+      },
+      "allRecommendedEqualRequired": true
+    }
+  ],
+  "patternSizeSummary": [
+    {
+      "patternSize": 40,
+      "runCount": 10,
+      "requiredDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 4,
+        "221": 6
+      },
+      "recommendedDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 4,
+        "221": 6
+      },
+      "allRecommendedEqualRequired": true
+    },
+    {
+      "patternSize": 60,
+      "runCount": 10,
+      "requiredDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 3,
+        "221": 7
+      },
+      "recommendedDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 3,
+        "221": 7
+      },
+      "allRecommendedEqualRequired": true
+    },
+    {
+      "patternSize": 80,
+      "runCount": 10,
+      "requiredDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 2,
+        "221": 8
+      },
+      "recommendedDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 2,
+        "221": 8
+      },
+      "allRecommendedEqualRequired": true
+    },
+    {
+      "patternSize": 104,
+      "runCount": 24,
+      "requiredDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 4,
+        "221": 20
+      },
+      "recommendedDistribution": {
+        "24": 0,
+        "48": 0,
+        "72": 0,
+        "120": 0,
+        "168": 4,
+        "221": 20
+      },
+      "allRecommendedEqualRequired": true
+    }
+  ],
+  "refill": {
+    "nominalBeadsPerColor": 1000,
+    "totalColorRows": 750,
+    "runsWithAnyRefill": 37,
+    "colorRowsRequiringRefill": 71,
+    "refillDistribution": {
+      "0": 679,
+      "1": 40,
+      "2": 11,
+      "3+": 20
+    },
+    "maximumSingleColorBeadCount": 9679,
+    "maximumSingleColorRefills": 9,
+    "maximumSingleColorExample": {
+      "runId": "thin-botanical-line-art:white:104",
+      "code": "H2",
+      "beadCount": 9679,
+      "refillPacks": 9
+    },
+    "maximumPatternRefills": 10,
+    "maximumPatternExamples": [
+      {
+        "runId": "dark-camera-product:white:104",
+        "refillPacks": 10
+      },
+      {
+        "runId": "white-sneaker-product:white:104",
+        "refillPacks": 10
+      }
+    ]
+  },
+  "hardGates": [
+    {
+      "id": "source-evidence-sha",
+      "status": "passed",
+      "checkedItems": 1
+    },
+    {
+      "id": "source-run-count",
+      "status": "passed",
+      "checkedItems": 54
+    },
+    {
+      "id": "formal-profile-identity",
+      "status": "passed",
+      "checkedItems": 6
+    },
+    {
+      "id": "formal-profile-nesting",
+      "status": "passed",
+      "checkedItems": 5
+    },
+    {
+      "id": "required-distribution",
+      "status": "passed",
+      "checkedItems": 54
+    },
+    {
+      "id": "recommended-not-below-required",
+      "status": "passed",
+      "checkedItems": 54
+    },
+    {
+      "id": "recommended-equals-required",
+      "status": "passed",
+      "checkedItems": 54
+    },
+    {
+      "id": "required-quality-equals-221",
+      "status": "passed",
+      "checkedItems": 54
+    },
+    {
+      "id": "eligible-168-zero-gain",
+      "status": "passed",
+      "checkedItems": 13
+    },
+    {
+      "id": "policy-input-exclusion",
+      "status": "passed",
+      "checkedItems": 54
+    },
+    {
+      "id": "refill-arithmetic",
+      "status": "passed",
+      "checkedItems": 7
+    },
+    {
+      "id": "refill-recommendation-independence",
+      "status": "passed",
+      "checkedItems": 54
+    },
+    {
+      "id": "refill-color-covered",
+      "status": "passed",
+      "checkedItems": 750
+    },
+    {
+      "id": "deterministic-serialization",
+      "status": "passed",
+      "checkedItems": 1
+    },
+    {
+      "id": "production-src-unchanged",
+      "status": "passed",
+      "checkedItems": 1
+    }
+  ],
+  "canonicalPolicyEvidenceSha256": "d6ef6aa2a54f4c6878e058e695d57532ac7ad007ae3878661a0f94f4bede0ffd"
+}

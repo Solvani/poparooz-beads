@@ -16,6 +16,7 @@ import type {
 } from "../../../src/domain/image/image.types.ts";
 import { assemblePattern } from "../../../src/domain/pattern/pattern-assembler.ts";
 import { toPublicPatternResult } from "../../../src/domain/pattern/public-pattern.mapper.ts";
+import type { PublicPatternResult } from "../../../src/domain/pattern/public-pattern.types.ts";
 import { quantizeImage } from "../../../src/domain/quantization/quantize-image.ts";
 import { createApprovedBoardProfileProviderFromArtifact } from "../../../src/runtime/board-profile/board-profile.provider.ts";
 import { createColorSetProvider } from "../../../src/runtime/color-set/color-set.provider.ts";
@@ -36,6 +37,7 @@ import {
   exactValueGate,
 } from "./generator-quality-gates.ts";
 import { applyH03D02NormalizedFringeCandidate } from "./generator-quality-h03-candidate.ts";
+import { applyDominantRgbSamplingCandidate } from "./generator-quality-dominant-sampling.ts";
 import type {
   GeneratorQualityBackground,
   GeneratorQualityCaseDeclaration,
@@ -57,6 +59,12 @@ export interface GeneratorQualityPerformanceSample {
   readonly patternAssemblyMs: number;
   readonly totalMs: number;
 }
+
+export interface GeneratorQualityReplayArtifacts {
+  readonly pattern: PublicPatternResult;
+}
+
+export type GeneratorQualityCandidate = "h03-d02" | "q02-a02";
 
 interface QualityDependencies {
   readonly palette: ReturnType<typeof adaptRuntimePaletteToGeneration>;
@@ -109,6 +117,7 @@ export function replaySyntheticQualityCase(
 ): Readonly<{
   result: GeneratorQualityCaseResult;
   performance: GeneratorQualityPerformanceSample;
+  artifacts: GeneratorQualityReplayArtifacts;
 }> {
   return replayQualityCase(
     declaration,
@@ -127,10 +136,11 @@ export function replayExternalQualityCase(
   background: GeneratorQualityBackground,
   size: GeneratorQualitySize,
   dependencies: QualityDependencies,
-  candidate: "h03-d02" | undefined = undefined,
+  candidate: GeneratorQualityCandidate | undefined = undefined,
 ): Readonly<{
   result: GeneratorQualityCaseResult;
   performance: GeneratorQualityPerformanceSample;
+  artifacts: GeneratorQualityReplayArtifacts;
 }> {
   if (background === "transparent" && reference === undefined) {
     throw new Error(
@@ -155,10 +165,11 @@ function replayQualityCase(
   background: GeneratorQualityBackground,
   size: GeneratorQualitySize,
   dependencies: QualityDependencies,
-  candidate: "h03-d02" | undefined = undefined,
+  candidate: GeneratorQualityCandidate | undefined = undefined,
 ): Readonly<{
   result: GeneratorQualityCaseResult;
   performance: GeneratorQualityPerformanceSample;
+  artifacts: GeneratorQualityReplayArtifacts;
 }> {
   const totalStarted = performance.now();
   const originalSourceBytes = new Uint8ClampedArray(source.data);
@@ -192,18 +203,30 @@ function replayQualityCase(
   const normalizationAndResizeMs = performance.now() - normalizationStarted;
 
   const cleanupStarted = performance.now();
-  const candidateResult =
+  const dominantResult =
+    candidate === "q02-a02"
+      ? applyDominantRgbSamplingCandidate(
+          normalizationSource,
+          normalized,
+          background,
+        )
+      : undefined;
+  const h03CandidateResult =
     candidate === "h03-d02"
       ? applyH03D02NormalizedFringeCandidate(normalized.image, {
           background,
           sourceHasAlpha: sourceMetadata.hasAlpha,
         })
       : undefined;
-  const candidateImage = candidateResult?.image ?? normalized.image;
-  const cleaned =
+  const baselineOrH03Image = h03CandidateResult?.image ?? normalized.image;
+  const baselineCleaned =
     background === "transparent"
-      ? excludeEdgeConnectedLightBackground(candidateImage)
-      : candidateImage;
+      ? excludeEdgeConnectedLightBackground(baselineOrH03Image)
+      : baselineOrH03Image;
+  const cleaned =
+    dominantResult === undefined
+      ? baselineCleaned
+      : preserveFrozenCleanupAlpha(dominantResult.image, baselineCleaned);
   const postResizeCleanupMs = performance.now() - cleanupStarted;
 
   const occupancyStarted = performance.now();
@@ -351,14 +374,18 @@ function replayQualityCase(
       normalizedDrawHeight: normalized.target.drawHeight,
       quantizedColorCount: quantized.colors.length,
       sourceHasAlpha: sourceMetadata.hasAlpha,
-      ...(candidateResult === undefined
+      ...(h03CandidateResult === undefined
         ? {}
-        : { h03Candidate: candidateResult.diagnostics }),
+        : { h03Candidate: h03CandidateResult.diagnostics }),
+      ...(dominantResult === undefined
+        ? {}
+        : { q02Candidate: dominantResult.diagnostics }),
     }),
   });
 
   return Object.freeze({
     result,
+    artifacts: Object.freeze({ pattern: publicPattern }),
     performance: Object.freeze({
       caseId: result.id,
       background,
@@ -373,6 +400,19 @@ function replayQualityCase(
       totalMs: performance.now() - totalStarted,
     }),
   });
+}
+
+function preserveFrozenCleanupAlpha(
+  candidate: RgbaImage,
+  baselineCleaned: RgbaImage,
+): RgbaImage {
+  const data = new Uint8ClampedArray(candidate.data);
+  for (let index = 0; index < data.length; index += 4) {
+    const alpha = baselineCleaned.data[index + 3]!;
+    if (alpha === 0) data.fill(0, index, index + 4);
+    else data[index + 3] = alpha;
+  }
+  return { width: candidate.width, height: candidate.height, data };
 }
 
 function normalizedReference(

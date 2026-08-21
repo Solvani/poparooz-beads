@@ -1,4 +1,5 @@
 import type { RgbaImage } from "../../../src/domain/image/image.types.ts";
+import type { DominantSamplingDiagnostics } from "./generator-quality-dominant-sampling.ts";
 
 export const GENERATOR_QUALITY_CATEGORIES = [
   "simple-graphic",
@@ -197,6 +198,7 @@ export interface GeneratorQualityCaseResult {
       componentCountBefore: number;
       componentCountAfter: number;
     }>;
+    q02Candidate?: DominantSamplingDiagnostics;
   }>;
 }
 

@@ -11,45 +11,42 @@ import {
   type WeightedObservedRgb,
 } from "./generator-quality-cell-footprint.ts";
 
-export interface DominantSamplingDiagnostics {
+export interface ObservedSamplingDiagnostics {
   readonly activated: boolean;
   readonly bypassReason: "none" | "not-downscaling";
   readonly evaluatedCellCount: number;
-  readonly dominantRgbChangedCellCount: number;
+  readonly observedRgbChangedCellCount: number;
+  readonly observedCandidateCount: number;
+  readonly exactReferenceMatchCellCount: number;
   readonly alphaMismatchCount: number;
 }
 
-export interface DominantSamplingResult {
+export interface ObservedSamplingResult {
   readonly image: RgbaImage;
-  readonly diagnostics: DominantSamplingDiagnostics;
+  readonly diagnostics: ObservedSamplingDiagnostics;
 }
 
-/**
- * Evaluation-only dominant RGB sampling. Spatial overlap multiplied by source
- * alpha selects the RGB. Production area-resized alpha and contain geometry are
- * retained exactly; only RGB inside a downscaled draw rectangle may change.
- */
-export function applyDominantRgbSamplingCandidate(
+/** Evaluation-only nearest-observed RGB selection against production resize RGB. */
+export function applyPerceptualObservedRgbSamplingCandidate(
   source: RgbaImage,
   baseline: NormalizedImageResult,
   background: ImageBackground,
-): DominantSamplingResult {
+): ObservedSamplingResult {
   const { drawX, drawY, drawWidth, drawHeight } = baseline.target;
-  const downscaling = drawWidth < source.width || drawHeight < source.height;
-  if (!downscaling) {
-    return Object.freeze({
-      image: baseline.image,
-      diagnostics: diagnostics(false, "not-downscaling", 0, 0, 0),
-    });
+  if (drawWidth >= source.width && drawHeight >= source.height) {
+    return result(baseline.image, false, "not-downscaling", 0, 0, 0, 0, 0);
   }
 
-  const areaResized = resizeRgbaImage(source, drawWidth, drawHeight);
+  // This is the production resize implementation, not a parallel average.
+  const areaReference = resizeRgbaImage(source, drawWidth, drawHeight);
   const output: RgbaImage = {
     width: baseline.image.width,
     height: baseline.image.height,
     data: new Uint8ClampedArray(baseline.image.data),
   };
-  let changedRgbCellCount = 0;
+  let changed = 0;
+  let candidateCount = 0;
+  let exactMatches = 0;
 
   for (let targetY = 0; targetY < drawHeight; targetY += 1) {
     const sourceTop = (targetY * source.height) / drawHeight;
@@ -57,27 +54,35 @@ export function applyDominantRgbSamplingCandidate(
     for (let targetX = 0; targetX < drawWidth; targetX += 1) {
       const sourceLeft = (targetX * source.width) / drawWidth;
       const sourceRight = ((targetX + 1) * source.width) / drawWidth;
-      const resizedIndex = (targetY * drawWidth + targetX) * 4;
-      const selected = dominantRgbForFootprint(
+      const referenceIndex = (targetY * drawWidth + targetX) * 4;
+      const observed = collectObservedRgbContributions(
         source,
         sourceLeft,
         sourceRight,
         sourceTop,
         sourceBottom,
-        {
-          r: areaResized.data[resizedIndex]!,
-          g: areaResized.data[resizedIndex + 1]!,
-          b: areaResized.data[resizedIndex + 2]!,
-        },
       );
+      candidateCount += observed.length;
+      const selected = nearestObservedRgb(observed, {
+        r: areaReference.data[referenceIndex]!,
+        g: areaReference.data[referenceIndex + 1]!,
+        b: areaReference.data[referenceIndex + 2]!,
+      });
       const destinationIndex =
         ((drawY + targetY) * output.width + drawX + targetX) * 4;
       if (selected !== undefined) {
-        compositeDominantRgb(
+        if (
+          selected.r === areaReference.data[referenceIndex] &&
+          selected.g === areaReference.data[referenceIndex + 1] &&
+          selected.b === areaReference.data[referenceIndex + 2]
+        ) {
+          exactMatches += 1;
+        }
+        composite(
           output.data,
           destinationIndex,
           selected,
-          areaResized.data[resizedIndex + 3]!,
+          areaReference.data[referenceIndex + 3]!,
           background,
         );
       }
@@ -88,79 +93,54 @@ export function applyDominantRgbSamplingCandidate(
           baseline.image.data[destinationIndex + 1] ||
         output.data[destinationIndex + 2] !==
           baseline.image.data[destinationIndex + 2]
-      ) {
-        changedRgbCellCount += 1;
-      }
+      )
+        changed += 1;
     }
   }
-
-  const alphaMismatchCount = countAlphaMismatches(
+  const alphaMismatches = countAlphaMismatches(
     baseline.image.data,
     output.data,
   );
-  if (alphaMismatchCount !== 0) {
-    throw new Error("Dominant RGB sampling changed production alpha bytes.");
+  if (alphaMismatches !== 0) {
+    throw new Error("Observed RGB sampling changed production alpha bytes.");
   }
-
-  return Object.freeze({
-    image: output,
-    diagnostics: diagnostics(
-      true,
-      "none",
-      drawWidth * drawHeight,
-      changedRgbCellCount,
-      alphaMismatchCount,
-    ),
-  });
+  return result(
+    output,
+    true,
+    "none",
+    drawWidth * drawHeight,
+    changed,
+    candidateCount,
+    exactMatches,
+    alphaMismatches,
+  );
 }
 
-function dominantRgbForFootprint(
-  source: RgbaImage,
-  sourceLeft: number,
-  sourceRight: number,
-  sourceTop: number,
-  sourceBottom: number,
-  areaAverage: Readonly<{ r: number; g: number; b: number }>,
+function nearestObservedRgb(
+  candidates: readonly WeightedObservedRgb[],
+  reference: Readonly<{ r: number; g: number; b: number }>,
 ): WeightedObservedRgb | undefined {
-  const candidates = collectObservedRgbContributions(
-    source,
-    sourceLeft,
-    sourceRight,
-    sourceTop,
-    sourceBottom,
-  );
+  const referenceLab = rgb8ToLab(reference);
   let winner: WeightedObservedRgb | undefined;
   let winnerDistance = Number.POSITIVE_INFINITY;
-  const averageLab = rgb8ToLab(areaAverage);
   for (const candidate of candidates) {
-    if (winner === undefined || candidate.contribution > winner.contribution) {
-      winner = candidate;
-      winnerDistance = Number.POSITIVE_INFINITY;
-      continue;
-    }
-    if (candidate.contribution !== winner.contribution) continue;
-    if (!Number.isFinite(winnerDistance)) {
-      winnerDistance = deltaE2000(
-        rgb8ToLab({ r: winner.r, g: winner.g, b: winner.b }),
-        averageLab,
-      );
-    }
-    const candidateDistance = deltaE2000(
-      rgb8ToLab({ r: candidate.r, g: candidate.g, b: candidate.b }),
-      averageLab,
-    );
+    const distance = deltaE2000(rgb8ToLab(candidate), referenceLab);
     if (
-      candidateDistance < winnerDistance ||
-      (candidateDistance === winnerDistance && candidate.key < winner.key)
+      distance < winnerDistance ||
+      (distance === winnerDistance &&
+        (winner === undefined ||
+          candidate.contribution > winner.contribution ||
+          (candidate.contribution === winner.contribution &&
+            candidate.key < winner.key)))
     ) {
       winner = candidate;
-      winnerDistance = candidateDistance;
+      winnerDistance = distance;
     }
   }
   return winner;
 }
 
-function compositeDominantRgb(
+function composite(
   output: Uint8ClampedArray,
   index: number,
   rgb: Pick<WeightedObservedRgb, "r" | "g" | "b">,
@@ -194,18 +174,26 @@ function countAlphaMismatches(
   return count;
 }
 
-function diagnostics(
+function result(
+  image: RgbaImage,
   activated: boolean,
-  bypassReason: DominantSamplingDiagnostics["bypassReason"],
+  bypassReason: ObservedSamplingDiagnostics["bypassReason"],
   evaluatedCellCount: number,
-  dominantRgbChangedCellCount: number,
+  observedRgbChangedCellCount: number,
+  observedCandidateCount: number,
+  exactReferenceMatchCellCount: number,
   alphaMismatchCount: number,
-): DominantSamplingDiagnostics {
+): ObservedSamplingResult {
   return Object.freeze({
-    activated,
-    bypassReason,
-    evaluatedCellCount,
-    dominantRgbChangedCellCount,
-    alphaMismatchCount,
+    image,
+    diagnostics: Object.freeze({
+      activated,
+      bypassReason,
+      evaluatedCellCount,
+      observedRgbChangedCellCount,
+      observedCandidateCount,
+      exactReferenceMatchCellCount,
+      alphaMismatchCount,
+    }),
   });
 }

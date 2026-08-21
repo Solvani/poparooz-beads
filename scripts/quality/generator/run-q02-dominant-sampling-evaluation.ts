@@ -40,11 +40,17 @@ const CRITICAL_CASES: ReadonlyMap<string, string> = new Map([
 ]);
 
 const repositoryRoot = process.cwd();
+const observedMode = process.env.POPAROOZ_Q02_CANDIDATE === "q02-a03";
+const candidateReplay = observedMode ? "q02-a03" : "q02-a02";
+const outputSlug = observedMode ? "q02-a03" : "q02-a02";
 const corpusRoot = process.env.POPAROOZ_QUALITY_CORPUS_DIR;
 if (corpusRoot === undefined || corpusRoot.trim() === "") {
   throw new Error("POPAROOZ_QUALITY_CORPUS_DIR is required.");
 }
-const outputDirectory = path.join(repositoryRoot, ".quality-output/q02-a02");
+const outputDirectory = path.join(
+  repositoryRoot,
+  `.quality-output/${outputSlug}`,
+);
 const visualDirectory = path.join(outputDirectory, "visuals");
 const manifestResult = await readGeneratorQualityManifest(
   path.join(
@@ -110,7 +116,7 @@ for (const declaration of manifestResult.manifest.cases
         background,
         size,
         dependencies,
-        "q02-a02",
+        candidateReplay,
       );
       const repeatedCandidate = replayExternalQualityCase(
         declaration,
@@ -119,7 +125,7 @@ for (const declaration of manifestResult.manifest.cases
         background,
         size,
         dependencies,
-        "q02-a02",
+        candidateReplay,
       );
       const frozenCase = baselineById.get(baseline.result.id);
       if (frozenCase === undefined) {
@@ -131,9 +137,9 @@ for (const declaration of manifestResult.manifest.cases
       deterministicReplay &&=
         serializeCanonicalJson(candidate.result.metrics) ===
           serializeCanonicalJson(repeatedCandidate.result.metrics) &&
-        serializeCanonicalJson(candidate.result.diagnostics.q02Candidate) ===
+        serializeCanonicalJson(candidateDiagnostics(candidate.result)) ===
           serializeCanonicalJson(
-            repeatedCandidate.result.diagnostics.q02Candidate,
+            candidateDiagnostics(repeatedCandidate.result),
           ) &&
         patternsEquivalent(
           candidate.artifacts.pattern,
@@ -206,7 +212,9 @@ const hardGates = Object.freeze({
 });
 const baseEvidence = Object.freeze({
   schemaVersion: "1.0.0",
-  evaluationId: "p3-a03-q02-a02-dominant-cell-sampling",
+  evaluationId: observedMode
+    ? "p3-a03-q02-a03-perceptual-observed-color-sampling"
+    : "p3-a03-q02-a02-dominant-cell-sampling",
   baseline: Object.freeze({
     baselineId: baselineScorecard.baselineIdentity.baselineId,
     baselineVersion: baselineScorecard.baselineIdentity.baselineVersion,
@@ -225,12 +233,21 @@ const baseEvidence = Object.freeze({
   }),
   frozenIdentities: frozenHashes,
   candidate: Object.freeze({
-    id: "q02-a02-dominant-cell-sampling",
+    id: observedMode
+      ? "q02-a03-perceptual-observed-color-sampling"
+      : "q02-a02-dominant-cell-sampling",
     productionActivation: false,
     applicability: "downscaling-only",
     colorWeight: "source-target-overlap-times-source-alpha",
-    tieBreak:
-      "greater-contribution-then-lower-delta-e-to-area-average-then-rgb-key",
+    ...(observedMode
+      ? {
+          selection:
+            "minimum-ciede2000-from-production-area-resize-reference-among-observed-rgb",
+        }
+      : {}),
+    tieBreak: observedMode
+      ? "greater-contribution-then-rgb-key"
+      : "greater-contribution-then-lower-delta-e-to-area-average-then-rgb-key",
     alpha: "production-area-resized-alpha-with-frozen-cleanup-mask",
   }),
   hardGates,
@@ -263,12 +280,22 @@ const evidence = Object.freeze({ ...baseEvidence, canonicalEvidenceSha256 });
 await mkdir(visualDirectory, { recursive: true });
 await Promise.all([
   writeFile(
-    path.join(outputDirectory, "q02-a02-dominant-sampling-scorecard.json"),
+    path.join(
+      outputDirectory,
+      observedMode
+        ? "q02-a03-sampling-scorecard.json"
+        : "q02-a02-dominant-sampling-scorecard.json",
+    ),
     serializeCanonicalJson(evidence),
     "utf8",
   ),
   writeFile(
-    path.join(outputDirectory, "q02-a02-dominant-sampling-summary.md"),
+    path.join(
+      outputDirectory,
+      observedMode
+        ? "q02-a03-sampling-summary.md"
+        : "q02-a02-dominant-sampling-summary.md",
+    ),
     markdownSummary(evidence),
     "utf8",
   ),
@@ -325,7 +352,8 @@ interface CandidateComparison {
     totalPositions: number;
   }>;
   readonly candidateDiagnostics: NonNullable<
-    GeneratorQualityCaseResult["diagnostics"]["q02Candidate"]
+    | GeneratorQualityCaseResult["diagnostics"]["q02Candidate"]
+    | GeneratorQualityCaseResult["diagnostics"]["q02A03Candidate"]
   >;
 }
 
@@ -345,10 +373,7 @@ function compareRun(
   candidateResult: GeneratorQualityCaseResult,
   candidatePattern: PublicPatternResult,
 ): CandidateComparison {
-  const candidateDiagnostics = candidateResult.diagnostics.q02Candidate;
-  if (candidateDiagnostics === undefined) {
-    throw new Error("Dominant-sampling diagnostics are missing.");
-  }
+  const diagnostics = candidateDiagnostics(candidateResult);
   const baselinePurity = analyzePatternColorPurity(
     baselinePattern,
     dependencies.palette.colors,
@@ -418,7 +443,7 @@ function compareRun(
         baseline.purity.totalComponentCount,
     }),
     matrix,
-    candidateDiagnostics,
+    candidateDiagnostics: diagnostics,
   });
 }
 
@@ -539,6 +564,25 @@ function patternsEquivalent(
   );
 }
 
+function candidateDiagnostics(
+  result: GeneratorQualityCaseResult,
+): NonNullable<
+  | GeneratorQualityCaseResult["diagnostics"]["q02Candidate"]
+  | GeneratorQualityCaseResult["diagnostics"]["q02A03Candidate"]
+> {
+  const diagnostics = observedMode
+    ? result.diagnostics.q02A03Candidate
+    : result.diagnostics.q02Candidate;
+  if (diagnostics === undefined) {
+    throw new Error(
+      observedMode
+        ? "Observed-color sampling diagnostics are missing."
+        : "Dominant-sampling diagnostics are missing.",
+    );
+  }
+  return diagnostics;
+}
+
 function comparisonSvg(
   label: string,
   baseline: PublicPatternResult,
@@ -601,7 +645,9 @@ function markdownSummary(
     CRITICAL_CASES.has(item.logicalCaseId),
   );
   return [
-    "# Q02-A02 Dominant Cell Sampling Evaluation",
+    observedMode
+      ? "# Q02-A03 Perceptual Observed-Color Sampling Evaluation"
+      : "# Q02-A02 Dominant Cell Sampling Evaluation",
     "",
     `- Runs: ${evidence.comparisons.length}`,
     `- Hard gates: ${Object.values(evidence.hardGates).every(Boolean) ? "PASS" : "FAIL"}`,

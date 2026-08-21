@@ -38,6 +38,7 @@ import {
 } from "./generator-quality-gates.ts";
 import { applyH03D02NormalizedFringeCandidate } from "./generator-quality-h03-candidate.ts";
 import { applyDominantRgbSamplingCandidate } from "./generator-quality-dominant-sampling.ts";
+import { applyPerceptualObservedRgbSamplingCandidate } from "./generator-quality-observed-sampling.ts";
 import type {
   GeneratorQualityBackground,
   GeneratorQualityCaseDeclaration,
@@ -64,7 +65,7 @@ export interface GeneratorQualityReplayArtifacts {
   readonly pattern: PublicPatternResult;
 }
 
-export type GeneratorQualityCandidate = "h03-d02" | "q02-a02";
+export type GeneratorQualityCandidate = "h03-d02" | "q02-a02" | "q02-a03";
 
 interface QualityDependencies {
   readonly palette: ReturnType<typeof adaptRuntimePaletteToGeneration>;
@@ -211,6 +212,14 @@ function replayQualityCase(
           background,
         )
       : undefined;
+  const observedResult =
+    candidate === "q02-a03"
+      ? applyPerceptualObservedRgbSamplingCandidate(
+          normalizationSource,
+          normalized,
+          background,
+        )
+      : undefined;
   const h03CandidateResult =
     candidate === "h03-d02"
       ? applyH03D02NormalizedFringeCandidate(normalized.image, {
@@ -223,10 +232,11 @@ function replayQualityCase(
     background === "transparent"
       ? excludeEdgeConnectedLightBackground(baselineOrH03Image)
       : baselineOrH03Image;
+  const samplingImage = dominantResult?.image ?? observedResult?.image;
   const cleaned =
-    dominantResult === undefined
+    samplingImage === undefined
       ? baselineCleaned
-      : preserveFrozenCleanupAlpha(dominantResult.image, baselineCleaned);
+      : preserveFrozenCleanupAlpha(samplingImage, baselineCleaned);
   const postResizeCleanupMs = performance.now() - cleanupStarted;
 
   const occupancyStarted = performance.now();
@@ -380,6 +390,9 @@ function replayQualityCase(
       ...(dominantResult === undefined
         ? {}
         : { q02Candidate: dominantResult.diagnostics }),
+      ...(observedResult === undefined
+        ? {}
+        : { q02A03Candidate: observedResult.diagnostics }),
     }),
   });
 

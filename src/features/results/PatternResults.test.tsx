@@ -33,6 +33,12 @@ describe("PatternResults", () => {
       screen.getByRole("heading", { name: "Pattern Summary" }),
     ).toBeInTheDocument();
     expect(
+      screen.getByRole("heading", { name: "Bead Set Requirements" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Required Bead Set" }),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("heading", { name: "Recommended Bead Set" }),
     ).toBeInTheDocument();
     expect(
@@ -42,8 +48,9 @@ describe("PatternResults", () => {
       screen.getByRole("heading", { name: "Bead Requirements" }),
     ).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Board Layout" })).toBeNull();
-    expect(screen.getByText("48-Color Set")).toBeInTheDocument();
-    expect(screen.getByText("Bead Color Set")).toBeInTheDocument();
+    expect(screen.getAllByText("48-Color Set")).toHaveLength(2);
+    expect(screen.getByText("Generation Color Set")).toBeInTheDocument();
+    expect(screen.getByText("None needed")).toBeInTheDocument();
     expect(screen.getByText("Full Background")).toBeInTheDocument();
     expect(screen.getByText("72-Color Set")).toBeInTheDocument();
   });

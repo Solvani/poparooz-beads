@@ -14,7 +14,7 @@ import type { GenerationRuntime } from "../features/generator/generation.types";
 import { createPublicPattern } from "../features/pattern-canvas/test/pattern-result";
 import { App } from "./App";
 
-const PUBLIC_RESULT = createPublicPattern();
+const PUBLIC_RESULT = withColorCodes(createPublicPattern(), ["A4", "A10"]);
 const COLOR_SET_PROFILES = [
   { profileId: "poparooz-set-24", size: 24 },
   { profileId: "poparooz-set-48", size: 48 },
@@ -82,6 +82,34 @@ function withSingleColorCode(
         color,
       }),
     ]),
+  });
+}
+
+function withColorCodes(
+  pattern: PublicPatternResult,
+  codes: readonly string[],
+): PublicPatternResult {
+  if (codes.length !== pattern.colors.length) {
+    throw new TypeError("Color code fixtures must preserve Pattern colors.");
+  }
+  const colors = pattern.colors.map((entry, index) =>
+    Object.freeze({
+      ...entry,
+      color: Object.freeze({ ...entry.color, code: codes[index]! }),
+    }),
+  );
+  const colorsByIndex = new Map(colors.map((entry) => [entry.index, entry]));
+  return Object.freeze({
+    ...pattern,
+    colors: Object.freeze(colors),
+    materials: Object.freeze(
+      pattern.materials.map((material) =>
+        Object.freeze({
+          ...material,
+          color: colorsByIndex.get(material.patternColorIndex)!.color,
+        }),
+      ),
+    ),
   });
 }
 
@@ -159,7 +187,7 @@ describe("App", () => {
       screen.queryByRole("button", { name: "Get Beads for This Pattern" }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("heading", { name: "Recommended Bead Set" }),
+      screen.queryByRole("heading", { name: "Bead Set Requirements" }),
     ).toBeNull();
     expect(
       screen.queryByRole("heading", { name: "Recommended Board Setup" }),
@@ -291,17 +319,17 @@ describe("App", () => {
       .getByRole("heading", { name: "Pattern Summary" })
       .closest("section")!;
     const packageRow = within(summarySection)
-      .getByText("Bead Color Set")
+      .getByText("Generation Color Set")
       .closest("div")!;
     const beadRecommendation = screen
       .getByRole("heading", { name: "Recommended Bead Set" })
-      .closest("section")!;
+      .closest<HTMLElement>(".bead-set-requirements__item")!;
     expect(within(packageRow).getByText("72-Color Set")).toBeInTheDocument();
     expect(
       within(summarySection).getByText("Full Background"),
     ).toBeInTheDocument();
     expect(
-      within(beadRecommendation).getByText("120-Color Set"),
+      within(beadRecommendation).getByText("48-Color Set"),
     ).toBeInTheDocument();
     await userEvent.click(
       screen.getByRole("button", { name: "Color Code View" }),
@@ -335,7 +363,7 @@ describe("App", () => {
       }),
     ).toBeNull();
     expect(
-      within(beadRecommendation).getByText("120-Color Set"),
+      within(beadRecommendation).getByText("48-Color Set"),
     ).toBeInTheDocument();
     expect(screen.getByText("1 × 52×52 Board")).toBeInTheDocument();
     await userEvent.clear(screen.getByLabelText("Maximum Colors"));
@@ -351,7 +379,7 @@ describe("App", () => {
       screen.getByRole("img", { name: /Bead pattern preview/ }),
     ).toBeInTheDocument();
     expect(
-      within(beadRecommendation).getByText("120-Color Set"),
+      within(beadRecommendation).getByText("48-Color Set"),
     ).toBeInTheDocument();
     expect(screen.getByText("1 × 52×52 Board")).toBeInTheDocument();
     const regenerate = screen.getByRole("button", {
@@ -470,7 +498,7 @@ describe("App", () => {
       within(
         screen
           .getByRole("heading", { name: "Recommended Bead Set" })
-          .closest("section")!,
+          .closest<HTMLElement>(".bead-set-requirements__item")!,
       ).getByText("221-Color Set"),
     ).toBeInTheDocument();
 
@@ -675,7 +703,7 @@ describe("App", () => {
       await screen.findByRole("button", { name: "Generate Pattern" }),
     );
     await screen.findByRole("heading", { name: "Pattern Summary" });
-    const focusedRow = screen.getByRole("button", { name: "A1, 2 beads" });
+    const focusedRow = screen.getByRole("button", { name: "A4, 2 beads" });
     await userEvent.click(focusedRow);
     expect(focusedRow).toHaveAttribute("aria-pressed", "true");
 
@@ -802,7 +830,7 @@ describe("App", () => {
       name: "Pattern Summary",
     });
     const compactBeadSet = within(compactContent).getByRole("heading", {
-      name: "Recommended Bead Set",
+      name: "Bead Set Requirements",
     });
     const compactBoardSetup = within(compactContent).getByRole("heading", {
       name: "Recommended Board Setup",
@@ -847,9 +875,9 @@ describe("App", () => {
       ),
     ).toEqual(["Settings", "Original"]);
 
-    expect(screen.getByText("A1")).toBeInTheDocument();
+    expect(screen.getByText("A4")).toBeInTheDocument();
     const compactColorRow = screen.getByRole("button", {
-      name: "A1, 2 beads",
+      name: "A4, 2 beads",
     });
     await userEvent.click(compactColorRow);
     expect(compactColorRow).toHaveAttribute("aria-pressed", "true");
@@ -890,7 +918,7 @@ describe("App", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
     expect(screen.getByText("Updating your pattern…")).toBeInTheDocument();
 
-    expect(screen.getByText("A1")).toBeInTheDocument();
+    expect(screen.getByText("A4")).toBeInTheDocument();
     await act(async () =>
       resolveSecond(createPublicPattern(2, 2, [1, 1, 65535, 1])),
     );

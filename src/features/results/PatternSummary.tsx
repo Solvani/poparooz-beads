@@ -36,7 +36,7 @@ export function PatternSummary({
           <dd>{summary.totalBeadsLabel}</dd>
         </div>
         <div>
-          <dt>Bead Color Set</dt>
+          <dt>Generation Color Set</dt>
           <dd>{selectedColorSetLabel}</dd>
         </div>
         <div>

@@ -41,7 +41,26 @@ describe("ResultRecommendations", () => {
       />,
     );
 
-    expect(screen.getByText("48-Color Set")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Bead Set Requirements" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Required Bead Set" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Recommended Bead Set" }),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("48-Color Set")).toHaveLength(2);
+    expect(
+      screen.getByText(
+        "Smallest set that includes every color used in your pattern.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Recommended for this pattern. It is also the minimum set required.",
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByText("1 × 78×78 Board")).toBeInTheDocument();
     expect(screen.getByText("Alternative Board Setup")).toBeInTheDocument();
     expect(
@@ -56,14 +75,14 @@ describe("ResultRecommendations", () => {
     const view = render(
       <ResultRecommendations summary={summary(40)} colors={colors(["A4"])} />,
     );
-    expect(screen.getByText("24-Color Set")).toBeInTheDocument();
+    expect(screen.getAllByText("24-Color Set")).toHaveLength(2);
     expect(screen.getByText("1 × 52×52 Board")).toBeInTheDocument();
     expect(screen.queryByText("Alternative Board Setup")).toBeNull();
 
     view.rerender(
       <ResultRecommendations summary={summary(104)} colors={colors(["A20"])} />,
     );
-    expect(screen.getByText("221-Color Set")).toBeInTheDocument();
+    expect(screen.getAllByText("221-Color Set")).toHaveLength(2);
     expect(screen.getByText("1 × 104×104 Board")).toBeInTheDocument();
     expect(screen.getByText("Alternative Board Setup")).toBeInTheDocument();
 

@@ -1,6 +1,7 @@
 import type { ColorRowView, PatternSummaryView } from "./result.types";
 import { recommendBoardSetup } from "./board-recommendation";
-import { recommendApprovedColorSet } from "./recommended-color-set";
+import { recommendBeadSet } from "./recommendation-policy";
+import { findRequiredApprovedBeadSet } from "./required-bead-set";
 
 export function ResultRecommendations({
   summary,
@@ -9,7 +10,10 @@ export function ResultRecommendations({
   readonly summary: PatternSummaryView;
   readonly colors: readonly ColorRowView[];
 }) {
-  const beadSet = recommendApprovedColorSet(colors.map((color) => color.code));
+  const requiredBeadSet = findRequiredApprovedBeadSet(
+    colors.map((color) => color.code),
+  );
+  const recommendedBeadSet = recommendBeadSet({ requiredBeadSet });
   const boardSetup = recommendBoardSetup({
     width: summary.width,
     height: summary.height,
@@ -17,23 +21,37 @@ export function ResultRecommendations({
   return (
     <>
       <section
-        className="result-recommendation"
-        aria-labelledby="recommended-bead-set-heading"
+        className="result-recommendation bead-set-requirements"
+        aria-labelledby="bead-set-requirements-heading"
       >
-        <span className="result-recommendation__badge">Recommended</span>
-        <h3 id="recommended-bead-set-heading">Recommended Bead Set</h3>
-        {beadSet === null ? (
+        <span className="result-recommendation__badge">Bead Sets</span>
+        <h3 id="bead-set-requirements-heading">Bead Set Requirements</h3>
+        {requiredBeadSet === null || recommendedBeadSet === null ? (
           <p className="result-recommendation__unavailable">
             No published set covers every color in this pattern.
           </p>
         ) : (
-          <>
-            <p className="result-recommendation__value">{beadSet.label}</p>
-            <p className="result-recommendation__support">
-              Covers all {summary.actualColorsLabel} colors used in this
-              pattern.
-            </p>
-          </>
+          <div className="bead-set-requirements__items">
+            <div className="bead-set-requirements__item">
+              <h4>Required Bead Set</h4>
+              <p className="result-recommendation__value">
+                {requiredBeadSet.label}
+              </p>
+              <p className="result-recommendation__support">
+                Smallest set that includes every color used in your pattern.
+              </p>
+            </div>
+            <div className="bead-set-requirements__item">
+              <h4>Recommended Bead Set</h4>
+              <p className="result-recommendation__value">
+                {recommendedBeadSet.label}
+              </p>
+              <p className="result-recommendation__support">
+                Recommended for this pattern. It is also the minimum set
+                required.
+              </p>
+            </div>
+          </div>
         )}
       </section>
       <section

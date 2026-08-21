@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { Button } from "../../components/ui/Button";
 import { ColorRow } from "./ColorRow";
+import { calculateRefillRequirements } from "./refill-requirements";
 import type { ColorRowView } from "./result.types";
 
 export const DEFAULT_VISIBLE_COLORS = 6;
@@ -23,6 +24,7 @@ export function ColorList({
     ? colors
     : colors.slice(0, DEFAULT_VISIBLE_COLORS);
   const focusedColor = colors.find((row) => row.index === focusedColorIndex);
+  const refillRequirements = calculateRefillRequirements(colors);
   return (
     <section
       className="result-section color-list-section"
@@ -33,6 +35,36 @@ export function ColorList({
         <span>
           {colors.length} {colors.length === 1 ? "color" : "colors"}
         </span>
+      </div>
+      <div
+        className="refill-requirements"
+        aria-labelledby="additional-refill-packs-heading"
+      >
+        <h4 id="additional-refill-packs-heading">Additional Refill Packs</h4>
+        {refillRequirements.requirements.length === 0 ? (
+          <p className="refill-requirements__none">None needed</p>
+        ) : (
+          <>
+            <ul className="refill-requirements__list">
+              {refillRequirements.requirements.map((requirement) => (
+                <li key={requirement.colorIndex}>
+                  <strong>{requirement.code}</strong>
+                  <span
+                    aria-label={`${requirement.refillPacksRequired} refill ${
+                      requirement.refillPacksRequired === 1 ? "pack" : "packs"
+                    }`}
+                  >
+                    ×{requirement.refillPacksRequired}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="refill-requirements__support">
+              Some colors need more than the approximately 1,000 beads included
+              per color.
+            </p>
+          </>
+        )}
       </div>
       {focusedColor === undefined ? null : (
         <div className="color-highlight-status">

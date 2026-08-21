@@ -48,6 +48,51 @@ describe("ColorList", () => {
     expect(document.querySelector(".color-list__header")).toHaveTextContent(
       "ColorPoparooz CodeBeads",
     );
+    expect(
+      screen.getByRole("heading", { name: "Additional Refill Packs" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("None needed")).toBeInTheDocument();
+  });
+
+  it("shows deterministic refill quantities without replacing exact bead counts", () => {
+    renderList([
+      {
+        index: 2,
+        code: "H2",
+        name: "Color H2",
+        hex: "#123456",
+        beadCount: 1001,
+        beadCountLabel: "1,001 beads",
+      },
+      {
+        index: 4,
+        code: "H9",
+        name: "Color H9",
+        hex: "#654321",
+        beadCount: 2160,
+        beadCountLabel: "2,160 beads",
+      },
+      {
+        index: 7,
+        code: "A2",
+        name: "Color A2",
+        hex: "#abcdef",
+        beadCount: 9679,
+        beadCountLabel: "9,679 beads",
+      },
+    ]);
+
+    expect(screen.getByLabelText("1 refill pack")).toHaveTextContent("×1");
+    expect(screen.getByLabelText("2 refill packs")).toHaveTextContent("×2");
+    expect(screen.getByLabelText("9 refill packs")).toHaveTextContent("×9");
+    expect(screen.getByText("1,001 beads")).toBeInTheDocument();
+    expect(screen.getByText("2,160 beads")).toBeInTheDocument();
+    expect(screen.getByText("9,679 beads")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Some colors need more than the approximately 1,000 beads included per color.",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("expands and collapses all colors with accessible native controls", async () => {

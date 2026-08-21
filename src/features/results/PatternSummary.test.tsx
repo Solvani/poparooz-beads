@@ -31,7 +31,7 @@ describe("PatternSummary", () => {
     expect(screen.getByText("40 × 30")).toBeInTheDocument();
     expect(screen.getByText("1,199")).toBeInTheDocument();
     expect(screen.getByText("Colors Used")).toBeInTheDocument();
-    expect(screen.getByText("Bead Color Set")).toBeInTheDocument();
+    expect(screen.getByText("Generation Color Set")).toBeInTheDocument();
     expect(screen.getByText("72-Color Set")).toBeInTheDocument();
     expect(screen.getByText("Pattern Background")).toBeInTheDocument();
     expect(screen.getByText("Full Background")).toBeInTheDocument();

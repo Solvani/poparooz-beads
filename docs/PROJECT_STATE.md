@@ -9,15 +9,15 @@ Repository: poparooz-beads
 Root: D:\Projects\poparooz-beads
 Remote: https://github.com/Solvani/poparooz-beads.git
 Branch: main
-Accepted repository baseline HEAD: 71e601ff3d1e17a779d8d01aa906eb6816af4697
-Accepted repository baseline commit: test: record blocked three-reviewer recommendation candidate
+A02 entry / pre-freeze repository baseline: 0a85392fb48798234fb4a46243bf1de449de63fe
+A02 entry baseline commit: docs: synchronize product scope governance
 Live HEAD at P3-A03-SCOPE-A01 entry: 71e601ff3d1e17a779d8d01aa906eb6816af4697
 Live worktree at P3-A03-SCOPE-A01 entry: clean
 Upstream: origin/main
 Push state at entry: local main and origin/main synchronized
 ```
 
-`9b2c98e0a1d716243025359d4070ff8c7582a4e3` is the P3-A01.3-U01 ExcelJS dependency-gate commit. `a3d11880603b430d8dc476b202968eb1b0accc62` is the accepted P3-A01.3 formal Palette compilation commit. `4fdac1d8f4e119c03736e02b999b9c6363d2461e` is the historical A08 deployment-hotfix implementation baseline. Later accepted production, evidence, closure, and developer-tooling commits advance the accepted repository baseline to `71e601ff3d1e17a779d8d01aa906eb6816af4697`. A later governance-only commit may advance live HEAD without changing production behavior; this document must not predict that uncreated commit SHA.
+`9b2c98e0a1d716243025359d4070ff8c7582a4e3` is the P3-A01.3-U01 ExcelJS dependency-gate commit. `a3d11880603b430d8dc476b202968eb1b0accc62` is the accepted P3-A01.3 formal Palette compilation commit. `4fdac1d8f4e119c03736e02b999b9c6363d2461e` is the historical A08 deployment-hotfix implementation baseline. Later accepted production, evidence, closure, developer-tooling, and governance commits advance the pushed post-A01 repository baseline to `0a85392fb48798234fb4a46243bf1de449de63fe`. This is the entry / pre-freeze baseline on which P3-A03-SCOPE-A02 was reviewed and frozen. The A02 closure commit will advance HEAD beyond this entry baseline; this document must not predict that uncreated commit SHA.
 
 Every task must verify the actual Git branch, HEAD, worktree, remote, and upstream state. When a formal task prompt provides an Expected HEAD, that explicitly specified task baseline governs. A live HEAD that differs from the accepted implementation baseline is not a conflict by itself; Codex must evaluate the commit history and the task baseline together.
 
@@ -336,13 +336,14 @@ A08-H02: Closed; corrected opaque near-white source-background contamination by 
 ```text
 Phase: Phase 3
 Status: production active
-Current accepted repository baseline: 71e601ff3d1e17a779d8d01aa906eb6816af4697
-Current governance stage: P3-A03-SCOPE-A01 Governance Synchronization / Scope Closure complete
+A02 entry / pre-freeze repository baseline: 0a85392fb48798234fb4a46243bf1de449de63fe
+A02 closure commit: pending
+Current governance stage: P3-A03-SCOPE-A02 Results / Materials Decision completed / frozen with applicability qualifications
 Production GenerationRuntime: Available and production verified
 Cloudflare Pages: Active
 Shopify embed: Active
 Production implementation resume: Conditional
-Next authorized decision work: Results / Materials Decision
+Next stage after A02 closure approval: P3-A03-SCOPE-A03 Unified Derived Material Requirement Contract
 ```
 
 The production Runtime and the A08 deployment remain active. The formal
@@ -362,13 +363,29 @@ that deterministic recommendation is not reliable enough. That separate
 automatic recommendation remains blocked, not activated, and outside the
 current production scope; it does not supersede Recommendation Policy v1.
 
+P3-A03-SCOPE-A02 retains Recommendation Policy v1 only as a post-generation
+material-policy result for the already-generated current Pattern. It does not
+select the Generation Color Set, change `selectedColorSetProfileId`, score image
+quality, choose a palette automatically, or trigger regeneration. Its source
+evidence used `poparooz-set-221` and does not prove equal profile-specific
+generation quality across all six formal Generation Color Sets.
+
+`MaterialRequirement`, `PublicMaterialRequirement`, and
+`buildMaterialRequirements()` remain authoritative for final Pattern per-color
+`beadCount`; future derived projections start from
+`PublicPatternResult.materials` and pass that count through. `Pattern.boardLayout`
+remains Pattern layout truth, while `recommendBoardSetup()` remains the separate,
+unchanged production board-purchase recommendation. Commerce quantity and
+purchase strategy remain unfrozen.
+
 P3-A03-SCOPE completed a repository-level product-completeness audit. It found
 no P0 blocker in repository code contracts or accepted evidence, subject to
 governance corrections. This is not new iPhone/Android, keyboard or screen
 reader, performance, Shopify Cart/variant/inventory, or complete live-production
-acceptance. Production implementation may resume only through separately
-authorized work, beginning with a Results / Materials Decision rather than
-direct implementation.
+acceptance. P3-A03-SCOPE-A02 subsequently completed and froze the Results /
+Materials Decision without authorizing production implementation. Any next work
+still requires separate authorization; A03 may begin only after A02 closure
+approval.
 
 P3-A01.4 and its D01 and A01 through A06 tasks are completed and frozen. The Runtime Artifact and Runtime Lock are deterministic and approved, every Vite build passes the fail-closed Production Gate during configuration resolution, and application startup synchronously validates and initializes the approved immutable Provider before React render. The real production module graph and emitted bundle expose only the approved Runtime Artifact as Palette-generated data. Build or Startup Gate failures do not fall back.
 
@@ -617,7 +634,8 @@ P3-A03-E05-D02 Recommendation Policy v1            Frozen
 P3-A03-E05-D04 Automatic Generation Recommendation Blocked / not activated
 P3-A03-SCOPE Product Completeness Audit             Complete / corrections synchronized by A01
 P3-A03-SCOPE-A01 Governance Synchronization         Completed / scope closure synchronized
-Next       Results / Materials Decision             Authorized decision work only
+P3-A03-SCOPE-A02 Results / Materials Decision       Completed / frozen with applicability qualifications
+Next       P3-A03-SCOPE-A03 Unified Derived Material Requirement Contract — after A02 closure approval
 ```
 
 The frozen P3-A02-D01 implementation boundary is:

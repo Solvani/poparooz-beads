@@ -1,6 +1,6 @@
 # Poparooz Product Decisions
 
-Status: **Historical MVP-A decisions preserved; synchronized through P3-A03 scope closure**
+Status: **Historical MVP-A decisions preserved; synchronized through P3-A03-SCOPE-A02 Results / Materials Decision**
 
 Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md)
 
@@ -16,6 +16,50 @@ Poparooz owns the shopping, website, and customer-visible color presentation. MA
 - Customer colors use approved Poparooz `displayCode` and ordinary English `displayName` fields. They never read internal `referenceSystem`, `referenceCode`, `referenceName`, `referenceSeries`, provenance, or Shopify mapping fields.
 - Every customer-visible color object is produced by the strict Public Presentation Model and whitelist mapper; UI code must not render or serialize an internal palette record.
 - Internal audit, supplier mapping, source/version evidence, and license records retain truthful third-party names where required.
+
+## Current Results and Materials decision
+
+P3-A03-SCOPE-A02 freezes **Option B** for future customer-facing Results:
+
+```text
+Required Bead Set
+72-Color Set
+Smallest official set containing every color used.
+
+Recommended Bead Set
+Same as the required set for this pattern
+```
+
+The `72-Color Set` value above is illustrative, not a fixed product rule. The
+Required value comes from the final Pattern.
+
+The terms remain distinct:
+
+- **Generation Color Set** is the formal color set used to generate the current
+  Pattern.
+- **Required Bead Set** is the smallest formal Poparooz set containing every
+  color used in the final Pattern.
+- **Recommended Bead Set** is the separate post-generation material-policy
+  result. Recommendation Policy v1 returns Required; it is not a smart image
+  recommendation, automatic generation recommendation, second quality
+  algorithm, or optimal generation palette.
+
+A Pattern may therefore have `Generation Color Set: 120` and
+`Required Bead Set: 72` without contradiction. The ambiguous customer-facing or
+export term **Bead Color Set** is deprecated for future work.
+
+The approved future Results information-architecture target is:
+
+```text
+Summary → Materials → Actions → Color Details
+```
+
+This is an approved implementation target, not proven final or optimal UX.
+Post-implementation verification remains required for desktop/mobile hierarchy,
+Results height, keyboard order, screen-reader behavior, accessibility,
+terminology comprehension, and actual visual presentation. No Product Design
+Audit was run in A02 because no current-stage screenshots existed and the stage
+concerned semantic and data contracts.
 
 ## Historical MVP-A included scope
 

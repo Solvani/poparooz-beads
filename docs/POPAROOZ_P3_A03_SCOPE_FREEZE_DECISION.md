@@ -62,6 +62,20 @@ Required and Recommended remain semantically independent. Any customer-facing
 removal, merge, or rename requires a separate Results / Materials Decision that
 explicitly supersedes the applicable frozen policy.
 
+## Subsequent A02 Qualification
+
+P3-A03-SCOPE-A02 was subsequently completed and frozen with applicability
+qualifications. It retained Recommendation Policy v1 and did not supersede its
+frozen E05/D02 evidence. It selected a customer-facing presentation that keeps
+Required and Recommended semantically independent rather than removing, merging,
+or renaming them.
+
+Recommendation Policy v1 now has an explicit post-generation-only application:
+it evaluates the already-generated current Pattern as a material policy. It does
+not select a Generation Color Set or trigger regeneration. The complete A02
+authority is
+[`POPAROOZ_P3_A03_SCOPE_A02_RESULTS_MATERIALS_DECISION.md`](POPAROOZ_P3_A03_SCOPE_A02_RESULTS_MATERIALS_DECISION.md).
+
 ## Material Requirement Governance
 
 The existing Pattern-domain `MaterialRequirement`, `PublicMaterialRequirement`,
@@ -157,6 +171,11 @@ The following remain deferred or outside current production scope:
 Email is not on the critical path. This document authorizes no production
 implementation. Production work may resume only through the separately
 authorized sequence above, beginning with the Results / Materials Decision.
+
+Sequence progress after this historical A01 decision: step 2 was completed and
+frozen by P3-A03-SCOPE-A02. Step 3, P3-A03-SCOPE-A03 Unified Derived Material
+Requirement Contract, is only the next stage after A02 closure approval and is
+not started by the A02 governance freeze.
 
 ## Git Baseline
 

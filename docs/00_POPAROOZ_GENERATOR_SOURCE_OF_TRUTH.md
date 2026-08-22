@@ -1,8 +1,8 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; P3-A03-SCOPE-A01 governance synchronized / scope closure complete**
+Status: **Production active; P3-A03-SCOPE-A02 Results / Materials Decision completed / frozen with applicability qualifications**
 
-Baseline version: **3.1**
+Baseline version: **3.2**
 
 Last reviewed: **2026-08-22**
 
@@ -95,6 +95,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_CRAFT_UI_V1_CONTRACT.md`](POPAROOZ_CRAFT_UI_V1_CONTRACT.md): authoritative Phase 2 Design Tokens, responsive layout, semantic shell, accessibility, and customer-visible UI boundary.
 - [`POPAROOZ_PHASE_2_COMPLETION_AND_FREEZE.md`](POPAROOZ_PHASE_2_COMPLETION_AND_FREEZE.md): Phase 2 completion record, frozen contracts, open gates, and Phase 3 entry boundary.
 - [`POPAROOZ_P3_A03_SCOPE_FREEZE_DECISION.md`](POPAROOZ_P3_A03_SCOPE_FREEZE_DECISION.md): current product-completeness scope closure, evidence limitations, exclusions, and conditional next-stage sequence.
+- [`POPAROOZ_P3_A03_SCOPE_A02_RESULTS_MATERIALS_DECISION.md`](POPAROOZ_P3_A03_SCOPE_A02_RESULTS_MATERIALS_DECISION.md): authoritative Results and Materials terminology, recommendation applicability, material authority, board boundary, derived projection, and Commerce boundary.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
@@ -177,6 +178,8 @@ Before implementation begins, read this file and every formal document relevant 
 
 ## Current production state
 
+- A02 entry / pre-freeze repository baseline:
+  `0a85392fb48798234fb4a46243bf1de449de63fe`
 - Accepted repository baseline at P3-A03-SCOPE-A01 entry:
   `71e601ff3d1e17a779d8d01aa906eb6816af4697`
 - P3-A02-A08: **Completed / Frozen / Production Active**
@@ -190,7 +193,7 @@ Before implementation begins, read this file and every formal document relevant 
 - Backend, database, Pages Functions, Cloudflare runtime Worker, Shopify App, App Proxy, and OAuth backend: **Not used**
 - Current Cart API/material-message bridge: **Not implemented**
 - Formal Generation Color Sets: **24 / 48 / 72 / 120 / 168 / 221**
-- Recommendation Policy v1: **Frozen; Recommended Bead Set equals Required Bead Set while remaining semantically independent**
+- Recommendation Policy v1: **Retained / not superseded; Recommended Bead Set equals Required Bead Set while remaining semantically independent**
 - Automatic Generation Color Set Recommendation: **Blocked / not activated / outside current production scope**
 
 The production acceptance includes upload, 40/80/104 White and Transparent generation, the 221-color set, Maximum Colors, Pattern preview, bead/material totals, selected package display, local PNG download, production Worker execution, desktop/mobile Shopify embedding, direct refresh, custom-domain HTTPS, Poparooz-only customer branding, and gallery regression after the external Shopify schema correction.
@@ -200,9 +203,28 @@ User images remain browser-local through upload, browser decode, resize/normaliz
 P3-A03-SCOPE found no P0 blocker in the repository-level audit, code contracts,
 or accepted evidence. It did not perform new real-device, keyboard/screen-reader,
 performance, Shopify Cart/variant/inventory, or complete live-production
-acceptance. Production implementation resume is conditional. The next
-authorized work is a Results / Materials Decision; no Results, export, or
-commerce behavior is changed by this governance synchronization.
+acceptance. Production implementation resume remains conditional.
+
+P3-A03-SCOPE-A02 applies Recommendation Policy v1 only after generation to the
+already-generated current Pattern. It does not select a Generation Color Set or
+trigger regeneration. Generation Color Set, Required Bead Set, and Recommended
+Bead Set are separate concepts. The E05 evidence used `poparooz-set-221` and
+must not be generalized into proof of equal profile-specific generation quality
+across all six formal Generation Color Sets.
+
+Pattern-domain `MaterialRequirement`, `PublicMaterialRequirement`, and
+`buildMaterialRequirements()` remain authoritative for per-color `beadCount`.
+Future derived Results and export projections start from
+`PublicPatternResult.materials` and must pass that count through rather than
+recount the Pattern Matrix. `totalPacksRequired` is a nominal 1,000-bead pack
+equivalent and is not `commerceQuantity`; Commerce identity, quantity, catalog,
+inventory, cart, and purchase strategy remain outside Pattern/material truth.
+
+`Pattern.boardLayout` is authoritative Pattern layout truth.
+`recommendBoardSetup()` remains the separate, unchanged production board-purchase
+recommendation behavior. P3-A03-SCOPE-A03, the Unified Derived Material
+Requirement Contract, is only the next stage after A02 closure approval; A03 is
+not started or implemented by this governance update.
 
 ## Historical Phase 1 and Phase 2 freeze
 

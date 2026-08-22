@@ -25,12 +25,53 @@ export function renderPatternComparisonPng(
   return encodeRgbaPng(width, height, rgba);
 }
 
+export function renderPatternGridPng(
+  patterns: readonly PublicPatternResult[],
+  columns: number,
+  cellSize = 4,
+  gap = 16,
+): Buffer {
+  if (
+    patterns.length === 0 ||
+    !Number.isSafeInteger(columns) ||
+    columns <= 0 ||
+    patterns.some(
+      (pattern) =>
+        pattern.matrix.width !== patterns[0]!.matrix.width ||
+        pattern.matrix.height !== patterns[0]!.matrix.height,
+    )
+  ) {
+    throw new Error("Pattern preview grid input is invalid.");
+  }
+  const rows = Math.ceil(patterns.length / columns);
+  const panelWidth = patterns[0]!.matrix.width * cellSize;
+  const panelHeight = patterns[0]!.matrix.height * cellSize;
+  const width = panelWidth * columns + gap * (columns - 1);
+  const height = panelHeight * rows + gap * (rows - 1);
+  const rgba = new Uint8Array(width * height * 4);
+  fill(rgba, width, height, [80, 80, 80, 255]);
+  patterns.forEach((pattern, index) => {
+    const column = index % columns;
+    const row = Math.floor(index / columns);
+    drawPattern(
+      rgba,
+      width,
+      pattern,
+      column * (panelWidth + gap),
+      cellSize,
+      row * (panelHeight + gap),
+    );
+  });
+  return encodeRgbaPng(width, height, rgba);
+}
+
 function drawPattern(
   output: Uint8Array,
   outputWidth: number,
   pattern: PublicPatternResult,
   offsetX: number,
   cellSize: number,
+  offsetY = 0,
 ): void {
   const colorByIndex = new Map(
     pattern.colors.map((item) => [item.index, hexRgb(item.color.hex)] as const),
@@ -42,7 +83,7 @@ function drawPattern(
     if (color === undefined)
       throw new Error("Pattern preview color is missing.");
     const x = offsetX + (index % pattern.matrix.width) * cellSize;
-    const y = Math.floor(index / pattern.matrix.width) * cellSize;
+    const y = offsetY + Math.floor(index / pattern.matrix.width) * cellSize;
     fillRectangle(output, outputWidth, x, y, cellSize, cellSize, [
       color[0],
       color[1],

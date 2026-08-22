@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "stage": "P3-A03-E05-D04-A01",
+  "reviewerType": "controlled_model_visual_review",
+  "humanReviewer": false,
+  "blindAtJudgmentTime": true,
+  "rubric": {
+    "question": "Is either side visibly meaningfully better for this Pattern?",
+    "dimensions": [
+      "overall visual fidelity",
+      "important edge and detail preservation",
+      "flat-region cleanliness",
+      "face and fur readability where applicable",
+      "unnecessary color fragmentation"
+    ],
+    "allowedJudgments": [
+      "left_meaningfully_better",
+      "left_slightly_better_not_meaningful",
+      "indistinguishable",
+      "right_slightly_better_not_meaningful",
+      "right_meaningfully_better"
+    ]
+  },
+  "limitation": "This record is a blind controlled visual pass by Codex, not an independent human review. It cannot by itself satisfy the human-review evidence requirement for a customer-facing policy freeze.",
+  "packets": [
+    {
+      "packetId": "review-001",
+      "rows": [
+        "right_slightly_better_not_meaningful",
+        "left_slightly_better_not_meaningful",
+        "right_meaningfully_better",
+        "right_slightly_better_not_meaningful",
+        "right_slightly_better_not_meaningful"
+      ]
+    },
+    {
+      "packetId": "review-002",
+      "rows": [
+        "left_slightly_better_not_meaningful",
+        "left_meaningfully_better",
+        "left_meaningfully_better",
+        "indistinguishable",
+        "indistinguishable"
+      ]
+    },
+    {
+      "packetId": "review-003",
+      "rows": [
+        "right_meaningfully_better",
+        "right_slightly_better_not_meaningful",
+        "right_meaningfully_better",
+        "right_slightly_better_not_meaningful",
+        "right_slightly_better_not_meaningful"
+      ]
+    },
+    {
+      "packetId": "review-004",
+      "rows": [
+        "right_meaningfully_better",
+        "right_slightly_better_not_meaningful",
+        "left_meaningfully_better",
+        "right_slightly_better_not_meaningful",
+        "indistinguishable"
+      ]
+    },
+    {
+      "packetId": "review-005",
+      "rows": [
+        "left_meaningfully_better",
+        "right_slightly_better_not_meaningful",
+        "left_meaningfully_better",
+        "right_meaningfully_better",
+        "left_meaningfully_better"
+      ]
+    },
+    {
+      "packetId": "review-006",
+      "rows": [
+        "indistinguishable",
+        "left_meaningfully_better",
+        "left_slightly_better_not_meaningful",
+        "indistinguishable",
+        "indistinguishable"
+      ]
+    },
+    {
+      "packetId": "review-007",
+      "rows": [
+        "right_meaningfully_better",
+        "indistinguishable",
+        "right_meaningfully_better",
+        "left_meaningfully_better",
+        "indistinguishable"
+      ]
+    },
+    {
+      "packetId": "review-008",
+      "rows": [
+        "left_meaningfully_better",
+        "right_meaningfully_better",
+        "left_meaningfully_better",
+        "right_slightly_better_not_meaningful",
+        "indistinguishable"
+      ]
+    },
+    {
+      "packetId": "review-009",
+      "rows": [
+        "right_slightly_better_not_meaningful",
+        "right_slightly_better_not_meaningful",
+        "left_slightly_better_not_meaningful",
+        "left_meaningfully_better",
+        "right_slightly_better_not_meaningful"
+      ]
+    },
+    {
+      "packetId": "review-010",
+      "rows": [
+        "left_slightly_better_not_meaningful",
+        "indistinguishable",
+        "left_slightly_better_not_meaningful",
+        "right_slightly_better_not_meaningful",
+        "indistinguishable"
+      ]
+    },
+    {
+      "packetId": "review-011",
+      "rows": [
+        "right_slightly_better_not_meaningful",
+        "right_slightly_better_not_meaningful",
+        "left_slightly_better_not_meaningful",
+        "right_meaningfully_better",
+        "indistinguishable"
+      ]
+    },
+    {
+      "packetId": "review-012",
+      "rows": [
+        "right_meaningfully_better",
+        "indistinguishable",
+        "left_meaningfully_better",
+        "right_slightly_better_not_meaningful",
+        "right_meaningfully_better"
+      ]
+    },
+    {
+      "packetId": "review-013",
+      "rows": [
+        "left_meaningfully_better",
+        "indistinguishable",
+        "left_meaningfully_better",
+        "left_slightly_better_not_meaningful",
+        "indistinguishable"
+      ]
+    },
+    {
+      "packetId": "review-014",
+      "rows": [
+        "left_meaningfully_better",
+        "indistinguishable",
+        "right_meaningfully_better",
+        "left_slightly_better_not_meaningful",
+        "indistinguishable"
+      ]
+    },
+    {
+      "packetId": "review-015",
+      "rows": [
+        "right_meaningfully_better",
+        "right_slightly_better_not_meaningful",
+        "left_meaningfully_better",
+        "left_slightly_better_not_meaningful",
+        "right_meaningfully_better"
+      ]
+    },
+    {
+      "packetId": "review-016",
+      "rows": [
+        "right_meaningfully_better",
+        "indistinguishable",
+        "right_meaningfully_better",
+        "right_slightly_better_not_meaningful",
+        "right_meaningfully_better"
+      ]
+    },
+    {
+      "packetId": "review-017",
+      "rows": [
+        "left_meaningfully_better",
+        "indistinguishable",
+        "left_meaningfully_better",
+        "right_meaningfully_better",
+        "right_meaningfully_better"
+      ]
+    },
+    {
+      "packetId": "review-018",
+      "rows": [
+        "indistinguishable",
+        "right_meaningfully_better",
+        "indistinguishable",
+        "right_slightly_better_not_meaningful",
+        "right_slightly_better_not_meaningful"
+      ]
+    },
+    {
+      "packetId": "review-019",
+      "rows": [
+        "indistinguishable",
+        "right_meaningfully_better",
+        "indistinguishable",
+        "right_slightly_better_not_meaningful",
+        "right_slightly_better_not_meaningful"
+      ]
+    },
+    {
+      "packetId": "review-020",
+      "rows": [
+        "indistinguishable",
+        "right_meaningfully_better",
+        "indistinguishable",
+        "right_slightly_better_not_meaningful",
+        "right_slightly_better_not_meaningful"
+      ]
+    },
+    {
+      "packetId": "review-021",
+      "rows": [
+        "indistinguishable",
+        "indistinguishable",
+        "right_meaningfully_better",
+        "left_meaningfully_better",
+        "indistinguishable"
+      ]
+    },
+    {
+      "packetId": "review-022",
+      "rows": [
+        "indistinguishable",
+        "indistinguishable",
+        "left_meaningfully_better",
+        "right_meaningfully_better",
+        "indistinguishable"
+      ]
+    },
+    {
+      "packetId": "review-023",
+      "rows": [
+        "indistinguishable",
+        "indistinguishable",
+        "left_meaningfully_better",
+        "right_meaningfully_better",
+        "indistinguishable"
+      ]
+    },
+    {
+      "packetId": "review-024",
+      "rows": [
+        "indistinguishable",
+        "right_meaningfully_better",
+        "indistinguishable",
+        "left_meaningfully_better",
+        "indistinguishable"
+      ]
+    }
+  ]
+}

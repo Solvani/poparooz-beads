@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "stage": "P3-A03-E05-D04-A01",
+  "productionActivation": false,
+  "reviewEvidenceBoundary": {
+    "reviewedPackets": 24,
+    "adjacentComparisons": 120,
+    "reviewerType": "controlled_model_visual_review",
+    "independentHumanReviewAvailable": false
+  },
+  "revealedVisualResults": {
+    "largerProfileMeaningfullyBetter": 29,
+    "largerProfileMeaningfullyWorse": 19,
+    "noMeaningfulDifference": 72,
+    "byTransition": [
+      { "transition": "24->48", "better": 10, "worse": 1, "notMeaningful": 13 },
+      { "transition": "48->72", "better": 5, "worse": 2, "notMeaningful": 17 },
+      { "transition": "72->120", "better": 5, "worse": 11, "notMeaningful": 8 },
+      {
+        "transition": "120->168",
+        "better": 6,
+        "worse": 3,
+        "notMeaningful": 15
+      },
+      { "transition": "168->221", "better": 3, "worse": 2, "notMeaningful": 19 }
+    ]
+  },
+  "metricVisualCorrelation": {
+    "largerMeaningfullyBetter": {
+      "count": 29,
+      "averageMeanDeltaE00Gain": 1.4301,
+      "minimumMeanDeltaE00Gain": 0.0361,
+      "maximumMeanDeltaE00Gain": 2.7244,
+      "averageP95DeltaE00Gain": 2.3542,
+      "averageChangedCellPercentage": 41.709
+    },
+    "largerMeaningfullyWorse": {
+      "count": 19,
+      "averageMeanDeltaE00Gain": 1.4705,
+      "minimumMeanDeltaE00Gain": 0.156,
+      "maximumMeanDeltaE00Gain": 2.8093,
+      "averageP95DeltaE00Gain": 2.6633,
+      "averageChangedCellPercentage": 45.251
+    },
+    "noMeaningfulDifference": {
+      "count": 72,
+      "averageMeanDeltaE00Gain": 0.3082,
+      "minimumMeanDeltaE00Gain": 0,
+      "maximumMeanDeltaE00Gain": 1.9269,
+      "averageP95DeltaE00Gain": 0.4017,
+      "averageChangedCellPercentage": 11.272
+    },
+    "interpretation": "Mean and P95 gains separate many no-difference comparisons from large changes, but they do not separate visually beneficial large changes from visually regressive large changes."
+  },
+  "calibrationValidation": {
+    "method": "Logical-case split fixed before review. Candidate thresholds are exhaustively selected from observed calibration metric values, minimizing false-small plus false-large errors; ties prefer fewer false-small errors.",
+    "calibrationPairs": 75,
+    "validationPairs": 45,
+    "illustrativeBestCalibrationRule": {
+      "meanDeltaE00GainAtLeast": 1.9269401164514655,
+      "p95DeltaE00GainAtLeast": 0.43441365059840287,
+      "falseSmall": 8,
+      "falseLarge": 2,
+      "totalErrors": 10
+    },
+    "validationResult": {
+      "falseSmall": 5,
+      "falseLarge": 4,
+      "totalErrors": 9,
+      "errorRate": 0.2
+    },
+    "warning": "This is an analysis-only separability probe, not an approved recommendation tolerance. It is calibrated to model visual judgments and cannot replace independent human validation."
+  },
+  "candidatePolicies": {
+    "relativeTo221Guard": {
+      "status": "not_supported",
+      "reason": "No mean/P95 tolerance has independent human support, and large metric improvements occur in both visually beneficial and visually regressive comparisons."
+    },
+    "qualityPlateau": {
+      "status": "not_supported",
+      "reason": "Visible quality is not monotonic with profile size in the controlled review, so an earliest stable plateau cannot be inferred reliably from profile order alone."
+    },
+    "combinedRelativeAndAdjacentSafeguard": {
+      "status": "not_supported",
+      "reason": "The adjacent metric safeguard cannot distinguish beneficial changes from regressions; the illustrative calibration rule produced 9 errors in 45 held-out comparisons."
+    }
+  },
+  "decision": "GENERATION RECOMMENDATION EVIDENCE INSUFFICIENT — MORE EVALUATION REQUIRED"
+}

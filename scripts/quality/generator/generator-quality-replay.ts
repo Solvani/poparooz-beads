@@ -12,12 +12,14 @@ import { refineOpaqueSourceMatteBackground } from "../../../src/domain/image/opa
 import { applyTransparentAlphaOccupancy } from "../../../src/domain/image/transparent-alpha-occupancy.ts";
 import type {
   ImageSourceMetadata,
+  NormalizedImageResult,
   RgbaImage,
 } from "../../../src/domain/image/image.types.ts";
 import { assemblePattern } from "../../../src/domain/pattern/pattern-assembler.ts";
 import { toPublicPatternResult } from "../../../src/domain/pattern/public-pattern.mapper.ts";
 import type { PublicPatternResult } from "../../../src/domain/pattern/public-pattern.types.ts";
 import { quantizeImage } from "../../../src/domain/quantization/quantize-image.ts";
+import type { QuantizedImage } from "../../../src/domain/quantization/quantization.types.ts";
 import { createApprovedBoardProfileProviderFromArtifact } from "../../../src/runtime/board-profile/board-profile.provider.ts";
 import { createColorSetProvider } from "../../../src/runtime/color-set/color-set.provider.ts";
 import { adaptBoardProfileToGeneration } from "../../../src/runtime/generation-board-profile/board-profile-to-generation.adapter.ts";
@@ -67,7 +69,7 @@ export interface GeneratorQualityReplayArtifacts {
 
 export type GeneratorQualityCandidate = "h03-d02" | "q02-a02" | "q02-a03";
 
-interface QualityDependencies {
+export interface QualityDependencies {
   readonly palette: ReturnType<typeof adaptRuntimePaletteToGeneration>;
   readonly colorSets: ReturnType<typeof adaptColorSetToGeneration>;
   readonly boardProfile: ReturnType<typeof adaptBoardProfileToGeneration>;
@@ -76,6 +78,20 @@ interface QualityDependencies {
   > extends { getSnapshot(): infer Snapshot }
     ? Snapshot
     : never;
+}
+
+export interface ProductionQualityIntermediate {
+  readonly normalized: NormalizedImageResult;
+  readonly quantizationImage: RgbaImage;
+  readonly quantized: QuantizedImage;
+  readonly performance: Readonly<{
+    sourcePreprocessingMs: number;
+    normalizationAndResizeMs: number;
+    postResizeCleanupMs: number;
+    occupancyMs: number;
+    quantizationMs: number;
+    totalMs: number;
+  }>;
 }
 
 export function loadGeneratorQualityDependencies(
@@ -106,6 +122,63 @@ export function loadGeneratorQualityDependencies(
       ).getSnapshot(),
     ),
     processingPolicy: createApprovedProcessingPolicyProvider().getSnapshot(),
+  });
+}
+
+/**
+ * Reproduces the frozen production source preparation through quantization once
+ * so evaluation-only consumers can project multiple approved Color Set profiles
+ * without repeating the heavy image path.
+ */
+export function prepareProductionQualityIntermediate(
+  source: RgbaImage,
+  background: GeneratorQualityBackground,
+  size: GeneratorQualitySize,
+  maxColors: number,
+  dependencies: QualityDependencies,
+): ProductionQualityIntermediate {
+  const totalStarted = performance.now();
+  const prepared = prepareNormalizedQualitySource(
+    source,
+    background,
+    size,
+    dependencies,
+  );
+  const cleanupStarted = performance.now();
+  const cleaned =
+    background === "transparent"
+      ? excludeEdgeConnectedLightBackground(prepared.normalized.image)
+      : prepared.normalized.image;
+  const postResizeCleanupMs = performance.now() - cleanupStarted;
+  const occupancyStarted = performance.now();
+  const quantizationImage =
+    background === "transparent"
+      ? applyTransparentAlphaOccupancy(
+          cleaned,
+          dependencies.processingPolicy.imageNormalization
+            .transparentOccupancyThresholdByte,
+        )
+      : cleaned;
+  const occupancyMs = performance.now() - occupancyStarted;
+  const quantizationStarted = performance.now();
+  const quantized = quantizeImage(quantizationImage, {
+    maxColors,
+    alphaThreshold:
+      dependencies.processingPolicy.quantization.alphaThresholdByte,
+  });
+  const quantizationMs = performance.now() - quantizationStarted;
+  return Object.freeze({
+    normalized: prepared.normalized,
+    quantizationImage,
+    quantized,
+    performance: Object.freeze({
+      sourcePreprocessingMs: prepared.sourcePreprocessingMs,
+      normalizationAndResizeMs: prepared.normalizationAndResizeMs,
+      postResizeCleanupMs,
+      occupancyMs,
+      quantizationMs,
+      totalMs: performance.now() - totalStarted,
+    }),
   });
 }
 
@@ -174,34 +247,19 @@ function replayQualityCase(
 }> {
   const totalStarted = performance.now();
   const originalSourceBytes = new Uint8ClampedArray(source.data);
-  const sourceMetadata = metadataFor(source);
-
-  const sourceStarted = performance.now();
-  const strictSource =
-    background === "transparent"
-      ? excludeStrictEdgeConnectedLightBackground(source)
-      : background === "white" && !sourceMetadata.hasAlpha
-        ? canonicalizeStrictEdgeConnectedLightBackgroundToWhite(source)
-        : source;
-  const normalizationSource =
-    background === "transparent" &&
-    !sourceMetadata.hasAlpha &&
-    strictSource !== source
-      ? refineOpaqueSourceMatteBackground(source, strictSource)
-      : strictSource;
-  const sourcePreprocessingMs = performance.now() - sourceStarted;
-
-  const normalizationStarted = performance.now();
-  const normalized = normalizeRgbaImage(
-    normalizationSource,
-    sourceMetadata,
-    normalizationOptions(
-      size,
-      background,
-      dependencies.processingPolicy.imageNormalization.allowUpscale,
-    ),
+  const prepared = prepareNormalizedQualitySource(
+    source,
+    background,
+    size,
+    dependencies,
   );
-  const normalizationAndResizeMs = performance.now() - normalizationStarted;
+  const {
+    sourceMetadata,
+    normalizationSource,
+    normalized,
+    sourcePreprocessingMs,
+    normalizationAndResizeMs,
+  } = prepared;
 
   const cleanupStarted = performance.now();
   const dominantResult =
@@ -426,6 +484,52 @@ function preserveFrozenCleanupAlpha(
     else data[index + 3] = alpha;
   }
   return { width: candidate.width, height: candidate.height, data };
+}
+
+function prepareNormalizedQualitySource(
+  source: RgbaImage,
+  background: GeneratorQualityBackground,
+  size: GeneratorQualitySize,
+  dependencies: QualityDependencies,
+): Readonly<{
+  sourceMetadata: ImageSourceMetadata;
+  normalizationSource: RgbaImage;
+  normalized: NormalizedImageResult;
+  sourcePreprocessingMs: number;
+  normalizationAndResizeMs: number;
+}> {
+  const sourceMetadata = metadataFor(source);
+  const sourceStarted = performance.now();
+  const strictSource =
+    background === "transparent"
+      ? excludeStrictEdgeConnectedLightBackground(source)
+      : background === "white" && !sourceMetadata.hasAlpha
+        ? canonicalizeStrictEdgeConnectedLightBackgroundToWhite(source)
+        : source;
+  const normalizationSource =
+    background === "transparent" &&
+    !sourceMetadata.hasAlpha &&
+    strictSource !== source
+      ? refineOpaqueSourceMatteBackground(source, strictSource)
+      : strictSource;
+  const sourcePreprocessingMs = performance.now() - sourceStarted;
+  const normalizationStarted = performance.now();
+  const normalized = normalizeRgbaImage(
+    normalizationSource,
+    sourceMetadata,
+    normalizationOptions(
+      size,
+      background,
+      dependencies.processingPolicy.imageNormalization.allowUpscale,
+    ),
+  );
+  return Object.freeze({
+    sourceMetadata,
+    normalizationSource,
+    normalized,
+    sourcePreprocessingMs,
+    normalizationAndResizeMs: performance.now() - normalizationStarted,
+  });
 }
 
 function normalizedReference(

@@ -1,0 +1,797 @@
+{
+  "warning": "Reveal only after blind judgments are recorded.",
+  "packets": [
+    {
+      "packetId": "review-001",
+      "runId": "dark-watch-product:white:104:max-32",
+      "fileName": "review-001.png",
+      "sha256": "baa15ec4d22acb1dc6f1e1418042e74feac4a73f4a13d5346c46650197648b0e",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 48,
+          "rightProfile": 24
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 72,
+          "rightProfile": 48
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 120,
+          "rightProfile": 72
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 168,
+          "rightProfile": 120
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 221,
+          "rightProfile": 168
+        }
+      ]
+    },
+    {
+      "packetId": "review-002",
+      "runId": "flat-dinosaur-illustration:white:104:max-32",
+      "fileName": "review-002.png",
+      "sha256": "2da0345758dceccb94b88f42f9e8027d02970e8fea325a78acd4307a00636106",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 48,
+          "rightProfile": 24
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    },
+    {
+      "packetId": "review-003",
+      "runId": "golden-retriever-pair:transparent:104:max-16",
+      "fileName": "review-003.png",
+      "sha256": "063415111e8a053e6e96f51b3fc0bbd801e3dc18b4d077e3df03574533584633",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 120,
+          "rightProfile": 72
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    },
+    {
+      "packetId": "review-004",
+      "runId": "golden-retriever-pair:transparent:104:max-32",
+      "fileName": "review-004.png",
+      "sha256": "cc26f1bb3c48f6a755739da5c27ac56f655e84902a91ab98eea58564950fa4f9",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 168,
+          "rightProfile": 120
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    },
+    {
+      "packetId": "review-005",
+      "runId": "golden-retriever-pair:transparent:104:max-64",
+      "fileName": "review-005.png",
+      "sha256": "905167b698d9b22c19a95175e24223a03c42fd28f3f72eba287997c803bcef65",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 48,
+          "rightProfile": 24
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 72,
+          "rightProfile": 48
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 168,
+          "rightProfile": 120
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 221,
+          "rightProfile": 168
+        }
+      ]
+    },
+    {
+      "packetId": "review-006",
+      "runId": "green-leaf-graphic:white:104:max-32",
+      "fileName": "review-006.png",
+      "sha256": "0ace712b252aba721608301f7c50644116abbc488067060a2b22fe131506899e",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 168,
+          "rightProfile": 120
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    },
+    {
+      "packetId": "review-007",
+      "runId": "pale-teddy-bear-pair:transparent:104:max-32",
+      "fileName": "review-007.png",
+      "sha256": "af07aeee6225235ff534f08e414d84bf6806f65611b42e7e31208c503216cbbe",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 72,
+          "rightProfile": 48
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 120,
+          "rightProfile": 72
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 168,
+          "rightProfile": 120
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 221,
+          "rightProfile": 168
+        }
+      ]
+    },
+    {
+      "packetId": "review-008",
+      "runId": "pink-floral-illustration:white:104:max-32",
+      "fileName": "review-008.png",
+      "sha256": "f210a9fdb11332d4ea7959665db6e238d32a468176ec875b1adeec303f28f031",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    },
+    {
+      "packetId": "review-009",
+      "runId": "poparooz-logo-pair:transparent:104:max-16",
+      "fileName": "review-009.png",
+      "sha256": "4ca03e785368a28e35414c7ad5274f829ba0a2c44454c833f0ab0b3ae776cfb0",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 48,
+          "rightProfile": 24
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 72,
+          "rightProfile": 48
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 120,
+          "rightProfile": 72
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 221,
+          "rightProfile": 168
+        }
+      ]
+    },
+    {
+      "packetId": "review-010",
+      "runId": "poparooz-logo-pair:transparent:104:max-32",
+      "fileName": "review-010.png",
+      "sha256": "b0bf1ef83ca9330bf94725cca8c1098f19bb410fa5619eb8293609918d3c78c5",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 72,
+          "rightProfile": 48
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 168,
+          "rightProfile": 120
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 221,
+          "rightProfile": 168
+        }
+      ]
+    },
+    {
+      "packetId": "review-011",
+      "runId": "poparooz-logo-pair:transparent:104:max-64",
+      "fileName": "review-011.png",
+      "sha256": "7c16d6d4a081b58a97c1f5e4dd91c3bf82d1003166df18a62777613c48926b57",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 72,
+          "rightProfile": 48
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 120,
+          "rightProfile": 72
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    },
+    {
+      "packetId": "review-012",
+      "runId": "portrait-sweater-pair:transparent:104:max-16",
+      "fileName": "review-012.png",
+      "sha256": "1a2648bafc74613f69f940257ff7c79576346170e96a5093d48944c88ea03c72",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 168,
+          "rightProfile": 120
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 221,
+          "rightProfile": 168
+        }
+      ]
+    },
+    {
+      "packetId": "review-013",
+      "runId": "portrait-sweater-pair:transparent:104:max-32",
+      "fileName": "review-013.png",
+      "sha256": "afc56a1c2758a03cbd5f402ec64bc0252a9e557ad9b63510d09d6b895029b587",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 48,
+          "rightProfile": 24
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    },
+    {
+      "packetId": "review-014",
+      "runId": "portrait-sweater-pair:transparent:104:max-64",
+      "fileName": "review-014.png",
+      "sha256": "9b2c703fb4578ecb4dd1fc0e7cb592f2172e8708f6a8a738182a835ffcf912e4",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 48,
+          "rightProfile": 24
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 72,
+          "rightProfile": 48
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 120,
+          "rightProfile": 72
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 221,
+          "rightProfile": 168
+        }
+      ]
+    },
+    {
+      "packetId": "review-015",
+      "runId": "saturated-lake-landscape:white:104:max-16",
+      "fileName": "review-015.png",
+      "sha256": "a2c7011cf72709ded7b9dc1512c4559bbc6e9ed8ca16ae4ef676d44eb19673d3",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 168,
+          "rightProfile": 120
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 221,
+          "rightProfile": 168
+        }
+      ]
+    },
+    {
+      "packetId": "review-016",
+      "runId": "saturated-lake-landscape:white:104:max-32",
+      "fileName": "review-016.png",
+      "sha256": "2a3d066aa5a824f5fcfe0c42d8915c41e09870b874dba09b24ebcbb3b9e3cb88",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 168,
+          "rightProfile": 120
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    },
+    {
+      "packetId": "review-017",
+      "runId": "saturated-lake-landscape:white:104:max-64",
+      "fileName": "review-017.png",
+      "sha256": "cd7fc5e384fdc0fa1a49e68967555b41ae909b377101bc8be543c13c6e1880fb",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 48,
+          "rightProfile": 24
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 120,
+          "rightProfile": 72
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    },
+    {
+      "packetId": "review-018",
+      "runId": "thin-botanical-line-art:white:104:max-16",
+      "fileName": "review-018.png",
+      "sha256": "6588c80ed8e63f557fa913a4b7531f4d26c593c44765471ca4a675d3b0538fb7",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 48,
+          "rightProfile": 24
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 221,
+          "rightProfile": 168
+        }
+      ]
+    },
+    {
+      "packetId": "review-019",
+      "runId": "thin-botanical-line-art:white:104:max-32",
+      "fileName": "review-019.png",
+      "sha256": "b5e1c679e4df15b3f67498a4f24ce2dea3fec381236cc7fe98486007d4266974",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 221,
+          "rightProfile": 168
+        }
+      ]
+    },
+    {
+      "packetId": "review-020",
+      "runId": "thin-botanical-line-art:white:104:max-64",
+      "fileName": "review-020.png",
+      "sha256": "e31176939930a72335a21dfa6fd25c78aa7384414ba526719a0586cb0b9c27b1",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 48,
+          "rightProfile": 24
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 221,
+          "rightProfile": 168
+        }
+      ]
+    },
+    {
+      "packetId": "review-021",
+      "runId": "white-pump-bottle-pair:transparent:104:max-16",
+      "fileName": "review-021.png",
+      "sha256": "127d0fb3a0667e53cb31e567fcf48bccd9c8826a4b32b1e17c11968203ded359",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 48,
+          "rightProfile": 24
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 72,
+          "rightProfile": 48
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 72,
+          "rightProfile": 120
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    },
+    {
+      "packetId": "review-022",
+      "runId": "white-pump-bottle-pair:transparent:104:max-32",
+      "fileName": "review-022.png",
+      "sha256": "1dfe5c85a186ae5417b89d37cf30b9496db9e2b48d09f8866c4d5003f1438f68",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 48,
+          "rightProfile": 24
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 120,
+          "rightProfile": 72
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    },
+    {
+      "packetId": "review-023",
+      "runId": "white-pump-bottle-pair:transparent:104:max-64",
+      "fileName": "review-023.png",
+      "sha256": "d3f073fb4bf8ace5e727e1174e1e01cbf5b9fb99885b32cb2d1de23b67d4b0a6",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 72,
+          "rightProfile": 48
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 120,
+          "rightProfile": 72
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 120,
+          "rightProfile": 168
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    },
+    {
+      "packetId": "review-024",
+      "runId": "white-sneaker-product:white:104:max-32",
+      "fileName": "review-024.png",
+      "sha256": "e84cc43a7744f8c1b2d47502240013e757d0f40e72d71f6f82c557119c18be0f",
+      "rows": [
+        {
+          "transition": "24->48",
+          "leftProfile": 24,
+          "rightProfile": 48
+        },
+        {
+          "transition": "48->72",
+          "leftProfile": 48,
+          "rightProfile": 72
+        },
+        {
+          "transition": "72->120",
+          "leftProfile": 120,
+          "rightProfile": 72
+        },
+        {
+          "transition": "120->168",
+          "leftProfile": 168,
+          "rightProfile": 120
+        },
+        {
+          "transition": "168->221",
+          "leftProfile": 168,
+          "rightProfile": 221
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "stage": "P3-A03-E05-D04-A01",
+  "nodeAuthoritativeReplay": {
+    "classification": "offline replay, not browser evidence",
+    "runs": 102,
+    "heavyProductionPathMedianMs": 77.16400000000067,
+    "heavyProductionPathP95Ms": 132.11859999999797,
+    "additionalSixProfileEvaluationMedianMs": 42.291749999998956,
+    "additionalSixProfileEvaluationP95Ms": 80.05329999999958,
+    "integratedTotalMedianMs": 125.46755000000121
+  },
+  "desktopBrowser": {
+    "browser": "Chromium 151 on Windows 10",
+    "viewport": { "width": 1280, "height": 720 },
+    "fixture": {
+      "kind": "deterministic-synthetic-104-square",
+      "width": 104,
+      "height": 104,
+      "maximumColors": 32
+    },
+    "iterations": 12,
+    "warmups": 3,
+    "baselineQuantizeAnd221AssemblyMedianMs": 68.39999961853027,
+    "additionalSixProfileEvaluationAndAssemblyMedianMs": 34.54999923706055,
+    "integratedQuantizeAndSixProfileEvaluationMedianMs": 97,
+    "scope": "Browser main-thread compute from an already decoded RGBA image. File decode, Background Removal, Worker scheduling, rendering, and device I/O are excluded."
+  },
+  "mobileBrowser": {
+    "available": false,
+    "reason": "The current in-app browser tooling exposed no mobile-device or viewport-emulation timing capability. Desktop timing was not relabeled as mobile evidence."
+  },
+  "interpretation": "The six-profile path reuses one quantization and therefore does not duplicate the heavy image-processing stage, but mapping and assembly are not free. The available timing is sufficient to characterize architecture cost, not to approve mobile production latency."
+}

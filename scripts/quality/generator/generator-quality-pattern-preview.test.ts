@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import type { PublicPatternResult } from "../../../src/domain/pattern/public-pattern.types.ts";
-import { renderPatternComparisonPng } from "./generator-quality-pattern-preview.ts";
+import {
+  renderPatternComparisonPng,
+  renderPatternGridPng,
+} from "./generator-quality-pattern-preview.ts";
 
 describe("Q02-A02 local Pattern preview", () => {
   it("emits a deterministic RGBA PNG without dependencies", () => {
@@ -15,6 +18,17 @@ describe("Q02-A02 local Pattern preview", () => {
     ]);
     expect(first.readUInt32BE(16)).toBe(10);
     expect(first.readUInt32BE(20)).toBe(4);
+  });
+
+  it("renders a deterministic multi-profile grid", () => {
+    const pattern = fixturePattern();
+    const first = renderPatternGridPng([pattern, pattern, pattern], 2, 2, 4);
+    const second = renderPatternGridPng([pattern, pattern, pattern], 2, 2, 4);
+
+    expect(first).toEqual(second);
+    expect(Array.from(first.subarray(0, 8))).toEqual([
+      137, 80, 78, 71, 13, 10, 26, 10,
+    ]);
   });
 });
 

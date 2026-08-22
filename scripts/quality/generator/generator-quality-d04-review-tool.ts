@@ -8,13 +8,60 @@ export interface BlindReviewToolInput {
   readonly packetSetId: string;
   readonly packetSetSha256: string;
   readonly packets: readonly AnonymousReviewPacket[];
+  readonly exactPacketCount?: number;
+  readonly resultStage?: string;
+  readonly requiredReviewerId?: string;
+  readonly explicitPatternChoiceLabels?: boolean;
+  readonly storageNamespace?: string;
+  readonly downloadPrefix?: string;
 }
 
 export function renderBlindReviewHtml(input: BlindReviewToolInput): string {
-  if (input.packets.length < 40 || input.packets.length > 80) {
+  if (
+    input.exactPacketCount === undefined &&
+    (input.packets.length < 40 || input.packets.length > 80)
+  ) {
     throw new Error("Blind review requires 40 to 80 packets.");
   }
+  if (
+    input.exactPacketCount !== undefined &&
+    input.packets.length !== input.exactPacketCount
+  ) {
+    throw new Error(
+      `Blind review requires exactly ${input.exactPacketCount} packets.`,
+    );
+  }
   const payload = JSON.stringify(input).replaceAll("<", "\\u003c");
+  const choiceDefinitions = input.explicitPatternChoiceLabels
+    ? `  ["a_clearly_better","Pattern A clearly better","1"],
+  ["a_slightly_better","Pattern A slightly better","2"],
+  ["no_meaningful_difference","No meaningful difference","3"],
+  ["b_slightly_better","Pattern B slightly better","4"],
+  ["b_clearly_better","Pattern B clearly better","5"],
+  ["cannot_judge","Cannot judge","6"]`
+    : `  ["a_clearly_better","A clearly better","1"],
+  ["a_slightly_better","A slightly better","2"],
+  ["no_meaningful_difference","No meaningful difference","3"],
+  ["b_slightly_better","B slightly better","4"],
+  ["b_clearly_better","B clearly better","5"],
+  ["cannot_judge","Cannot judge","6"]`;
+  const requiredReviewerId = input.requiredReviewerId ?? "";
+  const reviewerIdAttributes =
+    requiredReviewerId === ""
+      ? 'placeholder="reviewer-1"'
+      : `value="${requiredReviewerId}" readonly`;
+  const storagePrefixDefinition =
+    input.storageNamespace === undefined
+      ? 'const storagePrefix="poparooz-d04-a02:"+tool.packetSetSha256+":";'
+      : `const storagePrefix=${JSON.stringify(input.storageNamespace)}+":"+tool.packetSetSha256+":";`;
+  const sessionStage =
+    input.resultStage === undefined
+      ? '"P3-A03-E05-D04-A02"'
+      : JSON.stringify(input.resultStage);
+  const downloadPrefix =
+    input.downloadPrefix === undefined
+      ? '"poparooz-a02-"'
+      : JSON.stringify(`${input.downloadPrefix}-`);
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -69,7 +116,7 @@ export function renderBlindReviewHtml(input: BlindReviewToolInput): string {
     </ul>
     <p class="muted">Your progress is saved only in this browser. Complete this review independently and do not discuss answers with another reviewer.</p>
     <label for="reviewer-id">Reviewer ID</label>
-    <input id="reviewer-id" type="text" maxlength="40" autocomplete="off" placeholder="reviewer-1">
+    <input id="reviewer-id" type="text" maxlength="40" autocomplete="off" ${reviewerIdAttributes}>
     <button id="start" class="primary">Start review</button>
   </section>
   <section id="review" class="card hidden" aria-live="polite">
@@ -94,17 +141,12 @@ export function renderBlindReviewHtml(input: BlindReviewToolInput): string {
 "use strict";
 const tool=${payload};
 const choices=[
-  ["a_clearly_better","A clearly better","1"],
-  ["a_slightly_better","A slightly better","2"],
-  ["no_meaningful_difference","No meaningful difference","3"],
-  ["b_slightly_better","B slightly better","4"],
-  ["b_clearly_better","B clearly better","5"],
-  ["cannot_judge","Cannot judge","6"]
+${choiceDefinitions}
 ];
 let session=null;
 let current=0;
 const byId=(id)=>document.getElementById(id);
-const storagePrefix="poparooz-d04-a02:"+tool.packetSetSha256+":";
+${storagePrefixDefinition}
 choices.forEach(([value,label,key])=>{
   const wrapper=document.createElement("div"); wrapper.className="choice";
   const input=document.createElement("input"); input.type="radio"; input.name="choice"; input.id="choice-"+value; input.value=value;
@@ -129,7 +171,7 @@ function start(){
   if(!/^[A-Za-z0-9_-]{3,40}$/.test(reviewerId)){alert("Use a 3–40 character reviewer ID with letters, numbers, hyphens, or underscores.");return;}
   const key=storagePrefix+reviewerId;
   const saved=localStorage.getItem(key);
-  session=saved?JSON.parse(saved):{schemaVersion:1,stage:"P3-A03-E05-D04-A02",packetSetId:tool.packetSetId,packetSetSha256:tool.packetSetSha256,reviewerId,sessionId:crypto.randomUUID(),startedAt:new Date().toISOString(),completedAt:null,locked:false,responses:[]};
+  session=saved?JSON.parse(saved):{schemaVersion:1,stage:${sessionStage},packetSetId:tool.packetSetId,packetSetSha256:tool.packetSetSha256,reviewerId,sessionId:crypto.randomUUID(),startedAt:new Date().toISOString(),completedAt:null,locked:false,responses:[]};
   byId("intro").classList.add("hidden");
   current=Math.min(session.responses.length,tool.packets.length-1);
   if(session.locked) showFinish(); else {byId("review").classList.remove("hidden");render();}
@@ -167,7 +209,7 @@ async function lockSession(){
 }
 async function resultRecord(){const payload=JSON.parse(JSON.stringify(session));const canonical=canonicalJson(payload);const digest=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(canonical));return {...payload,resultSha256:[...new Uint8Array(digest)].map((byte)=>byte.toString(16).padStart(2,"0")).join("")};}
 async function renderHash(){const result=await resultRecord();byId("hash").textContent="Result SHA-256: "+result.resultSha256;}
-async function downloadResult(){const result=await resultRecord();const blob=new Blob([JSON.stringify(result,null,2)+"\\n"],{type:"application/json"});const url=URL.createObjectURL(blob);const link=document.createElement("a");link.href=url;link.download="poparooz-a02-"+session.reviewerId+"-"+session.sessionId+".json";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+async function downloadResult(){const result=await resultRecord();const blob=new Blob([JSON.stringify(result,null,2)+"\\n"],{type:"application/json"});const url=URL.createObjectURL(blob);const link=document.createElement("a");link.href=url;link.download=${downloadPrefix}+session.reviewerId+"-"+session.sessionId+".json";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function canonicalJson(value){if(Array.isArray(value))return"["+value.map(canonicalJson).join(",")+"]";if(value&&typeof value==="object")return"{"+Object.keys(value).sort().map((key)=>JSON.stringify(key)+":"+canonicalJson(value[key])).join(",")+"}";return JSON.stringify(value);}
 </script>
 </body>

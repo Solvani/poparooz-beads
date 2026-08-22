@@ -10,6 +10,15 @@ export const HUMAN_REVIEW_CHOICES = Object.freeze([
 export type HumanReviewChoice = (typeof HUMAN_REVIEW_CHOICES)[number];
 export type BlindBroadDirection = "A" | "B" | "neutral" | "cannot";
 export type RevealedDirection = "larger" | "smaller" | "neutral" | "cannot";
+export type ThreeReviewerConsensusLabel =
+  "larger" | "smaller" | "neutral" | "ambiguous" | "uncertain";
+export type ThreeReviewerConsensusStatus =
+  | "strong_directional_consensus"
+  | "majority_directional_consensus"
+  | "strong_neutral"
+  | "majority_neutral"
+  | "persistent_ambiguity"
+  | "uncertain";
 export type ConsensusStatus =
   | "exact_direction_agreement"
   | "soft_direction_agreement"
@@ -92,8 +101,8 @@ export function linearWeightedCohensKappa(
   for (const [first, second] of included) {
     const firstScore = score.get(first)!;
     const secondScore = score.get(second)!;
-    countsFirst[firstScore] += 1;
-    countsSecond[secondScore] += 1;
+    countsFirst[firstScore] = (countsFirst[firstScore] ?? 0) + 1;
+    countsSecond[secondScore] = (countsSecond[secondScore] ?? 0) + 1;
     observedWeightedAgreement += 1 - Math.abs(firstScore - secondScore) / 4;
   }
   observedWeightedAgreement /= included.length;
@@ -116,6 +125,41 @@ export function linearWeightedCohensKappa(
         ? null
         : (observedWeightedAgreement - expectedWeightedAgreement) /
           (1 - expectedWeightedAgreement),
+  });
+}
+
+export function threeReviewerConsensus(
+  votes: readonly [RevealedDirection, RevealedDirection, RevealedDirection],
+): Readonly<{
+  status: ThreeReviewerConsensusStatus;
+  label: ThreeReviewerConsensusLabel;
+}> {
+  const count = (direction: RevealedDirection) =>
+    votes.filter((vote) => vote === direction).length;
+  if (count("larger") === 3 || count("smaller") === 3) {
+    return Object.freeze({
+      status: "strong_directional_consensus",
+      label: count("larger") === 3 ? "larger" : "smaller",
+    });
+  }
+  if (count("neutral") === 3) {
+    return Object.freeze({ status: "strong_neutral", label: "neutral" });
+  }
+  if (count("larger") >= 2 || count("smaller") >= 2) {
+    return Object.freeze({
+      status: "majority_directional_consensus",
+      label: count("larger") >= 2 ? "larger" : "smaller",
+    });
+  }
+  if (count("neutral") >= 2) {
+    return Object.freeze({ status: "majority_neutral", label: "neutral" });
+  }
+  if (count("cannot") > 0) {
+    return Object.freeze({ status: "uncertain", label: "uncertain" });
+  }
+  return Object.freeze({
+    status: "persistent_ambiguity",
+    label: "ambiguous",
   });
 }
 

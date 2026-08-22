@@ -1,0 +1,2477 @@
+{
+  "schemaVersion": "1.0.0",
+  "evidenceId": "poparooz-e05-d04-a02-c2-three-reviewer-analysis-1.0.0",
+  "stage": "P3-A03-E05-D04-A02-C2",
+  "phase": "evaluation-only",
+  "productionActivation": "NOT ACTIVATED",
+  "sourceGitHead": "4d60dae351d8839daf0a6a971807b4aed23d7597",
+  "productionHead": "9b411803afb26d618abe94f411b1bb342099fb14",
+  "identities": {
+    "a01CanonicalEvidenceSha256": "1b58d8670444fb91f9b5026db06633aa0d975a01261b2adcd2bb0ef515850c89",
+    "a02StructuralCanonicalEvidenceSha256": "e47533d6a96fe244c188d71f173afae57617b2e1ada0a3ea6358c60e74a35a5c",
+    "a02HumanCanonicalEvidenceSha256": "367b1458bf39f66fcaa41690ef63921a24a7076724de4c8b5da5448dd77ea6a4",
+    "sourcePacketSetSha256": "1feeedeb9b04cd407526f40dd25c04a351c1389a20df6538eb8789b4027f15d7",
+    "targetPacketSetSha256": "e058fe70996ec37805c8610a5bb8e2cbf7bfc9fdfc84644ff737ce42986a842f",
+    "privateAnalysisSha256": "5fc1e0d13f84712d3cc3b170ee3444066873e85da698cb5cf9d5d13b5a8e494e",
+    "sourceRevealKeySha256": "92596bff8f2219098bad50268263b2dea935b71b4af3131a3239ed6a1b28494e",
+    "c1TargetedManifestFileSha256": "f1fd92d68a41794bfd048ef176e717cac09296b93a409773772131426f8a1f22",
+    "c1TargetedRevealFileSha256": "4515e4939eb5782c050242b7e4ce9eb365d2e3df3bcf9fd74af08faa2b8068f1",
+    "c1PreparationAuditFileSha256": "ba386d117f3efaa91bb8ada17dacc3d037903cf546f053e4873521a9b3fde8d0",
+    "c1ReviewHtmlFileSha256": "58efa96ba16c8219752a8faa785836d6b548381402b7ddff8a84c793ef71434a",
+    "reviewers": [
+      {
+        "reviewerId": "reviewer-1",
+        "sessionId": "c208effc-8783-4880-94e4-9557d952d181",
+        "resultSha256": "55d6b4654a849cb6ba5e69e1017bef80e3bb09eb986ee36126294c824755fe17",
+        "originalFileSha256": "acd480f29ee368c6803a2790a9364fd55904764a117973295378b54899cbbbff"
+      },
+      {
+        "reviewerId": "reviewer-2",
+        "sessionId": "83933aaf-f791-46ca-815e-d0ecbb6bbe22",
+        "resultSha256": "801e0ae45a4c46d85122d6e83d78e6bfda6c897af878c6e65b178b7a85b21a26",
+        "originalFileSha256": "4f1fee335660f26a303b0c5f6ef0d837286a3436f40271f5462705ab71c332e2"
+      },
+      {
+        "reviewerId": "reviewer-3",
+        "sessionId": "cb755fb2-de89-4789-a33c-691c0ff149be",
+        "resultSha256": "61c72bfdce5fc5fbf497f225b012099d1a906888d58312545cf6c863ffbc05d5",
+        "originalFileSha256": "ce8696a14c446c25baf0af8214659d45d097ca6296ea28bfcee8182a09a2ddd8"
+      }
+    ]
+  },
+  "integrity": {
+    "reviewer3SchemaAndIdentity": "PASS",
+    "reviewer3ResponseCoverage": "35/35 exact",
+    "reviewer3OriginalBytesPreserved": true,
+    "a01IdentityGate": "PASS",
+    "a02IdentityGate": "PASS",
+    "c1IdentityGate": "PASS",
+    "responseLevelDataCommitted": false
+  },
+  "consensus": {
+    "originalTwoReviewerConsensusPreserved": 25,
+    "targetedResolution": {
+      "comparisonCount": 35,
+      "usableConsensusCount": 27,
+      "ambiguousCount": 8,
+      "labelCounts": {
+        "ambiguous": 3,
+        "larger": 8,
+        "neutral": 12,
+        "smaller": 7,
+        "uncertain": 5
+      },
+      "statusCounts": {
+        "majority_directional_consensus": 15,
+        "majority_neutral": 12,
+        "persistent_ambiguity": 3,
+        "uncertain": 5
+      }
+    },
+    "allComparisons": {
+      "comparisonCount": 60,
+      "usableConsensusCount": 52,
+      "ambiguousCount": 8,
+      "labelCounts": {
+        "ambiguous": 3,
+        "larger": 15,
+        "neutral": 25,
+        "smaller": 12,
+        "uncertain": 5
+      },
+      "statusCounts": {
+        "majority_directional_consensus": 15,
+        "majority_neutral": 12,
+        "persistent_ambiguity": 3,
+        "preserved_directional_consensus": 12,
+        "preserved_neutral_consensus": 13,
+        "uncertain": 5
+      }
+    },
+    "reviewer3CoverageImprovement": {
+      "beforeUsableConsensusCount": 25,
+      "afterUsableConsensusCount": 52,
+      "usableConsensusGain": 27,
+      "beforeUsablePercentage": 41.66666666666667,
+      "afterUsablePercentage": 86.66666666666667
+    }
+  },
+  "groupedConsensus": {
+    "transition": [
+      {
+        "key": "120->168",
+        "comparisonCount": 11,
+        "usableConsensusCount": 10,
+        "ambiguousCount": 1,
+        "labelCounts": {
+          "ambiguous": 1,
+          "larger": 4,
+          "neutral": 5,
+          "smaller": 1
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 3,
+          "majority_neutral": 5,
+          "persistent_ambiguity": 1,
+          "preserved_directional_consensus": 2
+        }
+      },
+      {
+        "key": "168->221",
+        "comparisonCount": 6,
+        "usableConsensusCount": 6,
+        "ambiguousCount": 0,
+        "labelCounts": {
+          "larger": 1,
+          "neutral": 5
+        },
+        "statusCounts": {
+          "majority_neutral": 1,
+          "preserved_directional_consensus": 1,
+          "preserved_neutral_consensus": 4
+        }
+      },
+      {
+        "key": "24->48",
+        "comparisonCount": 10,
+        "usableConsensusCount": 8,
+        "ambiguousCount": 2,
+        "labelCounts": {
+          "larger": 6,
+          "neutral": 2,
+          "uncertain": 2
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 1,
+          "majority_neutral": 1,
+          "preserved_directional_consensus": 5,
+          "preserved_neutral_consensus": 1,
+          "uncertain": 2
+        }
+      },
+      {
+        "key": "48->72",
+        "comparisonCount": 13,
+        "usableConsensusCount": 11,
+        "ambiguousCount": 2,
+        "labelCounts": {
+          "ambiguous": 2,
+          "larger": 2,
+          "neutral": 7,
+          "smaller": 2
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 4,
+          "majority_neutral": 2,
+          "persistent_ambiguity": 2,
+          "preserved_neutral_consensus": 5
+        }
+      },
+      {
+        "key": "72->120",
+        "comparisonCount": 20,
+        "usableConsensusCount": 17,
+        "ambiguousCount": 3,
+        "labelCounts": {
+          "larger": 2,
+          "neutral": 6,
+          "smaller": 9,
+          "uncertain": 3
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 7,
+          "majority_neutral": 3,
+          "preserved_directional_consensus": 4,
+          "preserved_neutral_consensus": 3,
+          "uncertain": 3
+        }
+      }
+    ],
+    "maximumColors": [
+      {
+        "key": "16",
+        "comparisonCount": 15,
+        "usableConsensusCount": 14,
+        "ambiguousCount": 1,
+        "labelCounts": {
+          "larger": 5,
+          "neutral": 8,
+          "smaller": 1,
+          "uncertain": 1
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 2,
+          "majority_neutral": 4,
+          "preserved_directional_consensus": 4,
+          "preserved_neutral_consensus": 4,
+          "uncertain": 1
+        }
+      },
+      {
+        "key": "32",
+        "comparisonCount": 33,
+        "usableConsensusCount": 29,
+        "ambiguousCount": 4,
+        "labelCounts": {
+          "ambiguous": 1,
+          "larger": 7,
+          "neutral": 14,
+          "smaller": 8,
+          "uncertain": 3
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 10,
+          "majority_neutral": 6,
+          "persistent_ambiguity": 1,
+          "preserved_directional_consensus": 5,
+          "preserved_neutral_consensus": 8,
+          "uncertain": 3
+        }
+      },
+      {
+        "key": "64",
+        "comparisonCount": 12,
+        "usableConsensusCount": 9,
+        "ambiguousCount": 3,
+        "labelCounts": {
+          "ambiguous": 2,
+          "larger": 3,
+          "neutral": 3,
+          "smaller": 3,
+          "uncertain": 1
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 3,
+          "majority_neutral": 2,
+          "persistent_ambiguity": 2,
+          "preserved_directional_consensus": 3,
+          "preserved_neutral_consensus": 1,
+          "uncertain": 1
+        }
+      }
+    ],
+    "split": [
+      {
+        "key": "calibration",
+        "comparisonCount": 35,
+        "usableConsensusCount": 28,
+        "ambiguousCount": 7,
+        "labelCounts": {
+          "ambiguous": 3,
+          "larger": 10,
+          "neutral": 14,
+          "smaller": 4,
+          "uncertain": 4
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 7,
+          "majority_neutral": 8,
+          "persistent_ambiguity": 3,
+          "preserved_directional_consensus": 7,
+          "preserved_neutral_consensus": 6,
+          "uncertain": 4
+        }
+      },
+      {
+        "key": "validation",
+        "comparisonCount": 25,
+        "usableConsensusCount": 24,
+        "ambiguousCount": 1,
+        "labelCounts": {
+          "larger": 5,
+          "neutral": 11,
+          "smaller": 8,
+          "uncertain": 1
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 8,
+          "majority_neutral": 4,
+          "preserved_directional_consensus": 5,
+          "preserved_neutral_consensus": 7,
+          "uncertain": 1
+        }
+      }
+    ],
+    "evaluationOnlyCategory": [
+      {
+        "key": "complex-photo",
+        "comparisonCount": 1,
+        "usableConsensusCount": 1,
+        "ambiguousCount": 0,
+        "labelCounts": {
+          "larger": 1
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 1
+        }
+      },
+      {
+        "key": "dark-subject-background",
+        "comparisonCount": 2,
+        "usableConsensusCount": 2,
+        "ambiguousCount": 0,
+        "labelCounts": {
+          "neutral": 2
+        },
+        "statusCounts": {
+          "majority_neutral": 1,
+          "preserved_neutral_consensus": 1
+        }
+      },
+      {
+        "key": "fine-line",
+        "comparisonCount": 6,
+        "usableConsensusCount": 5,
+        "ambiguousCount": 1,
+        "labelCounts": {
+          "ambiguous": 1,
+          "larger": 1,
+          "neutral": 4
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 1,
+          "majority_neutral": 2,
+          "persistent_ambiguity": 1,
+          "preserved_neutral_consensus": 2
+        }
+      },
+      {
+        "key": "flat-illustration",
+        "comparisonCount": 7,
+        "usableConsensusCount": 6,
+        "ambiguousCount": 1,
+        "labelCounts": {
+          "larger": 3,
+          "smaller": 3,
+          "uncertain": 1
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 5,
+          "preserved_directional_consensus": 1,
+          "uncertain": 1
+        }
+      },
+      {
+        "key": "high-saturation",
+        "comparisonCount": 6,
+        "usableConsensusCount": 6,
+        "ambiguousCount": 0,
+        "labelCounts": {
+          "larger": 2,
+          "neutral": 4
+        },
+        "statusCounts": {
+          "majority_neutral": 2,
+          "preserved_directional_consensus": 2,
+          "preserved_neutral_consensus": 2
+        }
+      },
+      {
+        "key": "low-contrast",
+        "comparisonCount": 1,
+        "usableConsensusCount": 1,
+        "ambiguousCount": 0,
+        "labelCounts": {
+          "neutral": 1
+        },
+        "statusCounts": {
+          "majority_neutral": 1
+        }
+      },
+      {
+        "key": "opaque-background-removal",
+        "comparisonCount": 3,
+        "usableConsensusCount": 2,
+        "ambiguousCount": 1,
+        "labelCounts": {
+          "larger": 1,
+          "neutral": 1,
+          "uncertain": 1
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 1,
+          "preserved_neutral_consensus": 1,
+          "uncertain": 1
+        }
+      },
+      {
+        "key": "pale-subject-light-background",
+        "comparisonCount": 4,
+        "usableConsensusCount": 4,
+        "ambiguousCount": 0,
+        "labelCounts": {
+          "larger": 1,
+          "neutral": 2,
+          "smaller": 1
+        },
+        "statusCounts": {
+          "majority_neutral": 1,
+          "preserved_directional_consensus": 2,
+          "preserved_neutral_consensus": 1
+        }
+      },
+      {
+        "key": "pet-fur",
+        "comparisonCount": 9,
+        "usableConsensusCount": 6,
+        "ambiguousCount": 3,
+        "labelCounts": {
+          "ambiguous": 2,
+          "larger": 2,
+          "neutral": 1,
+          "smaller": 3,
+          "uncertain": 1
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 2,
+          "majority_neutral": 1,
+          "persistent_ambiguity": 2,
+          "preserved_directional_consensus": 3,
+          "uncertain": 1
+        }
+      },
+      {
+        "key": "portrait",
+        "comparisonCount": 12,
+        "usableConsensusCount": 11,
+        "ambiguousCount": 1,
+        "labelCounts": {
+          "larger": 2,
+          "neutral": 8,
+          "smaller": 1,
+          "uncertain": 1
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 2,
+          "majority_neutral": 4,
+          "preserved_directional_consensus": 1,
+          "preserved_neutral_consensus": 4,
+          "uncertain": 1
+        }
+      },
+      {
+        "key": "simple-graphic",
+        "comparisonCount": 2,
+        "usableConsensusCount": 2,
+        "ambiguousCount": 0,
+        "labelCounts": {
+          "neutral": 1,
+          "smaller": 1
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 1,
+          "preserved_neutral_consensus": 1
+        }
+      },
+      {
+        "key": "white-background-product",
+        "comparisonCount": 7,
+        "usableConsensusCount": 6,
+        "ambiguousCount": 1,
+        "labelCounts": {
+          "larger": 2,
+          "neutral": 1,
+          "smaller": 3,
+          "uncertain": 1
+        },
+        "statusCounts": {
+          "majority_directional_consensus": 2,
+          "preserved_directional_consensus": 3,
+          "preserved_neutral_consensus": 1,
+          "uncertain": 1
+        }
+      }
+    ]
+  },
+  "featureDistributions": {
+    "allComparisons": [
+      {
+        "label": "larger",
+        "comparisonCount": 15,
+        "features": [
+          {
+            "feature": "additionalUsedColors",
+            "count": 15,
+            "minimum": 0,
+            "p25": 1,
+            "median": 2,
+            "p75": 3,
+            "maximum": 7,
+            "mean": 2.466666666666667
+          },
+          {
+            "feature": "changedCellPercentage",
+            "count": 15,
+            "minimum": 3.1897189349112427,
+            "p25": 13.452292899408283,
+            "median": 37.5,
+            "p75": 50,
+            "maximum": 99.94764397905759,
+            "mean": 39.32643187578003
+          },
+          {
+            "feature": "changedRegionCount",
+            "count": 15,
+            "minimum": 2,
+            "p25": 33,
+            "median": 69,
+            "p75": 152,
+            "maximum": 250,
+            "mean": 94.2
+          },
+          {
+            "feature": "dominantColorComponentDelta",
+            "count": 15,
+            "minimum": -114,
+            "p25": -10,
+            "median": 0,
+            "p75": 0,
+            "maximum": 80,
+            "mean": -1.4666666666666666
+          },
+          {
+            "feature": "dominantColorLargestComponentCoverageDelta",
+            "count": 15,
+            "minimum": -0.5410397937995847,
+            "p25": -0.11618779269485646,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0.03866636322257622,
+            "mean": -0.08728333502995357
+          },
+          {
+            "feature": "highSwitchCellPercentageDelta",
+            "count": 15,
+            "minimum": -0.1941568047337272,
+            "p25": 0.10471204188481677,
+            "median": 1.6734467455621296,
+            "p75": 4.7984467455621305,
+            "maximum": 11.344304733727812,
+            "mean": 3.2710350290854495
+          },
+          {
+            "feature": "maximumDeltaE00Gain",
+            "count": 15,
+            "minimum": 0,
+            "p25": 0.3569588448753578,
+            "median": 2.5526861599494595,
+            "p75": 3.925600344063641,
+            "maximum": 7.311289057780105,
+            "mean": 2.6329702895279583
+          },
+          {
+            "feature": "meanDeltaE00GainPerAdditionalColor",
+            "count": 13,
+            "minimum": 0.03610930312036853,
+            "p25": 0.16197521929811876,
+            "median": 0.690275079773239,
+            "p75": 0.9081475695039144,
+            "maximum": 2.3115661275890362,
+            "mean": 0.7322470167070418
+          },
+          {
+            "feature": "meanLocalColorSwitchesDelta",
+            "count": 15,
+            "minimum": -0.18952879581151832,
+            "p25": 0.00009245562130177909,
+            "median": 0.08598372781065089,
+            "p75": 0.13683431952662728,
+            "maximum": 0.3628883136094674,
+            "mean": 0.09994450546844497
+          },
+          {
+            "feature": "normalizedBoundaryLengthDelta",
+            "count": 15,
+            "minimum": -0.050934706041723114,
+            "p25": 0,
+            "median": 0.01661687826736369,
+            "p75": 0.029096989966555187,
+            "maximum": 0.08397124719940255,
+            "mean": 0.016379946755214984
+          },
+          {
+            "feature": "singletonComponentDelta",
+            "count": 15,
+            "minimum": -25,
+            "p25": -2,
+            "median": 67,
+            "p75": 114,
+            "maximum": 326,
+            "mean": 95.73333333333333
+          },
+          {
+            "feature": "smallRegionCellPercentageDelta",
+            "count": 15,
+            "minimum": -1.0632396449704142,
+            "p25": 0.06548788474132339,
+            "median": 0.9060650887573969,
+            "p75": 2.5147928994082838,
+            "maximum": 6.518121301775146,
+            "mean": 1.9035624470637567
+          },
+          {
+            "feature": "thinSameColorContinuityDelta",
+            "count": 15,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          {
+            "feature": "totalColorComponentsDelta",
+            "count": 15,
+            "minimum": -50,
+            "p25": 0,
+            "median": 87,
+            "p75": 229,
+            "maximum": 567,
+            "mean": 149.86666666666667
+          },
+          {
+            "feature": "twoToThreeCellComponentDelta",
+            "count": 15,
+            "minimum": -20,
+            "p25": 0,
+            "median": 30,
+            "p75": 64,
+            "maximum": 120,
+            "mean": 36.733333333333334
+          },
+          {
+            "feature": "usedColorDelta",
+            "count": 15,
+            "minimum": 0,
+            "p25": 1,
+            "median": 2,
+            "p75": 3,
+            "maximum": 7,
+            "mean": 2.466666666666667
+          },
+          {
+            "feature": "weightedMeanDeltaE00Gain",
+            "count": 15,
+            "minimum": 0.03610930312036853,
+            "p25": 0.46612203988051704,
+            "median": 1.8810514971244876,
+            "p75": 2.139506987579752,
+            "maximum": 2.7244427085117433,
+            "mean": 1.384534543314208
+          },
+          {
+            "feature": "weightedP95DeltaE00Gain",
+            "count": 15,
+            "minimum": 0.43441365059840287,
+            "p25": 1.6889077266496848,
+            "median": 3.3245055067700253,
+            "p75": 3.6334405628761637,
+            "maximum": 4.472029533750099,
+            "mean": 2.858949815252307
+          }
+        ]
+      },
+      {
+        "label": "smaller",
+        "comparisonCount": 12,
+        "features": [
+          {
+            "feature": "additionalUsedColors",
+            "count": 12,
+            "minimum": -1,
+            "p25": 0,
+            "median": 2,
+            "p75": 5,
+            "maximum": 7,
+            "mean": 2.5833333333333335
+          },
+          {
+            "feature": "changedCellPercentage",
+            "count": 12,
+            "minimum": 5.048076923076923,
+            "p25": 19.01812130177515,
+            "median": 24.500739644970416,
+            "p75": 40.24593195266272,
+            "maximum": 83.88998035363457,
+            "mean": 37.00932282039657
+          },
+          {
+            "feature": "changedRegionCount",
+            "count": 12,
+            "minimum": 3,
+            "p25": 4,
+            "median": 33,
+            "p75": 112,
+            "maximum": 294,
+            "mean": 78.58333333333333
+          },
+          {
+            "feature": "dominantColorComponentDelta",
+            "count": 12,
+            "minimum": -21,
+            "p25": 0,
+            "median": 2,
+            "p75": 7,
+            "maximum": 73,
+            "mean": 11
+          },
+          {
+            "feature": "dominantColorLargestComponentCoverageDelta",
+            "count": 12,
+            "minimum": -0.24394257061312127,
+            "p25": -0.00798841117203375,
+            "median": 0,
+            "p75": 0.0015532544378697999,
+            "maximum": 0.11492344149738698,
+            "mean": -0.013737709126651723
+          },
+          {
+            "feature": "highSwitchCellPercentageDelta",
+            "count": 12,
+            "minimum": -1.2481508875739644,
+            "p25": 0.00924556213017702,
+            "median": 0.20340236686390512,
+            "p75": 4.946375739644971,
+            "maximum": 6.963545077493996,
+            "mean": 2.279158590095802
+          },
+          {
+            "feature": "maximumDeltaE00Gain",
+            "count": 12,
+            "minimum": 0.7405866544005306,
+            "p25": 1.4578704757844037,
+            "median": 2.330800430004837,
+            "p75": 3.4006040120053243,
+            "maximum": 5.305350637668681,
+            "mean": 2.6819482637411896
+          },
+          {
+            "feature": "meanDeltaE00GainPerAdditionalColor",
+            "count": 8,
+            "minimum": 0.031197913817229674,
+            "p25": 0.16446202019829478,
+            "median": 0.22745549026118606,
+            "p75": 0.27961742945109497,
+            "maximum": 0.5618629030761518,
+            "mean": 0.2701958209680703
+          },
+          {
+            "feature": "meanLocalColorSwitchesDelta",
+            "count": 12,
+            "minimum": -0.07377958579881658,
+            "p25": -0.04225221893491124,
+            "median": 0.09670857988165682,
+            "p75": 0.25287958115183246,
+            "maximum": 0.38266753983846324,
+            "mean": 0.1421047430693995
+          },
+          {
+            "feature": "normalizedBoundaryLengthDelta",
+            "count": 12,
+            "minimum": -0.023058252427184463,
+            "p25": -0.012229275578790139,
+            "median": 0.023291635548917083,
+            "p75": 0.06068816039013818,
+            "maximum": 0.08818283166109253,
+            "mean": 0.030716046464780895
+          },
+          {
+            "feature": "singletonComponentDelta",
+            "count": 12,
+            "minimum": -45,
+            "p25": -31,
+            "median": 12,
+            "p75": 145,
+            "maximum": 161,
+            "mean": 56.25
+          },
+          {
+            "feature": "smallRegionCellPercentageDelta",
+            "count": 12,
+            "minimum": -0.906065088757396,
+            "p25": -0.3790680473372783,
+            "median": 0.6282722513089006,
+            "p75": 3.16198224852071,
+            "maximum": 6.810740013097576,
+            "mean": 1.520078848691039
+          },
+          {
+            "feature": "thinSameColorContinuityDelta",
+            "count": 12,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          {
+            "feature": "totalColorComponentsDelta",
+            "count": 12,
+            "minimum": -76,
+            "p25": -48,
+            "median": 13,
+            "p75": 260,
+            "maximum": 312,
+            "mean": 104.75
+          },
+          {
+            "feature": "twoToThreeCellComponentDelta",
+            "count": 12,
+            "minimum": -16,
+            "p25": -10,
+            "median": 3,
+            "p75": 52,
+            "maximum": 66,
+            "mean": 19.25
+          },
+          {
+            "feature": "usedColorDelta",
+            "count": 12,
+            "minimum": -1,
+            "p25": 0,
+            "median": 2,
+            "p75": 5,
+            "maximum": 7,
+            "mean": 2.5833333333333335
+          },
+          {
+            "feature": "weightedMeanDeltaE00Gain",
+            "count": 12,
+            "minimum": 0.15598956908614836,
+            "p25": 0.2127789229179866,
+            "median": 0.7822064719146433,
+            "p75": 1.1512341413880636,
+            "maximum": 2.809314515380759,
+            "mean": 0.9611968881696581
+          },
+          {
+            "feature": "weightedP95DeltaE00Gain",
+            "count": 12,
+            "minimum": 0.783122194361356,
+            "p25": 1.1155376662102414,
+            "median": 1.8515210961908704,
+            "p75": 2.6152895200667334,
+            "maximum": 5.088550394770486,
+            "mean": 2.2057256494923725
+          }
+        ]
+      },
+      {
+        "label": "neutral",
+        "comparisonCount": 25,
+        "features": [
+          {
+            "feature": "additionalUsedColors",
+            "count": 25,
+            "minimum": -2,
+            "p25": 0,
+            "median": 1,
+            "p75": 2,
+            "maximum": 5,
+            "mean": 1.2
+          },
+          {
+            "feature": "changedCellPercentage",
+            "count": 25,
+            "minimum": 0,
+            "p25": 0.2617801047120419,
+            "median": 9.375,
+            "p75": 36.833333333333336,
+            "maximum": 85.9375,
+            "mean": 19.49475177994889
+          },
+          {
+            "feature": "changedRegionCount",
+            "count": 25,
+            "minimum": 0,
+            "p25": 4,
+            "median": 41,
+            "p75": 85,
+            "maximum": 322,
+            "mean": 64.36
+          },
+          {
+            "feature": "dominantColorComponentDelta",
+            "count": 25,
+            "minimum": -122,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 42,
+            "mean": -1.44
+          },
+          {
+            "feature": "dominantColorLargestComponentCoverageDelta",
+            "count": 25,
+            "minimum": -0.6701112138848585,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0.14482462413511343,
+            "mean": -0.0259899409827273
+          },
+          {
+            "feature": "highSwitchCellPercentageDelta",
+            "count": 25,
+            "minimum": -7.867973372781064,
+            "p25": 0.03660322108345593,
+            "median": 0.5555555555555536,
+            "p75": 1.2296597633136095,
+            "maximum": 2.8125,
+            "mean": 0.4037513406577638
+          },
+          {
+            "feature": "maximumDeltaE00Gain",
+            "count": 25,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 2.164014490196985,
+            "maximum": 6.305027873394291,
+            "mean": 1.3809110452597309
+          },
+          {
+            "feature": "meanDeltaE00GainPerAdditionalColor",
+            "count": 17,
+            "minimum": 0.000493398457263039,
+            "p25": 0.03659618724204705,
+            "median": 0.06653312775406128,
+            "p75": 0.41558788247481093,
+            "maximum": 1.7746715682007363,
+            "mean": 0.2939720614847551
+          },
+          {
+            "feature": "meanLocalColorSwitchesDelta",
+            "count": 25,
+            "minimum": -0.3087093195266273,
+            "p25": 0.0012500000000000289,
+            "median": 0.022281804733727872,
+            "p75": 0.056120562130177465,
+            "maximum": 0.38775887573964496,
+            "mean": 0.033940028529341526
+          },
+          {
+            "feature": "normalizedBoundaryLengthDelta",
+            "count": 25,
+            "minimum": -0.0720687079910381,
+            "p25": 0,
+            "median": 0.002660567587752044,
+            "p75": 0.009475354742345066,
+            "maximum": 0.12630694548170276,
+            "mean": 0.007526689014178424
+          },
+          {
+            "feature": "singletonComponentDelta",
+            "count": 25,
+            "minimum": -271,
+            "p25": 0,
+            "median": 17,
+            "p75": 34,
+            "maximum": 204,
+            "mean": 17.04
+          },
+          {
+            "feature": "smallRegionCellPercentageDelta",
+            "count": 25,
+            "minimum": -5.279215976331361,
+            "p25": 0,
+            "median": 0.3143491124260356,
+            "p75": 1.0624999999999964,
+            "maximum": 4.095784023668639,
+            "mean": 0.43796696580015293
+          },
+          {
+            "feature": "thinSameColorContinuityDelta",
+            "count": 25,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          {
+            "feature": "totalColorComponentsDelta",
+            "count": 25,
+            "minimum": -475,
+            "p25": 0,
+            "median": 12,
+            "p75": 58,
+            "maximum": 351,
+            "mean": 22.04
+          },
+          {
+            "feature": "twoToThreeCellComponentDelta",
+            "count": 25,
+            "minimum": -86,
+            "p25": 0,
+            "median": 1,
+            "p75": 9,
+            "maximum": 81,
+            "mean": 3.4
+          },
+          {
+            "feature": "usedColorDelta",
+            "count": 25,
+            "minimum": -2,
+            "p25": 0,
+            "median": 1,
+            "p75": 2,
+            "maximum": 5,
+            "mean": 1.2
+          },
+          {
+            "feature": "weightedMeanDeltaE00Gain",
+            "count": 25,
+            "minimum": 0,
+            "p25": 0.0021694196870205573,
+            "median": 0.2953524465020472,
+            "p75": 0.8650528500953625,
+            "maximum": 2.52670242325952,
+            "mean": 0.6848769504941211
+          },
+          {
+            "feature": "weightedP95DeltaE00Gain",
+            "count": 25,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 1.7860830361291535,
+            "maximum": 6.305027873394291,
+            "mean": 1.1635200523758193
+          }
+        ]
+      },
+      {
+        "label": "ambiguous",
+        "comparisonCount": 3,
+        "features": [
+          {
+            "feature": "additionalUsedColors",
+            "count": 3,
+            "minimum": 1,
+            "p25": 1,
+            "median": 2,
+            "p75": 2,
+            "maximum": 2,
+            "mean": 1.6666666666666667
+          },
+          {
+            "feature": "changedCellPercentage",
+            "count": 3,
+            "minimum": 3.9940828402366866,
+            "p25": 3.9940828402366866,
+            "median": 14.071745562130179,
+            "p75": 14.071745562130179,
+            "maximum": 19.526627218934912,
+            "mean": 12.530818540433927
+          },
+          {
+            "feature": "changedRegionCount",
+            "count": 3,
+            "minimum": 83,
+            "p25": 83,
+            "median": 96,
+            "p75": 96,
+            "maximum": 183,
+            "mean": 120.66666666666667
+          },
+          {
+            "feature": "dominantColorComponentDelta",
+            "count": 3,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 14,
+            "mean": 4.666666666666667
+          },
+          {
+            "feature": "dominantColorLargestComponentCoverageDelta",
+            "count": 3,
+            "minimum": -0.049022414347178994,
+            "p25": -0.049022414347178994,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": -0.016340804782392998
+          },
+          {
+            "feature": "highSwitchCellPercentageDelta",
+            "count": 3,
+            "minimum": 2.440828402366863,
+            "p25": 2.440828402366863,
+            "median": 3.2636834319526624,
+            "p75": 3.2636834319526624,
+            "maximum": 3.9571005917159763,
+            "mean": 3.2205374753451674
+          },
+          {
+            "feature": "maximumDeltaE00Gain",
+            "count": 3,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          {
+            "feature": "meanDeltaE00GainPerAdditionalColor",
+            "count": 3,
+            "minimum": 0.037455763346063264,
+            "p25": 0.037455763346063264,
+            "median": 0.14649764331551118,
+            "p75": 0.14649764331551118,
+            "maximum": 0.20960984280175277,
+            "mean": 0.13118774982110906
+          },
+          {
+            "feature": "meanLocalColorSwitchesDelta",
+            "count": 3,
+            "minimum": 0.05454881656804733,
+            "p25": 0.05454881656804733,
+            "median": 0.10623150887573962,
+            "p75": 0.10623150887573962,
+            "maximum": 0.125,
+            "mean": 0.09526010848126232
+          },
+          {
+            "feature": "normalizedBoundaryLengthDelta",
+            "count": 3,
+            "minimum": 0.002847274085138171,
+            "p25": 0.002847274085138171,
+            "median": 0.021891336818521318,
+            "p75": 0.021891336818521318,
+            "maximum": 0.026185586258401783,
+            "mean": 0.016974732387353756
+          },
+          {
+            "feature": "singletonComponentDelta",
+            "count": 3,
+            "minimum": 41,
+            "p25": 41,
+            "median": 57,
+            "p75": 57,
+            "maximum": 95,
+            "mean": 64.33333333333333
+          },
+          {
+            "feature": "smallRegionCellPercentageDelta",
+            "count": 3,
+            "minimum": 0.31434911242603647,
+            "p25": 0.31434911242603647,
+            "median": 1.6734467455621296,
+            "p75": 1.6734467455621296,
+            "maximum": 2.634985207100593,
+            "mean": 1.540927021696253
+          },
+          {
+            "feature": "thinSameColorContinuityDelta",
+            "count": 3,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          {
+            "feature": "totalColorComponentsDelta",
+            "count": 3,
+            "minimum": 49,
+            "p25": 49,
+            "median": 118,
+            "p75": 118,
+            "maximum": 204,
+            "mean": 123.66666666666667
+          },
+          {
+            "feature": "twoToThreeCellComponentDelta",
+            "count": 3,
+            "minimum": -5,
+            "p25": -5,
+            "median": 34,
+            "p75": 34,
+            "maximum": 58,
+            "mean": 29
+          },
+          {
+            "feature": "usedColorDelta",
+            "count": 3,
+            "minimum": 1,
+            "p25": 1,
+            "median": 2,
+            "p75": 2,
+            "maximum": 2,
+            "mean": 1.6666666666666667
+          },
+          {
+            "feature": "weightedMeanDeltaE00Gain",
+            "count": 3,
+            "minimum": 0.037455763346063264,
+            "p25": 0.037455763346063264,
+            "median": 0.29299528663102237,
+            "p75": 0.29299528663102237,
+            "maximum": 0.41921968560350553,
+            "mean": 0.2498902451935304
+          },
+          {
+            "feature": "weightedP95DeltaE00Gain",
+            "count": 3,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0.2521376834228848,
+            "mean": 0.08404589447429493
+          }
+        ]
+      },
+      {
+        "label": "uncertain",
+        "comparisonCount": 5,
+        "features": [
+          {
+            "feature": "additionalUsedColors",
+            "count": 5,
+            "minimum": 1,
+            "p25": 2,
+            "median": 3,
+            "p75": 3,
+            "maximum": 5,
+            "mean": 2.8
+          },
+          {
+            "feature": "changedCellPercentage",
+            "count": 5,
+            "minimum": 2.246671597633136,
+            "p25": 32.627588757396445,
+            "median": 44.881889763779526,
+            "p75": 46.875,
+            "maximum": 66.78994082840237,
+            "mean": 38.68421818944229
+          },
+          {
+            "feature": "changedRegionCount",
+            "count": 5,
+            "minimum": 35,
+            "p25": 60,
+            "median": 74,
+            "p75": 87,
+            "maximum": 97,
+            "mean": 70.6
+          },
+          {
+            "feature": "dominantColorComponentDelta",
+            "count": 5,
+            "minimum": -16,
+            "p25": -3,
+            "median": -1,
+            "p75": 35,
+            "maximum": 52,
+            "mean": 13.4
+          },
+          {
+            "feature": "dominantColorLargestComponentCoverageDelta",
+            "count": 5,
+            "minimum": -0.19884122287968442,
+            "p25": 0.0035921814292090293,
+            "median": 0.0066938148923730845,
+            "p75": 0.05396780912223487,
+            "maximum": 0.1038135593220339,
+            "mean": -0.006154771622766708
+          },
+          {
+            "feature": "highSwitchCellPercentageDelta",
+            "count": 5,
+            "minimum": 0.9892751479289945,
+            "p25": 1.6734467455621305,
+            "median": 3.4763313609467454,
+            "p75": 3.6242603550295858,
+            "maximum": 19.160104986876632,
+            "mean": 5.784683719268818
+          },
+          {
+            "feature": "maximumDeltaE00Gain",
+            "count": 5,
+            "minimum": 0.7823961803818413,
+            "p25": 2.827512726443663,
+            "median": 2.8950553314211405,
+            "p75": 3.1553252178642808,
+            "maximum": 3.606486206184748,
+            "mean": 2.6533551324591347
+          },
+          {
+            "feature": "meanDeltaE00GainPerAdditionalColor",
+            "count": 5,
+            "minimum": 0.02835537984891867,
+            "p25": 0.33870368640293247,
+            "median": 0.5234588491495658,
+            "p75": 0.6448736804272451,
+            "maximum": 1.0426855070019228,
+            "mean": 0.515615420566117
+          },
+          {
+            "feature": "meanLocalColorSwitchesDelta",
+            "count": 5,
+            "minimum": 0.029123520710059164,
+            "p25": 0.038461538461538436,
+            "median": 0.16817677514792906,
+            "p75": 0.2660872781065089,
+            "maximum": 0.6824146981627295,
+            "mean": 0.23685276211775302
+          },
+          {
+            "feature": "normalizedBoundaryLengthDelta",
+            "count": 5,
+            "minimum": 0.0027539208364451007,
+            "p25": 0.004060866318147872,
+            "median": 0.0315067214339059,
+            "p75": 0.06553398058252424,
+            "maximum": 0.08538350217076707,
+            "mean": 0.03784779826835803
+          },
+          {
+            "feature": "singletonComponentDelta",
+            "count": 5,
+            "minimum": 18,
+            "p25": 46,
+            "median": 50,
+            "p75": 91,
+            "maximum": 150,
+            "mean": 71
+          },
+          {
+            "feature": "smallRegionCellPercentageDelta",
+            "count": 5,
+            "minimum": 0.4622781065088757,
+            "p25": 0.8505917159763321,
+            "median": 2.08025147928994,
+            "p75": 3.152736686390533,
+            "maximum": 16.535433070866134,
+            "mean": 4.616258211806363
+          },
+          {
+            "feature": "thinSameColorContinuityDelta",
+            "count": 5,
+            "minimum": -0.16666666666666663,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": -0.033333333333333326
+          },
+          {
+            "feature": "totalColorComponentsDelta",
+            "count": 5,
+            "minimum": 38,
+            "p25": 50,
+            "median": 77,
+            "p75": 182,
+            "maximum": 273,
+            "mean": 124
+          },
+          {
+            "feature": "twoToThreeCellComponentDelta",
+            "count": 5,
+            "minimum": 6,
+            "p25": 8,
+            "median": 11,
+            "p75": 33,
+            "maximum": 56,
+            "mean": 22.8
+          },
+          {
+            "feature": "usedColorDelta",
+            "count": 5,
+            "minimum": 1,
+            "p25": 2,
+            "median": 3,
+            "p75": 3,
+            "maximum": 5,
+            "mean": 2.8
+          },
+          {
+            "feature": "weightedMeanDeltaE00Gain",
+            "count": 5,
+            "minimum": 0.05671075969783734,
+            "p25": 1.0161110592087974,
+            "median": 1.0426855070019228,
+            "p75": 1.9346210412817353,
+            "maximum": 2.6172942457478285,
+            "mean": 1.3334845225876244
+          },
+          {
+            "feature": "weightedP95DeltaE00Gain",
+            "count": 5,
+            "minimum": 0.8076805983714799,
+            "p25": 1.655916790254679,
+            "median": 1.6945849409966325,
+            "p75": 2.416730060913771,
+            "maximum": 2.4188047419270546,
+            "mean": 1.7987434264927233
+          }
+        ]
+      }
+    ],
+    "calibrationOnly": [
+      {
+        "label": "larger",
+        "comparisonCount": 10,
+        "features": [
+          {
+            "feature": "additionalUsedColors",
+            "count": 10,
+            "minimum": 0,
+            "p25": 1,
+            "median": 2,
+            "p75": 3,
+            "maximum": 5,
+            "mean": 2.1
+          },
+          {
+            "feature": "changedCellPercentage",
+            "count": 10,
+            "minimum": 3.1897189349112427,
+            "p25": 15.486316568047338,
+            "median": 26.590236686390533,
+            "p75": 39.27514792899408,
+            "maximum": 68.75,
+            "mean": 30.86109789381776
+          },
+          {
+            "feature": "changedRegionCount",
+            "count": 10,
+            "minimum": 33,
+            "p25": 63,
+            "median": 101,
+            "p75": 161,
+            "maximum": 250,
+            "mean": 125.7
+          },
+          {
+            "feature": "dominantColorComponentDelta",
+            "count": 10,
+            "minimum": -114,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 80,
+            "mean": 1.1
+          },
+          {
+            "feature": "dominantColorLargestComponentCoverageDelta",
+            "count": 10,
+            "minimum": -0.5410397937995847,
+            "p25": -0.22892011834319528,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0.03866636322257622,
+            "mean": -0.11440055696528
+          },
+          {
+            "feature": "highSwitchCellPercentageDelta",
+            "count": 10,
+            "minimum": -0.1941568047337272,
+            "p25": 0,
+            "median": 3.0140532544378695,
+            "p75": 5.177514792899409,
+            "maximum": 11.344304733727812,
+            "mean": 4.3481878698224845
+          },
+          {
+            "feature": "maximumDeltaE00Gain",
+            "count": 10,
+            "minimum": 0,
+            "p25": 0.06270114705873908,
+            "median": 2.5526861599494595,
+            "p75": 3.925600344063641,
+            "maximum": 7.311289057780105,
+            "mean": 2.684863841079392
+          },
+          {
+            "feature": "meanDeltaE00GainPerAdditionalColor",
+            "count": 8,
+            "minimum": 0.03610930312036853,
+            "p25": 0.0932244079761034,
+            "median": 0.39331882068255286,
+            "p75": 0.9081475695039144,
+            "maximum": 2.027025285056146,
+            "mean": 0.686715615614452
+          },
+          {
+            "feature": "meanLocalColorSwitchesDelta",
+            "count": 10,
+            "minimum": 0,
+            "p25": 0.05260724852070997,
+            "median": 0.08598372781065089,
+            "p75": 0.21690088757396453,
+            "maximum": 0.3628883136094674,
+            "mean": 0.154844674556213
+          },
+          {
+            "feature": "normalizedBoundaryLengthDelta",
+            "count": 10,
+            "minimum": -0.0005601194921583119,
+            "p25": 0.005181105302464531,
+            "median": 0.01661687826736369,
+            "p75": 0.03169342793129201,
+            "maximum": 0.08397124719940255,
+            "mean": 0.028547423450336073
+          },
+          {
+            "feature": "singletonComponentDelta",
+            "count": 10,
+            "minimum": -25,
+            "p25": 0,
+            "median": 104,
+            "p75": 160,
+            "maximum": 326,
+            "mean": 130.8
+          },
+          {
+            "feature": "smallRegionCellPercentageDelta",
+            "count": 10,
+            "minimum": -1.0632396449704142,
+            "p25": 0,
+            "median": 1.1741863905325438,
+            "p75": 3.5133136094674544,
+            "maximum": 6.518121301775146,
+            "mean": 2.443602071005917
+          },
+          {
+            "feature": "thinSameColorContinuityDelta",
+            "count": 10,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          {
+            "feature": "totalColorComponentsDelta",
+            "count": 10,
+            "minimum": -50,
+            "p25": 0,
+            "median": 96,
+            "p75": 259,
+            "maximum": 567,
+            "mean": 201.4
+          },
+          {
+            "feature": "twoToThreeCellComponentDelta",
+            "count": 10,
+            "minimum": -20,
+            "p25": 0,
+            "median": 32,
+            "p75": 66,
+            "maximum": 120,
+            "mean": 46.4
+          },
+          {
+            "feature": "usedColorDelta",
+            "count": 10,
+            "minimum": 0,
+            "p25": 1,
+            "median": 2,
+            "p75": 3,
+            "maximum": 5,
+            "mean": 2.1
+          },
+          {
+            "feature": "weightedMeanDeltaE00Gain",
+            "count": 10,
+            "minimum": 0.03610930312036853,
+            "p25": 0.46612203988051704,
+            "median": 0.7866376413651057,
+            "p75": 2.027025285056146,
+            "maximum": 2.7244427085117433,
+            "mean": 1.323108149812906
+          },
+          {
+            "feature": "weightedP95DeltaE00Gain",
+            "count": 10,
+            "minimum": 0.43441365059840287,
+            "p25": 1.03109900330767,
+            "median": 2.7151763656373884,
+            "p75": 3.3503352285692287,
+            "maximum": 4.472029533750099,
+            "mean": 2.547073164523983
+          }
+        ]
+      },
+      {
+        "label": "smaller",
+        "comparisonCount": 4,
+        "features": [
+          {
+            "feature": "additionalUsedColors",
+            "count": 4,
+            "minimum": -1,
+            "p25": -1,
+            "median": 0,
+            "p75": 4,
+            "maximum": 7,
+            "mean": 2.5
+          },
+          {
+            "feature": "changedCellPercentage",
+            "count": 4,
+            "minimum": 19.01812130177515,
+            "p25": 19.01812130177515,
+            "median": 24.500739644970416,
+            "p75": 39.84837278106509,
+            "maximum": 40.24593195266272,
+            "mean": 30.903291420118343
+          },
+          {
+            "feature": "changedRegionCount",
+            "count": 4,
+            "minimum": 3,
+            "p25": 3,
+            "median": 94,
+            "p75": 112,
+            "maximum": 294,
+            "mean": 125.75
+          },
+          {
+            "feature": "dominantColorComponentDelta",
+            "count": 4,
+            "minimum": -21,
+            "p25": -21,
+            "median": -20,
+            "p75": 0,
+            "maximum": 73,
+            "mean": 8
+          },
+          {
+            "feature": "dominantColorLargestComponentCoverageDelta",
+            "count": 4,
+            "minimum": -0.24394257061312127,
+            "p25": -0.24394257061312127,
+            "median": 0,
+            "p75": 0.0015532544378697999,
+            "maximum": 0.01351674641148326,
+            "mean": -0.05721814244094205
+          },
+          {
+            "feature": "highSwitchCellPercentageDelta",
+            "count": 4,
+            "minimum": -0.23113905325443784,
+            "p25": -0.23113905325443784,
+            "median": 3.16198224852071,
+            "p75": 4.946375739644971,
+            "maximum": 5.103550295857989,
+            "mean": 3.245192307692308
+          },
+          {
+            "feature": "maximumDeltaE00Gain",
+            "count": 4,
+            "minimum": 1.4578704757844037,
+            "p25": 1.4578704757844037,
+            "median": 2.330800430004837,
+            "p75": 2.427800033710147,
+            "maximum": 4.163924842104141,
+            "mean": 2.595098945400882
+          },
+          {
+            "feature": "meanDeltaE00GainPerAdditionalColor",
+            "count": 2,
+            "minimum": 0.16446202019829478,
+            "p25": 0.16446202019829478,
+            "median": 0.16446202019829478,
+            "p75": 0.16446202019829478,
+            "maximum": 0.26807934132657585,
+            "mean": 0.21627068076243533
+          },
+          {
+            "feature": "meanLocalColorSwitchesDelta",
+            "count": 4,
+            "minimum": -0.07377958579881658,
+            "p25": -0.07377958579881658,
+            "median": 0.09670857988165682,
+            "p75": 0.2677514792899408,
+            "maximum": 0.3055658284023669,
+            "mean": 0.14906157544378698
+          },
+          {
+            "feature": "normalizedBoundaryLengthDelta",
+            "count": 4,
+            "minimum": -0.023058252427184463,
+            "p25": -0.023058252427184463,
+            "median": 0.023291635548917083,
+            "p75": 0.053584764749813274,
+            "maximum": 0.06511389096340556,
+            "mean": 0.029733009708737865
+          },
+          {
+            "feature": "singletonComponentDelta",
+            "count": 4,
+            "minimum": -45,
+            "p25": -45,
+            "median": 106,
+            "p75": 145,
+            "maximum": 149,
+            "mean": 88.75
+          },
+          {
+            "feature": "smallRegionCellPercentageDelta",
+            "count": 4,
+            "minimum": -0.6841715976331362,
+            "p25": -0.6841715976331362,
+            "median": 1.775147928994084,
+            "p75": 3.16198224852071,
+            "maximum": 3.374630177514792,
+            "mean": 1.9068971893491125
+          },
+          {
+            "feature": "thinSameColorContinuityDelta",
+            "count": 4,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          {
+            "feature": "totalColorComponentsDelta",
+            "count": 4,
+            "minimum": -63,
+            "p25": -63,
+            "median": 154,
+            "p75": 289,
+            "maximum": 312,
+            "mean": 173
+          },
+          {
+            "feature": "twoToThreeCellComponentDelta",
+            "count": 4,
+            "minimum": -10,
+            "p25": -10,
+            "median": 19,
+            "p75": 52,
+            "maximum": 62,
+            "mean": 30.75
+          },
+          {
+            "feature": "usedColorDelta",
+            "count": 4,
+            "minimum": -1,
+            "p25": -1,
+            "median": 0,
+            "p75": 4,
+            "maximum": 7,
+            "mean": 2.5
+          },
+          {
+            "feature": "weightedMeanDeltaE00Gain",
+            "count": 4,
+            "minimum": 0.6901003388939724,
+            "p25": 0.6901003388939724,
+            "median": 0.7822064719146433,
+            "p75": 1.0723173653063034,
+            "maximum": 1.1512341413880636,
+            "mean": 0.9239645793757456
+          },
+          {
+            "feature": "weightedP95DeltaE00Gain",
+            "count": 4,
+            "minimum": 1.7102793928958953,
+            "p25": 1.7102793928958953,
+            "median": 2.2215745787907473,
+            "p75": 2.314152791956932,
+            "maximum": 3.307022154275284,
+            "mean": 2.3882572294797146
+          }
+        ]
+      },
+      {
+        "label": "neutral",
+        "comparisonCount": 14,
+        "features": [
+          {
+            "feature": "additionalUsedColors",
+            "count": 14,
+            "minimum": -2,
+            "p25": 0,
+            "median": 1,
+            "p75": 2,
+            "maximum": 5,
+            "mean": 1.2857142857142858
+          },
+          {
+            "feature": "changedCellPercentage",
+            "count": 14,
+            "minimum": 0,
+            "p25": 0.0625,
+            "median": 14.24741124260355,
+            "p75": 35.9375,
+            "maximum": 43.759245562130175,
+            "mean": 19.113858212229626
+          },
+          {
+            "feature": "changedRegionCount",
+            "count": 14,
+            "minimum": 0,
+            "p25": 4,
+            "median": 22,
+            "p75": 116,
+            "maximum": 322,
+            "mean": 83.57142857142857
+          },
+          {
+            "feature": "dominantColorComponentDelta",
+            "count": 14,
+            "minimum": -122,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 42,
+            "mean": -4.714285714285714
+          },
+          {
+            "feature": "dominantColorLargestComponentCoverageDelta",
+            "count": 14,
+            "minimum": -0.6701112138848585,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0.11649408284023671,
+            "mean": -0.04467180463608263
+          },
+          {
+            "feature": "highSwitchCellPercentageDelta",
+            "count": 14,
+            "minimum": -7.867973372781064,
+            "p25": 0,
+            "median": 0.6150061500614967,
+            "p75": 1.2296597633136095,
+            "maximum": 2.0247781065088724,
+            "mean": 0.22222087110188474
+          },
+          {
+            "feature": "maximumDeltaE00Gain",
+            "count": 14,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0.3237624195935851,
+            "p75": 1.0739373895264173,
+            "maximum": 6.305027873394291,
+            "mean": 1.3836508450037834
+          },
+          {
+            "feature": "meanDeltaE00GainPerAdditionalColor",
+            "count": 9,
+            "minimum": 0.000493398457263039,
+            "p25": 0.03985407131342811,
+            "median": 0.0984508155006824,
+            "p75": 0.43252642504768124,
+            "maximum": 1.7746715682007363,
+            "mean": 0.3937710023334748
+          },
+          {
+            "feature": "meanLocalColorSwitchesDelta",
+            "count": 14,
+            "minimum": -0.3087093195266273,
+            "p25": 0,
+            "median": 0.022281804733727872,
+            "p75": 0.06850961538461542,
+            "maximum": 0.38775887573964496,
+            "mean": 0.03737047223599877
+          },
+          {
+            "feature": "normalizedBoundaryLengthDelta",
+            "count": 14,
+            "minimum": -0.0720687079910381,
+            "p25": 0,
+            "median": 0.0006596306068601399,
+            "p75": 0.00910194174757284,
+            "maximum": 0.12630694548170276,
+            "mean": 0.008983753794376688
+          },
+          {
+            "feature": "singletonComponentDelta",
+            "count": 14,
+            "minimum": -271,
+            "p25": 0,
+            "median": 3,
+            "p75": 40,
+            "maximum": 204,
+            "mean": 17.642857142857142
+          },
+          {
+            "feature": "smallRegionCellPercentageDelta",
+            "count": 14,
+            "minimum": -5.279215976331361,
+            "p25": 0,
+            "median": 0.2460024600245987,
+            "p75": 1.1187130177514792,
+            "maximum": 4.095784023668639,
+            "mean": 0.5456252813796099
+          },
+          {
+            "feature": "thinSameColorContinuityDelta",
+            "count": 14,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          {
+            "feature": "totalColorComponentsDelta",
+            "count": 14,
+            "minimum": -475,
+            "p25": 0,
+            "median": 2,
+            "p75": 42,
+            "maximum": 351,
+            "mean": 19.5
+          },
+          {
+            "feature": "twoToThreeCellComponentDelta",
+            "count": 14,
+            "minimum": -86,
+            "p25": 0,
+            "median": 1,
+            "p75": 10,
+            "maximum": 81,
+            "mean": 3.7142857142857144
+          },
+          {
+            "feature": "usedColorDelta",
+            "count": 14,
+            "minimum": -2,
+            "p25": 0,
+            "median": 1,
+            "p75": 2,
+            "maximum": 5,
+            "mean": 1.2857142857142858
+          },
+          {
+            "feature": "weightedMeanDeltaE00Gain",
+            "count": 14,
+            "minimum": 0,
+            "p25": 0.000986796914526078,
+            "median": 0.2953524465020472,
+            "p75": 0.8244490565311029,
+            "maximum": 2.52670242325952,
+            "mean": 0.7040262209602081
+          },
+          {
+            "feature": "weightedP95DeltaE00Gain",
+            "count": 14,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 1.7860830361291535,
+            "maximum": 6.305027873394291,
+            "mean": 1.3598427184073714
+          }
+        ]
+      },
+      {
+        "label": "ambiguous",
+        "comparisonCount": 3,
+        "features": [
+          {
+            "feature": "additionalUsedColors",
+            "count": 3,
+            "minimum": 1,
+            "p25": 1,
+            "median": 2,
+            "p75": 2,
+            "maximum": 2,
+            "mean": 1.6666666666666667
+          },
+          {
+            "feature": "changedCellPercentage",
+            "count": 3,
+            "minimum": 3.9940828402366866,
+            "p25": 3.9940828402366866,
+            "median": 14.071745562130179,
+            "p75": 14.071745562130179,
+            "maximum": 19.526627218934912,
+            "mean": 12.530818540433927
+          },
+          {
+            "feature": "changedRegionCount",
+            "count": 3,
+            "minimum": 83,
+            "p25": 83,
+            "median": 96,
+            "p75": 96,
+            "maximum": 183,
+            "mean": 120.66666666666667
+          },
+          {
+            "feature": "dominantColorComponentDelta",
+            "count": 3,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 14,
+            "mean": 4.666666666666667
+          },
+          {
+            "feature": "dominantColorLargestComponentCoverageDelta",
+            "count": 3,
+            "minimum": -0.049022414347178994,
+            "p25": -0.049022414347178994,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": -0.016340804782392998
+          },
+          {
+            "feature": "highSwitchCellPercentageDelta",
+            "count": 3,
+            "minimum": 2.440828402366863,
+            "p25": 2.440828402366863,
+            "median": 3.2636834319526624,
+            "p75": 3.2636834319526624,
+            "maximum": 3.9571005917159763,
+            "mean": 3.2205374753451674
+          },
+          {
+            "feature": "maximumDeltaE00Gain",
+            "count": 3,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          {
+            "feature": "meanDeltaE00GainPerAdditionalColor",
+            "count": 3,
+            "minimum": 0.037455763346063264,
+            "p25": 0.037455763346063264,
+            "median": 0.14649764331551118,
+            "p75": 0.14649764331551118,
+            "maximum": 0.20960984280175277,
+            "mean": 0.13118774982110906
+          },
+          {
+            "feature": "meanLocalColorSwitchesDelta",
+            "count": 3,
+            "minimum": 0.05454881656804733,
+            "p25": 0.05454881656804733,
+            "median": 0.10623150887573962,
+            "p75": 0.10623150887573962,
+            "maximum": 0.125,
+            "mean": 0.09526010848126232
+          },
+          {
+            "feature": "normalizedBoundaryLengthDelta",
+            "count": 3,
+            "minimum": 0.002847274085138171,
+            "p25": 0.002847274085138171,
+            "median": 0.021891336818521318,
+            "p75": 0.021891336818521318,
+            "maximum": 0.026185586258401783,
+            "mean": 0.016974732387353756
+          },
+          {
+            "feature": "singletonComponentDelta",
+            "count": 3,
+            "minimum": 41,
+            "p25": 41,
+            "median": 57,
+            "p75": 57,
+            "maximum": 95,
+            "mean": 64.33333333333333
+          },
+          {
+            "feature": "smallRegionCellPercentageDelta",
+            "count": 3,
+            "minimum": 0.31434911242603647,
+            "p25": 0.31434911242603647,
+            "median": 1.6734467455621296,
+            "p75": 1.6734467455621296,
+            "maximum": 2.634985207100593,
+            "mean": 1.540927021696253
+          },
+          {
+            "feature": "thinSameColorContinuityDelta",
+            "count": 3,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          {
+            "feature": "totalColorComponentsDelta",
+            "count": 3,
+            "minimum": 49,
+            "p25": 49,
+            "median": 118,
+            "p75": 118,
+            "maximum": 204,
+            "mean": 123.66666666666667
+          },
+          {
+            "feature": "twoToThreeCellComponentDelta",
+            "count": 3,
+            "minimum": -5,
+            "p25": -5,
+            "median": 34,
+            "p75": 34,
+            "maximum": 58,
+            "mean": 29
+          },
+          {
+            "feature": "usedColorDelta",
+            "count": 3,
+            "minimum": 1,
+            "p25": 1,
+            "median": 2,
+            "p75": 2,
+            "maximum": 2,
+            "mean": 1.6666666666666667
+          },
+          {
+            "feature": "weightedMeanDeltaE00Gain",
+            "count": 3,
+            "minimum": 0.037455763346063264,
+            "p25": 0.037455763346063264,
+            "median": 0.29299528663102237,
+            "p75": 0.29299528663102237,
+            "maximum": 0.41921968560350553,
+            "mean": 0.2498902451935304
+          },
+          {
+            "feature": "weightedP95DeltaE00Gain",
+            "count": 3,
+            "minimum": 0,
+            "p25": 0,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0.2521376834228848,
+            "mean": 0.08404589447429493
+          }
+        ]
+      },
+      {
+        "label": "uncertain",
+        "comparisonCount": 4,
+        "features": [
+          {
+            "feature": "additionalUsedColors",
+            "count": 4,
+            "minimum": 1,
+            "p25": 1,
+            "median": 2,
+            "p75": 3,
+            "maximum": 3,
+            "mean": 2.25
+          },
+          {
+            "feature": "changedCellPercentage",
+            "count": 4,
+            "minimum": 2.246671597633136,
+            "p25": 2.246671597633136,
+            "median": 32.627588757396445,
+            "p75": 44.881889763779526,
+            "maximum": 46.875,
+            "mean": 31.657787529702276
+          },
+          {
+            "feature": "changedRegionCount",
+            "count": 4,
+            "minimum": 35,
+            "p25": 35,
+            "median": 60,
+            "p75": 74,
+            "maximum": 97,
+            "mean": 66.5
+          },
+          {
+            "feature": "dominantColorComponentDelta",
+            "count": 4,
+            "minimum": -16,
+            "p25": -16,
+            "median": -3,
+            "p75": -1,
+            "maximum": 35,
+            "mean": 3.75
+          },
+          {
+            "feature": "dominantColorLargestComponentCoverageDelta",
+            "count": 4,
+            "minimum": -0.19884122287968442,
+            "p25": -0.19884122287968442,
+            "median": 0.0035921814292090293,
+            "p75": 0.0066938148923730845,
+            "maximum": 0.1038135593220339,
+            "mean": -0.021185416809017102
+          },
+          {
+            "feature": "highSwitchCellPercentageDelta",
+            "count": 4,
+            "minimum": 0.9892751479289945,
+            "p25": 0.9892751479289945,
+            "median": 1.6734467455621305,
+            "p75": 3.4763313609467454,
+            "maximum": 19.160104986876632,
+            "mean": 6.324789560328625
+          },
+          {
+            "feature": "maximumDeltaE00Gain",
+            "count": 4,
+            "minimum": 0.7823961803818413,
+            "p25": 0.7823961803818413,
+            "median": 2.827512726443663,
+            "p75": 2.8950553314211405,
+            "maximum": 3.1553252178642808,
+            "mean": 2.4150723640277314
+          },
+          {
+            "feature": "meanDeltaE00GainPerAdditionalColor",
+            "count": 4,
+            "minimum": 0.02835537984891867,
+            "p25": 0.02835537984891867,
+            "median": 0.33870368640293247,
+            "p75": 0.6448736804272451,
+            "maximum": 1.0426855070019228,
+            "mean": 0.5136545634202547
+          },
+          {
+            "feature": "meanLocalColorSwitchesDelta",
+            "count": 4,
+            "minimum": 0.029123520710059164,
+            "p25": 0.029123520710059164,
+            "median": 0.038461538461538436,
+            "p75": 0.16817677514792906,
+            "maximum": 0.6824146981627295,
+            "mean": 0.22954413312056404
+          },
+          {
+            "feature": "normalizedBoundaryLengthDelta",
+            "count": 4,
+            "minimum": 0.0027539208364451007,
+            "p25": 0.0027539208364451007,
+            "median": 0.004060866318147872,
+            "p75": 0.0315067214339059,
+            "maximum": 0.08538350217076707,
+            "mean": 0.030926252689816483
+          },
+          {
+            "feature": "singletonComponentDelta",
+            "count": 4,
+            "minimum": 18,
+            "p25": 18,
+            "median": 46,
+            "p75": 50,
+            "maximum": 91,
+            "mean": 51.25
+          },
+          {
+            "feature": "smallRegionCellPercentageDelta",
+            "count": 4,
+            "minimum": 0.4622781065088757,
+            "p25": 0.4622781065088757,
+            "median": 0.8505917159763321,
+            "p75": 2.08025147928994,
+            "maximum": 16.535433070866134,
+            "mean": 4.98213859316032
+          },
+          {
+            "feature": "thinSameColorContinuityDelta",
+            "count": 4,
+            "minimum": -0.16666666666666663,
+            "p25": -0.16666666666666663,
+            "median": 0,
+            "p75": 0,
+            "maximum": 0,
+            "mean": -0.04166666666666666
+          },
+          {
+            "feature": "totalColorComponentsDelta",
+            "count": 4,
+            "minimum": 38,
+            "p25": 38,
+            "median": 50,
+            "p75": 77,
+            "maximum": 182,
+            "mean": 86.75
+          },
+          {
+            "feature": "twoToThreeCellComponentDelta",
+            "count": 4,
+            "minimum": 6,
+            "p25": 6,
+            "median": 8,
+            "p75": 11,
+            "maximum": 33,
+            "mean": 14.5
+          },
+          {
+            "feature": "usedColorDelta",
+            "count": 4,
+            "minimum": 1,
+            "p25": 1,
+            "median": 2,
+            "p75": 3,
+            "maximum": 3,
+            "mean": 2.25
+          },
+          {
+            "feature": "weightedMeanDeltaE00Gain",
+            "count": 4,
+            "minimum": 0.05671075969783734,
+            "p25": 0.05671075969783734,
+            "median": 1.0161110592087974,
+            "p75": 1.0426855070019228,
+            "maximum": 1.9346210412817353,
+            "mean": 1.0125320917975733
+          },
+          {
+            "feature": "weightedP95DeltaE00Gain",
+            "count": 4,
+            "minimum": 0.8076805983714799,
+            "p25": 0.8076805983714799,
+            "median": 1.655916790254679,
+            "p75": 1.6945849409966325,
+            "maximum": 2.416730060913771,
+            "mean": 1.6437280976341406
+          }
+        ]
+      }
+    ]
+  },
+  "structuralConclusion": {
+    "stableDirectionalSeparation": false,
+    "finding": "Boundary, switching, dominance, micro-component, and fragmentation distributions overlap across larger, smaller, and neutral consensus.",
+    "productionUse": "unsupported"
+  },
+  "calibration": {
+    "logicalCaseCount": 15,
+    "comparisonCount": 35,
+    "consensus": {
+      "comparisonCount": 35,
+      "usableConsensusCount": 28,
+      "ambiguousCount": 7,
+      "labelCounts": {
+        "ambiguous": 3,
+        "larger": 10,
+        "neutral": 14,
+        "smaller": 4,
+        "uncertain": 4
+      },
+      "statusCounts": {
+        "majority_directional_consensus": 7,
+        "majority_neutral": 8,
+        "persistent_ambiguity": 3,
+        "preserved_directional_consensus": 7,
+        "preserved_neutral_consensus": 6,
+        "uncertain": 4
+      }
+    },
+    "frozenPolicyResult": {
+      "decisionCount": 4,
+      "decisionCoveragePercentage": 11.428571428571429,
+      "abstentionCount": 31,
+      "abstentionPercentage": 88.57142857142857,
+      "decisionLabelCounts": {
+        "larger": 4
+      },
+      "correctLargerRecommendationCount": 4,
+      "correctRetainOrSmallerDecisionCount": 0,
+      "falseSmallCount": 0,
+      "falseLargeCount": 0,
+      "visualRegressionRecommendationCount": 0,
+      "ambiguousHumanDecisionCount": 0,
+      "resolvedRecommendationPrecision": 1
+    },
+    "validationLabelsInspectedDuringFreeze": false,
+    "selectionFinding": "The two-guard rule was the only frozen nontrivial candidate; calibration recommendations were 4/4 larger consensus with no smaller, neutral, ambiguous, or uncertain hits."
+  },
+  "frozenCandidatePolicy": {
+    "schemaVersion": "1.0.0",
+    "policyId": "a02-c2-conservative-adjacent-larger-v1",
+    "status": "evaluation-only",
+    "featureSet": [
+      "weightedMeanDeltaE00Gain",
+      "additionalUsedColors"
+    ],
+    "thresholds": {
+      "weightedMeanDeltaE00GainMinimum": 2,
+      "additionalUsedColorsMinimum": 1
+    },
+    "decisionOrdering": [
+      "recommend_larger_when_all_thresholds_pass",
+      "otherwise_abstain"
+    ],
+    "tieBehavior": "threshold equality passes",
+    "abstainBehavior": "retain current profile; no automatic change",
+    "policySha256": "b620e405a7d3e8bac1bfc6638a89b8358028b2ff35259ef0630cfcf074bfc60e"
+  },
+  "heldOutValidation": {
+    "logicalCaseCount": 9,
+    "comparisonCount": 25,
+    "consensus": {
+      "comparisonCount": 25,
+      "usableConsensusCount": 24,
+      "ambiguousCount": 1,
+      "labelCounts": {
+        "larger": 5,
+        "neutral": 11,
+        "smaller": 8,
+        "uncertain": 1
+      },
+      "statusCounts": {
+        "majority_directional_consensus": 8,
+        "majority_neutral": 4,
+        "preserved_directional_consensus": 5,
+        "preserved_neutral_consensus": 7,
+        "uncertain": 1
+      }
+    },
+    "decisionCount": 6,
+    "decisionCoveragePercentage": 24,
+    "abstentionCount": 19,
+    "abstentionPercentage": 76,
+    "decisionLabelCounts": {
+      "larger": 3,
+      "neutral": 1,
+      "smaller": 1,
+      "uncertain": 1
+    },
+    "correctLargerRecommendationCount": 3,
+    "correctRetainOrSmallerDecisionCount": 0,
+    "falseSmallCount": 0,
+    "falseLargeCount": 2,
+    "visualRegressionRecommendationCount": 1,
+    "ambiguousHumanDecisionCount": 1,
+    "resolvedRecommendationPrecision": 0.6,
+    "policyChangedAfterValidation": false
+  },
+  "globalSixProfileApplicability": {
+    "supported": false,
+    "reason": "The evidence covers sampled adjacent transitions and does not establish monotonic or globally optimal selection across 24/48/72/120/168/221."
+  },
+  "productOptions": {
+    "fullAutomatic": "not supported",
+    "conservativeWithAbstention": "evaluated candidate failed held-out safety because it produced a visual-regression recommendation",
+    "manualWithExplanatoryUx": "supported current direction"
+  },
+  "recommendedProductDirection": "Keep manual Generation Color Set selection; do not activate automatic Recommendation.",
+  "semantics": {
+    "currentGeneration": "profile actually used for the displayed Pattern",
+    "recommendedForYourImage": "advisory only; not activated",
+    "minimumRequiredForCurrentPattern": "material coverage only",
+    "recommendationDoesNotAlter": "Required, Refill, Materials, or Purchase without successful regeneration"
+  },
+  "finalDecision": "DETERMINISTIC GENERATION RECOMMENDATION NOT RELIABLE ENOUGH",
+  "canonicalC2EvidenceSha256": "32a3c46973f68c51fb93140be7fb9811fc7347ed6a8b36dce120af06c420e02f"
+}

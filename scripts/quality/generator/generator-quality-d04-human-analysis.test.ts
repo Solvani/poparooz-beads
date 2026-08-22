@@ -5,6 +5,7 @@ import {
   consensusStatus,
   linearWeightedCohensKappa,
   revealDirection,
+  threeReviewerConsensus,
 } from "./generator-quality-d04-human-analysis.ts";
 
 describe("D04-A02 human analysis", () => {
@@ -37,5 +38,24 @@ describe("D04-A02 human analysis", () => {
     expect(perfect.includedPairCount).toBe(3);
     expect(perfect.excludedCannotJudgeCount).toBe(1);
     expect(perfect.kappa).toBe(1);
+  });
+
+  it("keeps three-reviewer majority, ambiguity, and uncertainty distinct", () => {
+    expect(threeReviewerConsensus(["larger", "larger", "neutral"])).toEqual({
+      status: "majority_directional_consensus",
+      label: "larger",
+    });
+    expect(threeReviewerConsensus(["neutral", "neutral", "smaller"])).toEqual({
+      status: "majority_neutral",
+      label: "neutral",
+    });
+    expect(threeReviewerConsensus(["larger", "smaller", "neutral"])).toEqual({
+      status: "persistent_ambiguity",
+      label: "ambiguous",
+    });
+    expect(threeReviewerConsensus(["larger", "smaller", "cannot"])).toEqual({
+      status: "uncertain",
+      label: "uncertain",
+    });
   });
 });

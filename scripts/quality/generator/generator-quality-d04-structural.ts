@@ -138,7 +138,13 @@ function measure(pattern: PublicPatternResult): Readonly<{
         localX += 1
       ) {
         const localCode = codes[localY * width + localX];
-        if (localCode !== null && localCode !== code) localCodes.add(localCode);
+        if (
+          localCode !== undefined &&
+          localCode !== null &&
+          localCode !== code
+        ) {
+          localCodes.add(localCode);
+        }
       }
     }
     localSwitchTotal += localCodes.size;

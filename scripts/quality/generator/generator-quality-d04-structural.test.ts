@@ -70,6 +70,9 @@ function pattern(indices: readonly number[]): PublicPatternResult {
     colors,
     materials: [],
     totals: {
+      width,
+      height: width,
+      totalPositions: indices.length,
       totalBeads: occupied,
       transparentPositions: indices.length - occupied,
       colorCount: colors.length,

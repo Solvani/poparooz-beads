@@ -1,0 +1,311 @@
+{
+  "schemaVersion": "1.0.0",
+  "packetSetId": "poparooz-e05-d04-a02-blind-review-1.0.0",
+  "stage": "P3-A03-E05-D04-A02",
+  "reviewerCountRequired": 2,
+  "independentReviewRequired": true,
+  "packetCount": 60,
+  "packets": [
+    {
+      "packetId": "a02-review-001",
+      "leftImageSha256": "1aad6eeb51fd03b0437c5fc5ec91a7dda93bc5cc4c4226b72fbf39cac5ba2ba7",
+      "rightImageSha256": "5cabb181ec68569fab39a48d5bc5dc7ade093aa8b3b8909a2d163e2735024236"
+    },
+    {
+      "packetId": "a02-review-002",
+      "leftImageSha256": "c8af8166e90db8bbaa43070a9f20dce3c034a757515cf56a457a0b473f037be2",
+      "rightImageSha256": "c15d813a42e588331a1ab8154703b8e2cac1db9cad7c683cdf2693416d70afb7"
+    },
+    {
+      "packetId": "a02-review-003",
+      "leftImageSha256": "678be9d3dcac7661f070de89d9c6761950dfc7374dfc2a635ed7241ffeef2521",
+      "rightImageSha256": "6a07e6f4f3020f9bd8daf52b810ec747fb74018147804ff31d9d793e0ab6878d"
+    },
+    {
+      "packetId": "a02-review-004",
+      "leftImageSha256": "ce1d81be5c4aeb7fad21a95b86b60f0a973a98ba8bc48fdc92a5c89c725ef21c",
+      "rightImageSha256": "58df5d8efe5f877360a5f9f9a8dc1b793ad1ba1184208b2f500d99f92e55e7e7"
+    },
+    {
+      "packetId": "a02-review-005",
+      "leftImageSha256": "136fe77457ead8949019094f54d69f2aaabb8b1053357ffbebf23ffd4aa0d292",
+      "rightImageSha256": "06b6c2b072952e345d2032a66856620da1ee8fe29bebc24234819efbb58ee21d"
+    },
+    {
+      "packetId": "a02-review-006",
+      "leftImageSha256": "de1e62e063a291e5e4fc0dd1779bbd4b3767fbf09990d40192940eff50390a35",
+      "rightImageSha256": "4847b7f2c66b7642177b160c300b1bdb4c519f991bf6930ad10ee79fabc004e3"
+    },
+    {
+      "packetId": "a02-review-007",
+      "leftImageSha256": "59ee3a7da104400b56f1d960c9c977625b2a4ada004c0a35a846c2e62384d513",
+      "rightImageSha256": "a296264b74f5a7fe8ae6e38652941f7ffff1ecfa5334079f235c6ba8f3f7082e"
+    },
+    {
+      "packetId": "a02-review-008",
+      "leftImageSha256": "5e14ba64bf699b3b2d8863c267dae7ab4bcd968e252a4d32ae506a41ac0748bf",
+      "rightImageSha256": "45c5d439b3ba34178f2294eaacd51d5ba47035da713e5dc6f94703e8ec3b360d"
+    },
+    {
+      "packetId": "a02-review-009",
+      "leftImageSha256": "6378a70ce4cdb1aea1d5ede309d50baa46630841bafe6e00b113cedb840a482c",
+      "rightImageSha256": "64c97b04ef9080409255b1911c6121e54564e5c9885a13ef9259108b5b3b3605"
+    },
+    {
+      "packetId": "a02-review-010",
+      "leftImageSha256": "4b465e7507a9f18e6a7abc0c97a620a9831d1e9f713586e351f0c3afed8832a0",
+      "rightImageSha256": "0ead6dad1f6160b0bce82428e59a83a61a449a3aa69f946fe2751f21595f4f77"
+    },
+    {
+      "packetId": "a02-review-011",
+      "leftImageSha256": "189d1672fb27b74d83786faea15f739bcd47c472b8f0aa0753b7873bebcc07c5",
+      "rightImageSha256": "32e9ffe55ef0328690d6b8ca822405484f7a4164e4fbe3671f9aa63a6f306c19"
+    },
+    {
+      "packetId": "a02-review-012",
+      "leftImageSha256": "32e9ffe55ef0328690d6b8ca822405484f7a4164e4fbe3671f9aa63a6f306c19",
+      "rightImageSha256": "32e9ffe55ef0328690d6b8ca822405484f7a4164e4fbe3671f9aa63a6f306c19"
+    },
+    {
+      "packetId": "a02-review-013",
+      "leftImageSha256": "5a23e056cba67d18285e76bcd713b16bcbc0194bbd360e0d8eb34b9c3853306e",
+      "rightImageSha256": "5a23e056cba67d18285e76bcd713b16bcbc0194bbd360e0d8eb34b9c3853306e"
+    },
+    {
+      "packetId": "a02-review-014",
+      "leftImageSha256": "085822df412484b6f8d26f199d537f20f29c199792af6246e4c20ae2c1e7491d",
+      "rightImageSha256": "743e44db7087a4be8217ea2d82287f34add9f415ea393cbf02c3f1e0908c60f0"
+    },
+    {
+      "packetId": "a02-review-015",
+      "leftImageSha256": "8f69cf15b6abdfa951a4eed895604cd8a7d62203fc84dffdf6e759f66401407b",
+      "rightImageSha256": "c985674dc8368ba525bca197b66a9be6d493cf27a172d49b7e6af5c54dbc7e91"
+    },
+    {
+      "packetId": "a02-review-016",
+      "leftImageSha256": "2ff86d1a7bc7eebc70df8155e072ea19db1ad026f38571cace590f886332cfdc",
+      "rightImageSha256": "864440544b7a3da1364bbc34a41cbeae442cac1b4ddefae7fbc8112081b02d33"
+    },
+    {
+      "packetId": "a02-review-017",
+      "leftImageSha256": "8525829eb12940a19cad86adfc62849b737582e2edb9338ed326026d5439b7c6",
+      "rightImageSha256": "3dea3162ac261f766fdfb7bf0e0551e848a406fbb23fe5e9d521bb36f4777b1f"
+    },
+    {
+      "packetId": "a02-review-018",
+      "leftImageSha256": "c1ff5de82f283138c769ef55629a4c2da2d5f695efa4789ca6f060b2963e04c7",
+      "rightImageSha256": "9704adffe7c626fdb7a158dd859b7b210003cd4959eb3a8632b7abc19323ad43"
+    },
+    {
+      "packetId": "a02-review-019",
+      "leftImageSha256": "cc254df277f3b85d15b91dda7acc877e99101decbf57e13d8c1717c680d8a621",
+      "rightImageSha256": "8b6f5ea351d5c2b9d10c1781eb1acc347bcb759170c676e353aa563bbaae6947"
+    },
+    {
+      "packetId": "a02-review-020",
+      "leftImageSha256": "f1f5d0f779b69d8312c12bbf82ac32fc45a57689d812aa33278fbe20223d1db4",
+      "rightImageSha256": "0c2434257579f1eeb99619213428bc0fd21d04883a5a0dca6f270b94eedf2c11"
+    },
+    {
+      "packetId": "a02-review-021",
+      "leftImageSha256": "e7bbfc4623a739d35876237352afb5f139db7a425367cbd368b55fd00d1077bc",
+      "rightImageSha256": "362848527a6846264828b74da31ccfb678e8806d68534617937cd4f004faa1f8"
+    },
+    {
+      "packetId": "a02-review-022",
+      "leftImageSha256": "9cd5b9815ade6f4ae292b541e3b8c0f43e343ed65abcb0f31e5a91e5f53ebf5b",
+      "rightImageSha256": "de9cc6003078bc86b0bb54b5ce7243d420ddd22bf2afbabb9cf15fe7e1cd13ac"
+    },
+    {
+      "packetId": "a02-review-023",
+      "leftImageSha256": "f721f046b786c84fc4cc56faf20f67727e1e102918457169734d13de947640a0",
+      "rightImageSha256": "ed209c82f911bfb8bce0c553a87e03765a700376c0f7a2282a5b3a0f1a9088c0"
+    },
+    {
+      "packetId": "a02-review-024",
+      "leftImageSha256": "8639481f02ee6986d0dc499ad416b38a5823b204cf02c1f97e55c6e4399db974",
+      "rightImageSha256": "21300ffdcdafc8c5e48ae6a4abc5527cf082b38b0c7da3c65651aae983fbd143"
+    },
+    {
+      "packetId": "a02-review-025",
+      "leftImageSha256": "2ff86d1a7bc7eebc70df8155e072ea19db1ad026f38571cace590f886332cfdc",
+      "rightImageSha256": "89e0dc37f9c00f6d561f6dacebf0a2bd5c23e487a26e44a1a4098e4df4e4bc1f"
+    },
+    {
+      "packetId": "a02-review-026",
+      "leftImageSha256": "731e5e252a6400b28b6074d58dffc8ccd4b096919a30edca2a8777ec73f0d64d",
+      "rightImageSha256": "3c2f58daadb8929f2d345bd324e8bb668ca36727fe12d88d9c4af4b741e021c2"
+    },
+    {
+      "packetId": "a02-review-027",
+      "leftImageSha256": "eef13927baf4f54bca5b6302d3cecb0d419cb5e1af705218e8e93b8e89cce8f4",
+      "rightImageSha256": "4c81af2499649ca8b8586b054ea1c59672608e77f41c870c71fac0cdcf5d410d"
+    },
+    {
+      "packetId": "a02-review-028",
+      "leftImageSha256": "6c59d469d215c0d6191ada865e926bd075335c9062ce9e93d65a3d51d5ec3aad",
+      "rightImageSha256": "b406ac1ef2437942807c271a17cc74985752d450db636f4f46a7ab4050b0bf72"
+    },
+    {
+      "packetId": "a02-review-029",
+      "leftImageSha256": "864440544b7a3da1364bbc34a41cbeae442cac1b4ddefae7fbc8112081b02d33",
+      "rightImageSha256": "7d0bfd2d4d49d39f7819c71ba299027ff88d06ebcf8462c4e6ea94b24ad9d10e"
+    },
+    {
+      "packetId": "a02-review-030",
+      "leftImageSha256": "e8cec2b6b6a5f687293841e8c34a4e8da36c50378d2fc09f85089cbb6d684d2b",
+      "rightImageSha256": "e8cec2b6b6a5f687293841e8c34a4e8da36c50378d2fc09f85089cbb6d684d2b"
+    },
+    {
+      "packetId": "a02-review-031",
+      "leftImageSha256": "ff9738e6214611228da6ce36f19edc5d17774d52b442080e10b7c32af755edb0",
+      "rightImageSha256": "66ba795270ea0d9d8cb63e84dd7e1ace643cbe85f10a416c5717d9ea2a4fa802"
+    },
+    {
+      "packetId": "a02-review-032",
+      "leftImageSha256": "270e581beaee1b4fb895966ebc1a1def1651884dfcff4b0479736a5805daeef5",
+      "rightImageSha256": "b9629b4b198ac02aa7073447b57953bd2fd1417d820d780ba10cc780533b2771"
+    },
+    {
+      "packetId": "a02-review-033",
+      "leftImageSha256": "c0b154f050d0414a25af29e9d7aaf496ab2732e153dab98d7e3b7048b990cdb8",
+      "rightImageSha256": "66ba795270ea0d9d8cb63e84dd7e1ace643cbe85f10a416c5717d9ea2a4fa802"
+    },
+    {
+      "packetId": "a02-review-034",
+      "leftImageSha256": "7f2988f5b0c0e5b5b6f5659fd1a43e6152d6977327445d3274780c7137df3b9c",
+      "rightImageSha256": "4d51e7a12a0a1e6f3647b603691250ea85ac2c5ac95241d8189af5c78618699d"
+    },
+    {
+      "packetId": "a02-review-035",
+      "leftImageSha256": "bbb93761ac4baf3c1f5b34c322a2baaa19fa8b42a8a70c1b463dddd7f5c91a55",
+      "rightImageSha256": "6b5bfcbf16988c182fb9463b6189dbac7fc854135dc7d3169399d5fc6b99c54e"
+    },
+    {
+      "packetId": "a02-review-036",
+      "leftImageSha256": "4f5fe0c4a07d9ce166cded2b01bca9271a3de990ef0e76e6578de69b41193aa6",
+      "rightImageSha256": "ce2f0c8805923f80251904c11db64b94d003797be75894ab5f3b85e18147d8d8"
+    },
+    {
+      "packetId": "a02-review-037",
+      "leftImageSha256": "1734ea9e38dd0af7c05fe81e840cdd12a81aa0267e15adf70a8fac32054df7d8",
+      "rightImageSha256": "a434ce6aab1e98afb9bbf9532603c3f8eb91439fd9997419d76898778220a5ba"
+    },
+    {
+      "packetId": "a02-review-038",
+      "leftImageSha256": "ed209c82f911bfb8bce0c553a87e03765a700376c0f7a2282a5b3a0f1a9088c0",
+      "rightImageSha256": "962ef1a81b3eadb00c4eda23710616a10e9108ed70911e08912a4f4ca63dff30"
+    },
+    {
+      "packetId": "a02-review-039",
+      "leftImageSha256": "ccc6bbbe93d14d553fc30b934a4ba47cd480e2305ab2679c663dde1f270e6976",
+      "rightImageSha256": "39a649a46e3e9e36feb58fb860e3fceb38260af2e396430bb9175972b4530687"
+    },
+    {
+      "packetId": "a02-review-040",
+      "leftImageSha256": "01aa21c271f9319f7c9a479a4302b1a2bc2b9515985ec8a8681d6ee78a262aeb",
+      "rightImageSha256": "f6c7376c9fc7ad21f543b8822ab187a02a9dd4e67ca4c21f625fc3de309bb2e4"
+    },
+    {
+      "packetId": "a02-review-041",
+      "leftImageSha256": "d05af3b2672751be0e22ddd3cad852922a96eb4776ce581e3abe66624f03b117",
+      "rightImageSha256": "11c2b28e47c4cfaad7d45fa9f38d0849497bad4e68c4354cc02fb129e207d896"
+    },
+    {
+      "packetId": "a02-review-042",
+      "leftImageSha256": "de1e62e063a291e5e4fc0dd1779bbd4b3767fbf09990d40192940eff50390a35",
+      "rightImageSha256": "2277b5eb3d83373f5dfae94a13faae33cff806eda21d00c1ef2e9b65b2f980a3"
+    },
+    {
+      "packetId": "a02-review-043",
+      "leftImageSha256": "991e96c30287df7e05d9a0a86f9c4942b8dfa203726afd9e57d1a6f1d67f3d56",
+      "rightImageSha256": "9fd41110eb57540b5120f2afe2e443c6803d726c74eab4c2c2896b545cf3e556"
+    },
+    {
+      "packetId": "a02-review-044",
+      "leftImageSha256": "b477b20b6c88052bf8735d2b4778af5c77da271be4d66296d208dfd72b8a1d4c",
+      "rightImageSha256": "b477b20b6c88052bf8735d2b4778af5c77da271be4d66296d208dfd72b8a1d4c"
+    },
+    {
+      "packetId": "a02-review-045",
+      "leftImageSha256": "5e14ba64bf699b3b2d8863c267dae7ab4bcd968e252a4d32ae506a41ac0748bf",
+      "rightImageSha256": "3c2f58daadb8929f2d345bd324e8bb668ca36727fe12d88d9c4af4b741e021c2"
+    },
+    {
+      "packetId": "a02-review-046",
+      "leftImageSha256": "28436ca8f8c291c58acc8a4b7e3105db8ec3c5ef16587e1a15da3d2edde31e9a",
+      "rightImageSha256": "44ed36f493cbda03a4e45c9faaae43795a3b42fb91bc32398ff5d594a046c579"
+    },
+    {
+      "packetId": "a02-review-047",
+      "leftImageSha256": "a6899d23072bc11b95eb1b3a142d4cebece7df055d0d09335185a1f91d1f3b02",
+      "rightImageSha256": "75fa6238e649f7bb044e799186421336da9d3cc8cc77971f548d9b083f0616b5"
+    },
+    {
+      "packetId": "a02-review-048",
+      "leftImageSha256": "0f46df6d3db5268cb0522b588f86eaad5293460c634d195548ce39765a90f9ad",
+      "rightImageSha256": "3d4c15764f1ce152834a2364fcab767c178b2206d1698d02d21b0024af9e7b47"
+    },
+    {
+      "packetId": "a02-review-049",
+      "leftImageSha256": "483b6bb70b279f352988919d8adcd53d80dea6e3ab2ef9ec57de2646c1245e26",
+      "rightImageSha256": "596d5045cd51951960866eee21a704f8f2df9e2be3c99c39205af0f9c6e63809"
+    },
+    {
+      "packetId": "a02-review-050",
+      "leftImageSha256": "cc254df277f3b85d15b91dda7acc877e99101decbf57e13d8c1717c680d8a621",
+      "rightImageSha256": "a9c54a6184b4c666151b684a4e4ca9b5e42fcdc0f9f1acec327c57f8b3837e8b"
+    },
+    {
+      "packetId": "a02-review-051",
+      "leftImageSha256": "337727ac3f3810d7d3ba10d410c8344d6f0951344e6e9cdba8b21a3edff38f26",
+      "rightImageSha256": "8e46bd55e3cd3b17d2499b66c01a5d85942f9a12e64cebb04508f1748339102a"
+    },
+    {
+      "packetId": "a02-review-052",
+      "leftImageSha256": "f794123e459dc3ca5ff354b81372ba2bf5e571d5e10838ac22028603ba447b3b",
+      "rightImageSha256": "81955f40090955c5884c2ac3e01753302e75a273cb89d41bd74d0bcfd18d719f"
+    },
+    {
+      "packetId": "a02-review-053",
+      "leftImageSha256": "2d0eec9864e4798a6a2a740f59441a713ff16b51d4e37fd47901b7bb1c398e4e",
+      "rightImageSha256": "71aecf1c211d42b94c65e0291dc33b603e1a1ff044fc8502c70063fb2e6d332a"
+    },
+    {
+      "packetId": "a02-review-054",
+      "leftImageSha256": "f1f5d0f779b69d8312c12bbf82ac32fc45a57689d812aa33278fbe20223d1db4",
+      "rightImageSha256": "6e1444bdfe4ebd7a1d7f68012fcd83c279c8fc032198f2983cd63ca2a26e3f05"
+    },
+    {
+      "packetId": "a02-review-055",
+      "leftImageSha256": "6f05a29cb7109a929dd6540382285d1ef4e08b092e9b5a9444a16005bee8b503",
+      "rightImageSha256": "ddb77dafb8e885df3ac72b3c0991cc13dd590dacf72468f82e12a1ac8a0c1e10"
+    },
+    {
+      "packetId": "a02-review-056",
+      "leftImageSha256": "ddb77dafb8e885df3ac72b3c0991cc13dd590dacf72468f82e12a1ac8a0c1e10",
+      "rightImageSha256": "3a131230887046a1183061b47278de99a6e7fbf95634cc01a00fca8e675ed077"
+    },
+    {
+      "packetId": "a02-review-057",
+      "leftImageSha256": "b040501c34b612da918e5288bb0adb7042214ba52cc2fa0bb92ab5bff2e01d2b",
+      "rightImageSha256": "fa1e17b6896ff3355366fcdce2828d6ff1a86100fad5e1982b73001d3e96a072"
+    },
+    {
+      "packetId": "a02-review-058",
+      "leftImageSha256": "bba5e81fb18d7d9b07882825d63bc53213532323bceba9fe2a07af5fb2b44a84",
+      "rightImageSha256": "a15d45c2400562b0d37772402671ebcdcd13792b739698850a1c05b003a57f33"
+    },
+    {
+      "packetId": "a02-review-059",
+      "leftImageSha256": "f9cf2220a8729eed621dcdfd36f554911c4ce3be1a4d0c642f93597742c7c16b",
+      "rightImageSha256": "ba355ad64f06838f1b9075ce54121c9751935a6b47f16533b6770b42c615687d"
+    },
+    {
+      "packetId": "a02-review-060",
+      "leftImageSha256": "2ae2385cf48484b769f492b77bb18f139cb0ad0bb6260e52dde94284306c954c",
+      "rightImageSha256": "3cb28ca71ad821e7e70ee5c0024dd5d4fd2bb31a6183d88c72fc39d1d2cbca45"
+    }
+  ],
+  "packetSetSha256": "1feeedeb9b04cd407526f40dd25c04a351c1389a20df6538eb8789b4027f15d7"
+}

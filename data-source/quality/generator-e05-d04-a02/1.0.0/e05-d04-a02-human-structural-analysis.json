@@ -1,0 +1,1730 @@
+{
+  "schemaVersion": "1.0.0",
+  "evidenceId": "poparooz-e05-d04-a02-human-structural-analysis",
+  "stage": "P3-A03-E05-D04-A02-B",
+  "productionActivation": false,
+  "sourceGitHead": "4566c73c30f5b700e580004c2d4a1580fd0eacef",
+  "productionHead": "9b411803afb26d618abe94f411b1bb342099fb14",
+  "identities": {
+    "packetSetSha256": "1feeedeb9b04cd407526f40dd25c04a351c1389a20df6538eb8789b4027f15d7",
+    "a01CanonicalEvidenceSha256": "1b58d8670444fb91f9b5026db06633aa0d975a01261b2adcd2bb0ef515850c89",
+    "a02StructuralCanonicalEvidenceSha256": "e47533d6a96fe244c188d71f173afae57617b2e1ada0a3ea6358c60e74a35a5c",
+    "reviewers": [
+      {
+        "reviewerId": "reviewer-1",
+        "sessionId": "c208effc-8783-4880-94e4-9557d952d181",
+        "resultSha256": "55d6b4654a849cb6ba5e69e1017bef80e3bb09eb986ee36126294c824755fe17",
+        "originalFileByteSha256": "acd480f29ee368c6803a2790a9364fd55904764a117973295378b54899cbbbff"
+      },
+      {
+        "reviewerId": "reviewer-2",
+        "sessionId": "83933aaf-f791-46ca-815e-d0ecbb6bbe22",
+        "resultSha256": "801e0ae45a4c46d85122d6e83d78e6bfda6c897af878c6e65b178b7a85b21a26",
+        "originalFileByteSha256": "4f1fee335660f26a303b0c5f6ef0d837286a3436f40271f5462705ab71c332e2"
+      }
+    ]
+  },
+  "integrity": {
+    "reviewerFilesValidated": 2,
+    "eachLocked": true,
+    "responsesPerReviewer": 60,
+    "exactPacketSetCoverage": true,
+    "originalFilesAvailableOnlyInIgnoredPrivateArtifacts": true,
+    "revealAfterIntegrityValidation": true
+  },
+  "agreement": {
+    "comparisonCount": 60,
+    "exactAgreementCount": 18,
+    "exactAgreementPercentage": 30,
+    "broadAgreementCount": 25,
+    "broadAgreementPercentage": 41.66666666666667,
+    "excludingCannotJudge": {
+      "comparisonCount": 52,
+      "exactAgreementCount": 18,
+      "broadAgreementCount": 25
+    },
+    "directOppositeCount": 12,
+    "directOppositePercentage": 20,
+    "linearWeightedKappa": {
+      "includedPairCount": 52,
+      "excludedCannotJudgeCount": 8,
+      "observedWeightedAgreement": 0.6586538461538461,
+      "expectedWeightedAgreement": 0.6255547337278106,
+      "kappa": 0.08839506172839526
+    },
+    "blindCrossTab": {
+      "A|A": 4,
+      "A|B": 6,
+      "A|neutral": 4,
+      "B|A": 6,
+      "B|B": 8,
+      "B|neutral": 3,
+      "cannot|A": 1,
+      "cannot|B": 1,
+      "cannot|neutral": 6,
+      "neutral|A": 7,
+      "neutral|B": 1,
+      "neutral|neutral": 13
+    }
+  },
+  "groupedAgreement": {
+    "byTransition": [
+      {
+        "key": "120->168",
+        "comparisonCount": 11,
+        "exactAgreementCount": 0,
+        "exactAgreementPercentage": 0,
+        "broadAgreementCount": 2,
+        "broadAgreementPercentage": 18.181818181818183,
+        "excludingCannotJudge": {
+          "comparisonCount": 10,
+          "exactAgreementCount": 0,
+          "broadAgreementCount": 2
+        },
+        "directOppositeCount": 1,
+        "directOppositePercentage": 9.090909090909092,
+        "linearWeightedKappa": {
+          "includedPairCount": 10,
+          "excludedCannotJudgeCount": 1,
+          "observedWeightedAgreement": 0.65,
+          "expectedWeightedAgreement": 0.6350000000000001,
+          "kappa": 0.04109589041095865
+        },
+        "blindCrossTab": {
+          "A|A": 1,
+          "B|A": 1,
+          "B|B": 1,
+          "B|neutral": 3,
+          "cannot|neutral": 1,
+          "neutral|A": 3,
+          "neutral|B": 1
+        }
+      },
+      {
+        "key": "168->221",
+        "comparisonCount": 6,
+        "exactAgreementCount": 5,
+        "exactAgreementPercentage": 83.33333333333334,
+        "broadAgreementCount": 5,
+        "broadAgreementPercentage": 83.33333333333334,
+        "excludingCannotJudge": {
+          "comparisonCount": 6,
+          "exactAgreementCount": 5,
+          "broadAgreementCount": 5
+        },
+        "directOppositeCount": 0,
+        "directOppositePercentage": 0,
+        "linearWeightedKappa": {
+          "includedPairCount": 6,
+          "excludedCannotJudgeCount": 0,
+          "observedWeightedAgreement": 0.9583333333333334,
+          "expectedWeightedAgreement": 0.8333333333333334,
+          "kappa": 0.7500000000000002
+        },
+        "blindCrossTab": {
+          "A|A": 1,
+          "neutral|A": 1,
+          "neutral|neutral": 4
+        }
+      },
+      {
+        "key": "24->48",
+        "comparisonCount": 10,
+        "exactAgreementCount": 3,
+        "exactAgreementPercentage": 30,
+        "broadAgreementCount": 6,
+        "broadAgreementPercentage": 60,
+        "excludingCannotJudge": {
+          "comparisonCount": 8,
+          "exactAgreementCount": 3,
+          "broadAgreementCount": 6
+        },
+        "directOppositeCount": 1,
+        "directOppositePercentage": 10,
+        "linearWeightedKappa": {
+          "includedPairCount": 8,
+          "excludedCannotJudgeCount": 2,
+          "observedWeightedAgreement": 0.71875,
+          "expectedWeightedAgreement": 0.5546875,
+          "kappa": 0.3684210526315789
+        },
+        "blindCrossTab": {
+          "A|A": 1,
+          "B|A": 1,
+          "B|B": 4,
+          "cannot|A": 1,
+          "cannot|B": 1,
+          "neutral|A": 1,
+          "neutral|neutral": 1
+        }
+      },
+      {
+        "key": "48->72",
+        "comparisonCount": 13,
+        "exactAgreementCount": 5,
+        "exactAgreementPercentage": 38.46153846153847,
+        "broadAgreementCount": 5,
+        "broadAgreementPercentage": 38.46153846153847,
+        "excludingCannotJudge": {
+          "comparisonCount": 12,
+          "exactAgreementCount": 5,
+          "broadAgreementCount": 5
+        },
+        "directOppositeCount": 5,
+        "directOppositePercentage": 38.46153846153847,
+        "linearWeightedKappa": {
+          "includedPairCount": 12,
+          "excludedCannotJudgeCount": 1,
+          "observedWeightedAgreement": 0.5416666666666666,
+          "expectedWeightedAgreement": 0.6458333333333335,
+          "kappa": -0.29411764705882415
+        },
+        "blindCrossTab": {
+          "A|B": 3,
+          "A|neutral": 1,
+          "B|A": 2,
+          "cannot|neutral": 1,
+          "neutral|A": 1,
+          "neutral|neutral": 5
+        }
+      },
+      {
+        "key": "72->120",
+        "comparisonCount": 20,
+        "exactAgreementCount": 5,
+        "exactAgreementPercentage": 25,
+        "broadAgreementCount": 7,
+        "broadAgreementPercentage": 35,
+        "excludingCannotJudge": {
+          "comparisonCount": 16,
+          "exactAgreementCount": 5,
+          "broadAgreementCount": 7
+        },
+        "directOppositeCount": 5,
+        "directOppositePercentage": 25,
+        "linearWeightedKappa": {
+          "includedPairCount": 16,
+          "excludedCannotJudgeCount": 4,
+          "observedWeightedAgreement": 0.609375,
+          "expectedWeightedAgreement": 0.583984375,
+          "kappa": 0.06103286384976526
+        },
+        "blindCrossTab": {
+          "A|A": 1,
+          "A|B": 3,
+          "A|neutral": 3,
+          "B|A": 2,
+          "B|B": 3,
+          "cannot|neutral": 4,
+          "neutral|A": 1,
+          "neutral|neutral": 3
+        }
+      }
+    ],
+    "byMaximumColors": [
+      {
+        "key": "16",
+        "comparisonCount": 15,
+        "exactAgreementCount": 5,
+        "exactAgreementPercentage": 33.33333333333333,
+        "broadAgreementCount": 8,
+        "broadAgreementPercentage": 53.333333333333336,
+        "excludingCannotJudge": {
+          "comparisonCount": 15,
+          "exactAgreementCount": 5,
+          "broadAgreementCount": 8
+        },
+        "directOppositeCount": 1,
+        "directOppositePercentage": 6.666666666666667,
+        "linearWeightedKappa": {
+          "includedPairCount": 15,
+          "excludedCannotJudgeCount": 0,
+          "observedWeightedAgreement": 0.7333333333333333,
+          "expectedWeightedAgreement": 0.6599999999999999,
+          "kappa": 0.21568627450980396
+        },
+        "blindCrossTab": {
+          "A|A": 2,
+          "A|B": 1,
+          "B|B": 2,
+          "B|neutral": 2,
+          "neutral|A": 4,
+          "neutral|neutral": 4
+        }
+      },
+      {
+        "key": "32",
+        "comparisonCount": 33,
+        "exactAgreementCount": 9,
+        "exactAgreementPercentage": 27.27272727272727,
+        "broadAgreementCount": 13,
+        "broadAgreementPercentage": 39.39393939393939,
+        "excludingCannotJudge": {
+          "comparisonCount": 26,
+          "exactAgreementCount": 9,
+          "broadAgreementCount": 13
+        },
+        "directOppositeCount": 8,
+        "directOppositePercentage": 24.242424242424242,
+        "linearWeightedKappa": {
+          "includedPairCount": 26,
+          "excludedCannotJudgeCount": 7,
+          "observedWeightedAgreement": 0.6346153846153846,
+          "expectedWeightedAgreement": 0.6390532544378699,
+          "kappa": -0.012295081967213333
+        },
+        "blindCrossTab": {
+          "A|A": 2,
+          "A|B": 3,
+          "A|neutral": 3,
+          "B|A": 5,
+          "B|B": 3,
+          "cannot|A": 1,
+          "cannot|neutral": 6,
+          "neutral|A": 2,
+          "neutral|neutral": 8
+        }
+      },
+      {
+        "key": "64",
+        "comparisonCount": 12,
+        "exactAgreementCount": 4,
+        "exactAgreementPercentage": 33.33333333333333,
+        "broadAgreementCount": 4,
+        "broadAgreementPercentage": 33.33333333333333,
+        "excludingCannotJudge": {
+          "comparisonCount": 11,
+          "exactAgreementCount": 4,
+          "broadAgreementCount": 4
+        },
+        "directOppositeCount": 3,
+        "directOppositePercentage": 25,
+        "linearWeightedKappa": {
+          "includedPairCount": 11,
+          "excludedCannotJudgeCount": 1,
+          "observedWeightedAgreement": 0.6136363636363636,
+          "expectedWeightedAgreement": 0.5971074380165288,
+          "kappa": 0.04102564102564142
+        },
+        "blindCrossTab": {
+          "A|B": 2,
+          "A|neutral": 1,
+          "B|A": 1,
+          "B|B": 3,
+          "B|neutral": 1,
+          "cannot|B": 1,
+          "neutral|A": 1,
+          "neutral|B": 1,
+          "neutral|neutral": 1
+        }
+      }
+    ],
+    "bySplit": [
+      {
+        "key": "calibration",
+        "comparisonCount": 35,
+        "exactAgreementCount": 9,
+        "exactAgreementPercentage": 25.71428571428571,
+        "broadAgreementCount": 13,
+        "broadAgreementPercentage": 37.142857142857146,
+        "excludingCannotJudge": {
+          "comparisonCount": 29,
+          "exactAgreementCount": 9,
+          "broadAgreementCount": 13
+        },
+        "directOppositeCount": 9,
+        "directOppositePercentage": 25.71428571428571,
+        "linearWeightedKappa": {
+          "includedPairCount": 29,
+          "excludedCannotJudgeCount": 6,
+          "observedWeightedAgreement": 0.6206896551724138,
+          "expectedWeightedAgreement": 0.6040428061831153,
+          "kappa": 0.04204204204204208
+        },
+        "blindCrossTab": {
+          "A|A": 3,
+          "A|B": 4,
+          "A|neutral": 1,
+          "B|A": 5,
+          "B|B": 4,
+          "B|neutral": 2,
+          "cannot|B": 1,
+          "cannot|neutral": 5,
+          "neutral|A": 3,
+          "neutral|B": 1,
+          "neutral|neutral": 6
+        }
+      },
+      {
+        "key": "validation",
+        "comparisonCount": 25,
+        "exactAgreementCount": 9,
+        "exactAgreementPercentage": 36,
+        "broadAgreementCount": 12,
+        "broadAgreementPercentage": 48,
+        "excludingCannotJudge": {
+          "comparisonCount": 23,
+          "exactAgreementCount": 9,
+          "broadAgreementCount": 12
+        },
+        "directOppositeCount": 3,
+        "directOppositePercentage": 12,
+        "linearWeightedKappa": {
+          "includedPairCount": 23,
+          "excludedCannotJudgeCount": 2,
+          "observedWeightedAgreement": 0.7065217391304348,
+          "expectedWeightedAgreement": 0.6545368620037809,
+          "kappa": 0.15047879616963022
+        },
+        "blindCrossTab": {
+          "A|A": 1,
+          "A|B": 2,
+          "A|neutral": 3,
+          "B|A": 1,
+          "B|B": 4,
+          "B|neutral": 1,
+          "cannot|A": 1,
+          "cannot|neutral": 1,
+          "neutral|A": 4,
+          "neutral|neutral": 7
+        }
+      }
+    ],
+    "byCategory": [
+      {
+        "key": "complex-photo",
+        "comparisonCount": 1,
+        "exactAgreementCount": 0,
+        "exactAgreementPercentage": 0,
+        "broadAgreementCount": 0,
+        "broadAgreementPercentage": 0,
+        "excludingCannotJudge": {
+          "comparisonCount": 1,
+          "exactAgreementCount": 0,
+          "broadAgreementCount": 0
+        },
+        "directOppositeCount": 1,
+        "directOppositePercentage": 100,
+        "linearWeightedKappa": {
+          "includedPairCount": 1,
+          "excludedCannotJudgeCount": 0,
+          "observedWeightedAgreement": 0.5,
+          "expectedWeightedAgreement": 0.5,
+          "kappa": 0
+        },
+        "blindCrossTab": {
+          "B|A": 1
+        }
+      },
+      {
+        "key": "dark-subject-background",
+        "comparisonCount": 2,
+        "exactAgreementCount": 1,
+        "exactAgreementPercentage": 50,
+        "broadAgreementCount": 1,
+        "broadAgreementPercentage": 50,
+        "excludingCannotJudge": {
+          "comparisonCount": 1,
+          "exactAgreementCount": 1,
+          "broadAgreementCount": 1
+        },
+        "directOppositeCount": 0,
+        "directOppositePercentage": 0,
+        "linearWeightedKappa": {
+          "includedPairCount": 1,
+          "excludedCannotJudgeCount": 1,
+          "observedWeightedAgreement": 1,
+          "expectedWeightedAgreement": 1,
+          "kappa": null
+        },
+        "blindCrossTab": {
+          "cannot|neutral": 1,
+          "neutral|neutral": 1
+        }
+      },
+      {
+        "key": "fine-line",
+        "comparisonCount": 6,
+        "exactAgreementCount": 2,
+        "exactAgreementPercentage": 33.33333333333333,
+        "broadAgreementCount": 2,
+        "broadAgreementPercentage": 33.33333333333333,
+        "excludingCannotJudge": {
+          "comparisonCount": 5,
+          "exactAgreementCount": 2,
+          "broadAgreementCount": 2
+        },
+        "directOppositeCount": 2,
+        "directOppositePercentage": 33.33333333333333,
+        "linearWeightedKappa": {
+          "includedPairCount": 5,
+          "excludedCannotJudgeCount": 1,
+          "observedWeightedAgreement": 0.5,
+          "expectedWeightedAgreement": 0.6200000000000001,
+          "kappa": -0.3157894736842109
+        },
+        "blindCrossTab": {
+          "A|B": 1,
+          "B|A": 1,
+          "cannot|neutral": 1,
+          "neutral|A": 1,
+          "neutral|neutral": 2
+        }
+      },
+      {
+        "key": "flat-illustration",
+        "comparisonCount": 7,
+        "exactAgreementCount": 0,
+        "exactAgreementPercentage": 0,
+        "broadAgreementCount": 1,
+        "broadAgreementPercentage": 14.285714285714285,
+        "excludingCannotJudge": {
+          "comparisonCount": 7,
+          "exactAgreementCount": 0,
+          "broadAgreementCount": 1
+        },
+        "directOppositeCount": 3,
+        "directOppositePercentage": 42.857142857142854,
+        "linearWeightedKappa": {
+          "includedPairCount": 7,
+          "excludedCannotJudgeCount": 0,
+          "observedWeightedAgreement": 0.39285714285714285,
+          "expectedWeightedAgreement": 0.5459183673469388,
+          "kappa": -0.33707865168539325
+        },
+        "blindCrossTab": {
+          "A|neutral": 3,
+          "B|A": 3,
+          "B|B": 1
+        }
+      },
+      {
+        "key": "high-saturation",
+        "comparisonCount": 6,
+        "exactAgreementCount": 3,
+        "exactAgreementPercentage": 50,
+        "broadAgreementCount": 4,
+        "broadAgreementPercentage": 66.66666666666666,
+        "excludingCannotJudge": {
+          "comparisonCount": 4,
+          "exactAgreementCount": 3,
+          "broadAgreementCount": 4
+        },
+        "directOppositeCount": 0,
+        "directOppositePercentage": 0,
+        "linearWeightedKappa": {
+          "includedPairCount": 4,
+          "excludedCannotJudgeCount": 2,
+          "observedWeightedAgreement": 0.9375,
+          "expectedWeightedAgreement": 0.65625,
+          "kappa": 0.8181818181818182
+        },
+        "blindCrossTab": {
+          "A|A": 1,
+          "B|B": 1,
+          "cannot|neutral": 2,
+          "neutral|neutral": 2
+        }
+      },
+      {
+        "key": "low-contrast",
+        "comparisonCount": 1,
+        "exactAgreementCount": 0,
+        "exactAgreementPercentage": 0,
+        "broadAgreementCount": 0,
+        "broadAgreementPercentage": 0,
+        "excludingCannotJudge": {
+          "comparisonCount": 1,
+          "exactAgreementCount": 0,
+          "broadAgreementCount": 0
+        },
+        "directOppositeCount": 0,
+        "directOppositePercentage": 0,
+        "linearWeightedKappa": {
+          "includedPairCount": 1,
+          "excludedCannotJudgeCount": 0,
+          "observedWeightedAgreement": 0.75,
+          "expectedWeightedAgreement": 0.75,
+          "kappa": 0
+        },
+        "blindCrossTab": {
+          "neutral|A": 1
+        }
+      },
+      {
+        "key": "opaque-background-removal",
+        "comparisonCount": 3,
+        "exactAgreementCount": 1,
+        "exactAgreementPercentage": 33.33333333333333,
+        "broadAgreementCount": 1,
+        "broadAgreementPercentage": 33.33333333333333,
+        "excludingCannotJudge": {
+          "comparisonCount": 2,
+          "exactAgreementCount": 1,
+          "broadAgreementCount": 1
+        },
+        "directOppositeCount": 0,
+        "directOppositePercentage": 0,
+        "linearWeightedKappa": {
+          "includedPairCount": 2,
+          "excludedCannotJudgeCount": 1,
+          "observedWeightedAgreement": 0.875,
+          "expectedWeightedAgreement": 0.875,
+          "kappa": 0
+        },
+        "blindCrossTab": {
+          "B|neutral": 1,
+          "cannot|neutral": 1,
+          "neutral|neutral": 1
+        }
+      },
+      {
+        "key": "pale-subject-light-background",
+        "comparisonCount": 4,
+        "exactAgreementCount": 2,
+        "exactAgreementPercentage": 50,
+        "broadAgreementCount": 3,
+        "broadAgreementPercentage": 75,
+        "excludingCannotJudge": {
+          "comparisonCount": 4,
+          "exactAgreementCount": 2,
+          "broadAgreementCount": 3
+        },
+        "directOppositeCount": 0,
+        "directOppositePercentage": 0,
+        "linearWeightedKappa": {
+          "includedPairCount": 4,
+          "excludedCannotJudgeCount": 0,
+          "observedWeightedAgreement": 0.8125,
+          "expectedWeightedAgreement": 0.625,
+          "kappa": 0.5
+        },
+        "blindCrossTab": {
+          "B|B": 2,
+          "neutral|A": 1,
+          "neutral|neutral": 1
+        }
+      },
+      {
+        "key": "pet-fur",
+        "comparisonCount": 9,
+        "exactAgreementCount": 1,
+        "exactAgreementPercentage": 11.11111111111111,
+        "broadAgreementCount": 3,
+        "broadAgreementPercentage": 33.33333333333333,
+        "excludingCannotJudge": {
+          "comparisonCount": 9,
+          "exactAgreementCount": 1,
+          "broadAgreementCount": 3
+        },
+        "directOppositeCount": 3,
+        "directOppositePercentage": 33.33333333333333,
+        "linearWeightedKappa": {
+          "includedPairCount": 9,
+          "excludedCannotJudgeCount": 0,
+          "observedWeightedAgreement": 0.5277777777777778,
+          "expectedWeightedAgreement": 0.5030864197530863,
+          "kappa": 0.04968944099378903
+        },
+        "blindCrossTab": {
+          "A|A": 2,
+          "A|B": 3,
+          "A|neutral": 1,
+          "B|B": 1,
+          "B|neutral": 1,
+          "neutral|B": 1
+        }
+      },
+      {
+        "key": "portrait",
+        "comparisonCount": 12,
+        "exactAgreementCount": 5,
+        "exactAgreementPercentage": 41.66666666666667,
+        "broadAgreementCount": 5,
+        "broadAgreementPercentage": 41.66666666666667,
+        "excludingCannotJudge": {
+          "comparisonCount": 10,
+          "exactAgreementCount": 5,
+          "broadAgreementCount": 5
+        },
+        "directOppositeCount": 1,
+        "directOppositePercentage": 8.333333333333332,
+        "linearWeightedKappa": {
+          "includedPairCount": 10,
+          "excludedCannotJudgeCount": 2,
+          "observedWeightedAgreement": 0.75,
+          "expectedWeightedAgreement": 0.7000000000000001,
+          "kappa": 0.1666666666666665
+        },
+        "blindCrossTab": {
+          "A|B": 1,
+          "B|B": 1,
+          "cannot|A": 1,
+          "cannot|neutral": 1,
+          "neutral|A": 4,
+          "neutral|neutral": 4
+        }
+      },
+      {
+        "key": "simple-graphic",
+        "comparisonCount": 2,
+        "exactAgreementCount": 1,
+        "exactAgreementPercentage": 50,
+        "broadAgreementCount": 1,
+        "broadAgreementPercentage": 50,
+        "excludingCannotJudge": {
+          "comparisonCount": 2,
+          "exactAgreementCount": 1,
+          "broadAgreementCount": 1
+        },
+        "directOppositeCount": 1,
+        "directOppositePercentage": 50,
+        "linearWeightedKappa": {
+          "includedPairCount": 2,
+          "excludedCannotJudgeCount": 0,
+          "observedWeightedAgreement": 0.625,
+          "expectedWeightedAgreement": 0.625,
+          "kappa": 0
+        },
+        "blindCrossTab": {
+          "A|B": 1,
+          "neutral|neutral": 1
+        }
+      },
+      {
+        "key": "white-background-product",
+        "comparisonCount": 7,
+        "exactAgreementCount": 2,
+        "exactAgreementPercentage": 28.57142857142857,
+        "broadAgreementCount": 4,
+        "broadAgreementPercentage": 57.14285714285714,
+        "excludingCannotJudge": {
+          "comparisonCount": 6,
+          "exactAgreementCount": 2,
+          "broadAgreementCount": 4
+        },
+        "directOppositeCount": 1,
+        "directOppositePercentage": 14.285714285714285,
+        "linearWeightedKappa": {
+          "includedPairCount": 6,
+          "excludedCannotJudgeCount": 1,
+          "observedWeightedAgreement": 0.75,
+          "expectedWeightedAgreement": 0.6111111111111112,
+          "kappa": 0.35714285714285704
+        },
+        "blindCrossTab": {
+          "A|A": 1,
+          "B|A": 1,
+          "B|B": 2,
+          "B|neutral": 1,
+          "cannot|B": 1,
+          "neutral|neutral": 1
+        }
+      }
+    ]
+  },
+  "consensus": {
+    "rule": {
+      "exactDirectionAgreement": "same broad direction and same six-choice strength",
+      "softDirectionAgreement": "same non-neutral broad direction with different strength",
+      "neutralAgreement": "both no-meaningful-difference",
+      "directOpposite": "one reviewer prefers each side; retained as disagreement",
+      "directionNeutral": "one reviewer prefers a side and the other reports no meaningful difference",
+      "cannotJudge": "any cannot-judge response remains uncertain",
+      "usableForExploratoryPredictor": "exact/soft same direction or both neutral only"
+    },
+    "distribution": {
+      "cannot_judge_uncertain": 8,
+      "direct_opposite_disagreement": 12,
+      "direction_neutral_disagreement": 15,
+      "exact_direction_agreement": 5,
+      "neutral_agreement": 13,
+      "soft_direction_agreement": 7
+    },
+    "usableDirectionDistribution": {
+      "larger": 7,
+      "neutral": 13,
+      "smaller": 5
+    }
+  },
+  "featureDistributions": [
+    {
+      "direction": "larger",
+      "comparisonCount": 7,
+      "features": [
+        {
+          "feature": "additionalUsedColors",
+          "count": 7,
+          "minimum": 0,
+          "p25": 1,
+          "median": 2,
+          "p75": 2,
+          "maximum": 3,
+          "mean": 1.8571428571428572
+        },
+        {
+          "feature": "changedCellPercentage",
+          "count": 7,
+          "minimum": 3.1897189349112427,
+          "p25": 11.678672778869242,
+          "median": 37.5,
+          "p75": 39.27514792899408,
+          "maximum": 68.75,
+          "mean": 33.85482518988073
+        },
+        {
+          "feature": "changedRegionCount",
+          "count": 7,
+          "minimum": 24,
+          "p25": 46,
+          "median": 87,
+          "p75": 101,
+          "maximum": 250,
+          "mean": 103.28571428571429
+        },
+        {
+          "feature": "dominantColorComponentDelta",
+          "count": 7,
+          "minimum": -114,
+          "p25": -10,
+          "median": 0,
+          "p75": 6,
+          "maximum": 80,
+          "mean": 2.4285714285714284
+        },
+        {
+          "feature": "dominantColorLargestComponentCoverageDelta",
+          "count": 7,
+          "minimum": -0.5410397937995847,
+          "p25": -0.4127120207325961,
+          "median": -0.11618779269485646,
+          "p75": 0,
+          "maximum": 0.03866636322257622,
+          "mean": -0.18002762319252236
+        },
+        {
+          "feature": "highSwitchCellPercentageDelta",
+          "count": 7,
+          "minimum": -0.1941568047337272,
+          "p25": -0.01849112426035404,
+          "median": 1.6549556213017755,
+          "p75": 3.0140532544378695,
+          "maximum": 11.344304733727812,
+          "mean": 3.8980292718297105
+        },
+        {
+          "feature": "maximumDeltaE00Gain",
+          "count": 7,
+          "minimum": 0,
+          "p25": 0.3569588448753578,
+          "median": 2.5526861599494595,
+          "p75": 3.6889117081098455,
+          "maximum": 7.311289057780105,
+          "mean": 2.683668695445939
+        },
+        {
+          "feature": "meanDeltaE00GainPerAdditionalColor",
+          "count": 6,
+          "minimum": 0.20518894653074415,
+          "p25": 0.39331882068255286,
+          "median": 0.8041708254885359,
+          "p75": 0.9081475695039144,
+          "maximum": 2.027025285056146,
+          "mean": 0.9012674901752948
+        },
+        {
+          "feature": "meanLocalColorSwitchesDelta",
+          "count": 7,
+          "minimum": 0.00009245562130177909,
+          "p25": 0.05260724852070997,
+          "median": 0.11460379829731504,
+          "p75": 0.29955621301775137,
+          "maximum": 0.3628883136094674,
+          "mean": 0.1768220979816113
+        },
+        {
+          "feature": "normalizedBoundaryLengthDelta",
+          "count": 7,
+          "minimum": -0.0005601194921583119,
+          "p25": 0.015776699029126207,
+          "median": 0.029096989966555187,
+          "p75": 0.036501120238984275,
+          "maximum": 0.08397124719940255,
+          "mean": 0.03590348549719592
+        },
+        {
+          "feature": "singletonComponentDelta",
+          "count": 7,
+          "minimum": -25,
+          "p25": -8,
+          "median": 67,
+          "p75": 104,
+          "maximum": 326,
+          "mean": 112.28571428571429
+        },
+        {
+          "feature": "smallRegionCellPercentageDelta",
+          "count": 7,
+          "minimum": -1.0632396449704142,
+          "p25": -0.03698224852070986,
+          "median": 1.1741863905325438,
+          "p75": 2.5147928994082838,
+          "maximum": 6.518121301775146,
+          "mean": 2.1239475507365033
+        },
+        {
+          "feature": "thinSameColorContinuityDelta",
+          "count": 7,
+          "minimum": 0,
+          "p25": 0,
+          "median": 0,
+          "p75": 0,
+          "maximum": 0,
+          "mean": 0
+        },
+        {
+          "feature": "totalColorComponentsDelta",
+          "count": 7,
+          "minimum": -50,
+          "p25": -5,
+          "median": 87,
+          "p75": 229,
+          "maximum": 567,
+          "mean": 185
+        },
+        {
+          "feature": "twoToThreeCellComponentDelta",
+          "count": 7,
+          "minimum": -20,
+          "p25": 0,
+          "median": 32,
+          "p75": 66,
+          "maximum": 120,
+          "mean": 43.714285714285715
+        },
+        {
+          "feature": "usedColorDelta",
+          "count": 7,
+          "minimum": 0,
+          "p25": 1,
+          "median": 2,
+          "p75": 2,
+          "maximum": 3,
+          "mean": 1.8571428571428572
+        },
+        {
+          "feature": "weightedMeanDeltaE00Gain",
+          "count": 7,
+          "minimum": 0.10977268183285638,
+          "p25": 0.4103778930614883,
+          "median": 2.027025285056146,
+          "p75": 2.139506987579752,
+          "maximum": 2.7244427085117433,
+          "mean": 1.5157536676960999
+        },
+        {
+          "feature": "weightedP95DeltaE00Gain",
+          "count": 7,
+          "minimum": 0.8418124128947753,
+          "p25": 1.03109900330767,
+          "median": 3.353177961976346,
+          "p75": 4.259274255086208,
+          "maximum": 4.472029533750099,
+          "mean": 3.006025888147629
+        }
+      ]
+    },
+    {
+      "direction": "smaller",
+      "comparisonCount": 5,
+      "features": [
+        {
+          "feature": "additionalUsedColors",
+          "count": 5,
+          "minimum": 0,
+          "p25": 0,
+          "median": 1,
+          "p75": 4,
+          "maximum": 5,
+          "mean": 2
+        },
+        {
+          "feature": "changedCellPercentage",
+          "count": 5,
+          "minimum": 24.083769633507853,
+          "p25": 24.500739644970416,
+          "median": 35.916230366492144,
+          "p75": 54.70599112426036,
+          "maximum": 83.88998035363457,
+          "mean": 44.61934222457307
+        },
+        {
+          "feature": "changedRegionCount",
+          "count": 5,
+          "minimum": 3,
+          "p25": 4,
+          "median": 9,
+          "p75": 33,
+          "maximum": 143,
+          "mean": 38.4
+        },
+        {
+          "feature": "dominantColorComponentDelta",
+          "count": 5,
+          "minimum": -21,
+          "p25": 2,
+          "median": 3,
+          "p75": 7,
+          "maximum": 55,
+          "mean": 9.2
+        },
+        {
+          "feature": "dominantColorLargestComponentCoverageDelta",
+          "count": 5,
+          "minimum": -0.1390972239021474,
+          "p25": -0.00798841117203375,
+          "median": -0.002945906432748502,
+          "p75": 0.01351674641148326,
+          "maximum": 0.1019109460157751,
+          "mean": -0.006920769815934258
+        },
+        {
+          "feature": "highSwitchCellPercentageDelta",
+          "count": 5,
+          "minimum": -0.23113905325443784,
+          "p25": 0.052356020942408384,
+          "median": 0.10471204188481677,
+          "p75": 5.870931952662721,
+          "maximum": 6.963545077493996,
+          "mean": 2.5520812079459008
+        },
+        {
+          "feature": "maximumDeltaE00Gain",
+          "count": 5,
+          "minimum": 0.7405866544005306,
+          "p25": 1.3835987639453062,
+          "median": 1.4578704757844037,
+          "p75": 1.6842499281927807,
+          "maximum": 3.3867231963760656,
+          "mean": 1.7306058037398173
+        },
+        {
+          "feature": "meanDeltaE00GainPerAdditionalColor",
+          "count": 3,
+          "minimum": 0.1895309012050097,
+          "p25": 0.1895309012050097,
+          "median": 0.27961742945109497,
+          "p75": 0.27961742945109497,
+          "maximum": 0.4393605684090196,
+          "mean": 0.3028362996883747
+        },
+        {
+          "feature": "meanLocalColorSwitchesDelta",
+          "count": 5,
+          "minimum": -0.07377958579881658,
+          "p25": 0.22577662721893488,
+          "median": 0.22984293193717278,
+          "p75": 0.25287958115183246,
+          "maximum": 0.38266753983846324,
+          "mean": 0.20347741886951737
+        },
+        {
+          "feature": "normalizedBoundaryLengthDelta",
+          "count": 5,
+          "minimum": -0.023058252427184463,
+          "p25": 0.038788274831964176,
+          "median": 0.06068816039013818,
+          "p75": 0.06881603901381739,
+          "maximum": 0.08818283166109253,
+          "mean": 0.04668341069396556
+        },
+        {
+          "feature": "singletonComponentDelta",
+          "count": 5,
+          "minimum": -45,
+          "p25": -1,
+          "median": 5,
+          "p75": 145,
+          "maximum": 161,
+          "mean": 53
+        },
+        {
+          "feature": "smallRegionCellPercentageDelta",
+          "count": 5,
+          "minimum": -0.6841715976331362,
+          "p25": -0.05235602094240838,
+          "median": 0.6282722513089006,
+          "p75": 3.2544378698224836,
+          "maximum": 6.810740013097576,
+          "mean": 1.9913845031306832
+        },
+        {
+          "feature": "thinSameColorContinuityDelta",
+          "count": 5,
+          "minimum": 0,
+          "p25": 0,
+          "median": 0,
+          "p75": 0,
+          "maximum": 0,
+          "mean": 0
+        },
+        {
+          "feature": "totalColorComponentsDelta",
+          "count": 5,
+          "minimum": -63,
+          "p25": 2,
+          "median": 12,
+          "p75": 260,
+          "maximum": 296,
+          "mean": 101.4
+        },
+        {
+          "feature": "twoToThreeCellComponentDelta",
+          "count": 5,
+          "minimum": -10,
+          "p25": 0,
+          "median": 3,
+          "p75": 53,
+          "maximum": 66,
+          "mean": 22.4
+        },
+        {
+          "feature": "usedColorDelta",
+          "count": 5,
+          "minimum": 0,
+          "p25": 0,
+          "median": 1,
+          "p75": 4,
+          "maximum": 5,
+          "mean": 2
+        },
+        {
+          "feature": "weightedMeanDeltaE00Gain",
+          "count": 5,
+          "minimum": 0.1895309012050097,
+          "p25": 0.2127789229179866,
+          "median": 0.6901003388939724,
+          "p75": 1.3980871472554748,
+          "maximum": 1.7574422736360784,
+          "mean": 0.8495879167817044
+        },
+        {
+          "feature": "weightedP95DeltaE00Gain",
+          "count": 5,
+          "minimum": 0.783122194361356,
+          "p25": 1.1155376662102414,
+          "median": 1.8515210961908704,
+          "p75": 2.314152791956932,
+          "maximum": 2.6152895200667334,
+          "mean": 1.7359246537572268
+        }
+      ]
+    },
+    {
+      "direction": "neutral",
+      "comparisonCount": 13,
+      "features": [
+        {
+          "feature": "additionalUsedColors",
+          "count": 13,
+          "minimum": -2,
+          "p25": 1,
+          "median": 1,
+          "p75": 2,
+          "maximum": 3,
+          "mean": 1.2307692307692308
+        },
+        {
+          "feature": "changedCellPercentage",
+          "count": 13,
+          "minimum": 0,
+          "p25": 0.14641288433382138,
+          "median": 3.075030750307503,
+          "p75": 9.375,
+          "maximum": 50.015625,
+          "mean": 9.93485113197575
+        },
+        {
+          "feature": "changedRegionCount",
+          "count": 13,
+          "minimum": 0,
+          "p25": 3,
+          "median": 41,
+          "p75": 61,
+          "maximum": 222,
+          "mean": 55
+        },
+        {
+          "feature": "dominantColorComponentDelta",
+          "count": 13,
+          "minimum": -122,
+          "p25": 0,
+          "median": 0,
+          "p75": 0,
+          "maximum": 15,
+          "mean": -8.23076923076923
+        },
+        {
+          "feature": "dominantColorLargestComponentCoverageDelta",
+          "count": 13,
+          "minimum": 0,
+          "p25": 0,
+          "median": 0,
+          "p75": 0,
+          "maximum": 0.14482462413511343,
+          "mean": 0.020101438998103856
+        },
+        {
+          "feature": "highSwitchCellPercentageDelta",
+          "count": 13,
+          "minimum": -7.867973372781064,
+          "p25": 0,
+          "median": 0.40680473372781023,
+          "p75": 0.8413461538461542,
+          "maximum": 2.8125,
+          "mean": 0.06453976273258838
+        },
+        {
+          "feature": "maximumDeltaE00Gain",
+          "count": 13,
+          "minimum": 0,
+          "p25": 0,
+          "median": 0,
+          "p75": 1.0739373895264173,
+          "maximum": 6.305027873394291,
+          "mean": 1.1405988741358546
+        },
+        {
+          "feature": "meanDeltaE00GainPerAdditionalColor",
+          "count": 10,
+          "minimum": 0.000493398457263039,
+          "p25": 0.0021694196870205573,
+          "median": 0.03659618724204705,
+          "p75": 0.06653312775406128,
+          "maximum": 0.723507334488175,
+          "mean": 0.11735385429647445
+        },
+        {
+          "feature": "meanLocalColorSwitchesDelta",
+          "count": 13,
+          "minimum": -0.3087093195266273,
+          "p25": 0.0012500000000000289,
+          "median": 0.010077662721893477,
+          "p75": 0.050388313609467494,
+          "maximum": 0.14984375000000005,
+          "mean": 0.005519310920356624
+        },
+        {
+          "feature": "normalizedBoundaryLengthDelta",
+          "count": 13,
+          "minimum": -0.0720687079910381,
+          "p25": 0,
+          "median": 0.0006596306068601399,
+          "p75": 0.009475354742345066,
+          "maximum": 0.025316455696202528,
+          "mean": -0.0007478818311993961
+        },
+        {
+          "feature": "singletonComponentDelta",
+          "count": 13,
+          "minimum": -271,
+          "p25": 0,
+          "median": 3,
+          "p75": 27,
+          "maximum": 85,
+          "mean": -3.3076923076923075
+        },
+        {
+          "feature": "smallRegionCellPercentageDelta",
+          "count": 13,
+          "minimum": -5.279215976331361,
+          "p25": 0,
+          "median": 0.22189349112425916,
+          "p75": 0.5362426035502965,
+          "maximum": 1.377588757396449,
+          "mean": -0.10059139358970229
+        },
+        {
+          "feature": "thinSameColorContinuityDelta",
+          "count": 13,
+          "minimum": 0,
+          "p25": 0,
+          "median": 0,
+          "p75": 0,
+          "maximum": 0,
+          "mean": 0
+        },
+        {
+          "feature": "totalColorComponentsDelta",
+          "count": 13,
+          "minimum": -475,
+          "p25": 0,
+          "median": 2,
+          "p75": 58,
+          "maximum": 117,
+          "mean": -8.538461538461538
+        },
+        {
+          "feature": "twoToThreeCellComponentDelta",
+          "count": 13,
+          "minimum": -86,
+          "p25": 0,
+          "median": 0,
+          "p75": 8,
+          "maximum": 26,
+          "mean": -2.1538461538461537
+        },
+        {
+          "feature": "usedColorDelta",
+          "count": 13,
+          "minimum": -2,
+          "p25": 1,
+          "median": 1,
+          "p75": 2,
+          "maximum": 3,
+          "mean": 1.2307692307692308
+        },
+        {
+          "feature": "weightedMeanDeltaE00Gain",
+          "count": 13,
+          "minimum": 0,
+          "p25": 0.0019603315263228005,
+          "median": 0.0665331277540595,
+          "p75": 0.2953524465020472,
+          "maximum": 2.52670242325952,
+          "mean": 0.4260730626102023
+        },
+        {
+          "feature": "weightedP95DeltaE00Gain",
+          "count": 13,
+          "minimum": 0,
+          "p25": 0,
+          "median": 0,
+          "p75": 0,
+          "maximum": 6.305027873394291,
+          "mean": 0.871267889376171
+        }
+      ]
+    }
+  ],
+  "exploratoryFeatureRanking": [
+    {
+      "feature": "normalizedBoundaryLengthDelta",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 0.01661687826736369
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": -0.023058252427184463
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": 2.3876404494382033
+    },
+    {
+      "feature": "dominantColorComponentDelta",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 0
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": -21
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": 2.1
+    },
+    {
+      "feature": "meanLocalColorSwitchesDelta",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 0.08598372781065089
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": -0.07377958579881658
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": 1.8580645161290323
+    },
+    {
+      "feature": "smallRegionCellPercentageDelta",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 1.1741863905325438
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": -0.6841715976331362
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": 1.313725490196079
+    },
+    {
+      "feature": "twoToThreeCellComponentDelta",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 32
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": -10
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": 1.2727272727272727
+    },
+    {
+      "feature": "totalColorComponentsDelta",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 87
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": -63
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": 1.2295081967213115
+    },
+    {
+      "feature": "singletonComponentDelta",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 67
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": -45
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": 1.2043010752688172
+    },
+    {
+      "feature": "changedCellPercentage",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 37.5
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": 24.500739644970416
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0.0625
+        }
+      ],
+      "normalizedMedianSpread": 1.0341817352470326
+    },
+    {
+      "feature": "additionalUsedColors",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 2
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": 0
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": 1
+    },
+    {
+      "feature": "meanDeltaE00GainPerAdditionalColor",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 5,
+          "median": 0.9081475695039144
+        },
+        {
+          "direction": "smaller",
+          "count": 0,
+          "median": null
+        },
+        {
+          "direction": "neutral",
+          "count": 3,
+          "median": 0.03659618724204705
+        }
+      ],
+      "normalizedMedianSpread": 1
+    },
+    {
+      "feature": "usedColorDelta",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 2
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": 0
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": 1
+    },
+    {
+      "feature": "weightedMeanDeltaE00Gain",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 2.027025285056146
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": 0.6901003388939724
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0.000986796914526078
+        }
+      ],
+      "normalizedMedianSpread": 0.9805082320481205
+    },
+    {
+      "feature": "highSwitchCellPercentageDelta",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 1.6549556213017755
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": -0.23113905325443784
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": 0.9230769230769252
+    },
+    {
+      "feature": "weightedP95DeltaE00Gain",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 2.7151763656373884
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": 2.314152791956932
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": 0.8097322588977881
+    },
+    {
+      "feature": "maximumDeltaE00Gain",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 2.5526861599494595
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": 1.4578704757844037
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": 0.6919889555332908
+    },
+    {
+      "feature": "changedRegionCount",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 87
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": 3
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 4
+        }
+      ],
+      "normalizedMedianSpread": 0.5675675675675675
+    },
+    {
+      "feature": "dominantColorLargestComponentCoverageDelta",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": -0.22892011834319528
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": 0.01351674641148326
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": null
+    },
+    {
+      "feature": "thinSameColorContinuityDelta",
+      "medians": [
+        {
+          "direction": "larger",
+          "count": 6,
+          "median": 0
+        },
+        {
+          "direction": "smaller",
+          "count": 1,
+          "median": 0
+        },
+        {
+          "direction": "neutral",
+          "count": 6,
+          "median": 0
+        }
+      ],
+      "normalizedMedianSpread": null
+    }
+  ],
+  "calibration": {
+    "splitFrozenBeforeHumanAnalysis": true,
+    "logicalCaseCounts": {
+      "calibration": 15,
+      "validation": 9
+    },
+    "sampledComparisonCounts": {
+      "calibration": 35,
+      "validation": 25
+    },
+    "usableConsensusCounts": {
+      "calibration": 13,
+      "validation": 12
+    },
+    "conclusion": "Calibration labels are too sparse and inter-reviewer stability too weak to select defensible feature thresholds without overfitting."
+  },
+  "frozenCandidatePredictor": {
+    "id": "a02-abstain-only-v1",
+    "status": "evaluation-only",
+    "rule": "Always abstain; do not recommend a profile change.",
+    "rationale": "No nontrivial deterministic rule was frozen because calibration human ground truth was not stable enough."
+  },
+  "heldOutValidation": {
+    "usableConsensusComparisons": 12,
+    "decisionCoverageCount": 0,
+    "decisionCoveragePercentage": 0,
+    "abstentionCount": 25,
+    "falseSmallCount": 0,
+    "falseLargeCount": 0,
+    "visualRegressionRecommendationCount": 0,
+    "interpretation": "Zero errors are vacuous because the abstain-only candidate makes no recommendations; it does not demonstrate a useful recommendation predictor."
+  },
+  "thirdReviewer": {
+    "recommended": true,
+    "scope": "targeted ambiguous packets only",
+    "packetCount": 35,
+    "limitation": "A third vote may resolve some packets but cannot remove underlying subjectivity; results still require case-level held-out evaluation."
+  },
+  "finalDecision": "EVIDENCE IMPROVED BUT INSUFFICIENT — THIRD REVIEW / MORE EVALUATION REQUIRED",
+  "canonicalHumanAnalysisSha256": "367b1458bf39f66fcaa41690ef63921a24a7076724de4c8b5da5448dd77ea6a4"
+}

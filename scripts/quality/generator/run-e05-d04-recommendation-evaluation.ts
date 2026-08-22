@@ -1,6 +1,5 @@
 /// <reference lib="dom" />
 
-import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -26,6 +25,11 @@ import {
   loadGeneratorQualityDependencies,
   prepareProductionQualityIntermediate,
 } from "./generator-quality-replay.ts";
+import {
+  assertExactEvidenceIdentity,
+  D04_A01_AUTHORIZED_PRODUCTION_BASELINE,
+  verifyProductionBaselineLifecycle,
+} from "./generator-quality-evidence-verifier.ts";
 import { resolveExternalCorpus } from "./generator-quality-resolver.ts";
 import { serializeCanonicalJson } from "./generator-quality-scorecard.ts";
 import type {
@@ -34,7 +38,6 @@ import type {
   GeneratorQualitySize,
 } from "./generator-quality.types.ts";
 
-const AUTHORIZED_HEAD = "9b411803afb26d618abe94f411b1bb342099fb14";
 const EXPECTED_MANIFEST_SHA =
   "94b3a88a77ebd969bae9be3a2971c84a32eaf38c7e6779bc1e0e317b1f15fc9e";
 const MAXIMUM_COLORS = Object.freeze([16, 32, 64] as const);
@@ -84,9 +87,11 @@ const operation = process.argv[2];
 if (operation !== "--write" && operation !== "--verify") {
   throw new Error("Expected --write or --verify.");
 }
-if (gitHead() !== AUTHORIZED_HEAD) {
-  throw new Error("D04-A01 production baseline differs from authorization.");
-}
+const recordedProductionBaseline =
+  operation === "--verify"
+    ? readRecordedProductionBaseline(permanentEvidencePath)
+    : D04_A01_AUTHORIZED_PRODUCTION_BASELINE;
+verifyProductionBaselineLifecycle(repositoryRoot, recordedProductionBaseline);
 
 const manifestResult = await readGeneratorQualityManifest(
   path.join(
@@ -233,7 +238,7 @@ const baseEvidence = Object.freeze({
   evidenceVersion: "1.0.0",
   stage: "P3-A03-E05-D04-A01",
   productionActivation: false,
-  productionHead: AUTHORIZED_HEAD,
+  productionHead: D04_A01_AUTHORIZED_PRODUCTION_BASELINE,
   corpus: Object.freeze({
     version: manifestResult.manifest.corpusVersion,
     manifestSha256: manifestResult.sha256,
@@ -301,18 +306,20 @@ if (operation === "--write") {
   );
 } else {
   const checkedIn = await readFile(permanentEvidencePath, "utf8");
-  if (checkedIn !== serialized) {
-    throw new Error("Checked-in D04-A01 evidence is not deterministic.");
-  }
+  assertExactEvidenceIdentity(
+    checkedIn,
+    serialized,
+    "Checked-in D04-A01 evidence",
+  );
   const checkedInBlindReviewKey = await readFile(
     permanentBlindReviewKeyPath,
     "utf8",
   );
-  if (checkedInBlindReviewKey !== serializedBlindReviewKey) {
-    throw new Error(
-      "Checked-in D04-A01 blind-review key is not deterministic.",
-    );
-  }
+  assertExactEvidenceIdentity(
+    checkedInBlindReviewKey,
+    serializedBlindReviewKey,
+    "Checked-in D04-A01 blind-review key",
+  );
 }
 await writeFile(
   path.join(outputDirectory, "runtime-node-performance.json"),
@@ -567,9 +574,12 @@ function sha256(value: string | Buffer): string {
   return createHash("sha256").update(value).digest("hex");
 }
 
-function gitHead(): string {
-  return execFileSync("git", ["rev-parse", "HEAD"], {
-    cwd: repositoryRoot,
-    encoding: "utf8",
-  }).trim();
+function readRecordedProductionBaseline(evidencePath: string): string {
+  const parsed = JSON.parse(readFileSync(evidencePath, "utf8")) as {
+    readonly productionHead?: unknown;
+  };
+  if (typeof parsed.productionHead !== "string") {
+    throw new Error("D04-A01 evidence production baseline is missing.");
+  }
+  return parsed.productionHead;
 }

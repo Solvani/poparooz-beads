@@ -58,6 +58,7 @@ export function PatternResults({
       />
       <ColorList
         colors={result.view.colors}
+        materials={result.view.materials}
         focusedColorIndex={focusedColorIndex}
         onFocusColor={onFocusColor}
         onClearHighlight={onClearHighlight}

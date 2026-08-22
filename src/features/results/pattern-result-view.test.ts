@@ -102,6 +102,16 @@ describe("pattern result view", () => {
           },
         },
       ],
+      materials: [
+        {
+          ...pattern.materials[0]!,
+          color: {
+            brand: color.brand,
+            code: color.code,
+            hex: color.hex,
+          },
+        },
+      ],
     });
 
     expect(view.colors[0]).toMatchObject({ code: "A1", beadCount: 1 });
@@ -123,15 +133,6 @@ describe("pattern result view", () => {
       (pattern: PublicPatternResult) => ({
         ...pattern,
         totals: { ...pattern.totals, colorCount: 99 },
-      }),
-    ],
-    [
-      "mismatched color sum",
-      (pattern: PublicPatternResult) => ({
-        ...pattern,
-        colors: pattern.colors.map((entry, index) =>
-          index === 0 ? { ...entry, beadCount: entry.beadCount + 1 } : entry,
-        ),
       }),
     ],
     [
@@ -190,6 +191,32 @@ describe("pattern result view", () => {
     ).toBe(false);
   });
 
+  it("uses materials as bead-count and refill authority when colors disagree", () => {
+    const pattern = createResultFixture({
+      width: 1001,
+      height: 1,
+      transparentPositions: 0,
+      colors: [{ index: 0, beadCount: 1001, code: "A4" }],
+    });
+    const view = viewOf({
+      ...pattern,
+      colors: [{ ...pattern.colors[0]!, beadCount: 1 }],
+    });
+
+    expect(view.colors[0]).toMatchObject({
+      index: 0,
+      code: "A4",
+      beadCount: 1001,
+      beadCountLabel: "1,001 beads",
+    });
+    expect(view.materials[0]).toMatchObject({
+      patternColorIndex: 0,
+      beadCount: 1001,
+      totalPacksRequired: 2,
+      additionalRefillPacks: 1,
+    });
+  });
+
   it("detects an unknown matrix color only in the controlled development assertion", () => {
     const pattern = createResultFixture();
     const indexes = pattern.matrix.colorIndices.slice();
@@ -222,8 +249,10 @@ describe("pattern result view", () => {
     const pattern = createResultFixture();
     const matrixBefore = pattern.matrix.colorIndices.slice();
     const colorsBefore = [...pattern.colors];
+    const materialsBefore = [...pattern.materials];
     toPatternResultView(pattern);
     expect(pattern.matrix.colorIndices).toEqual(matrixBefore);
     expect(pattern.colors).toEqual(colorsBefore);
+    expect(pattern.materials).toEqual(materialsBefore);
   });
 });

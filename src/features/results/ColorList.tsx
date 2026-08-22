@@ -1,19 +1,21 @@
 import { useState } from "react";
 
 import { Button } from "../../components/ui/Button";
+import type { DerivedMaterialRequirementV1 } from "../materials/derived-material-requirements";
 import { ColorRow } from "./ColorRow";
-import { calculateRefillRequirements } from "./refill-requirements";
 import type { ColorRowView } from "./result.types";
 
 export const DEFAULT_VISIBLE_COLORS = 6;
 
 export function ColorList({
   colors,
+  materials,
   focusedColorIndex,
   onFocusColor,
   onClearHighlight,
 }: {
   readonly colors: readonly ColorRowView[];
+  readonly materials: readonly DerivedMaterialRequirementV1[];
   readonly focusedColorIndex: number | null;
   readonly onFocusColor: (colorIndex: number) => void;
   readonly onClearHighlight: () => void;
@@ -24,7 +26,13 @@ export function ColorList({
     ? colors
     : colors.slice(0, DEFAULT_VISIBLE_COLORS);
   const focusedColor = colors.find((row) => row.index === focusedColorIndex);
-  const refillRequirements = calculateRefillRequirements(colors);
+  const refillRequirements = [...materials]
+    .filter((material) => material.additionalRefillPacks > 0)
+    .sort(
+      (left, right) =>
+        left.patternColorIndex - right.patternColorIndex ||
+        left.color.code.localeCompare(right.color.code),
+    );
   return (
     <section
       className="result-section color-list-section"
@@ -41,20 +49,20 @@ export function ColorList({
         aria-labelledby="additional-refill-packs-heading"
       >
         <h4 id="additional-refill-packs-heading">Additional Refill Packs</h4>
-        {refillRequirements.requirements.length === 0 ? (
+        {refillRequirements.length === 0 ? (
           <p className="refill-requirements__none">None needed</p>
         ) : (
           <>
             <ul className="refill-requirements__list">
-              {refillRequirements.requirements.map((requirement) => (
-                <li key={requirement.colorIndex}>
-                  <strong>{requirement.code}</strong>
+              {refillRequirements.map((requirement) => (
+                <li key={requirement.patternColorIndex}>
+                  <strong>{requirement.color.code}</strong>
                   <span
-                    aria-label={`${requirement.refillPacksRequired} refill ${
-                      requirement.refillPacksRequired === 1 ? "pack" : "packs"
+                    aria-label={`${requirement.additionalRefillPacks} refill ${
+                      requirement.additionalRefillPacks === 1 ? "pack" : "packs"
                     }`}
                   >
-                    ×{requirement.refillPacksRequired}
+                    ×{requirement.additionalRefillPacks}
                   </span>
                 </li>
               ))}

@@ -191,6 +191,7 @@ export function App({
         <ColorList
           key={lastSuccess?.snapshot.jobId}
           colors={compactResult.view.colors}
+          materials={compactResult.view.materials}
           focusedColorIndex={focusedColorIndex}
           onFocusColor={setFocusedColorIndex}
           onClearHighlight={() => setFocusedColorIndex(null)}

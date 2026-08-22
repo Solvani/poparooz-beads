@@ -1,4 +1,8 @@
 import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
+import {
+  deriveMaterialRequirementsV1,
+  type DerivedMaterialRequirementV1,
+} from "../materials/derived-material-requirements";
 
 export const PATTERN_EXPORT_CELL_SIZE = 24;
 export const PATTERN_EXPORT_LEFT_MARGIN = 32;
@@ -76,7 +80,11 @@ export function renderPatternExport(
     return { ok: false, message: SAFE_EXPORT_ERROR };
   }
 
-  const geometry = calculateGeometry(input.pattern, logo);
+  const geometry = calculateGeometry(
+    input.pattern,
+    logo,
+    validation.materials.length,
+  );
   let canvas: HTMLCanvasElement | null;
   try {
     canvas = createCanvas(geometry.width, geometry.height);
@@ -90,7 +98,7 @@ export function renderPatternExport(
   if (context === null) return { ok: false, message: SAFE_EXPORT_ERROR };
 
   try {
-    drawExport(context, input, logo, geometry, validation.colors);
+    drawExport(context, input, logo, geometry, validation.materialsByIndex);
     return {
       ok: true,
       canvas,
@@ -114,17 +122,15 @@ function isValidLogo(logo: PatternExportLogo): boolean {
 function calculateGeometry(
   pattern: PublicPatternResult,
   logo: PatternExportLogo,
+  materialCount: number,
 ): PatternExportGeometry {
   const gridWidth = pattern.matrix.width * PATTERN_EXPORT_CELL_SIZE;
   const gridHeight = pattern.matrix.height * PATTERN_EXPORT_CELL_SIZE;
   const logoScale = Math.min(1, PATTERN_EXPORT_LOGO_MAX_HEIGHT / logo.height);
   const logoWidth = logo.width * logoScale;
   const logoHeight = logo.height * logoScale;
-  const legendColumns = calculateLegendColumns(
-    gridWidth,
-    pattern.colors.length,
-  );
-  const legendRows = Math.ceil(pattern.colors.length / legendColumns);
+  const legendColumns = calculateLegendColumns(gridWidth, materialCount);
+  const legendRows = Math.ceil(materialCount / legendColumns);
   const gridY =
     PATTERN_EXPORT_TOP_PADDING +
     logoHeight +
@@ -169,13 +175,20 @@ function calculateLegendColumns(gridWidth: number, colorsUsed: number): number {
 function validateExportInput(input: PatternExportInput):
   | {
       readonly ok: true;
-      readonly colors: ReadonlyMap<
+      readonly materialsByIndex: ReadonlyMap<
         number,
-        PublicPatternResult["colors"][number]
+        DerivedMaterialRequirementV1
       >;
+      readonly materials: readonly DerivedMaterialRequirementV1[];
     }
   | { readonly ok: false; readonly message: string } {
   const { matrix, totals, colors } = input.pattern;
+  let materials: readonly DerivedMaterialRequirementV1[];
+  try {
+    materials = deriveMaterialRequirementsV1(input.pattern.materials);
+  } catch {
+    return { ok: false, message: SAFE_EXPORT_ERROR };
+  }
   if (
     !Number.isSafeInteger(matrix.width) ||
     !Number.isSafeInteger(matrix.height) ||
@@ -189,34 +202,60 @@ function validateExportInput(input: PatternExportInput):
     totals.width !== matrix.width ||
     totals.height !== matrix.height ||
     totals.colorCount !== colors.length ||
-    colors.reduce((sum, entry) => sum + entry.beadCount, 0) !==
+    totals.colorCount !== materials.length ||
+    materials.reduce((sum, entry) => sum + entry.beadCount, 0) !==
       totals.totalBeads
   ) {
     return { ok: false, message: SAFE_EXPORT_ERROR };
   }
 
-  const colorMap = new Map<number, PublicPatternResult["colors"][number]>();
+  const patternColorsByIndex = new Map<
+    number,
+    PublicPatternResult["colors"][number]
+  >();
   for (const entry of colors) {
     if (
       !Number.isSafeInteger(entry.index) ||
       entry.index < 0 ||
-      colorMap.has(entry.index) ||
+      patternColorsByIndex.has(entry.index) ||
       entry.color.brand !== "Poparooz" ||
       !/^#[0-9A-F]{6}$/.test(entry.color.hex) ||
-      !/^[A-HM]\d{1,2}$/.test(entry.color.code) ||
-      !Number.isSafeInteger(entry.beadCount) ||
-      entry.beadCount <= 0
+      !/^[A-HM]\d{1,2}$/.test(entry.color.code)
     ) {
       return { ok: false, message: SAFE_EXPORT_ERROR };
     }
-    colorMap.set(entry.index, entry);
+    patternColorsByIndex.set(entry.index, entry);
+  }
+  const materialsByIndex = new Map<number, DerivedMaterialRequirementV1>();
+  for (const material of materials) {
+    const patternColor = patternColorsByIndex.get(material.patternColorIndex);
+    if (
+      !Number.isSafeInteger(material.patternColorIndex) ||
+      material.patternColorIndex < 0 ||
+      material.beadCount <= 0 ||
+      materialsByIndex.has(material.patternColorIndex) ||
+      material.color.brand !== "Poparooz" ||
+      !/^#[0-9A-F]{6}$/.test(material.color.hex) ||
+      !/^[A-HM]\d{1,2}$/.test(material.color.code) ||
+      patternColor === undefined ||
+      patternColor.color.brand !== material.color.brand ||
+      patternColor.color.code !== material.color.code ||
+      patternColor.color.hex !== material.color.hex ||
+      patternColor.color.name !== material.color.name
+    ) {
+      return { ok: false, message: SAFE_EXPORT_ERROR };
+    }
+    materialsByIndex.set(material.patternColorIndex, material);
   }
   for (const colorIndex of matrix.colorIndices) {
-    if (colorIndex !== matrix.transparentIndex && !colorMap.has(colorIndex)) {
+    if (
+      colorIndex !== matrix.transparentIndex &&
+      !materialsByIndex.has(colorIndex)
+    ) {
       return { ok: false, message: SAFE_EXPORT_ERROR };
     }
   }
-  return { ok: true, colors: colorMap };
+  return { ok: true, materialsByIndex, materials };
 }
 
 function drawExport(
@@ -224,7 +263,7 @@ function drawExport(
   input: PatternExportInput,
   logo: PatternExportLogo,
   geometry: PatternExportGeometry,
-  colors: ReadonlyMap<number, PublicPatternResult["colors"][number]>,
+  materialsByIndex: ReadonlyMap<number, DerivedMaterialRequirementV1>,
 ) {
   const { pattern, selectedColorSetLabel } = input;
   context.fillStyle = "#FFFFFF";
@@ -268,15 +307,15 @@ function drawExport(
     metadataY + PATTERN_EXPORT_METADATA_LINE_HEIGHT * 2,
   );
 
-  drawPatternGrid(context, pattern, geometry, colors);
-  drawLegend(context, pattern, geometry);
+  drawPatternGrid(context, pattern, geometry, materialsByIndex);
+  drawLegend(context, pattern.colors, geometry, materialsByIndex);
 }
 
 function drawPatternGrid(
   context: CanvasRenderingContext2D,
   pattern: PublicPatternResult,
   geometry: PatternExportGeometry,
-  colors: ReadonlyMap<number, PublicPatternResult["colors"][number]>,
+  materialsByIndex: ReadonlyMap<number, DerivedMaterialRequirementV1>,
 ) {
   context.textAlign = "center";
   context.textBaseline = "middle";
@@ -287,8 +326,8 @@ function drawPatternGrid(
         pattern.matrix.colorIndices[row * pattern.matrix.width + column]!;
       const x = geometry.gridX + column * PATTERN_EXPORT_CELL_SIZE;
       const y = geometry.gridY + row * PATTERN_EXPORT_CELL_SIZE;
-      const color = colors.get(colorIndex);
-      context.fillStyle = color?.color.hex ?? "#F3F4F1";
+      const material = materialsByIndex.get(colorIndex);
+      context.fillStyle = material?.color.hex ?? "#F3F4F1";
       context.fillRect(
         x,
         y,
@@ -303,14 +342,14 @@ function drawPatternGrid(
         PATTERN_EXPORT_CELL_SIZE - 1,
         PATTERN_EXPORT_CELL_SIZE - 1,
       );
-      if (color !== undefined) {
+      if (material !== undefined) {
         context.save();
         context.beginPath();
         context.rect(x, y, PATTERN_EXPORT_CELL_SIZE, PATTERN_EXPORT_CELL_SIZE);
         context.clip();
-        context.fillStyle = readableTextColor(color.color.hex);
+        context.fillStyle = readableTextColor(material.color.hex);
         context.fillText(
-          color.color.code,
+          material.color.code,
           x + PATTERN_EXPORT_CELL_SIZE / 2,
           y + PATTERN_EXPORT_CELL_SIZE / 2,
           PATTERN_EXPORT_CELL_SIZE - 4,
@@ -323,8 +362,9 @@ function drawPatternGrid(
 
 function drawLegend(
   context: CanvasRenderingContext2D,
-  pattern: PublicPatternResult,
+  colors: PublicPatternResult["colors"],
   geometry: PatternExportGeometry,
+  materialsByIndex: ReadonlyMap<number, DerivedMaterialRequirementV1>,
 ) {
   const legendY =
     geometry.gridY + geometry.gridHeight + PATTERN_EXPORT_GRID_LEGEND_GAP;
@@ -342,7 +382,11 @@ function drawLegend(
     (geometry.gridWidth -
       (geometry.legendColumns - 1) * PATTERN_EXPORT_LEGEND_COLUMN_GAP) /
     geometry.legendColumns;
-  pattern.colors.forEach((entry, index) => {
+  colors.forEach((entry, index) => {
+    const material = materialsByIndex.get(entry.index);
+    if (material === undefined) {
+      throw new Error("Validated export material is missing.");
+    }
     const column = index % geometry.legendColumns;
     const row = Math.floor(index / geometry.legendColumns);
     const x =
@@ -373,7 +417,7 @@ function drawLegend(
     context.fillText(entry.color.code, codeX, centerY, LEGEND_CODE_SLOT_WIDTH);
     context.font = "500 18px system-ui, sans-serif";
     context.fillText(
-      `${entry.beadCount.toLocaleString("en-US")} beads`,
+      `${material.beadCount.toLocaleString("en-US")} beads`,
       codeX + LEGEND_CODE_SLOT_WIDTH + LEGEND_CODE_QUANTITY_GAP,
       centerY,
       Math.max(

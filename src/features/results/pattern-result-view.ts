@@ -1,7 +1,8 @@
-import type {
-  PublicPatternColor,
-  PublicPatternResult,
-} from "../../domain/pattern/public-pattern.types";
+import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
+import {
+  deriveMaterialRequirementsV1,
+  type DerivedMaterialRequirementV1,
+} from "../materials/derived-material-requirements";
 import { toBoardLayoutView } from "./board-layout-view";
 import type { ColorRowView, PatternResultViewResult } from "./result.types";
 
@@ -27,16 +28,27 @@ export function toPatternResultView(
     !nonNegativeInteger(totals.transparentPositions) ||
     totals.totalBeads + totals.transparentPositions !== totals.totalPositions ||
     totals.colorCount !== pattern.colors.length ||
-    pattern.colors.length > MAX_RESULT_COLORS
+    totals.colorCount !== pattern.materials.length ||
+    pattern.materials.length > MAX_RESULT_COLORS
   ) {
     return { ok: false };
   }
 
-  const colors = toColorRows(pattern.colors);
+  let materials: readonly DerivedMaterialRequirementV1[];
+  try {
+    materials = deriveMaterialRequirementsV1(pattern.materials);
+  } catch {
+    return { ok: false };
+  }
+  const colors = toColorRows(materials);
   if (colors === null) return { ok: false };
   const colorTotal = colors.reduce((sum, row) => sum + row.beadCount, 0);
   if (colorTotal !== totals.totalBeads) return { ok: false };
-  if (import.meta.env.DEV && !matrixUsesOnlyPublicColors(pattern)) {
+  if (!materialsMatchPatternColors(pattern, materials)) return { ok: false };
+  if (
+    import.meta.env.DEV &&
+    !matrixUsesOnlyPublicMaterials(pattern, materials)
+  ) {
     return { ok: false };
   }
 
@@ -64,20 +76,21 @@ export function toPatternResultView(
         transparentPositionsLabel,
       }),
       colors,
+      materials,
       boardLayout,
     }),
   };
 }
 
 export function toColorRows(
-  colors: readonly PublicPatternColor[],
+  materials: readonly DerivedMaterialRequirementV1[],
 ): readonly ColorRowView[] | null {
   const indexes = new Set<number>();
   const rows: ColorRowView[] = [];
-  for (const entry of colors) {
+  for (const entry of materials) {
     if (
-      !nonNegativeInteger(entry.index) ||
-      indexes.has(entry.index) ||
+      !nonNegativeInteger(entry.patternColorIndex) ||
+      indexes.has(entry.patternColorIndex) ||
       !positiveInteger(entry.beadCount) ||
       entry.color.brand !== "Poparooz" ||
       !validLabel(entry.color.code) ||
@@ -86,10 +99,10 @@ export function toColorRows(
     ) {
       return null;
     }
-    indexes.add(entry.index);
+    indexes.add(entry.patternColorIndex);
     rows.push(
       Object.freeze({
-        index: entry.index,
+        index: entry.patternColorIndex,
         code: entry.color.code,
         ...(entry.color.name === undefined ? {} : { name: entry.color.name }),
         hex: entry.color.hex,
@@ -104,8 +117,38 @@ export function toColorRows(
   return Object.freeze(rows);
 }
 
-function matrixUsesOnlyPublicColors(pattern: PublicPatternResult): boolean {
-  const indexes = new Set(pattern.colors.map((entry) => entry.index));
+function materialsMatchPatternColors(
+  pattern: PublicPatternResult,
+  materials: readonly DerivedMaterialRequirementV1[],
+): boolean {
+  const materialByIndex = new Map(
+    materials.map((material) => [material.patternColorIndex, material]),
+  );
+  const indexes = new Set<number>();
+  for (const entry of pattern.colors) {
+    if (!nonNegativeInteger(entry.index) || indexes.has(entry.index)) {
+      return false;
+    }
+    indexes.add(entry.index);
+    const material = materialByIndex.get(entry.index);
+    if (
+      material === undefined ||
+      material.color.brand !== entry.color.brand ||
+      material.color.code !== entry.color.code ||
+      material.color.hex !== entry.color.hex ||
+      material.color.name !== entry.color.name
+    ) {
+      return false;
+    }
+  }
+  return indexes.size === materials.length;
+}
+
+function matrixUsesOnlyPublicMaterials(
+  pattern: PublicPatternResult,
+  materials: readonly DerivedMaterialRequirementV1[],
+): boolean {
+  const indexes = new Set(materials.map((entry) => entry.patternColorIndex));
   for (const index of pattern.matrix.colorIndices) {
     if (index !== pattern.matrix.transparentIndex && !indexes.has(index))
       return false;

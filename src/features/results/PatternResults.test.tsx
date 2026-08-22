@@ -55,6 +55,33 @@ describe("PatternResults", () => {
     expect(screen.getByText("72-Color Set")).toBeInTheDocument();
   });
 
+  it("renders bead and refill quantities from materials when colors disagree", () => {
+    const pattern = createResultFixture({
+      width: 1001,
+      height: 1,
+      transparentPositions: 0,
+      colors: [{ index: 0, beadCount: 1001, code: "A4" }],
+    });
+
+    render(
+      <PatternResults
+        {...focusProps}
+        pattern={{
+          ...pattern,
+          colors: [{ ...pattern.colors[0]!, beadCount: 1 }],
+        }}
+        status="success"
+        selectedColorSetLabel="24-Color Set"
+      />,
+    );
+
+    expect(
+      screen.getByRole("button", { name: "A4, 1,001 beads" }),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText("1 refill pack")).toHaveTextContent("×1");
+    expect(screen.queryByRole("button", { name: "A4, 1 bead" })).toBeNull();
+  });
+
   it.each([
     ["dirty", "These details belong to your previous pattern."],
     [

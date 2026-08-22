@@ -2,6 +2,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { deriveMaterialRequirementsV1 } from "../materials/derived-material-requirements";
 import { ColorList, DEFAULT_VISIBLE_COLORS } from "./ColorList";
 import type { ColorRowView } from "./result.types";
 
@@ -24,9 +25,22 @@ function renderList(
   onFocusColor = vi.fn(),
   onClearHighlight = vi.fn(),
 ) {
+  const materials = deriveMaterialRequirementsV1(
+    colors.map((row) => ({
+      patternColorIndex: row.index,
+      color: {
+        brand: "Poparooz" as const,
+        code: row.code,
+        hex: row.hex,
+        ...(row.name === undefined ? {} : { name: row.name }),
+      },
+      beadCount: row.beadCount,
+    })),
+  );
   return render(
     <ColorList
       colors={colors}
+      materials={materials}
       focusedColorIndex={focusedColorIndex}
       onFocusColor={onFocusColor}
       onClearHighlight={onClearHighlight}
@@ -93,6 +107,41 @@ describe("ColorList", () => {
         "Some colors need more than the approximately 1,000 beads included per color.",
       ),
     ).toBeInTheDocument();
+  });
+
+  it("keeps refill presentation ordered by color index instead of material input order", () => {
+    const colors = rows(3).map((row) => ({
+      ...row,
+      beadCount: 1001,
+      beadCountLabel: "1,001 beads",
+    }));
+    const materials = deriveMaterialRequirementsV1(
+      [...colors].reverse().map((row) => ({
+        patternColorIndex: row.index,
+        color: {
+          brand: "Poparooz" as const,
+          code: row.code,
+          hex: row.hex,
+        },
+        beadCount: row.beadCount,
+      })),
+    );
+
+    render(
+      <ColorList
+        colors={colors}
+        materials={materials}
+        focusedColorIndex={null}
+        onFocusColor={vi.fn()}
+        onClearHighlight={vi.fn()}
+      />,
+    );
+
+    expect(
+      Array.from(
+        document.querySelectorAll(".refill-requirements__list strong"),
+      ).map((element) => element.textContent),
+    ).toEqual(["P1", "P2", "P3"]);
   });
 
   it("expands and collapses all colors with accessible native controls", async () => {

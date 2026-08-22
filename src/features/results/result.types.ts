@@ -1,3 +1,5 @@
+import type { DerivedMaterialRequirementV1 } from "../materials/derived-material-requirements";
+
 export interface PatternSummaryView {
   readonly width: number;
   readonly height: number;
@@ -42,6 +44,7 @@ export interface BoardLayoutView {
 export interface PatternResultView {
   readonly summary: PatternSummaryView;
   readonly colors: readonly ColorRowView[];
+  readonly materials: readonly DerivedMaterialRequirementV1[];
   readonly boardLayout: BoardLayoutView;
 }
 

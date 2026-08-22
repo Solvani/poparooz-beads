@@ -219,6 +219,93 @@ describe("renderPatternExport", () => {
     );
   });
 
+  it("renders bead counts from materials when colors disagree", () => {
+    const base = createPublicPattern();
+    const pattern = Object.freeze({
+      ...base,
+      colors: Object.freeze(
+        base.colors.map((entry) => Object.freeze({ ...entry, beadCount: 999 })),
+      ),
+    });
+    const { result, target } = render(pattern);
+
+    expect(result.ok).toBe(true);
+    const labels = vi
+      .mocked(target.context.fillText)
+      .mock.calls.map(([text]) => String(text));
+    expect(labels).toContain("2 beads");
+    expect(labels).toContain("1 beads");
+    expect(labels).not.toContain("999 beads");
+  });
+
+  it("preserves color legend order while resolving material counts by index", () => {
+    const base = createPatternWithColors(3, 3);
+    const colorIndices = new Uint16Array([0, 1, 1, 1, 2, 2, 2, 2, 2]);
+    const colors = Object.freeze(
+      base.colors.map((entry, index) =>
+        Object.freeze({ ...entry, beadCount: 100 + index }),
+      ),
+    );
+    const materialsByIndex = new Map<
+      number,
+      PublicPatternResult["materials"][number]
+    >([
+      [
+        0,
+        Object.freeze({
+          patternColorIndex: 0,
+          color: colors[0]!.color,
+          beadCount: 1,
+        }),
+      ],
+      [
+        1,
+        Object.freeze({
+          patternColorIndex: 1,
+          color: colors[1]!.color,
+          beadCount: 3,
+        }),
+      ],
+      [
+        2,
+        Object.freeze({
+          patternColorIndex: 2,
+          color: colors[2]!.color,
+          beadCount: 5,
+        }),
+      ],
+    ]);
+    const pattern = Object.freeze({
+      ...base,
+      matrix: Object.freeze({ ...base.matrix, colorIndices }),
+      colors,
+      materials: Object.freeze([
+        materialsByIndex.get(2)!,
+        materialsByIndex.get(0)!,
+        materialsByIndex.get(1)!,
+      ]),
+    });
+    const { result, target } = render(pattern);
+
+    expect(result.ok).toBe(true);
+    const labels = vi
+      .mocked(target.context.fillText)
+      .mock.calls.map(([text]) => String(text));
+    const legendStart = labels.indexOf("Bead Requirements");
+    expect(labels.slice(legendStart)).toEqual([
+      "Bead Requirements",
+      "A1",
+      "1 beads",
+      "A2",
+      "3 beads",
+      "A3",
+      "5 beads",
+    ]);
+    expect(labels).not.toContain("100 beads");
+    expect(labels).not.toContain("101 beads");
+    expect(labels).not.toContain("102 beads");
+  });
+
   it("renders every used legend color exactly once with its swatch and count", () => {
     const pattern = createPatternWithColors(40, 15);
     const { result, target } = render(pattern);
@@ -226,13 +313,13 @@ describe("renderPatternExport", () => {
     const labels = vi
       .mocked(target.context.fillText)
       .mock.calls.map(([text]) => String(text));
-    for (const entry of pattern.colors) {
+    for (const entry of pattern.materials) {
       expect(labels.filter((label) => label === entry.color.code)).toHaveLength(
         entry.beadCount + 1,
       );
     }
     expect(target.context.fillRect).toHaveBeenCalledTimes(
-      1 + 40 * 40 + pattern.colors.length,
+      1 + 40 * 40 + pattern.materials.length,
     );
   });
 

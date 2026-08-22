@@ -1,10 +1,10 @@
 # Poparooz Generator Source of Truth
 
-Status: **A08 completed and frozen; production active**
+Status: **Production active; P3-A03-SCOPE-A01 governance synchronized / scope closure complete**
 
-Baseline version: **3.0**
+Baseline version: **3.1**
 
-Last reviewed: **2026-08-12**
+Last reviewed: **2026-08-22**
 
 ## Authority
 
@@ -15,7 +15,10 @@ This document is the single governing baseline for the current Poparooz Generato
 - Poparooz is the only customer-visible product, color-display, sales, and website brand. Customer content never displays MARD or another third-party brand name, logo, or icon.
 - Scope may not expand without an explicit product decision and a corresponding update to this baseline.
 - Every phase is implemented and accepted independently. Passing one phase is required before entering the next.
-- MVP-A has no account, database, cloud project storage, community system, or Shopify Cart API.
+- The current production scope has no account, database, cloud project storage,
+  community system, or Shopify Cart API bridge. Historical MVP-A decisions are
+  retained below as historical baselines, not as a complete description of the
+  later accepted product.
 
 ## Product definition
 
@@ -45,11 +48,25 @@ https://poparooz.com/pages/fuse-bead-pattern-maker
 
 The generator remains a standalone application with its complete core generation flow when opened directly at `https://generator.poparooz.com`. Production uses React, TypeScript, Vite, Canvas, a lazy Web Worker, and browser-local image processing.
 
-Shopify owns its header, navigation, SEO and explanatory copy, FAQ, privacy explanation, product entry points, cart, iframe container, resize handling, full-screen fallback, and any future same-origin Cart API bridge. The independently deployed generator owns upload, local image processing, internal-reference matching, pattern generation, the Canvas workspace, bead/board statistics, PNG/CSV downloads, and controlled messages to the parent.
+Shopify owns its header, navigation, SEO and explanatory copy, FAQ, privacy explanation, product entry points, cart, iframe container, resize handling, full-screen fallback, and any future same-origin Cart API bridge. The independently deployed generator owns upload, local image processing, internal-reference matching, pattern generation, the Canvas workspace, bead/board statistics, the current local PNG download, and controlled messages to the parent. CSV expansion remains deferred unless separately authorized.
 
-The generator and Shopify parent communicate through a versioned `postMessage` protocol with exact origin validation. Images and image-derived content never cross that boundary.
+The current production generator and Shopify parent communicate through a
+versioned `postMessage` protocol with exact origin validation. Production
+messages are limited to `generator.ready` and `generator.resize`; raw images,
+Pattern content, and image-derived material data do not cross that boundary.
+A future, separately reviewed Commerce contract may authorize an
+explicit-customer-action-only payload containing approved public Poparooz color
+codes and approved commerce quantities. That exception is a candidate only and
+is not authorized or implemented by this document. Source images, pixels,
+filenames, paths, file metadata, Pattern Matrix data, image or Pattern hashes,
+internal/reference/supplier color identity, and arbitrary generator state remain
+prohibited.
 
-MVP-A does not use a Shopify App, Embedded App, Admin App, App Proxy, Shopify CLI project, deep theme customization, Docker, WSL, server-side image processing, authentication, a database, or Cart API integration. Shopify integration does not change this repository into a Shopify App.
+Current production does not use a Shopify App, Embedded App, Admin App, App
+Proxy, Shopify CLI project, server-side image processing, authentication, a
+database, or Cart API integration. Shopify integration does not change this
+repository into a Shopify App. Any future Cart bridge requires a separately
+approved Commerce contract and remains parent-owned.
 
 Production uses `https://generator.poparooz.com`; a `vercel.app` deployment is limited to development or deployment verification and is not the long-term public entry. Preview origins are not automatically trusted by production.
 
@@ -77,11 +94,16 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_ACCEPTANCE_CRITERIA.md`](POPAROOZ_ACCEPTANCE_CRITERIA.md): acceptance gates for Phase 0 and later phases.
 - [`POPAROOZ_CRAFT_UI_V1_CONTRACT.md`](POPAROOZ_CRAFT_UI_V1_CONTRACT.md): authoritative Phase 2 Design Tokens, responsive layout, semantic shell, accessibility, and customer-visible UI boundary.
 - [`POPAROOZ_PHASE_2_COMPLETION_AND_FREEZE.md`](POPAROOZ_PHASE_2_COMPLETION_AND_FREEZE.md): Phase 2 completion record, frozen contracts, open gates, and Phase 3 entry boundary.
+- [`POPAROOZ_P3_A03_SCOPE_FREEZE_DECISION.md`](POPAROOZ_P3_A03_SCOPE_FREEZE_DECISION.md): current product-completeness scope closure, evidence limitations, exclusions, and conditional next-stage sequence.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
 
-## Current scope boundary
+## Historical Phase 0 scope boundary
+
+The following records the repository's Phase 0 boundary. It is retained as
+history and must not be read as the current implementation state or as
+permission to disregard later accepted and frozen behavior.
 
 Phase 0 includes only:
 
@@ -119,7 +141,12 @@ P2-I08 adds container-width Workspace Modes, a Compact result-first structure, f
 
 P2-I09 completed automated regression, responsive boundary, controlled-Chromium, accessibility-tree, contrast, lifecycle, resource-cleanup, and stress validation. The evidence-backed visible-focus defect was fixed. Phase 2 UI code validation is **Passed with external device gates open**; rows without direct environment evidence remain `Not verified` and continue to block production launch. No production palette, runtime, export, commerce, persistence, Shopify behavior, or deployment was added.
 
-## Data truth boundary
+## Historical Phase 0 data truth boundary
+
+The opening statements in this section describe the evidence state at the
+Phase 0 freeze. The later formal Palette and production Runtime state under
+**Current production state** supersedes those historical availability claims;
+the privacy, provenance, and public/internal separation rules remain binding.
 
 No production internal reference palette, Poparooz display-code list, or sellable range is defined. Publicly available color values may later be used internally only as clearly labeled reference values; they must not be presented as exact physical matches or verified Poparooz inventory. Internal palette fields are governed by [`POPAROOZ_MARD_PALETTE_CONTRACT.md`](POPAROOZ_MARD_PALETTE_CONTRACT.md), canonical file ingestion by [`POPAROOZ_PALETTE_IMPORT_CONTRACT.md`](POPAROOZ_PALETTE_IMPORT_CONTRACT.md), and every customer-visible consumer by [`POPAROOZ_PUBLIC_BRANDING_CONTRACT.md`](POPAROOZ_PUBLIC_BRANDING_CONTRACT.md). Visual reference charts are not valid production palette sources.
 
@@ -150,6 +177,8 @@ Before implementation begins, read this file and every formal document relevant 
 
 ## Current production state
 
+- Accepted repository baseline at P3-A03-SCOPE-A01 entry:
+  `71e601ff3d1e17a779d8d01aa906eb6816af4697`
 - P3-A02-A08: **Completed / Frozen / Production Active**
 - Production Launch Readiness: **Accepted for the deployed MVP scope**
 - Production Generation Runtime: **Available and production verified**
@@ -159,10 +188,21 @@ Before implementation begins, read this file and every formal document relevant 
 - Desktop and mobile Shopify embed smoke: **Passed**
 - Browser-local privacy: **Preserved**
 - Backend, database, Pages Functions, Cloudflare runtime Worker, Shopify App, App Proxy, and OAuth backend: **Not used**
+- Current Cart API/material-message bridge: **Not implemented**
+- Formal Generation Color Sets: **24 / 48 / 72 / 120 / 168 / 221**
+- Recommendation Policy v1: **Frozen; Recommended Bead Set equals Required Bead Set while remaining semantically independent**
+- Automatic Generation Color Set Recommendation: **Blocked / not activated / outside current production scope**
 
 The production acceptance includes upload, 40/80/104 White and Transparent generation, the 221-color set, Maximum Colors, Pattern preview, bead/material totals, selected package display, local PNG download, production Worker execution, desktop/mobile Shopify embedding, direct refresh, custom-domain HTTPS, Poparooz-only customer branding, and gallery regression after the external Shopify schema correction.
 
 User images remain browser-local through upload, browser decode, resize/normalization, local Worker execution, Pattern creation, local preview, and local PNG download. There is no image-upload backend, photo database, persistent photo storage, or deployment-introduced image logging. The production iframe bridge sends only bounded protocol-version-1 readiness and height metadata; it does not transfer images or Pattern content.
+
+P3-A03-SCOPE found no P0 blocker in the repository-level audit, code contracts,
+or accepted evidence. It did not perform new real-device, keyboard/screen-reader,
+performance, Shopify Cart/variant/inventory, or complete live-production
+acceptance. Production implementation resume is conditional. The next
+authorized work is a Results / Materials Decision; no Results, export, or
+commerce behavior is changed by this governance synchronization.
 
 ## Historical Phase 1 and Phase 2 freeze
 

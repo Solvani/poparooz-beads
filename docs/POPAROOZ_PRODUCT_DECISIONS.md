@@ -1,6 +1,6 @@
 # Poparooz Product Decisions
 
-Status: **Frozen through A08 production acceptance**
+Status: **Historical MVP-A decisions preserved; synchronized through P3-A03 scope closure**
 
 Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md)
 
@@ -17,7 +17,10 @@ Poparooz owns the shopping, website, and customer-visible color presentation. MA
 - Every customer-visible color object is produced by the strict Public Presentation Model and whitelist mapper; UI code must not render or serialize an internal palette record.
 - Internal audit, supplier mapping, source/version evidence, and license records retain truthful third-party names where required.
 
-## MVP-A included scope
+## Historical MVP-A included scope
+
+This section records the intended MVP-A baseline. Later accepted implementation
+and freeze records determine current production behavior where they differ.
 
 ### Start page
 
@@ -41,9 +44,11 @@ Poparooz owns the shopping, website, and customer-visible color presentation. MA
 - Swatch, Poparooz display code, ordinary English display name, bead count per color, total beads, colors used, pattern dimensions, horizontal boards, vertical boards, and estimated total boards.
 - Material counts reflect exact generated cells. Commerce-only values stay blank until verified.
 
-### Export and conversion
+### Historical export and conversion plan
 
-- PNG pattern and CSV material list with sanitized file names, palette/generator versions, pattern metadata, color counts, and board information.
+- The MVP-A plan included PNG and CSV outputs. Current accepted production
+  provides local PNG download; CSV expansion remains deferred unless separately
+  authorized.
 - `Get Beads for This Pattern` navigates only to a centrally configured Poparooz Shopify collection and records only non-image conversion telemetry. React components must not hard-code test, temporary, or local URLs.
 - Users do not log in and MVP-A does not add variants to the cart automatically.
 
@@ -67,7 +72,11 @@ The production iframe is hosted by a dedicated `pattern-maker` page template and
 - FAQ;
 - Shop Poparooz Beads.
 
-## MVP-A exclusions
+## Historical MVP-A exclusions
+
+These exclusions describe the MVP-A stage boundary. Later explicitly accepted
+features, including conservative background removal, supersede the corresponding
+historical exclusion without reopening other excluded capabilities.
 
 MVP-A excludes registration, login, accounts, databases, cloud saves or sync, community publishing, search, comments, likes, favorites, creator pages, AI subject detection, background removal, style transfer, Cart API, automatic variant addition, inventory lookup, pack conversion, complex layers, collaboration, brush, eraser, eyedropper, undo/redo, and other advanced editing.
 
@@ -75,9 +84,16 @@ MVP-A excludes registration, login, accounts, databases, cloud saves or sync, co
 
 MVP-B may add brush, eraser, eyedropper, rectangle fill, color replacement, undo/redo, local project import/export, simple crop, manual transparency, optional dithering, and basic pattern correction. MVP-B work may not be pulled into Phases 1–3.
 
-## Deferred commerce and community
+## Deferred commerce candidate and community
 
-Shopify one-click cart integration is Phase 5 and requires verified handles, variant IDs, pack sizes, waste policy, inventory behavior, partial-add behavior, parent-page Cart API, and conversion measurement. The external iframe never controls the cart directly: it sends a versioned material-requirement message after an explicit user click; the same-origin Shopify parent validates it, performs product/inventory mapping and Cart API operations, and returns a bounded result.
+Shopify one-click cart integration is a future candidate and requires a
+separately reviewed and frozen Commerce contract. No material message or Cart
+API bridge exists in current production. The external iframe must never control
+the cart directly. A future contract may, after explicit customer action,
+authorize a versioned bounded material-requirement message that the same-origin
+Shopify parent validates before product/inventory mapping and Cart API work.
+This document does not freeze the payload schema, `commerceQuantity`, purchase
+strategy, catalog mapping, inventory behavior, or partial-add policy.
 
 Accounts, cloud projects, publishing, galleries, search, favorites, comments, author pages, moderation, and copyright complaint handling remain an unscheduled Community Backlog.
 
@@ -97,7 +113,8 @@ Accounts, cloud projects, publishing, galleries, search, favorites, comments, au
 - The live Shopify theme template, section, `PATTERN MAKER` navigation entry, and image-gallery schema correction were completed manually in Shopify Admin and remain external platform state rather than repository implementation.
 - Shopify remains responsible for the theme, SEO content, navigation, FAQ, privacy copy, collection entry, cart, iframe container, height updates, and full-screen fallback.
 - The generator remains responsible for local upload/processing, pattern generation, Canvas, internal reference-based color/material calculations, Public Presentation mapping, downloads, and allowlisted messages.
-- MVP-A does not create a Shopify App, Embedded/Admin App, App Proxy, Shopify CLI project, deep theme integration, or Cart API bridge.
+- Current production does not include a Shopify App, Embedded/Admin App, App
+  Proxy, Shopify CLI project, or Cart API bridge.
 - Configuration is centralized. Candidate names are `VITE_SHOP_URL`, `VITE_BEADS_COLLECTION_URL`, `VITE_ALLOWED_PARENT_ORIGINS`, and `VITE_GENERATOR_PUBLIC_URL`; final names may follow the Phase 1 project convention without weakening the contract.
 - Cloudflare Pages preview addresses are for validation only. Production Shopify references the custom generator domain, and preview origins are excluded from the production allowlist by default.
 - Mobile always exposes `Open Pattern Maker Full Screen` to avoid nested-scroll, upload, download, virtual-keyboard, fixed-header, and Canvas gesture failures.

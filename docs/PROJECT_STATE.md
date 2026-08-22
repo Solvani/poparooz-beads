@@ -9,15 +9,15 @@ Repository: poparooz-beads
 Root: D:\Projects\poparooz-beads
 Remote: https://github.com/Solvani/poparooz-beads.git
 Branch: main
-Accepted implementation HEAD: 4fdac1d8f4e119c03736e02b999b9c6363d2461e
-Accepted implementation commit: fix: canonicalize white edge background
-Live HEAD: 4fdac1d8f4e119c03736e02b999b9c6363d2461e
-Live worktree: clean
+Accepted repository baseline HEAD: 71e601ff3d1e17a779d8d01aa906eb6816af4697
+Accepted repository baseline commit: test: record blocked three-reviewer recommendation candidate
+Live HEAD at P3-A03-SCOPE-A01 entry: 71e601ff3d1e17a779d8d01aa906eb6816af4697
+Live worktree at P3-A03-SCOPE-A01 entry: clean
 Upstream: origin/main
-Push: executed; local main and origin/main synchronized
+Push state at entry: local main and origin/main synchronized
 ```
 
-`9b2c98e0a1d716243025359d4070ff8c7582a4e3` is the P3-A01.3-U01 ExcelJS dependency-gate commit. `a3d11880603b430d8dc476b202968eb1b0accc62` is the accepted P3-A01.3 formal Palette compilation commit. `4fdac1d8f4e119c03736e02b999b9c6363d2461e` is the latest accepted product implementation baseline after the A08 deployment hotfix chain. Documentation or governance commits may advance the live repository HEAD without changing that implementation baseline.
+`9b2c98e0a1d716243025359d4070ff8c7582a4e3` is the P3-A01.3-U01 ExcelJS dependency-gate commit. `a3d11880603b430d8dc476b202968eb1b0accc62` is the accepted P3-A01.3 formal Palette compilation commit. `4fdac1d8f4e119c03736e02b999b9c6363d2461e` is the historical A08 deployment-hotfix implementation baseline. Later accepted production, evidence, closure, and developer-tooling commits advance the accepted repository baseline to `71e601ff3d1e17a779d8d01aa906eb6816af4697`. A later governance-only commit may advance live HEAD without changing production behavior; this document must not predict that uncreated commit SHA.
 
 Every task must verify the actual Git branch, HEAD, worktree, remote, and upstream state. When a formal task prompt provides an Expected HEAD, that explicitly specified task baseline governs. A live HEAD that differs from the accepted implementation baseline is not a conflict by itself; Codex must evaluate the commit history and the task baseline together.
 
@@ -70,6 +70,10 @@ Freeze commit:
 ```
 
 ### Phase 3 accepted work
+
+The entries below preserve their historical stage-local states. The later
+accepted production and governance state is summarized under **Current Phase**
+and does not rewrite those historical checkpoints.
 
 ```text
 P3-D01 Formal Palette Contract
@@ -332,12 +336,39 @@ A08-H02: Closed; corrected opaque near-white source-background contamination by 
 ```text
 Phase: Phase 3
 Status: production active
-Current accepted stage: P3-A02-A08 Completed / Frozen / Production Active
+Current accepted repository baseline: 71e601ff3d1e17a779d8d01aa906eb6816af4697
+Current governance stage: P3-A03-SCOPE-A01 Governance Synchronization / Scope Closure complete
 Production GenerationRuntime: Available and production verified
 Cloudflare Pages: Active
 Shopify embed: Active
-Next implementation task: not authorized
+Production implementation resume: Conditional
+Next authorized decision work: Results / Materials Decision
 ```
+
+The production Runtime and the A08 deployment remain active. The formal
+Generation Color Set profiles are `24 / 48 / 72 / 120 / 168 / 221`; `96`,
+`144`, and `192` are not formal profiles. Background Removal v1 Conservative
+and production area-average sampling remain the production baselines.
+
+P3-A03-E05-D02 froze Recommendation Policy v1:
+
+```text
+Recommended Bead Set = Required Bead Set
+```
+
+Required and Recommended remain semantically independent. P3-A03-E05-D04
+later evaluated automatic Generation Color Set Recommendation and concluded
+that deterministic recommendation is not reliable enough. That separate
+automatic recommendation remains blocked, not activated, and outside the
+current production scope; it does not supersede Recommendation Policy v1.
+
+P3-A03-SCOPE completed a repository-level product-completeness audit. It found
+no P0 blocker in repository code contracts or accepted evidence, subject to
+governance corrections. This is not new iPhone/Android, keyboard or screen
+reader, performance, Shopify Cart/variant/inventory, or complete live-production
+acceptance. Production implementation may resume only through separately
+authorized work, beginning with a Results / Materials Decision rather than
+direct implementation.
 
 P3-A01.4 and its D01 and A01 through A06 tasks are completed and frozen. The Runtime Artifact and Runtime Lock are deterministic and approved, every Vite build passes the fail-closed Production Gate during configuration resolution, and application startup synchronously validates and initializes the approved immutable Provider before React render. The real production module graph and emitted bundle expose only the approved Runtime Artifact as Palette-generated data. Build or Startup Gate failures do not fall back.
 
@@ -578,8 +609,15 @@ P3-A02-A07-H02 Conservative Transparent Background Cleanup - Completed / Frozen 
 P3-A02-A08 Production Deployment and Shopify Embed - Completed / Frozen / Production Active
 P3-A02-A08-H01 Lab White Endpoint Hotfix          Closed
 P3-A02-A08-H02 White Opaque Background Cleanup    Closed
-P3-D03     Pattern Annotation and Export          Not started
-P3-D04     Get Beads and Catalog Boundary         Not started
+P3-D03     Pattern Annotation and Export           Historical roadmap entry / superseded by later accepted work
+P3-D04     Get Beads and Catalog Boundary          Historical roadmap entry / commerce not implemented
+P3-A03-H03 Background Removal v1 Conservative      Frozen / production baseline
+P3-A03-Q02 Sampling Exploration                    Closed / area-average retained
+P3-A03-E05-D02 Recommendation Policy v1            Frozen
+P3-A03-E05-D04 Automatic Generation Recommendation Blocked / not activated
+P3-A03-SCOPE Product Completeness Audit             Complete / corrections synchronized by A01
+P3-A03-SCOPE-A01 Governance Synchronization         Completed / scope closure synchronized
+Next       Results / Materials Decision             Authorized decision work only
 ```
 
 The frozen P3-A02-D01 implementation boundary is:

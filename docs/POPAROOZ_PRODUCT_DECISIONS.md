@@ -1,6 +1,6 @@
 # Poparooz Product Decisions
 
-Status: **Historical MVP-A decisions preserved; synchronized through P3-A03-SCOPE-A04 Export Terminology / Material Contract closure**
+Status: **Historical MVP-A decisions preserved; synchronized through P3-A03-E05-A01 Recommendation Closure / Customer UI Suppression**
 
 Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md)
 
@@ -17,9 +17,29 @@ Poparooz owns the shopping, website, and customer-visible color presentation. MA
 - Every customer-visible color object is produced by the strict Public Presentation Model and whitelist mapper; UI code must not render or serialize an internal palette record.
 - Internal audit, supplier mapping, source/version evidence, and license records retain truthful third-party names where required.
 
-## Current Results and Materials decision
+## Current Results and Materials decisions
 
-P3-A03-SCOPE-A02 freezes **Option B** for future customer-facing Results:
+P3-A03-E05-A01 supersedes only the active customer-presentation portion of the
+earlier A02 decision. Current customer Results display:
+
+```text
+Pattern Summary
+-> Required Bead Set
+-> Bead Requirements
+```
+
+Additional Refill Packs remain within Bead Requirements. Recommended Bead Set
+is temporarily hidden and inactive in customer presentation. Auto and
+Recommended for Your Image are not active customer controls or labels. Manual
+Generation Color Set selection remains active with exactly
+`24 / 48 / 72 / 120 / 168 / 221`.
+
+This visibility decision does not delete or reinterpret Recommendation Policy
+v1 or the Recommended Bead Set semantic contract. Required and Recommended
+remain independent concepts even though only Required is currently displayed.
+
+P3-A03-SCOPE-A02 previously froze **Option B** as its customer-facing Results
+target:
 
 ```text
 Required Bead Set

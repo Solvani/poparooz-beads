@@ -346,6 +346,12 @@ A04-A01 implementation commit: 2e5d7e2bf7c45bb0e269c6bbf299099a0347fa1f
 A04-A01 implementation subject: fix: clarify generation color set terminology
 A04 classification: MINIMAL TERMINOLOGY IMPLEMENTATION / NO MATERIAL CONTRACT DEFECT
 A04 governance authority: docs/POPAROOZ_P3_A03_SCOPE_A04_EXPORT_TERMINOLOGY_MATERIAL_CONTRACT_DECISION.md
+P3-A03-E05-A00: COMPLETED / READ-ONLY
+A00 decision: CURRENT AUTOMATIC RECOMMENDATION DIRECTION BLOCKED
+P3-A03-E05-A01: COMPLETED / CUSTOMER RECOMMENDATION PRESENTATION INACTIVE
+A01 implementation commit: 09a031d6e2a7ff1e44374807d665bcadeb667f15
+A01 implementation subject: fix: hide blocked recommendation presentation
+A01 governance authority: docs/POPAROOZ_P3_A03_E05_A01_RECOMMENDATION_CLOSURE.md
 Canonical active customer-facing term: Generation Color Set
 Production GenerationRuntime: Available and production verified
 Cloudflare Pages: Active
@@ -370,6 +376,20 @@ later evaluated automatic Generation Color Set Recommendation and concluded
 that deterministic recommendation is not reliable enough. That separate
 automatic recommendation remains blocked, not activated, and outside the
 current production scope; it does not supersede Recommendation Policy v1.
+
+P3-A03-E05-A00 completed the current read-only architecture and evidence audit:
+
+```text
+CURRENT AUTOMATIC RECOMMENDATION DIRECTION BLOCKED
+```
+
+P3-A03-E05-A01 keeps manual Generation Color Set selection active and keeps
+Required Bead Set, Bead Requirements, and Additional Refill Packs visible. It
+removes Recommended Bead Set from active customer rendering and does not expose
+Auto or Recommended for Your Image. Recommendation Policy v1 and its tests remain
+retained as a separate post-generation semantic contract. Future reopening
+requires a new mechanism-level hypothesis, independent evidence, and separate
+authorization.
 
 P3-A03-SCOPE-A02 retains Recommendation Policy v1 only as a post-generation
 material-policy result for the already-generated current Pattern. It does not
@@ -651,6 +671,8 @@ P3-A03-H03 Background Removal v1 Conservative      Frozen / production baseline
 P3-A03-Q02 Sampling Exploration                    Closed / area-average retained
 P3-A03-E05-D02 Recommendation Policy v1            Frozen
 P3-A03-E05-D04 Automatic Generation Recommendation Blocked / not activated
+P3-A03-E05-A00 Recommendation Architecture Audit    Completed / read-only / direction blocked
+P3-A03-E05-A01 Recommendation Customer UI Closure   Completed / customer presentation inactive
 P3-A03-SCOPE Product Completeness Audit             Complete / corrections synchronized by A01
 P3-A03-SCOPE-A01 Governance Synchronization         Completed / scope closure synchronized
 P3-A03-SCOPE-A02 Results / Materials Decision       Completed / frozen with applicability qualifications

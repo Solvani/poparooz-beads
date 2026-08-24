@@ -1,6 +1,6 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; synchronized through P3-A03-SCOPE-A04 Export Terminology / Material Contract closure**
+Status: **Production active; synchronized through P3-A03-E05-A01 Recommendation Closure / Customer UI Suppression**
 
 Baseline version: **3.3**
 
@@ -97,6 +97,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_SCOPE_FREEZE_DECISION.md`](POPAROOZ_P3_A03_SCOPE_FREEZE_DECISION.md): current product-completeness scope closure, evidence limitations, exclusions, and conditional next-stage sequence.
 - [`POPAROOZ_P3_A03_SCOPE_A02_RESULTS_MATERIALS_DECISION.md`](POPAROOZ_P3_A03_SCOPE_A02_RESULTS_MATERIALS_DECISION.md): authoritative Results and Materials terminology, recommendation applicability, material authority, board boundary, derived projection, and Commerce boundary.
 - [`POPAROOZ_P3_A03_SCOPE_A04_EXPORT_TERMINOLOGY_MATERIAL_CONTRACT_DECISION.md`](POPAROOZ_P3_A03_SCOPE_A04_EXPORT_TERMINOLOGY_MATERIAL_CONTRACT_DECISION.md): authoritative active customer-facing terminology, local-PNG material mapping, A03 Material Authority application, and A04 evidence qualifications.
+- [`POPAROOZ_P3_A03_E05_A01_RECOMMENDATION_CLOSURE.md`](POPAROOZ_P3_A03_E05_A01_RECOMMENDATION_CLOSURE.md): authoritative automatic-recommendation closure, customer presentation suppression, retained manual Generation Color Set control, and future reopen boundary.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
@@ -199,6 +200,9 @@ Before implementation begins, read this file and every formal document relevant 
 - A04 classification: **Minimal terminology implementation / no Material Contract defect**
 - Recommendation Policy v1: **Retained / not superseded; Recommended Bead Set equals Required Bead Set while remaining semantically independent**
 - Automatic Generation Color Set Recommendation: **Blocked / not activated / outside current production scope**
+- Customer-facing Auto / Recommended for Your Image: **Not active / not displayed**
+- Customer-facing Recommended Bead Set: **Temporarily hidden / inactive**
+- Customer-facing Required Bead Set, Bead Requirements, and Additional Refill Packs: **Active**
 
 The production acceptance includes upload, 40/80/104 White and Transparent generation, the 221-color set, Maximum Colors, Pattern preview, bead/material totals, selected package display, local PNG download, production Worker execution, desktop/mobile Shopify embedding, direct refresh, custom-domain HTTPS, Poparooz-only customer branding, and gallery regression after the external Shopify schema correction.
 
@@ -215,6 +219,14 @@ trigger regeneration. Generation Color Set, Required Bead Set, and Recommended
 Bead Set are separate concepts. The E05 evidence used `poparooz-set-221` and
 must not be generalized into proof of equal profile-specific generation quality
 across all six formal Generation Color Sets.
+
+P3-A03-E05-A00 completed a read-only audit and concluded that the current
+DeltaE00, structural-feature, and adjacent-transition automatic Generation
+Color Set recommendation direction is blocked. P3-A03-E05-A01 therefore keeps
+manual Generation Color Set selection active and removes Recommended Bead Set
+from active customer rendering without deleting or reinterpreting Recommendation
+Policy v1. Reopening requires a genuinely new mechanism-level hypothesis,
+independent evidence, and separate authorization.
 
 Pattern-domain `MaterialRequirement`, `PublicMaterialRequirement`, and
 `buildMaterialRequirements()` remain authoritative for per-color `beadCount`.

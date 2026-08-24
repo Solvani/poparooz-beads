@@ -76,6 +76,32 @@ not select a Generation Color Set or trigger regeneration. The complete A02
 authority is
 [`POPAROOZ_P3_A03_SCOPE_A02_RESULTS_MATERIALS_DECISION.md`](POPAROOZ_P3_A03_SCOPE_A02_RESULTS_MATERIALS_DECISION.md).
 
+## Subsequent E05-A00 / A01 Recommendation Closure
+
+P3-A03-E05-A00 completed a read-only audit and concluded:
+
+```text
+CURRENT AUTOMATIC RECOMMENDATION DIRECTION BLOCKED
+```
+
+The conclusion applies to the current DeltaE00, structural-feature, and
+adjacent-transition automatic Generation Color Set recommendation direction.
+It is not a claim that all future smart recommendation is impossible.
+
+P3-A03-E05-A01 separately authorizes the customer-presentation change required
+by this conclusion. Manual Generation Color Set selection and its exact six
+formal profiles remain active. Required Bead Set, Bead Requirements, and
+Additional Refill Packs remain active and visible. Auto, Recommended for Your
+Image, and Recommended Bead Set are not active customer presentation.
+
+Recommendation Policy v1, its tests, the Recommended Bead Set semantic
+contract, and historical evidence remain retained. Required and Recommended
+remain semantically independent. This presentation closure does not activate a
+Generation Color Set recommendation or reinterpret Required as Recommended.
+Reopening requires a new mechanism-level hypothesis, independent evidence, and
+separate authorization; D04 threshold rescue against the same validation
+evidence is prohibited.
+
 ## Material Requirement Governance
 
 The existing Pattern-domain `MaterialRequirement`, `PublicMaterialRequirement`,

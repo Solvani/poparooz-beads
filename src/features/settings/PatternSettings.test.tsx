@@ -29,7 +29,7 @@ describe("PatternSettings", () => {
     expect(view.getByLabelText("Pattern Size")).toHaveValue("80");
     expect(view.getByText("Best for most photos.")).toBeInTheDocument();
     expect(view.getByLabelText("Maximum Colors")).toHaveValue(32);
-    expect(view.getByLabelText("Bead Color Set")).toHaveValue(
+    expect(view.getByLabelText("Generation Color Set")).toHaveValue(
       "poparooz-set-221",
     );
     expect(
@@ -51,7 +51,7 @@ describe("PatternSettings", () => {
     ).toBeInTheDocument();
     expect(
       view.getByText(
-        "Maximum number of colors used in the generated pattern. This does not change the selected Bead Color Set.",
+        "Maximum number of colors used in the generated pattern. This does not change the selected Generation Color Set.",
       ),
     ).toBeInTheDocument();
     expect(view.getByText("Bead Size")).toBeInTheDocument();

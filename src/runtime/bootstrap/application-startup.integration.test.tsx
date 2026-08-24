@@ -68,7 +68,7 @@ describe("Application startup integration", () => {
       screen.getByRole("button", { name: "Generate Pattern" }),
     ).toBeDisabled();
     expect(result.generationRuntime.availability.available).toBe(true);
-    expect(screen.getByLabelText("Bead Color Set")).toHaveValue(
+    expect(screen.getByLabelText("Generation Color Set")).toHaveValue(
       "poparooz-set-221",
     );
     expect(screen.queryByText(/not available in this preview/i)).toBeNull();

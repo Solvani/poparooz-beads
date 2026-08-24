@@ -204,7 +204,7 @@ describe("renderPatternExport", () => {
     expect(labels).toContain("Color Code Pattern");
     expect(labels).toContain("Pattern Size: 2 × 2");
     expect(labels).toContain("Colors Used: 2 · Total Beads: 3");
-    expect(labels).toContain("Bead Color Set: 48-Color Set");
+    expect(labels).toContain("Generation Color Set: 48-Color Set");
     expect(labels).not.toContain(expect.stringContaining("Actual Colors"));
     expect(labels.filter((label) => label === "A1")).toHaveLength(3);
     expect(labels.filter((label) => label === "B1")).toHaveLength(2);

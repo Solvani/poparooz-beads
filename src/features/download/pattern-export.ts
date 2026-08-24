@@ -302,7 +302,7 @@ function drawExport(
     metadataY + PATTERN_EXPORT_METADATA_LINE_HEIGHT,
   );
   context.fillText(
-    `Bead Color Set: ${selectedColorSetLabel}`,
+    `Generation Color Set: ${selectedColorSetLabel}`,
     PATTERN_EXPORT_LEFT_MARGIN,
     metadataY + PATTERN_EXPORT_METADATA_LINE_HEIGHT * 2,
   );

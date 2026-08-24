@@ -278,7 +278,7 @@ describe("App", () => {
     render(<App generationRuntime={runtime} />);
     await completeInputs();
     await userEvent.selectOptions(
-      screen.getByLabelText("Bead Color Set"),
+      screen.getByLabelText("Generation Color Set"),
       "poparooz-set-72",
     );
 
@@ -347,7 +347,7 @@ describe("App", () => {
     expect(runtime.service.generate).toHaveBeenCalledOnce();
 
     await userEvent.selectOptions(
-      screen.getByLabelText("Bead Color Set"),
+      screen.getByLabelText("Generation Color Set"),
       "poparooz-set-221",
     );
     await userEvent.click(

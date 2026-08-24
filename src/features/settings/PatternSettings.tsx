@@ -45,7 +45,7 @@ export function PatternSettings({
         </p>
       ) : null}
       <div className="form-field">
-        <label htmlFor="color-set-profile">Bead Color Set</label>
+        <label htmlFor="color-set-profile">Generation Color Set</label>
         <select
           id="color-set-profile"
           value={
@@ -92,7 +92,7 @@ export function PatternSettings({
       <NumberSetting
         id="maximum-colors"
         label="Maximum Colors"
-        help="Maximum number of colors used in the generated pattern. This does not change the selected Bead Color Set."
+        help="Maximum number of colors used in the generated pattern. This does not change the selected Generation Color Set."
         value={value.maxColors}
         min={2}
         max={64}

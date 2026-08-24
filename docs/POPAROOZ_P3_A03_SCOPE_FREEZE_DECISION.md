@@ -80,8 +80,12 @@ authority is
 
 The existing Pattern-domain `MaterialRequirement`, `PublicMaterialRequirement`,
 and `buildMaterialRequirements()` remain authoritative for final Pattern
-per-color bead counts. Future Results, export, or commerce work must derive from
-that source rather than create a competing material truth source.
+per-color bead counts. P3-A03-SCOPE-A03 subsequently froze
+`PublicPatternResult.materials` as the input to the active
+`DerivedMaterialRequirementV1` production/application projection. Results and
+Export must derive from that source rather than recount the Pattern Matrix, use
+`pattern.colors[].beadCount` as quantity authority, or create a competing
+material truth source.
 
 The frozen nominal quantity and refill calculation are:
 
@@ -100,6 +104,38 @@ totalPacksRequired = ceil(beadCount / 1000)
 not interchangeable. `commerceQuantity` is not frozen because the purchase
 strategy—individual color packs or a complete Required Bead Set plus refills—has
 not been selected.
+
+## Subsequent A03 and A04 Closure
+
+P3-A03-SCOPE-A03 is **COMPLETED / FROZEN / COMMITTED / PUSHED / CLOSED WITH
+FROZEN EVIDENCE APPLICABILITY QUALIFICATION**. Its implementation commit is
+`4be9ce43477a7ced7764620ea05c61d0ee433186` (`refactor: unify derived material
+requirements`). The A03 Material Authority remains frozen.
+
+P3-A03-SCOPE-A04 is **COMPLETED / FROZEN / CLOSED WITH EVIDENCE APPLICABILITY
+QUALIFICATIONS**. Its implementation commit is
+`2e5d7e2bf7c45bb0e269c6bbf299099a0347fa1f` (`fix: clarify generation color set
+terminology`). A04 found no Material Contract defect and made a minimal
+terminology implementation:
+
+```text
+MINIMAL TERMINOLOGY IMPLEMENTATION
+NO MATERIAL CONTRACT DEFECT
+```
+
+- **Generation Color Set** is frozen as the canonical active customer-facing
+  term;
+- **Bead Color Set** is deprecated for active customer-facing use;
+- Settings, Results Pattern Summary, and local PNG use the canonical term;
+- PNG quantity authority remains derived from `PublicPatternResult.materials`,
+  joined by `patternColorIndex`, with `pattern.colors` display ordering; and
+- Required Bead Set, Recommended Bead Set, Bead Requirements, and Additional
+  Refill Packs remain separate.
+
+A04 does not implement Commerce, Shopify purchase mapping, Board purchase
+policy, automatic Generation Color Set Recommendation, Email Gate, deployment,
+or image-algorithm changes. It does not claim pixel-level PNG visual or clipping
+acceptance. Later work requires a separately authorized stage.
 
 ## Shopify Catalog and Privacy Boundary
 
@@ -173,9 +209,9 @@ implementation. Production work may resume only through the separately
 authorized sequence above, beginning with the Results / Materials Decision.
 
 Sequence progress after this historical A01 decision: step 2 was completed and
-frozen by P3-A03-SCOPE-A02. Step 3, P3-A03-SCOPE-A03 Unified Derived Material
-Requirement Contract, is only the next stage after A02 closure approval and is
-not started by the A02 governance freeze.
+frozen by P3-A03-SCOPE-A02; step 3 was completed and frozen by
+P3-A03-SCOPE-A03; and step 4 was completed and frozen by P3-A03-SCOPE-A04.
+Progress to any later step requires separate explicit authorization.
 
 ## Git Baseline
 

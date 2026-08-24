@@ -1,6 +1,6 @@
 # Poparooz Product Decisions
 
-Status: **Historical MVP-A decisions preserved; synchronized through P3-A03-SCOPE-A02 Results / Materials Decision**
+Status: **Historical MVP-A decisions preserved; synchronized through P3-A03-SCOPE-A04 Export Terminology / Material Contract closure**
 
 Authority: [`00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md`](00_POPAROOZ_GENERATOR_SOURCE_OF_TRUTH.md)
 
@@ -46,7 +46,32 @@ The terms remain distinct:
 
 A Pattern may therefore have `Generation Color Set: 120` and
 `Required Bead Set: 72` without contradiction. The ambiguous customer-facing or
-export term **Bead Color Set** is deprecated for future work.
+export term **Bead Color Set** is deprecated for active customer-facing use.
+
+P3-A03-SCOPE-A04 implements and freezes **Generation Color Set** in the Settings
+selector/help, Results Pattern Summary, and local PNG metadata. The profile value
+labels remain `<size>-Color Set`; the formal sizes remain exactly
+`24 / 48 / 72 / 120 / 168 / 221`. `96`, `144`, and `192` remain unsupported.
+This was a minimal terminology implementation; no Material Contract defect was
+found. Source-level Export geometry remained unchanged, but pixel-level PNG
+visual or clipping acceptance was not completed.
+
+The A03/A04 material and Export boundary is:
+
+```text
+PublicPatternResult.materials
+-> DerivedMaterialRequirementV1
+-> patternColorIndex mapping
+-> pattern.colors display order
+-> local PNG Bead Requirements legend
+```
+
+Bead Requirements take `beadCount` from the Pattern material authority. Results
+and Export do not recount the Pattern Matrix or use
+`pattern.colors[].beadCount` as quantity authority. Required Bead Set,
+Recommended Bead Set, Bead Requirements, and Additional Refill Packs remain
+separate concepts. A04 does not define Commerce purchase semantics or activate
+automatic Generation Color Set Recommendation.
 
 The approved future Results information-architecture target is:
 

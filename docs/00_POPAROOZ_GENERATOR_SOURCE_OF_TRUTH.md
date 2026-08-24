@@ -1,10 +1,10 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; P3-A03-SCOPE-A02 Results / Materials Decision completed / frozen with applicability qualifications**
+Status: **Production active; synchronized through P3-A03-SCOPE-A04 Export Terminology / Material Contract closure**
 
-Baseline version: **3.2**
+Baseline version: **3.3**
 
-Last reviewed: **2026-08-22**
+Last reviewed: **2026-08-24**
 
 ## Authority
 
@@ -96,6 +96,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_PHASE_2_COMPLETION_AND_FREEZE.md`](POPAROOZ_PHASE_2_COMPLETION_AND_FREEZE.md): Phase 2 completion record, frozen contracts, open gates, and Phase 3 entry boundary.
 - [`POPAROOZ_P3_A03_SCOPE_FREEZE_DECISION.md`](POPAROOZ_P3_A03_SCOPE_FREEZE_DECISION.md): current product-completeness scope closure, evidence limitations, exclusions, and conditional next-stage sequence.
 - [`POPAROOZ_P3_A03_SCOPE_A02_RESULTS_MATERIALS_DECISION.md`](POPAROOZ_P3_A03_SCOPE_A02_RESULTS_MATERIALS_DECISION.md): authoritative Results and Materials terminology, recommendation applicability, material authority, board boundary, derived projection, and Commerce boundary.
+- [`POPAROOZ_P3_A03_SCOPE_A04_EXPORT_TERMINOLOGY_MATERIAL_CONTRACT_DECISION.md`](POPAROOZ_P3_A03_SCOPE_A04_EXPORT_TERMINOLOGY_MATERIAL_CONTRACT_DECISION.md): authoritative active customer-facing terminology, local-PNG material mapping, A03 Material Authority application, and A04 evidence qualifications.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
@@ -193,6 +194,9 @@ Before implementation begins, read this file and every formal document relevant 
 - Backend, database, Pages Functions, Cloudflare runtime Worker, Shopify App, App Proxy, and OAuth backend: **Not used**
 - Current Cart API/material-message bridge: **Not implemented**
 - Formal Generation Color Sets: **24 / 48 / 72 / 120 / 168 / 221**
+- Canonical active customer-facing term: **Generation Color Set**
+- Deprecated active customer-facing term: **Bead Color Set**
+- A04 classification: **Minimal terminology implementation / no Material Contract defect**
 - Recommendation Policy v1: **Retained / not superseded; Recommended Bead Set equals Required Bead Set while remaining semantically independent**
 - Automatic Generation Color Set Recommendation: **Blocked / not activated / outside current production scope**
 
@@ -214,17 +218,37 @@ across all six formal Generation Color Sets.
 
 Pattern-domain `MaterialRequirement`, `PublicMaterialRequirement`, and
 `buildMaterialRequirements()` remain authoritative for per-color `beadCount`.
-Future derived Results and export projections start from
-`PublicPatternResult.materials` and must pass that count through rather than
-recount the Pattern Matrix. `totalPacksRequired` is a nominal 1,000-bead pack
-equivalent and is not `commerceQuantity`; Commerce identity, quantity, catalog,
-inventory, cart, and purchase strategy remain outside Pattern/material truth.
+The active production/application projection starts from
+`PublicPatternResult.materials` and returns `DerivedMaterialRequirementV1` with
+exactly `patternColorIndex`, `color`, `beadCount`, `nominalBeadsPerColor`,
+`totalPacksRequired`, and `additionalRefillPacks`. It must pass through
+`PublicMaterialRequirement.beadCount` rather than recount the Pattern Matrix or
+use `pattern.colors[].beadCount` as quantity authority. The frozen derivation is:
 
-`Pattern.boardLayout` is authoritative Pattern layout truth.
-`recommendBoardSetup()` remains the separate, unchanged production board-purchase
-recommendation behavior. P3-A03-SCOPE-A03, the Unified Derived Material
-Requirement Contract, is only the next stage after A02 closure approval; A03 is
-not started or implemented by this governance update.
+```text
+nominalBeadsPerColor = 1000
+totalPacksRequired = ceil(beadCount / 1000)
+additionalRefillPacks = max(0, totalPacksRequired - 1)
+```
+
+The local PNG Export derives quantities once, maps material and display color by
+`patternColorIndex`, and preserves `pattern.colors` legend display order. The
+Generation Color Set metadata comes from the successful-generation snapshot.
+Required Bead Set, Recommended Bead Set, Bead Requirements, and Additional
+Refill Packs remain separate concepts.
+
+`totalPacksRequired` is a nominal 1,000-bead pack equivalent and is not
+`commerceQuantity`; Commerce identity, quantity, catalog, inventory, cart, and
+purchase strategy remain outside Pattern/material truth. `Pattern.boardLayout`
+is authoritative Pattern layout truth. `recommendBoardSetup()` remains the
+separate, unchanged production board-purchase recommendation behavior.
+
+The pre-existing independent formula in
+`scripts/evidence/e05-recommendation-policy-evaluation.ts` remains an accepted
+frozen historical evidence exception, not an active production/application
+material consumer. A04 did not modify it. A04 froze source-level terminology and
+Export contract invariance, but did not complete pixel-level PNG visual or
+clipping acceptance.
 
 ## Historical Phase 1 and Phase 2 freeze
 

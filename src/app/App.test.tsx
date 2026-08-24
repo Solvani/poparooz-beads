@@ -321,16 +321,20 @@ describe("App", () => {
     const packageRow = within(summarySection)
       .getByText("Generation Color Set")
       .closest("div")!;
-    const beadRecommendation = screen
-      .getByRole("heading", { name: "Recommended Bead Set" })
+    const requiredBeadSet = screen
+      .getByRole("heading", { name: "Required Bead Set" })
       .closest<HTMLElement>(".bead-set-requirements__item")!;
     expect(within(packageRow).getByText("72-Color Set")).toBeInTheDocument();
     expect(
       within(summarySection).getByText("Full Background"),
     ).toBeInTheDocument();
     expect(
-      within(beadRecommendation).getByText("48-Color Set"),
+      within(requiredBeadSet).getByText("48-Color Set"),
     ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Recommended Bead Set" }),
+    ).toBeNull();
+    expect(screen.queryByText("Recommended for Your Image")).toBeNull();
     await userEvent.click(
       screen.getByRole("button", { name: "Color Code View" }),
     );
@@ -363,7 +367,7 @@ describe("App", () => {
       }),
     ).toBeNull();
     expect(
-      within(beadRecommendation).getByText("48-Color Set"),
+      within(requiredBeadSet).getByText("48-Color Set"),
     ).toBeInTheDocument();
     expect(screen.getByText("1 × 52×52 Board")).toBeInTheDocument();
     await userEvent.clear(screen.getByLabelText("Maximum Colors"));
@@ -379,7 +383,7 @@ describe("App", () => {
       screen.getByRole("img", { name: /Bead pattern preview/ }),
     ).toBeInTheDocument();
     expect(
-      within(beadRecommendation).getByText("48-Color Set"),
+      within(requiredBeadSet).getByText("48-Color Set"),
     ).toBeInTheDocument();
     expect(screen.getByText("1 × 52×52 Board")).toBeInTheDocument();
     const regenerate = screen.getByRole("button", {
@@ -497,7 +501,7 @@ describe("App", () => {
     expect(
       within(
         screen
-          .getByRole("heading", { name: "Recommended Bead Set" })
+          .getByRole("heading", { name: "Required Bead Set" })
           .closest<HTMLElement>(".bead-set-requirements__item")!,
       ).getByText("221-Color Set"),
     ).toBeInTheDocument();
@@ -823,6 +827,10 @@ describe("App", () => {
     expect(
       screen.getByRole("heading", { name: "Bead Requirements" }),
     ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Recommended Bead Set" }),
+    ).toBeNull();
+    expect(screen.queryByText("Recommended for Your Image")).toBeNull();
     const compactContent = document.querySelector<HTMLElement>(
       ".compact-result-content",
     )!;

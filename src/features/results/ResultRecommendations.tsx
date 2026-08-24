@@ -1,6 +1,5 @@
 import type { ColorRowView, PatternSummaryView } from "./result.types";
 import { recommendBoardSetup } from "./board-recommendation";
-import { recommendBeadSet } from "./recommendation-policy";
 import { findRequiredApprovedBeadSet } from "./required-bead-set";
 
 export function ResultRecommendations({
@@ -13,7 +12,6 @@ export function ResultRecommendations({
   const requiredBeadSet = findRequiredApprovedBeadSet(
     colors.map((color) => color.code),
   );
-  const recommendedBeadSet = recommendBeadSet({ requiredBeadSet });
   const boardSetup = recommendBoardSetup({
     width: summary.width,
     height: summary.height,
@@ -26,7 +24,7 @@ export function ResultRecommendations({
       >
         <span className="result-recommendation__badge">Bead Sets</span>
         <h3 id="bead-set-requirements-heading">Bead Set Requirements</h3>
-        {requiredBeadSet === null || recommendedBeadSet === null ? (
+        {requiredBeadSet === null ? (
           <p className="result-recommendation__unavailable">
             No published set covers every color in this pattern.
           </p>
@@ -39,16 +37,6 @@ export function ResultRecommendations({
               </p>
               <p className="result-recommendation__support">
                 Smallest set that includes every color used in your pattern.
-              </p>
-            </div>
-            <div className="bead-set-requirements__item">
-              <h4>Recommended Bead Set</h4>
-              <p className="result-recommendation__value">
-                {recommendedBeadSet.label}
-              </p>
-              <p className="result-recommendation__support">
-                Recommended for this pattern. It is also the minimum set
-                required.
               </p>
             </div>
           </div>

@@ -47,7 +47,9 @@ describe("PatternSettings", () => {
       "221-Color Set",
     ]);
     expect(
-      view.getByText("Choose the Poparooz color range available for matching."),
+      view.getByText(
+        "Try different Color Sets and regenerate to compare results. More colors don鈥檛 always mean a better pattern.",
+      ),
     ).toBeInTheDocument();
     expect(
       view.getByText(

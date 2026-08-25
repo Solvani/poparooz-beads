@@ -104,6 +104,20 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
     expect(workspace).toContain("height: clamp(280px, 52vh, 720px)");
   });
 
+  it("keeps zoom controls together while allowing the desktop toolbar to wrap", () => {
+    expect(workspace).toMatch(
+      /\.canvas-toolbar__zoom-controls \{[\s\S]*?flex-wrap: nowrap;/,
+    );
+    expect(workspace).toMatch(
+      /\.canvas-toolbar__secondary \{[\s\S]*?max-width: 100%;[\s\S]*?flex: 0 0 auto;/,
+    );
+    expect(
+      workspace.match(
+        /\.workspace-shell \.canvas-toolbar \{[\s\S]*?flex-wrap: wrap;/g,
+      ),
+    ).toHaveLength(2);
+  });
+
   it("keeps the desktop shell stable while generated content follows top-aligned natural flow", () => {
     expect(workspace).toContain(
       "--desktop-workspace-height: clamp(720px, calc(100dvh - 104px), 820px)",

@@ -355,13 +355,18 @@ A01 governance authority: docs/POPAROOZ_P3_A03_E05_A01_RECOMMENDATION_CLOSURE.md
 P3-A03-E04-A01: COMPLETED / FROZEN / PRODUCTION IMPLEMENTATION NOT STARTED
 E04-A01 entry baseline: 3dc0fd57865a2bce3c79d8622c464c82719cb35d
 E04 production implementation: NOT STARTED / NOT AUTHORIZED BY A01
-E04 email provider and Cloudflare infrastructure: NOT SELECTED / NOT CREATED
+P3-A03-E04-A02-A01: COMPLETED / FROZEN / PRODUCTION IMPLEMENTATION NOT STARTED
+E04-A02-A01 entry baseline: 36b529fecba2af108560a37c68e3afe450667f0a
+E04-A02-A01 frozen direction: SAME-ORIGIN PATH-SCOPED WORKERS ROUTE / D1 ONLY / TURNSTILE / RESEND TRANSACTIONAL VERIFICATION / ONE-TIME CODE
+E04-A02-A01 qualification: FROZEN GOVERNANCE DIRECTION ONLY / RESOURCES NOT CREATED / PROVIDER NOT INTEGRATED / PROVIDER-DEFAULT AUDIT UNPERFORMED
+E04-A02-A01 authority: docs/POPAROOZ_P3_A03_E04_A02_PROVIDER_TOPOLOGY_RETENTION_DECISION.md
 Canonical active customer-facing term: Generation Color Set
 Production GenerationRuntime: Available and production verified
 Cloudflare Pages: Active
 Shopify embed: Active
 Production implementation resume: Conditional
-Next separately authorized candidate: P3-A03-E04-A02 — Provider / Infrastructure / Retention Contract
+Next separately authorized candidate: P3-A03-E04-A02-A02 - Schema / Security / API Contract
+E04-A02-A02 status: NOT STARTED / NOT AUTHORIZED BY THE A02-A01 FREEZE
 ```
 
 The production Runtime and the A08 deployment remain active. The formal
@@ -401,6 +406,16 @@ implementation-entry contract. It supersedes the historical statement that the
 entire Email Gate topic is deferred, but only at the governance-contract level.
 The existing PNG remains browser-local; no gate UI, endpoint, provider,
 Cloudflare infrastructure, or production behavior has been implemented.
+
+P3-A03-E04-A02-A01 freezes the provider, topology, and retention governance
+direction while keeping the static application on Cloudflare Pages. It selects
+a narrow same-origin path-scoped standalone Workers Route, D1-only storage,
+Turnstile abuse challenge, Resend transactional verification delivery, and
+one-time-code verification. Production implementation and provider acceptance
+remain blocked; the provider-default audit is unperformed, and no account,
+Worker, D1 database, Turnstile widget, DNS record, secret, scheduled aggregation,
+or downstream report has been created. P3-A03-E04-A02-A02 remains a separately
+authorized candidate and has not started.
 
 P3-A03-SCOPE-A02 retains Recommendation Policy v1 only as a post-generation
 material-policy result for the already-generated current Pattern. It does not
@@ -685,6 +700,7 @@ P3-A03-E05-D04 Automatic Generation Recommendation Blocked / not activated
 P3-A03-E05-A00 Recommendation Architecture Audit    Completed / read-only / direction blocked
 P3-A03-E05-A01 Recommendation Customer UI Closure   Completed / customer presentation inactive
 P3-A03-E04-A01 Email Download Gate Contract          Completed / frozen / production not implemented
+P3-A03-E04-A02-A01 Provider/Topology/Retention Decision Completed / frozen / production implementation not started / provider acceptance pending
 P3-A03-SCOPE Product Completeness Audit             Complete / corrections synchronized by A01
 P3-A03-SCOPE-A01 Governance Synchronization         Completed / scope closure synchronized
 P3-A03-SCOPE-A02 Results / Materials Decision       Completed / frozen with applicability qualifications

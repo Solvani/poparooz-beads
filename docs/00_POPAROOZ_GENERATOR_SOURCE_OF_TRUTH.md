@@ -1,8 +1,8 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; synchronized through P3-A03-E04-A01 Email Download Gate Contract Freeze**
+Status: **Production active; synchronized through P3-A03-E04-A02-A01 provider/topology/retention decision freeze**
 
-Baseline version: **3.4**
+Baseline version: **3.5**
 
 Last reviewed: **2026-08-25**
 
@@ -99,6 +99,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_SCOPE_A04_EXPORT_TERMINOLOGY_MATERIAL_CONTRACT_DECISION.md`](POPAROOZ_P3_A03_SCOPE_A04_EXPORT_TERMINOLOGY_MATERIAL_CONTRACT_DECISION.md): authoritative active customer-facing terminology, local-PNG material mapping, A03 Material Authority application, and A04 evidence qualifications.
 - [`POPAROOZ_P3_A03_E05_A01_RECOMMENDATION_CLOSURE.md`](POPAROOZ_P3_A03_E05_A01_RECOMMENDATION_CLOSURE.md): authoritative automatic-recommendation closure, customer presentation suppression, retained manual Generation Color Set control, and future reopen boundary.
 - [`POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md`](POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md): bounded Email Download Gate customer flow, browser-local privacy, verification, persistence, consent, backend, security, accessibility, and implementation-entry contract.
+- [`POPAROOZ_P3_A03_E04_A02_PROVIDER_TOPOLOGY_RETENTION_DECISION.md`](POPAROOZ_P3_A03_E04_A02_PROVIDER_TOPOLOGY_RETENTION_DECISION.md): frozen bounded v1 Worker Route, same-origin API, D1-only storage, Turnstile, Resend, one-time-code, retention, and cost direction without authorizing implementation or accepting actual provider/infrastructure configuration.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
@@ -205,7 +206,9 @@ Before implementation begins, read this file and every formal document relevant 
 - Customer-facing Recommended Bead Set: **Temporarily hidden / inactive**
 - Customer-facing Required Bead Set, Bead Requirements, and Additional Refill Packs: **Active**
 - P3-A03-E04-A01: **Email Download Gate contract frozen / production implementation not started**
-- Email backend, provider, and Cloudflare gate infrastructure: **Not implemented / not selected**
+- P3-A03-E04-A02-A01: **Provider, topology, and retention decision completed / frozen / production implementation not started**
+- Email backend and Cloudflare gate infrastructure: **Not implemented / not created**
+- Email provider and topology: **Frozen governance direction only / resources not created / provider not integrated / provider-default audit unperformed**
 
 The production acceptance includes upload, 40/80/104 White and Transparent generation, the 221-color set, Maximum Colors, Pattern preview, bead/material totals, selected package display, local PNG download, production Worker execution, desktop/mobile Shopify embedding, direct refresh, custom-domain HTTPS, Poparooz-only customer branding, and gallery regression after the external Shopify schema correction.
 
@@ -218,6 +221,14 @@ never receive images, Pattern content, PNG data, or generator internals.
 Marketing consent remains optional and independent from download eligibility.
 No Email Gate UI, backend, provider, infrastructure, or production behavior is
 implemented by A01.
+
+P3-A03-E04-A02-A01 freezes one standalone Cloudflare Worker on a narrow
+same-origin path-scoped Workers Route, D1 as the sole v1 storage direction,
+Turnstile for abuse challenge, Resend for bounded transactional verification
+delivery, and one-time-code verification. This is a frozen governance direction,
+not production provider or infrastructure acceptance. No provider account,
+Worker, D1 database, Turnstile widget, DNS record, secret, or integration exists
+as a result of the freeze, and the provider-default audit remains unperformed.
 
 P3-A03-SCOPE found no P0 blocker in the repository-level audit, code contracts,
 or accepted evidence. It did not perform new real-device, keyboard/screen-reader,

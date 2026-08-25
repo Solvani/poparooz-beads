@@ -57,12 +57,13 @@ export function CanvasToolbar({
       </div>
       <Button
         className="canvas-toolbar__more"
-        variant="tertiary"
+        variant="secondary"
+        aria-label="More controls"
         aria-expanded={secondaryControlsOpen}
         aria-controls={secondaryControlsId}
         onClick={() => setSecondaryControlsOpen((open) => !open)}
       >
-        More controls
+        More Controls ▾
       </Button>
       {secondaryControlsOpen ? (
         <div

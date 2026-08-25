@@ -46,6 +46,8 @@ describe("CanvasToolbar", () => {
   it("reveals zoom controls only from the accessible secondary disclosure", async () => {
     const props = renderToolbar();
     const more = screen.getByRole("button", { name: "More controls" });
+    expect(more).toHaveTextContent("More Controls ▾");
+    expect(more).toHaveClass("button--secondary");
     expect(more).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByLabelText("Current zoom")).toBeNull();
     expect(screen.queryByRole("button", { name: "Zoom out" })).toBeNull();
@@ -59,6 +61,11 @@ describe("CanvasToolbar", () => {
     expect(props.onZoomOut).toHaveBeenCalledOnce();
     expect(props.onZoomIn).toHaveBeenCalledOnce();
     expect(screen.queryByRole("button", { name: "Read Codes" })).toBeNull();
+
+    await userEvent.click(more);
+
+    expect(more).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByLabelText("Current zoom")).toBeNull();
   });
 
   it("switches between pure presentation modes with an announced selection", async () => {

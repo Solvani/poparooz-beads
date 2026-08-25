@@ -112,7 +112,7 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
       /\.canvas-toolbar__zoom-controls \{[\s\S]*?flex-wrap: nowrap;/,
     );
     expect(workspace).toMatch(
-      /\.canvas-toolbar__secondary \{[\s\S]*?max-width: 100%;[\s\S]*?flex: 0 0 auto;/,
+      /\.canvas-toolbar__secondary \{[\s\S]*?display: grid;[\s\S]*?width: fit-content;[\s\S]*?max-width: 100%;[\s\S]*?flex: 0 0 auto;[\s\S]*?justify-items: start;/,
     );
     expect(
       workspace.match(

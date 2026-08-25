@@ -105,6 +105,9 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
   });
 
   it("keeps zoom controls together while allowing the desktop toolbar to wrap", () => {
+    expect(workspace).toContain(
+      ".canvas-toolbar__secondary-controls {\n  display: contents;",
+    );
     expect(workspace).toMatch(
       /\.canvas-toolbar__zoom-controls \{[\s\S]*?flex-wrap: nowrap;/,
     );
@@ -114,6 +117,16 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
     expect(
       workspace.match(
         /\.workspace-shell \.canvas-toolbar \{[\s\S]*?flex-wrap: wrap;/g,
+      ),
+    ).toHaveLength(2);
+    expect(
+      workspace.match(
+        /\.workspace-shell \.canvas-toolbar__secondary-controls \{[\s\S]*?flex: 0 0 auto;[\s\S]*?flex-wrap: nowrap;[\s\S]*?margin-left: auto;/g,
+      ),
+    ).toHaveLength(2);
+    expect(
+      workspace.match(
+        /\.workspace-shell \.canvas-toolbar__primary \{[\s\S]*?width: auto;[\s\S]*?flex: 1 1 auto;/g,
       ),
     ).toHaveLength(2);
   });

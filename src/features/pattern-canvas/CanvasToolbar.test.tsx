@@ -26,7 +26,7 @@ function renderToolbar(
 }
 
 describe("CanvasToolbar", () => {
-  it("keeps exactly the three frozen controls in the primary group", async () => {
+  it("keeps view modes primary and groups the secondary controls", async () => {
     const props = renderToolbar();
     const primary = screen.getByRole("group", {
       name: "Primary pattern controls",
@@ -35,10 +35,18 @@ describe("CanvasToolbar", () => {
       within(primary)
         .getAllByRole("button")
         .map(({ textContent }) => textContent),
-    ).toEqual(["Color Preview", "Color Code View", "Fit to Screen"]);
+    ).toEqual(["Color Preview", "Color Code View"]);
+    const secondary = screen.getByRole("group", {
+      name: "Secondary pattern controls",
+    });
+    expect(
+      within(secondary)
+        .getAllByRole("button")
+        .map(({ textContent }) => textContent),
+    ).toEqual(["Fit to Screen", "More Controls ▾"]);
     expect(screen.queryByRole("button", { name: "Grid" })).toBeNull();
     await userEvent.click(
-      within(primary).getByRole("button", { name: "Fit to Screen" }),
+      within(secondary).getByRole("button", { name: "Fit to Screen" }),
     );
     expect(props.onFit).toHaveBeenCalledOnce();
   });

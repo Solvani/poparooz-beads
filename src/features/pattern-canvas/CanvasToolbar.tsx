@@ -51,59 +51,68 @@ export function CanvasToolbar({
             Color Code View
           </Button>
         </div>
+      </div>
+      <div
+        className="canvas-toolbar__secondary-controls"
+        role="group"
+        aria-label="Secondary pattern controls"
+      >
         <Button variant="secondary" onClick={onFit}>
           Fit to Screen
         </Button>
-      </div>
-      <Button
-        className="canvas-toolbar__more"
-        variant="secondary"
-        aria-label="More controls"
-        aria-expanded={secondaryControlsOpen}
-        aria-controls={secondaryControlsId}
-        onClick={() => setSecondaryControlsOpen((open) => !open)}
-      >
-        More Controls ▾
-      </Button>
-      {secondaryControlsOpen ? (
-        <div
-          id={secondaryControlsId}
-          className="canvas-toolbar__secondary"
-          role="group"
-          aria-label="More pattern controls"
+        <Button
+          className="canvas-toolbar__more"
+          variant="secondary"
+          aria-label="More controls"
+          aria-expanded={secondaryControlsOpen}
+          aria-controls={secondaryControlsId}
+          onClick={() => setSecondaryControlsOpen((open) => !open)}
         >
+          More Controls ▾
+        </Button>
+        {secondaryControlsOpen ? (
           <div
-            className="canvas-toolbar__zoom-controls"
+            id={secondaryControlsId}
+            className="canvas-toolbar__secondary"
             role="group"
-            aria-label="Zoom controls"
+            aria-label="More pattern controls"
           >
-            <Button
-              variant="secondary"
-              aria-label="Zoom out"
-              disabled={!canZoomOut}
-              onClick={onZoomOut}
+            <div
+              className="canvas-toolbar__zoom-controls"
+              role="group"
+              aria-label="Zoom controls"
             >
-              −
-            </Button>
-            <output className="canvas-toolbar__zoom" aria-label="Current zoom">
-              {zoomPercentage}%
-            </output>
-            <Button
-              variant="secondary"
-              aria-label="Zoom in"
-              disabled={!canZoomIn}
-              onClick={onZoomIn}
-            >
-              +
-            </Button>
+              <Button
+                variant="secondary"
+                aria-label="Zoom out"
+                disabled={!canZoomOut}
+                onClick={onZoomOut}
+              >
+                −
+              </Button>
+              <output
+                className="canvas-toolbar__zoom"
+                aria-label="Current zoom"
+              >
+                {zoomPercentage}%
+              </output>
+              <Button
+                variant="secondary"
+                aria-label="Zoom in"
+                disabled={!canZoomIn}
+                onClick={onZoomIn}
+              >
+                +
+              </Button>
+            </div>
+            {viewMode === "code" ? (
+              <Button variant="secondary" onClick={onReadCodes}>
+                Read Codes
+              </Button>
+            ) : null}
           </div>
-          {viewMode === "code" ? (
-            <Button variant="secondary" onClick={onReadCodes}>
-              Read Codes
-            </Button>
-          ) : null}
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </div>
   );
 }

@@ -163,7 +163,11 @@ describe("PatternCanvas", () => {
     const primary = screen.getByRole("group", {
       name: "Primary pattern controls",
     });
-    expect(within(primary).getAllByRole("button")).toHaveLength(3);
+    expect(within(primary).getAllByRole("button")).toHaveLength(2);
+    const secondary = screen.getByRole("group", {
+      name: "Secondary pattern controls",
+    });
+    expect(within(secondary).getAllByRole("button")).toHaveLength(2);
     expect(
       screen.getByRole("button", { name: "Color Preview" }),
     ).toHaveAttribute("aria-pressed", "true");

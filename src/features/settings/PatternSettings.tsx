@@ -82,7 +82,7 @@ export function PatternSettings({
         </select>
         <p id="color-set-profile-help" className="form-help">
           Try different Color Sets and regenerate to compare results. More
-          colors don鈥檛 always mean a better pattern.
+          colors don't always mean a better pattern.
         </p>
         {errors.selectedColorSetProfileId ? (
           <p id="color-set-profile-error" className="form-error" role="alert">

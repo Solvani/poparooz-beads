@@ -48,7 +48,7 @@ describe("PatternSettings", () => {
     ]);
     expect(
       view.getByText(
-        "Try different Color Sets and regenerate to compare results. More colors don鈥檛 always mean a better pattern.",
+        "Try different Color Sets and regenerate to compare results. More colors don't always mean a better pattern.",
       ),
     ).toBeInTheDocument();
     expect(

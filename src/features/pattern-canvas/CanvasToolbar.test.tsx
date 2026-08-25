@@ -55,7 +55,15 @@ describe("CanvasToolbar", () => {
     await userEvent.click(more);
 
     expect(more).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByLabelText("Current zoom")).toHaveTextContent("125%");
+    const zoomControls = screen.getByRole("group", { name: "Zoom controls" });
+    expect(
+      within(zoomControls).getByLabelText("Current zoom"),
+    ).toHaveTextContent("125%");
+    expect(
+      within(zoomControls)
+        .getAllByRole("button")
+        .map((button) => button.getAttribute("aria-label")),
+    ).toEqual(["Zoom out", "Zoom in"]);
     await userEvent.click(screen.getByRole("button", { name: "Zoom out" }));
     await userEvent.click(screen.getByRole("button", { name: "Zoom in" }));
     expect(props.onZoomOut).toHaveBeenCalledOnce();
@@ -84,6 +92,10 @@ describe("CanvasToolbar", () => {
     await userEvent.click(
       screen.getByRole("button", { name: "More controls" }),
     );
+    const zoomControls = screen.getByRole("group", { name: "Zoom controls" });
+    expect(
+      within(zoomControls).queryByRole("button", { name: "Read Codes" }),
+    ).toBeNull();
     await userEvent.click(screen.getByRole("button", { name: "Read Codes" }));
     expect(props.onReadCodes).toHaveBeenCalledOnce();
   });

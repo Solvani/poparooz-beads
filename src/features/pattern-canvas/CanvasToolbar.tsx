@@ -72,25 +72,31 @@ export function CanvasToolbar({
           role="group"
           aria-label="More pattern controls"
         >
-          <Button
-            variant="secondary"
-            aria-label="Zoom out"
-            disabled={!canZoomOut}
-            onClick={onZoomOut}
+          <div
+            className="canvas-toolbar__zoom-controls"
+            role="group"
+            aria-label="Zoom controls"
           >
-            −
-          </Button>
-          <output className="canvas-toolbar__zoom" aria-label="Current zoom">
-            {zoomPercentage}%
-          </output>
-          <Button
-            variant="secondary"
-            aria-label="Zoom in"
-            disabled={!canZoomIn}
-            onClick={onZoomIn}
-          >
-            +
-          </Button>
+            <Button
+              variant="secondary"
+              aria-label="Zoom out"
+              disabled={!canZoomOut}
+              onClick={onZoomOut}
+            >
+              −
+            </Button>
+            <output className="canvas-toolbar__zoom" aria-label="Current zoom">
+              {zoomPercentage}%
+            </output>
+            <Button
+              variant="secondary"
+              aria-label="Zoom in"
+              disabled={!canZoomIn}
+              onClick={onZoomIn}
+            >
+              +
+            </Button>
+          </div>
           {viewMode === "code" ? (
             <Button variant="secondary" onClick={onReadCodes}>
               Read Codes

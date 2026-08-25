@@ -352,12 +352,16 @@ P3-A03-E05-A01: COMPLETED / CUSTOMER RECOMMENDATION PRESENTATION INACTIVE
 A01 implementation commit: 09a031d6e2a7ff1e44374807d665bcadeb667f15
 A01 implementation subject: fix: hide blocked recommendation presentation
 A01 governance authority: docs/POPAROOZ_P3_A03_E05_A01_RECOMMENDATION_CLOSURE.md
+P3-A03-E04-A01: COMPLETED / FROZEN / PRODUCTION IMPLEMENTATION NOT STARTED
+E04-A01 entry baseline: 3dc0fd57865a2bce3c79d8622c464c82719cb35d
+E04 production implementation: NOT STARTED / NOT AUTHORIZED BY A01
+E04 email provider and Cloudflare infrastructure: NOT SELECTED / NOT CREATED
 Canonical active customer-facing term: Generation Color Set
 Production GenerationRuntime: Available and production verified
 Cloudflare Pages: Active
 Shopify embed: Active
 Production implementation resume: Conditional
-Next stage: requires separate explicit authorization
+Next separately authorized candidate: P3-A03-E04-A02 — Provider / Infrastructure / Retention Contract
 ```
 
 The production Runtime and the A08 deployment remain active. The formal
@@ -390,6 +394,13 @@ Auto or Recommended for Your Image. Recommendation Policy v1 and its tests remai
 retained as a separate post-generation semantic contract. Future reopening
 requires a new mechanism-level hypothesis, independent evidence, and separate
 authorization.
+
+P3-A03-E04-A01 defines the bounded Email Download Gate product, privacy,
+verification, persistence, consent, backend, security, accessibility, and
+implementation-entry contract. It supersedes the historical statement that the
+entire Email Gate topic is deferred, but only at the governance-contract level.
+The existing PNG remains browser-local; no gate UI, endpoint, provider,
+Cloudflare infrastructure, or production behavior has been implemented.
 
 P3-A03-SCOPE-A02 retains Recommendation Policy v1 only as a post-generation
 material-policy result for the already-generated current Pattern. It does not
@@ -673,6 +684,7 @@ P3-A03-E05-D02 Recommendation Policy v1            Frozen
 P3-A03-E05-D04 Automatic Generation Recommendation Blocked / not activated
 P3-A03-E05-A00 Recommendation Architecture Audit    Completed / read-only / direction blocked
 P3-A03-E05-A01 Recommendation Customer UI Closure   Completed / customer presentation inactive
+P3-A03-E04-A01 Email Download Gate Contract          Completed / frozen / production not implemented
 P3-A03-SCOPE Product Completeness Audit             Complete / corrections synchronized by A01
 P3-A03-SCOPE-A01 Governance Synchronization         Completed / scope closure synchronized
 P3-A03-SCOPE-A02 Results / Materials Decision       Completed / frozen with applicability qualifications

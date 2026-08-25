@@ -1,10 +1,10 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; synchronized through P3-A03-E05-A01 Recommendation Closure / Customer UI Suppression**
+Status: **Production active; synchronized through P3-A03-E04-A01 Email Download Gate Contract Freeze**
 
-Baseline version: **3.3**
+Baseline version: **3.4**
 
-Last reviewed: **2026-08-24**
+Last reviewed: **2026-08-25**
 
 ## Authority
 
@@ -98,6 +98,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_SCOPE_A02_RESULTS_MATERIALS_DECISION.md`](POPAROOZ_P3_A03_SCOPE_A02_RESULTS_MATERIALS_DECISION.md): authoritative Results and Materials terminology, recommendation applicability, material authority, board boundary, derived projection, and Commerce boundary.
 - [`POPAROOZ_P3_A03_SCOPE_A04_EXPORT_TERMINOLOGY_MATERIAL_CONTRACT_DECISION.md`](POPAROOZ_P3_A03_SCOPE_A04_EXPORT_TERMINOLOGY_MATERIAL_CONTRACT_DECISION.md): authoritative active customer-facing terminology, local-PNG material mapping, A03 Material Authority application, and A04 evidence qualifications.
 - [`POPAROOZ_P3_A03_E05_A01_RECOMMENDATION_CLOSURE.md`](POPAROOZ_P3_A03_E05_A01_RECOMMENDATION_CLOSURE.md): authoritative automatic-recommendation closure, customer presentation suppression, retained manual Generation Color Set control, and future reopen boundary.
+- [`POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md`](POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md): bounded Email Download Gate customer flow, browser-local privacy, verification, persistence, consent, backend, security, accessibility, and implementation-entry contract.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
@@ -203,10 +204,20 @@ Before implementation begins, read this file and every formal document relevant 
 - Customer-facing Auto / Recommended for Your Image: **Not active / not displayed**
 - Customer-facing Recommended Bead Set: **Temporarily hidden / inactive**
 - Customer-facing Required Bead Set, Bead Requirements, and Additional Refill Packs: **Active**
+- P3-A03-E04-A01: **Email Download Gate contract frozen / production implementation not started**
+- Email backend, provider, and Cloudflare gate infrastructure: **Not implemented / not selected**
 
 The production acceptance includes upload, 40/80/104 White and Transparent generation, the 221-color set, Maximum Colors, Pattern preview, bead/material totals, selected package display, local PNG download, production Worker execution, desktop/mobile Shopify embedding, direct refresh, custom-domain HTTPS, Poparooz-only customer branding, and gallery regression after the external Shopify schema correction.
 
 User images remain browser-local through upload, browser decode, resize/normalization, local Worker execution, Pattern creation, local preview, and local PNG download. There is no image-upload backend, photo database, persistent photo storage, or deployment-introduced image logging. The production iframe bridge sends only bounded protocol-version-1 readiness and height metadata; it does not transfer images or Pattern content.
+
+P3-A03-E04-A01 supersedes the historical whole-stage deferral only for a
+bounded governance contract. A future Email Download Gate may verify an email
+before authorizing the existing browser-local download, but the backend must
+never receive images, Pattern content, PNG data, or generator internals.
+Marketing consent remains optional and independent from download eligibility.
+No Email Gate UI, backend, provider, infrastructure, or production behavior is
+implemented by A01.
 
 P3-A03-SCOPE found no P0 blocker in the repository-level audit, code contracts,
 or accepted evidence. It did not perform new real-device, keyboard/screen-reader,

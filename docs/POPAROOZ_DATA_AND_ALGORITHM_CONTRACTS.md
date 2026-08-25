@@ -198,6 +198,15 @@ Allowed properties are pattern width/height, maximum colors, elapsed time, succe
 
 Forbidden everywhere: original images, names, paths, pixels, thumbnails, Base64, hashes/fingerprints, embeddings/features that reveal content, and unconsented identity data. Images stay in browser memory, are never sent to a server or parent iframe, are not written to LocalStorage, and are cleared on refresh/unload. Phase 0 integrates no analytics provider.
 
+P3-A03-E04-A01 defines one narrow, user-initiated identity-data exception for
+the future Email Download Gate: a normalized email may be sent only to the
+bounded verification backend described in
+[`POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md`](POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md).
+It remains prohibited from analytics, parent-iframe messages, image/Pattern
+processing, and browser persistence. Submission for download verification is
+not marketing consent; optional marketing consent is separate and must not
+control download eligibility. A01 implements no backend or production behavior.
+
 ## Iframe protocol and security
 
 The message envelope and privacy rules below are data contracts. Deployment, lifecycle, origin, resize, CSP, sandbox, and fallback requirements are governed by [`POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md`](POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md).

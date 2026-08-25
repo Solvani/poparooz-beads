@@ -163,6 +163,19 @@ policy, automatic Generation Color Set Recommendation, Email Gate, deployment,
 or image-algorithm changes. It does not claim pixel-level PNG visual or clipping
 acceptance. Later work requires a separately authorized stage.
 
+## Subsequent E04 Contract Authorization
+
+P3-A03-E04-A01 is a separately authorized, completed, and frozen governance
+contract stage. It supersedes the historical whole-stage deferral of the Email
+Download Gate only for the bounded contract recorded in
+[`POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md`](POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md).
+
+The bounded contract permits a future email-verification authorization step
+before the existing browser-local PNG download. It does not authorize or
+implement the UI, API, provider, Cloudflare infrastructure, accounts, general
+backend, database, image/Pattern upload, server-side generation, or Commerce.
+Marketing consent remains optional and independent from download eligibility.
+
 ## Shopify Catalog and Privacy Boundary
 
 Formal Generation Color Set identity is independent from Shopify catalog or
@@ -209,7 +222,8 @@ support evidence elevates them.
 The following remain deferred or outside current production scope:
 
 - automatic Generation Color Set Recommendation;
-- Email Download Gate and email verification backend;
+- Email Download Gate production implementation and its bounded verification
+  backend, pending the separately required implementation-entry gates;
 - HEIC decoding without real-device evidence;
 - accounts, login, general database, and cloud Pattern/project storage;
 - generic Feature Flag or Ops/Remediation platforms and remediation logs;
@@ -230,9 +244,10 @@ The following remain deferred or outside current production scope:
 9. Final Generator UX Polish.
 10. Shopify Theme / Store Polish.
 
-Email is not on the critical path. This document authorizes no production
-implementation. Production work may resume only through the separately
-authorized sequence above, beginning with the Results / Materials Decision.
+The original scope decision did not place Email on its critical path and
+authorized no Email production implementation. P3-A03-E04-A01 is a later,
+explicit, independent contract authorization; it does not reorder or implicitly
+authorize any production item in the sequence above.
 
 Sequence progress after this historical A01 decision: step 2 was completed and
 frozen by P3-A03-SCOPE-A02; step 3 was completed and frozen by

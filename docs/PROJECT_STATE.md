@@ -360,13 +360,17 @@ E04-A02-A01 entry baseline: 36b529fecba2af108560a37c68e3afe450667f0a
 E04-A02-A01 frozen direction: SAME-ORIGIN PATH-SCOPED WORKERS ROUTE / D1 ONLY / TURNSTILE / RESEND TRANSACTIONAL VERIFICATION / ONE-TIME CODE
 E04-A02-A01 qualification: FROZEN GOVERNANCE DIRECTION ONLY / RESOURCES NOT CREATED / PROVIDER NOT INTEGRATED / PROVIDER-DEFAULT AUDIT UNPERFORMED
 E04-A02-A01 authority: docs/POPAROOZ_P3_A03_E04_A02_PROVIDER_TOPOLOGY_RETENTION_DECISION.md
+P3-A03-E04-A02-A02-A01: COMPLETED / FROZEN / PRODUCTION IMPLEMENTATION NOT STARTED
+E04-A02-A02-A01 entry baseline: 4898d1eec987283fdf4faedb73f6058cde3a7644
+E04-A02-A02 authority: docs/POPAROOZ_P3_A03_E04_A02_A02_SCHEMA_SECURITY_API_CONTRACT.md
+E04-A02-A02 qualification: PROVIDER-DEFAULT AUDIT UNPERFORMED / RESOURCES NOT CREATED / PRODUCTION IMPLEMENTATION NOT STARTED
 Canonical active customer-facing term: Generation Color Set
 Production GenerationRuntime: Available and production verified
 Cloudflare Pages: Active
 Shopify embed: Active
 Production implementation resume: Conditional
-Next separately authorized candidate: P3-A03-E04-A02-A02 - Schema / Security / API Contract
-E04-A02-A02 status: NOT STARTED / NOT AUTHORIZED BY THE A02-A01 FREEZE
+Current E04 governance state: P3-A03-E04-A02-A02 contract frozen / production implementation not started
+Next E04 implementation stage: SEPARATELY AUTHORIZED CANDIDATE ONLY / NOT STARTED
 ```
 
 The production Runtime and the A08 deployment remain active. The formal
@@ -414,8 +418,9 @@ Turnstile abuse challenge, Resend transactional verification delivery, and
 one-time-code verification. Production implementation and provider acceptance
 remain blocked; the provider-default audit is unperformed, and no account,
 Worker, D1 database, Turnstile widget, DNS record, secret, scheduled aggregation,
-or downstream report has been created. P3-A03-E04-A02-A02 remains a separately
-authorized candidate and has not started.
+or downstream report has been created. P3-A03-E04-A02-A02-A01 freezes the
+documentation-only schema, security, and API contract. Production implementation
+has not started; provider acceptance and every resource-entry gate remain open.
 
 P3-A03-SCOPE-A02 retains Recommendation Policy v1 only as a post-generation
 material-policy result for the already-generated current Pattern. It does not
@@ -701,6 +706,7 @@ P3-A03-E05-A00 Recommendation Architecture Audit    Completed / read-only / dire
 P3-A03-E05-A01 Recommendation Customer UI Closure   Completed / customer presentation inactive
 P3-A03-E04-A01 Email Download Gate Contract          Completed / frozen / production not implemented
 P3-A03-E04-A02-A01 Provider/Topology/Retention Decision Completed / frozen / production implementation not started / provider acceptance pending
+P3-A03-E04-A02-A02-A01 Schema/Security/API Contract Completed / frozen / production implementation not started
 P3-A03-SCOPE Product Completeness Audit             Complete / corrections synchronized by A01
 P3-A03-SCOPE-A01 Governance Synchronization         Completed / scope closure synchronized
 P3-A03-SCOPE-A02 Results / Materials Decision       Completed / frozen with applicability qualifications

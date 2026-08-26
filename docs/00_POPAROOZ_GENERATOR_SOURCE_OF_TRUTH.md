@@ -1,10 +1,10 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; synchronized through P3-A03-E04-A02-A01 provider/topology/retention decision freeze**
+Status: **Production active; synchronized through P3-A03-E04-A02-A02 formal schema/security/API contract freeze**
 
-Baseline version: **3.5**
+Baseline version: **3.6**
 
-Last reviewed: **2026-08-25**
+Last reviewed: **2026-08-26**
 
 ## Authority
 
@@ -100,6 +100,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_E05_A01_RECOMMENDATION_CLOSURE.md`](POPAROOZ_P3_A03_E05_A01_RECOMMENDATION_CLOSURE.md): authoritative automatic-recommendation closure, customer presentation suppression, retained manual Generation Color Set control, and future reopen boundary.
 - [`POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md`](POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md): bounded Email Download Gate customer flow, browser-local privacy, verification, persistence, consent, backend, security, accessibility, and implementation-entry contract.
 - [`POPAROOZ_P3_A03_E04_A02_PROVIDER_TOPOLOGY_RETENTION_DECISION.md`](POPAROOZ_P3_A03_E04_A02_PROVIDER_TOPOLOGY_RETENTION_DECISION.md): frozen bounded v1 Worker Route, same-origin API, D1-only storage, Turnstile, Resend, one-time-code, retention, and cost direction without authorizing implementation or accepting actual provider/infrastructure configuration.
+- [`POPAROOZ_P3_A03_E04_A02_A02_SCHEMA_SECURITY_API_CONTRACT.md`](POPAROOZ_P3_A03_E04_A02_A02_SCHEMA_SECURITY_API_CONTRACT.md): frozen exact API, schema, OTP, challenge lifecycle, D1 atomicity, security, retention, and test contract; production implementation not started.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
@@ -207,6 +208,7 @@ Before implementation begins, read this file and every formal document relevant 
 - Customer-facing Required Bead Set, Bead Requirements, and Additional Refill Packs: **Active**
 - P3-A03-E04-A01: **Email Download Gate contract frozen / production implementation not started**
 - P3-A03-E04-A02-A01: **Provider, topology, and retention decision completed / frozen / production implementation not started**
+- P3-A03-E04-A02-A02: **Completed / frozen / production implementation not started**
 - Email backend and Cloudflare gate infrastructure: **Not implemented / not created**
 - Email provider and topology: **Frozen governance direction only / resources not created / provider not integrated / provider-default audit unperformed**
 
@@ -229,6 +231,13 @@ delivery, and one-time-code verification. This is a frozen governance direction,
 not production provider or infrastructure acceptance. No provider account,
 Worker, D1 database, Turnstile widget, DNS record, secret, or integration exists
 as a result of the freeze, and the provider-default audit remains unperformed.
+
+P3-A03-E04-A02-A02 freezes the bounded v1 API surface, strict provider-neutral
+schemas, conservative email normalization, deterministic OTP derivation,
+challenge and provider lifecycle, D1 atomicity, abuse limits, retention
+reconciliation, and Worker test gates. Production implementation has not
+started; all provider/account, resource, and production-entry gates remain open,
+and the provider-default audit remains unperformed.
 
 P3-A03-SCOPE found no P0 blocker in the repository-level audit, code contracts,
 or accepted evidence. It did not perform new real-device, keyboard/screen-reader,

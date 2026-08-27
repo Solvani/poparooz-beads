@@ -1,10 +1,10 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; synchronized through P3-A03-E04-A02-A02 formal schema/security/API contract freeze**
+Status: **Production active; synchronized through P3-A03-E04-A04-A00 backend foundation freeze**
 
-Baseline version: **3.6**
+Baseline version: **3.7**
 
-Last reviewed: **2026-08-26**
+Last reviewed: **2026-08-27**
 
 ## Authority
 
@@ -101,6 +101,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md`](POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md): bounded Email Download Gate customer flow, browser-local privacy, verification, persistence, consent, backend, security, accessibility, and implementation-entry contract.
 - [`POPAROOZ_P3_A03_E04_A02_PROVIDER_TOPOLOGY_RETENTION_DECISION.md`](POPAROOZ_P3_A03_E04_A02_PROVIDER_TOPOLOGY_RETENTION_DECISION.md): frozen bounded v1 Worker Route, same-origin API, D1-only storage, Turnstile, Resend, one-time-code, retention, and cost direction without authorizing implementation or accepting actual provider/infrastructure configuration.
 - [`POPAROOZ_P3_A03_E04_A02_A02_SCHEMA_SECURITY_API_CONTRACT.md`](POPAROOZ_P3_A03_E04_A02_A02_SCHEMA_SECURITY_API_CONTRACT.md): frozen exact API, schema, OTP, challenge lifecycle, D1 atomicity, security, retention, and test contract; production implementation not started.
+- [`POPAROOZ_P3_A03_E04_A04_A00_BACKEND_FOUNDATION_FREEZE.md`](POPAROOZ_P3_A03_E04_A04_A00_BACKEND_FOUNDATION_FREEZE.md): independently reviewed standalone Email Gate Worker/D1 backend foundation freeze, committed with production delivery and frontend inactive.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
@@ -195,7 +196,7 @@ Before implementation begins, read this file and every formal document relevant 
 - Shopify page: `https://poparooz.com/pages/fuse-bead-pattern-maker`
 - Desktop and mobile Shopify embed smoke: **Passed**
 - Browser-local privacy: **Preserved**
-- Backend, database, Pages Functions, Cloudflare runtime Worker, Shopify App, App Proxy, and OAuth backend: **Not used**
+- Production backend, database, Pages Functions, Cloudflare runtime Worker, Shopify App, App Proxy, and OAuth backend: **Not used**
 - Current Cart API/material-message bridge: **Not implemented**
 - Formal Generation Color Sets: **24 / 48 / 72 / 120 / 168 / 221**
 - Canonical active customer-facing term: **Generation Color Set**
@@ -208,8 +209,11 @@ Before implementation begins, read this file and every formal document relevant 
 - Customer-facing Required Bead Set, Bead Requirements, and Additional Refill Packs: **Active**
 - P3-A03-E04-A01: **Email Download Gate contract frozen / production implementation not started**
 - P3-A03-E04-A02-A01: **Provider, topology, and retention decision completed / frozen / production implementation not started**
-- P3-A03-E04-A02-A02: **Completed / frozen / production implementation not started**
-- Email backend and Cloudflare gate infrastructure: **Not implemented / not created**
+- P3-A03-E04-A02-A02: **Completed / frozen**
+- P3-A03-E04-A04-A00: **Backend foundation completed / independently reviewed / frozen / committed / production inactive**
+- Email backend foundation: **Implemented in repository as one standalone Worker / not deployed / production renderer intentionally empty**
+- Email Gate frontend and current Download interception: **Not implemented / Download remains ungated**
+- Cloudflare Email Gate infrastructure: **Not created**
 - Email provider and topology: **Frozen governance direction only / resources not created / provider not integrated / provider-default audit unperformed**
 
 The production acceptance includes upload, 40/80/104 White and Transparent generation, the 221-color set, Maximum Colors, Pattern preview, bead/material totals, selected package display, local PNG download, production Worker execution, desktop/mobile Shopify embedding, direct refresh, custom-domain HTTPS, Poparooz-only customer branding, and gallery regression after the external Shopify schema correction.
@@ -235,8 +239,13 @@ as a result of the freeze, and the provider-default audit remains unperformed.
 P3-A03-E04-A02-A02 freezes the bounded v1 API surface, strict provider-neutral
 schemas, conservative email normalization, deterministic OTP derivation,
 challenge and provider lifecycle, D1 atomicity, abuse limits, retention
-reconciliation, and Worker test gates. Production implementation has not
-started; all provider/account, resource, and production-entry gates remain open,
+reconciliation, and Worker test gates. P3-A03-E04-A04-A00 implements and freezes
+the repository-only standalone Worker/D1 backend foundation at commit
+`2e333d6016f104fda2737c3c5e9901898a05b5fb`. The production renderer registry
+is intentionally empty, the frontend is not implemented, the current Download
+remains ungated, and no Worker, Route, D1 resource, remote migration, provider,
+secret, Cron, DNS, or marketing behavior was activated. All provider/account,
+resource, frontend, delivery-copy, and production-activation gates remain open,
 and the provider-default audit remains unperformed.
 
 P3-A03-SCOPE found no P0 blocker in the repository-level audit, code contracts,

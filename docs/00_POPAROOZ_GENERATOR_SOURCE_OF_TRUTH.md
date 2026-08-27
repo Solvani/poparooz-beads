@@ -1,8 +1,8 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; synchronized through P3-A03-E04-A05-A01 Delivery Copy V1 freeze**
+Status: **Production active; synchronized through P3-A03-E04-A05-A02-A01 Sender / Reply-To decision**
 
-Baseline version: **3.8**
+Baseline version: **3.9**
 
 Last reviewed: **2026-08-27**
 
@@ -103,6 +103,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_E04_A02_A02_SCHEMA_SECURITY_API_CONTRACT.md`](POPAROOZ_P3_A03_E04_A02_A02_SCHEMA_SECURITY_API_CONTRACT.md): frozen exact API, schema, OTP, challenge lifecycle, D1 atomicity, security, retention, and test contract; production implementation not started.
 - [`POPAROOZ_P3_A03_E04_A04_A00_BACKEND_FOUNDATION_FREEZE.md`](POPAROOZ_P3_A03_E04_A04_A00_BACKEND_FOUNDATION_FREEZE.md): independently reviewed standalone Email Gate Worker/D1 backend foundation freeze, committed with production delivery and frontend inactive.
 - [`POPAROOZ_P3_A03_E04_A05_A01_DELIVERY_COPY_V1_FREEZE.md`](POPAROOZ_P3_A03_E04_A05_A01_DELIVERY_COPY_V1_FREEZE.md): exact Delivery Copy V1 subject and text, minimal-HTML semantics, OTP and expiry presentation, transactional-only boundary, and unresolved sender/blocked-renderer status.
+- [`POPAROOZ_P3_A03_E04_A05_A02_A01_SENDER_REPLY_TO_DECISION.md`](POPAROOZ_P3_A03_E04_A05_A02_A01_SENDER_REPLY_TO_DECISION.md): accepted production sending domain, immutable From and Reply-To identities, disabled tracking and receiving policy, and Renderer V1 implementation-entry status.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
@@ -213,8 +214,9 @@ Before implementation begins, read this file and every formal document relevant 
 - P3-A03-E04-A02-A02: **Completed / frozen**
 - P3-A03-E04-A04-A00: **Backend foundation completed / independently reviewed / frozen / committed / production inactive**
 - P3-A03-E04-A05-A01: **Delivery Copy V1 completed / frozen / renderer implementation blocked / production inactive**
+- P3-A03-E04-A05-A02-A01: **Sender accepted / Reply-To frozen / Renderer V1 ready for implementation / production inactive**
 - Email backend foundation: **Implemented in repository as one standalone Worker / not deployed / production renderer intentionally empty**
-- Email Delivery Copy V1: **Exact subject and text plus HTML semantics frozen / production sender not accepted / Renderer V1 not implemented or registered**
+- Email Delivery Copy V1: **Exact subject and text plus HTML semantics frozen / exact sender and Reply-To frozen / Renderer V1 not implemented or registered**
 - Email Gate frontend and current Download interception: **Not implemented / Download remains ungated**
 - Cloudflare Email Gate infrastructure: **Not created**
 - Email provider and topology: **Frozen governance direction only / resources not created / provider not integrated / provider-default audit unperformed**
@@ -260,6 +262,17 @@ the immutable `from` value remains unresolved, Renderer V1 remains blocked,
 unimplemented, and unregistered; the production renderer registry stays empty.
 The frontend and production behavior remain unchanged, and no provider or
 infrastructure resource was created or mutated.
+
+P3-A03-E04-A05-A02-A01 accepts the verified `notify.poparooz.com` Resend
+sending-domain evidence and freezes the exact From identity
+`Poparooz <verification@notify.poparooz.com>` plus Reply-To
+`poparooz2026@gmail.com`. Resend Receiving, open tracking, and click tracking
+remain disabled, with no tracking subdomain. The provider-neutral Renderer V1
+payload must add immutable `replyTo` identity and reproduce it on same-event
+retries. Renderer V1 is ready for a separately authorized implementation but
+remains unimplemented and unregistered; the production registry remains empty,
+and no email, deployment, resource, secret, DNS, frontend, or production
+behavior was changed by this governance stage.
 
 P3-A03-SCOPE found no P0 blocker in the repository-level audit, code contracts,
 or accepted evidence. It did not perform new real-device, keyboard/screen-reader,

@@ -375,13 +375,20 @@ E04-A05-A01 authority: docs/POPAROOZ_P3_A03_E04_A05_A01_DELIVERY_COPY_V1_FREEZE.
 E04-A05-A01 subject: Your Poparooz verification code
 E04-A05-A01 renderer: BLOCKED PENDING SENDER ACCEPTANCE / PRODUCTION REGISTRY REMAINS EMPTY
 E04-A05-A01 qualification: PRODUCTION SENDER NOT ACCEPTED / FRONTEND UNCHANGED / NO PROVIDER OR RESOURCE MUTATION
+P3-A03-E04-A05-A02-A01: COMPLETED / SENDER ACCEPTED / REPLY-TO FROZEN / RENDERER V1 READY FOR IMPLEMENTATION / PRODUCTION INACTIVE
+E04-A05-A02-A01 authority: docs/POPAROOZ_P3_A03_E04_A05_A02_A01_SENDER_REPLY_TO_DECISION.md
+E04-A05-A02-A01 From: Poparooz <verification@notify.poparooz.com>
+E04-A05-A02-A01 Reply-To: poparooz2026@gmail.com
+E04-A05-A02-A01 policy: RESEND RECEIVING DISABLED / OPEN TRACKING DISABLED / CLICK TRACKING DISABLED / NO TRACKING SUBDOMAIN
+E04-A05-A02-A01 renderer: READY FOR SEPARATELY AUTHORIZED IMPLEMENTATION / PRODUCTION REGISTRY REMAINS EMPTY
+E04-A05-A02-A01 qualification: NO EMAIL / DEPLOYMENT / RESOURCE / SECRET / DNS / FRONTEND / PRODUCTION-BEHAVIOR CHANGE
 Canonical active customer-facing term: Generation Color Set
 Production GenerationRuntime: Available and production verified
 Cloudflare Pages: Active
 Shopify embed: Active
 Production implementation resume: Conditional
-Current E04 governance state: P3-A03-E04-A05-A01 Delivery Copy V1 frozen / renderer blocked / production inactive
-Next E04 stage: SENDER ACCEPTANCE REQUIRES SEPARATE EXPLICIT AUTHORIZATION / NOT STARTED
+Current E04 governance state: P3-A03-E04-A05-A02-A01 sender accepted / Reply-To frozen / Renderer V1 ready for implementation / production inactive
+Next E04 stage: RENDERER V1 IMPLEMENTATION REQUIRES SEPARATE EXPLICIT AUTHORIZATION / NOT STARTED
 ```
 
 The production Runtime and the A08 deployment remain active. The formal
@@ -439,6 +446,16 @@ P3-A03-E04-A05-A01 freezes the exact Delivery Copy V1 subject and plain-text
 copy plus the minimal-HTML semantic, OTP, expiry, transactional-only, privacy,
 and no-links/tracking/marketing boundaries. The production sender is not
 accepted, so Renderer V1 remains blocked, unimplemented, and unregistered.
+
+P3-A03-E04-A05-A02-A01 accepts the verified `notify.poparooz.com` Resend
+sending-domain state and freezes `Poparooz
+<verification@notify.poparooz.com>` as From and `poparooz2026@gmail.com` as
+Reply-To. Resend Receiving, open tracking, and click tracking remain disabled,
+with no tracking subdomain. Renderer V1 must add immutable provider-neutral
+`replyTo` identity and reproduce it for same-event retries. It is ready for a
+separately authorized implementation but remains unimplemented and
+unregistered; the production registry stays empty and production remains
+inactive.
 
 P3-A03-SCOPE-A02 retains Recommendation Policy v1 only as a post-generation
 material-policy result for the already-generated current Pattern. It does not
@@ -727,6 +744,7 @@ P3-A03-E04-A02-A01 Provider/Topology/Retention Decision Completed / frozen / pro
 P3-A03-E04-A02-A02-A01 Schema/Security/API Contract Completed / frozen
 P3-A03-E04-A04-A00 Email Gate Backend Foundation Completed / frozen / committed / production inactive
 P3-A03-E04-A05-A01 Delivery Copy V1 Freeze       Completed / copy frozen / renderer blocked / production inactive
+P3-A03-E04-A05-A02-A01 Sender / Reply-To Decision Completed / frozen / renderer ready for implementation / production inactive
 P3-A03-SCOPE Product Completeness Audit             Complete / corrections synchronized by A01
 P3-A03-SCOPE-A01 Governance Synchronization         Completed / scope closure synchronized
 P3-A03-SCOPE-A02 Results / Materials Decision       Completed / frozen with applicability qualifications

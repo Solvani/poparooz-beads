@@ -32,6 +32,23 @@ export function createResendAdapter(
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), RESEND_TIMEOUT_MS);
       try {
+        const requestBody =
+          payload.html === undefined
+            ? {
+                from: payload.from,
+                to: payload.to,
+                subject: payload.subject,
+                text: payload.text,
+                reply_to: payload.replyTo,
+              }
+            : {
+                from: payload.from,
+                to: payload.to,
+                subject: payload.subject,
+                text: payload.text,
+                html: payload.html,
+                reply_to: payload.replyTo,
+              };
         const response = await fetchPort(RESEND_EMAILS_URL, {
           method: "POST",
           headers: {
@@ -39,7 +56,7 @@ export function createResendAdapter(
             "Content-Type": "application/json",
             "Idempotency-Key": `poparooz-email-gate/v1/${providerSendEventId}`,
           },
-          body: JSON.stringify(payload),
+          body: JSON.stringify(requestBody),
           redirect: "error",
           signal: controller.signal,
         });

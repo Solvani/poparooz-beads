@@ -1,10 +1,7 @@
 import { createEmailGateFetchHandler } from "./api";
-import { createDeliveryPayloadRendererRegistry } from "./delivery/payload-renderer";
+import { createProductionDeliveryPayloadRendererRegistry } from "./delivery/production-renderer-v1";
 import { createOtpKeyRegistry } from "./crypto/otp";
-import {
-  EMAIL_GATE_DELIVERY_PAYLOAD_VERSION,
-  EMAIL_GATE_OTP_KEY_VERSION,
-} from "./model";
+import { EMAIL_GATE_OTP_KEY_VERSION } from "./model";
 import { createResendAdapter } from "./providers/resend";
 import { createTurnstileAdapter } from "./providers/turnstile";
 import { createEmailGateRepository } from "./repository/email-gate-repository";
@@ -24,12 +21,7 @@ function createRuntimeService(env: EmailGateRuntimeBindings) {
       EMAIL_GATE_OTP_KEY_VERSION,
       new Map([[EMAIL_GATE_OTP_KEY_VERSION, keyBytes]]),
     ),
-    // No production sender/subject/body is frozen yet. The runtime therefore
-    // has no production renderer and fails closed until that decision exists.
-    payloadRenderers: createDeliveryPayloadRendererRegistry(
-      EMAIL_GATE_DELIVERY_PAYLOAD_VERSION,
-      [],
-    ),
+    payloadRenderers: createProductionDeliveryPayloadRendererRegistry(),
     now: Date.now,
     randomUuid: () => crypto.randomUUID(),
   });

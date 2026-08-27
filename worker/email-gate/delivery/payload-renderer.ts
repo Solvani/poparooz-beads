@@ -1,5 +1,6 @@
 export interface DeliveryPayload {
   readonly from: string;
+  readonly replyTo: string;
   readonly to: readonly [string];
   readonly subject: string;
   readonly text: string;
@@ -44,6 +45,7 @@ export function createTestFixtureRenderer(
     }: Readonly<{ normalizedEmail: string; otp: string }>): DeliveryPayload {
       return Object.freeze({
         from: "Poparooz Test <test@notify.example.invalid>",
+        replyTo: "test-replies@example.invalid",
         to: Object.freeze([normalizedEmail]) as readonly [string],
         subject: "Poparooz test verification fixture",
         text: `Test-only verification code: ${otp}`,

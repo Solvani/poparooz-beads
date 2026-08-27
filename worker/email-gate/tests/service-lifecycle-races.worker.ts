@@ -6,6 +6,7 @@ import {
   createDeliveryPayloadRendererRegistry,
   createTestFixtureRenderer,
 } from "../delivery/payload-renderer";
+import { PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V1 } from "../delivery/production-renderer-v1";
 import type { ProviderSendResult } from "../model";
 import { createEmailGateRepository } from "../repository/email-gate-repository";
 import {
@@ -58,8 +59,10 @@ describe("Email Gate service lifecycle", () => {
     ).resolves.toBe("verification_invalid");
   });
 
-  it("requires fresh Turnstile but reuses pending identity and reservation", async () => {
-    const fixture = createFixture(["ambiguous", "accepted"]);
+  it("reconstructs an identical production payload for same-event recovery", async () => {
+    const fixture = createFixture(["ambiguous", "accepted"], {
+      productionRenderer: true,
+    });
     await expect(fixture.service.issue(issueRequest())).resolves.toEqual({
       result: "retry_later",
     });
@@ -72,6 +75,18 @@ describe("Email Gate service lifecycle", () => {
     expect(fixture.resend.send.mock.calls[0]?.[0]).toBe(
       fixture.resend.send.mock.calls[1]?.[0],
     );
+    expect(fixture.resend.send.mock.calls[0]?.[1]).toEqual(
+      fixture.resend.send.mock.calls[1]?.[1],
+    );
+    expect(JSON.stringify(fixture.resend.send.mock.calls[0]?.[1])).toBe(
+      JSON.stringify(fixture.resend.send.mock.calls[1]?.[1]),
+    );
+    expect(fixture.resend.send.mock.calls[0]?.[1]).toMatchObject({
+      from: "Poparooz <verification@notify.poparooz.com>",
+      replyTo: "poparooz2026@gmail.com",
+      to: ["User@example.com"],
+      subject: "Your Poparooz verification code",
+    });
     const reservations = await env.EMAIL_GATE_DB.prepare(
       "SELECT COUNT(*) AS count FROM email_gate_send_reservations",
     ).first<Readonly<{ count: number }>>();
@@ -563,6 +578,7 @@ function createFixture(
   options: Readonly<{
     key?: boolean;
     renderer?: boolean;
+    productionRenderer?: boolean;
     onSend?: () => void | Promise<void>;
   }> = {},
 ): Fixture {
@@ -587,7 +603,13 @@ function createFixture(
   );
   const payloadRenderers = createDeliveryPayloadRendererRegistry(
     1,
-    options.renderer === false ? [] : [createTestFixtureRenderer(1)],
+    options.renderer === false
+      ? []
+      : [
+          options.productionRenderer === true
+            ? PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V1
+            : createTestFixtureRenderer(1),
+        ],
   );
   const repository = createEmailGateRepository(env.EMAIL_GATE_DB);
   const service = createEmailGateService({

@@ -110,6 +110,7 @@ describe("delivery renderer registry", () => {
       }),
     ).toEqual({
       from: "Poparooz Test <test@notify.example.invalid>",
+      replyTo: "test-replies@example.invalid",
       to: ["a@example.com"],
       subject: "Poparooz test verification fixture",
       text: "Test-only verification code: 00000001",
@@ -244,6 +245,7 @@ describe("provider adapters", () => {
     await expect(
       adapter.send("event-id", {
         from: "test@example.invalid",
+        replyTo: "replies@example.invalid",
         to: ["a@example.com"],
         subject: "test",
         text: "test",
@@ -269,6 +271,7 @@ describe("provider adapters", () => {
     await expect(
       createResendAdapter("test-key", fetchPort).send("event", {
         from: "test@example.invalid",
+        replyTo: "replies@example.invalid",
         to: ["a@example.com"],
         subject: "test",
         text: "test",
@@ -287,6 +290,7 @@ describe("provider adapters", () => {
     await expect(
       createResendAdapter("test-key", fetchPort).send("event", {
         from: "test@example.invalid",
+        replyTo: "replies@example.invalid",
         to: ["a@example.com"],
         subject: "test",
         text: "test",
@@ -301,6 +305,7 @@ describe("provider adapters", () => {
     await expect(
       createResendAdapter("test-key", fetchPort).send("event", {
         from: "test@example.invalid",
+        replyTo: "replies@example.invalid",
         to: ["a@example.com"],
         subject: "test",
         text: "test",
@@ -317,6 +322,7 @@ describe("provider adapters", () => {
     const adapter = createResendAdapter("test-key", fetchPort);
     const payload = Object.freeze({
       from: "test@example.invalid",
+      replyTo: "replies@example.invalid",
       to: Object.freeze(["a@example.com"]) as readonly [string],
       subject: "test",
       text: "test",
@@ -329,6 +335,70 @@ describe("provider adapters", () => {
     );
   });
 
+  it("maps replyTo to reply_to through an exact provider field allowlist", async () => {
+    const fetchPort = vi.fn<FetchPort>(
+      async () => new Response(JSON.stringify({ id: "provider-id" })),
+    );
+    const payload = {
+      from: "test@example.invalid",
+      replyTo: "replies@example.invalid",
+      to: ["a@example.com"] as const,
+      subject: "test",
+      text: "plain",
+      html: "<p>html</p>",
+      unexpected: "must-not-cross-provider-boundary",
+    };
+
+    await createResendAdapter("test-key", fetchPort).send("event", payload);
+
+    const body = JSON.parse(
+      String(fetchPort.mock.calls[0]?.[1]?.body),
+    ) as Record<string, unknown>;
+    expect(body).toEqual({
+      from: "test@example.invalid",
+      to: ["a@example.com"],
+      subject: "test",
+      text: "plain",
+      html: "<p>html</p>",
+      reply_to: "replies@example.invalid",
+    });
+    expect(Object.keys(body)).toEqual([
+      "from",
+      "to",
+      "subject",
+      "text",
+      "html",
+      "reply_to",
+    ]);
+    expect(body).not.toHaveProperty("replyTo");
+    expect(body).not.toHaveProperty("unexpected");
+  });
+
+  it("omits html from the provider body when the neutral payload omits it", async () => {
+    const fetchPort = vi.fn<FetchPort>(
+      async () => new Response(JSON.stringify({ id: "provider-id" })),
+    );
+    await createResendAdapter("test-key", fetchPort).send("event", {
+      from: "test@example.invalid",
+      replyTo: "replies@example.invalid",
+      to: ["a@example.com"],
+      subject: "test",
+      text: "plain",
+    });
+
+    const body = JSON.parse(
+      String(fetchPort.mock.calls[0]?.[1]?.body),
+    ) as Record<string, unknown>;
+    expect(body).toEqual({
+      from: "test@example.invalid",
+      to: ["a@example.com"],
+      subject: "test",
+      text: "plain",
+      reply_to: "replies@example.invalid",
+    });
+    expect(body).not.toHaveProperty("html");
+  });
+
   it("maps Resend network failure to ambiguous without throwing", async () => {
     const fetchPort = vi.fn<FetchPort>(async () => {
       throw new Error("network");
@@ -336,6 +406,7 @@ describe("provider adapters", () => {
     await expect(
       createResendAdapter("test-key", fetchPort).send("event", {
         from: "test@example.invalid",
+        replyTo: "replies@example.invalid",
         to: ["a@example.com"],
         subject: "test",
         text: "test",
@@ -362,6 +433,7 @@ describe("provider adapters", () => {
       await expect(
         createResendAdapter("test-key", fetchPort).send("event", {
           from: "test@example.invalid",
+          replyTo: "replies@example.invalid",
           to: ["a@example.com"],
           subject: "test",
           text: "test",
@@ -386,6 +458,7 @@ describe("provider adapters", () => {
       );
       const result = createResendAdapter("test-key", fetchPort).send("event", {
         from: "test@example.invalid",
+        replyTo: "replies@example.invalid",
         to: ["a@example.com"],
         subject: "test",
         text: "test",

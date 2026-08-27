@@ -1,8 +1,8 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; synchronized through P3-A03-E04-A04-A00 backend foundation freeze**
+Status: **Production active; synchronized through P3-A03-E04-A05-A01 Delivery Copy V1 freeze**
 
-Baseline version: **3.7**
+Baseline version: **3.8**
 
 Last reviewed: **2026-08-27**
 
@@ -102,6 +102,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_E04_A02_PROVIDER_TOPOLOGY_RETENTION_DECISION.md`](POPAROOZ_P3_A03_E04_A02_PROVIDER_TOPOLOGY_RETENTION_DECISION.md): frozen bounded v1 Worker Route, same-origin API, D1-only storage, Turnstile, Resend, one-time-code, retention, and cost direction without authorizing implementation or accepting actual provider/infrastructure configuration.
 - [`POPAROOZ_P3_A03_E04_A02_A02_SCHEMA_SECURITY_API_CONTRACT.md`](POPAROOZ_P3_A03_E04_A02_A02_SCHEMA_SECURITY_API_CONTRACT.md): frozen exact API, schema, OTP, challenge lifecycle, D1 atomicity, security, retention, and test contract; production implementation not started.
 - [`POPAROOZ_P3_A03_E04_A04_A00_BACKEND_FOUNDATION_FREEZE.md`](POPAROOZ_P3_A03_E04_A04_A00_BACKEND_FOUNDATION_FREEZE.md): independently reviewed standalone Email Gate Worker/D1 backend foundation freeze, committed with production delivery and frontend inactive.
+- [`POPAROOZ_P3_A03_E04_A05_A01_DELIVERY_COPY_V1_FREEZE.md`](POPAROOZ_P3_A03_E04_A05_A01_DELIVERY_COPY_V1_FREEZE.md): exact Delivery Copy V1 subject and text, minimal-HTML semantics, OTP and expiry presentation, transactional-only boundary, and unresolved sender/blocked-renderer status.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
@@ -211,7 +212,9 @@ Before implementation begins, read this file and every formal document relevant 
 - P3-A03-E04-A02-A01: **Provider, topology, and retention decision completed / frozen / production implementation not started**
 - P3-A03-E04-A02-A02: **Completed / frozen**
 - P3-A03-E04-A04-A00: **Backend foundation completed / independently reviewed / frozen / committed / production inactive**
+- P3-A03-E04-A05-A01: **Delivery Copy V1 completed / frozen / renderer implementation blocked / production inactive**
 - Email backend foundation: **Implemented in repository as one standalone Worker / not deployed / production renderer intentionally empty**
+- Email Delivery Copy V1: **Exact subject and text plus HTML semantics frozen / production sender not accepted / Renderer V1 not implemented or registered**
 - Email Gate frontend and current Download interception: **Not implemented / Download remains ungated**
 - Cloudflare Email Gate infrastructure: **Not created**
 - Email provider and topology: **Frozen governance direction only / resources not created / provider not integrated / provider-default audit unperformed**
@@ -247,6 +250,16 @@ remains ungated, and no Worker, Route, D1 resource, remote migration, provider,
 secret, Cron, DNS, or marketing behavior was activated. All provider/account,
 resource, frontend, delivery-copy, and production-activation gates remain open,
 and the provider-default audit remains unperformed.
+
+P3-A03-E04-A05-A01 closes only the Delivery Copy V1 governance gate. It freezes
+the exact subject `Your Poparooz verification code`, exact plain-text copy,
+minimal-HTML semantics, eight-ASCII-digit OTP presentation, qualified expiry
+wording, and transactional-only privacy boundary. It does not accept
+`Poparooz <verification@notify.poparooz.com>` as the production sender. Because
+the immutable `from` value remains unresolved, Renderer V1 remains blocked,
+unimplemented, and unregistered; the production renderer registry stays empty.
+The frontend and production behavior remain unchanged, and no provider or
+infrastructure resource was created or mutated.
 
 P3-A03-SCOPE found no P0 blocker in the repository-level audit, code contracts,
 or accepted evidence. It did not perform new real-device, keyboard/screen-reader,

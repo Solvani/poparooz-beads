@@ -370,13 +370,18 @@ E04-A04-A00 implementation subject: feat: add email gate backend foundation
 E04-A04-A00 authority: docs/POPAROOZ_P3_A03_E04_A04_A00_BACKEND_FOUNDATION_FREEZE.md
 E04-A04-A00 architecture: ONE STANDALONE EMAIL GATE WORKER / PRODUCTION RENDERER INTENTIONALLY EMPTY
 E04-A04-A00 qualification: FRONTEND NOT IMPLEMENTED / DOWNLOAD UNGATED / NO RESOURCES OR PRODUCTION ACTIVATION
+P3-A03-E04-A05-A01: COMPLETED / COPY V1 FROZEN / RENDERER IMPLEMENTATION BLOCKED / PRODUCTION INACTIVE
+E04-A05-A01 authority: docs/POPAROOZ_P3_A03_E04_A05_A01_DELIVERY_COPY_V1_FREEZE.md
+E04-A05-A01 subject: Your Poparooz verification code
+E04-A05-A01 renderer: BLOCKED PENDING SENDER ACCEPTANCE / PRODUCTION REGISTRY REMAINS EMPTY
+E04-A05-A01 qualification: PRODUCTION SENDER NOT ACCEPTED / FRONTEND UNCHANGED / NO PROVIDER OR RESOURCE MUTATION
 Canonical active customer-facing term: Generation Color Set
 Production GenerationRuntime: Available and production verified
 Cloudflare Pages: Active
 Shopify embed: Active
 Production implementation resume: Conditional
-Current E04 governance state: P3-A03-E04-A04-A00 backend foundation frozen / committed / production inactive
-Next E04 stage: SEPARATE EXPLICIT AUTHORIZATION REQUIRED / NOT STARTED
+Current E04 governance state: P3-A03-E04-A05-A01 Delivery Copy V1 frozen / renderer blocked / production inactive
+Next E04 stage: SENDER ACCEPTANCE REQUIRES SEPARATE EXPLICIT AUTHORIZATION / NOT STARTED
 ```
 
 The production Runtime and the A08 deployment remain active. The formal
@@ -430,6 +435,10 @@ the repository-only standalone Worker/D1 backend foundation at commit
 `2e333d6016f104fda2737c3c5e9901898a05b5fb`. Its production renderer remains
 intentionally empty, the frontend is not implemented, Download remains ungated,
 and provider acceptance and every resource-entry and activation gate remain open.
+P3-A03-E04-A05-A01 freezes the exact Delivery Copy V1 subject and plain-text
+copy plus the minimal-HTML semantic, OTP, expiry, transactional-only, privacy,
+and no-links/tracking/marketing boundaries. The production sender is not
+accepted, so Renderer V1 remains blocked, unimplemented, and unregistered.
 
 P3-A03-SCOPE-A02 retains Recommendation Policy v1 only as a post-generation
 material-policy result for the already-generated current Pattern. It does not
@@ -717,6 +726,7 @@ P3-A03-E04-A01 Email Download Gate Contract          Completed / frozen / produc
 P3-A03-E04-A02-A01 Provider/Topology/Retention Decision Completed / frozen / production implementation not started / provider acceptance pending
 P3-A03-E04-A02-A02-A01 Schema/Security/API Contract Completed / frozen
 P3-A03-E04-A04-A00 Email Gate Backend Foundation Completed / frozen / committed / production inactive
+P3-A03-E04-A05-A01 Delivery Copy V1 Freeze       Completed / copy frozen / renderer blocked / production inactive
 P3-A03-SCOPE Product Completeness Audit             Complete / corrections synchronized by A01
 P3-A03-SCOPE-A01 Governance Synchronization         Completed / scope closure synchronized
 P3-A03-SCOPE-A02 Results / Materials Decision       Completed / frozen with applicability qualifications

@@ -1,8 +1,8 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; synchronized through P3-A03-E04-A05-A02-A01 Sender / Reply-To decision**
+Status: **Production active; synchronized through P3-A03-E04-A05-A03-A00 Renderer V1 freeze**
 
-Baseline version: **3.9**
+Baseline version: **3.10**
 
 Last reviewed: **2026-08-27**
 
@@ -104,6 +104,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_E04_A04_A00_BACKEND_FOUNDATION_FREEZE.md`](POPAROOZ_P3_A03_E04_A04_A00_BACKEND_FOUNDATION_FREEZE.md): independently reviewed standalone Email Gate Worker/D1 backend foundation freeze, committed with production delivery and frontend inactive.
 - [`POPAROOZ_P3_A03_E04_A05_A01_DELIVERY_COPY_V1_FREEZE.md`](POPAROOZ_P3_A03_E04_A05_A01_DELIVERY_COPY_V1_FREEZE.md): exact Delivery Copy V1 subject and text, minimal-HTML semantics, OTP and expiry presentation, transactional-only boundary, and unresolved sender/blocked-renderer status.
 - [`POPAROOZ_P3_A03_E04_A05_A02_A01_SENDER_REPLY_TO_DECISION.md`](POPAROOZ_P3_A03_E04_A05_A02_A01_SENDER_REPLY_TO_DECISION.md): accepted production sending domain, immutable From and Reply-To identities, disabled tracking and receiving policy, and Renderer V1 implementation-entry status.
+- [`POPAROOZ_P3_A03_E04_A05_A03_A00_RENDERER_V1_FREEZE.md`](POPAROOZ_P3_A03_E04_A05_A03_A00_RENDERER_V1_FREEZE.md): independently reviewed Production Delivery Renderer V1 implementation, deterministic payload authority, sequential verification recovery, and production-inactive boundary.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
@@ -215,8 +216,9 @@ Before implementation begins, read this file and every formal document relevant 
 - P3-A03-E04-A04-A00: **Backend foundation completed / independently reviewed / frozen / committed / production inactive**
 - P3-A03-E04-A05-A01: **Delivery Copy V1 completed / frozen / renderer implementation blocked / production inactive**
 - P3-A03-E04-A05-A02-A01: **Sender accepted / Reply-To frozen / Renderer V1 ready for implementation / production inactive**
-- Email backend foundation: **Implemented in repository as one standalone Worker / not deployed / production renderer intentionally empty**
-- Email Delivery Copy V1: **Exact subject and text plus HTML semantics frozen / exact sender and Reply-To frozen / Renderer V1 not implemented or registered**
+- P3-A03-E04-A05-A03-A00: **Renderer V1 implemented / independently reviewed / registered / frozen / committed / production inactive**
+- Email backend foundation: **Implemented in repository as one standalone Worker / not deployed / Production Renderer V1 registered**
+- Email Delivery Copy V1: **Exact subject, text, deterministic HTML, sender, and Reply-To frozen / Renderer V1 implemented and registered in repository / not deployed**
 - Email Gate frontend and current Download interception: **Not implemented / Download remains ungated**
 - Cloudflare Email Gate infrastructure: **Not created**
 - Email provider and topology: **Frozen governance direction only / resources not created / provider not integrated / provider-default audit unperformed**
@@ -273,6 +275,17 @@ retries. Renderer V1 is ready for a separately authorized implementation but
 remains unimplemented and unregistered; the production registry remains empty,
 and no email, deployment, resource, secret, DNS, frontend, or production
 behavior was changed by this governance stage.
+
+P3-A03-E04-A05-A03-A00 implements and freezes Production Delivery Renderer V1
+at commit `5fe514e1728a3dbd0631d21e5cb4f603645a6a9c`. The repository Worker runtime
+registers the exact deterministic V1 From, Reply-To, subject, plain text, HTML,
+recipient-only `to`, and Resend `reply_to` serialization. Unknown versions fail
+closed and the test fixture is not production registered. Three timeouts from
+an earlier concurrent verification run did not reproduce in repeated isolated
+runs, a combined affected-file run, or the sequential 132-file / 1522-test
+repository suite. No Worker is deployed, no real email was sent, the frontend
+and Download behavior remain unchanged, and all provider, resource, secret,
+route, Cron, real-delivery, and production-activation gates remain open.
 
 P3-A03-SCOPE found no P0 blocker in the repository-level audit, code contracts,
 or accepted evidence. It did not perform new real-device, keyboard/screen-reader,

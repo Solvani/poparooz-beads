@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "WebWorker"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": [
+      "./worker-configuration.d.ts",
+      "@cloudflare/vitest-plugin/types",
+      "vitest/globals"
+    ]
+  },
+  "include": [
+    "src/contracts/email-gate/**/*.ts",
+    "worker/email-gate/**/*.ts",
+    "worker-configuration.d.ts",
+    "vitest.worker.config.ts"
+  ]
+}

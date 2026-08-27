@@ -5,8 +5,12 @@ dist/
 .env.*
 !.env.example
 !.env.production
+.dev.vars
+.dev.vars.*
+*.dev.vars
 coverage/
 .vite/
+.wrangler/
 *.log
 *.tsbuildinfo
 data-source/incoming/*

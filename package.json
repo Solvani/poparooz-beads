@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.test.json",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.test.json && tsc --noEmit -p tsconfig.worker.json",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -26,7 +26,8 @@
     "palette:runtime:verify": "node --experimental-strip-types --import ./scripts/palette/runtime/register-typescript-extension-loader.mjs scripts/palette/runtime/verify-runtime-palette-production-gate-cli.ts",
     "palette:validate": "node --experimental-strip-types scripts/palette/validate-palette.ts",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "test:worker": "vitest run --config vitest.worker.config.ts"
   },
   "dependencies": {
     "react": "^19.2.8",
@@ -34,6 +35,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.1.0",
     "@eslint/js": "^10.0.1",
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.3.2",
@@ -54,6 +56,7 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.65.0",
     "vite": "^8.1.5",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "wrangler": "^4.126.0"
   }
 }

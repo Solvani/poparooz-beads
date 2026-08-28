@@ -1,10 +1,10 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; synchronized through P3-A03-E04-A05-A03-A00 Renderer V1 freeze**
+Status: **Production active; synchronized through P3-A03-E04-A06 Email Download Gate frontend freeze**
 
-Baseline version: **3.10**
+Baseline version: **3.11**
 
-Last reviewed: **2026-08-27**
+Last reviewed: **2026-08-28**
 
 ## Authority
 
@@ -217,9 +217,11 @@ Before implementation begins, read this file and every formal document relevant 
 - P3-A03-E04-A05-A01: **Delivery Copy V1 completed / frozen / renderer implementation blocked / production inactive**
 - P3-A03-E04-A05-A02-A01: **Sender accepted / Reply-To frozen / Renderer V1 ready for implementation / production inactive**
 - P3-A03-E04-A05-A03-A00: **Renderer V1 implemented / independently reviewed / registered / frozen / committed / production inactive**
+- P3-A03-E04-A06: **Frontend implemented / code reviewed / Desktop and Mobile visually approved / frozen / committed / production inactive**
 - Email backend foundation: **Implemented in repository as one standalone Worker / not deployed / Production Renderer V1 registered**
 - Email Delivery Copy V1: **Exact subject, text, deterministic HTML, sender, and Reply-To frozen / Renderer V1 implemented and registered in repository / not deployed**
-- Email Gate frontend and current Download interception: **Not implemented / Download remains ungated**
+- Email Gate frontend: **Implemented and frozen in the repository / production capability unavailable**
+- Current Download interception: **Inactive / Download remains ungated**
 - Cloudflare Email Gate infrastructure: **Not created**
 - Email provider and topology: **Frozen governance direction only / resources not created / provider not integrated / provider-default audit unperformed**
 
@@ -286,6 +288,20 @@ runs, a combined affected-file run, or the sequential 132-file / 1522-test
 repository suite. No Worker is deployed, no real email was sent, the frontend
 and Download behavior remain unchanged, and all provider, resource, secret,
 route, Cron, real-delivery, and production-activation gates remain open.
+
+P3-A03-E04-A06 implements and freezes the repository Email Download Gate
+frontend at commit `676241c8307c525bca98521ad4a984897920eed7`. The frontend
+lazy-loads its dialog, CSS, and approved floral presentation, keeps a minimal
+versioned local unlock marker, binds pending Download authority to the original
+Pattern, rejects stale operations, protects exactly-once completion, and keeps
+frontend production modules canonically contained from Worker/server code.
+A06-A01 code review passed. Real Chrome QA covered Desktop `1440 x 1000` and
+`1440 x 800` plus Mobile `390 x 844` and `375 x 667`; the V1 focus and
+status-semantic defects were closed, and the user approved Desktop and Mobile
+while accepting the two recorded V2 visual qualifications as-is. Production
+continues to inject `UNAVAILABLE_EMAIL_GATE_CAPABILITY`, so current customer
+Download remains ungated. No Worker, Route, D1 resource, Turnstile, provider,
+secret, real email, Shopify protocol, or manual deployment was activated.
 
 P3-A03-SCOPE found no P0 blocker in the repository-level audit, code contracts,
 or accepted evidence. It did not perform new real-device, keyboard/screen-reader,

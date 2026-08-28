@@ -389,13 +389,19 @@ E04-A05-A03-A00 authority: docs/POPAROOZ_P3_A03_E04_A05_A03_A00_RENDERER_V1_FREE
 E04-A05-A03-A00 renderer: REPOSITORY IMPLEMENTED / REGISTERED / FROZEN / DEPLOYED INACTIVE
 E04-A05-A03-A00 verification recovery: NON-DETERMINISTIC RESOURCE-CONTENTION / NOT REPRODUCED UNDER SEQUENTIAL VERIFICATION
 E04-A05-A03-A00 qualification: FRONTEND NOT IMPLEMENTED / DOWNLOAD UNGATED / NO EMAIL, DEPLOYMENT, RESOURCE, SECRET, DNS, OR PRODUCTION-BEHAVIOR CHANGE
+P3-A03-E04-A06: COMPLETED / CODE REVIEWED / VISUALLY APPROVED / FROZEN / COMMITTED / PRODUCTION INACTIVE
+E04-A06 implementation commit: 676241c8307c525bca98521ad4a984897920eed7
+E04-A06 implementation subject: feat: add email download gate frontend
+E04-A06 authority: docs/POPAROOZ_P3_A03_E04_A06_FRONTEND_FREEZE.md
+E04-A06 browser QA: DESKTOP AND MOBILE USER APPROVED / V1 FOCUS AND STATUS DEFECTS CLOSED
+E04-A06 qualification: PRODUCTION CAPABILITY UNAVAILABLE / DOWNLOAD UNGATED / V2 VISUAL OBSERVATIONS ACCEPTED AS-IS / NO BACKEND OR PRODUCTION ACTIVATION
 Canonical active customer-facing term: Generation Color Set
 Production GenerationRuntime: Available and production verified
 Cloudflare Pages: Active
 Shopify embed: Active
 Production implementation resume: Conditional
-Current E04 governance state: P3-A03-E04-A05-A03-A00 Renderer V1 implemented / registered / frozen / committed / production inactive
-Next E04 stage: PROVIDER, INFRASTRUCTURE, FRONTEND, AND PRODUCTION ACTIVATION GATES REMAIN SEPARATELY AUTHORIZED / OPEN
+Current E04 governance state: P3-A03-E04-A06 frontend implemented / code reviewed / visually approved / frozen / committed / production inactive
+Next E04 stage: PROVIDER, INFRASTRUCTURE, AND PRODUCTION ACTIVATION GATES REMAIN SEPARATELY AUTHORIZED / OPEN
 ```
 
 The production Runtime and the A08 deployment remain active. The formal
@@ -474,6 +480,20 @@ two affected files together, or the sequential 132-file / 1522-test repository
 suite. No Worker is deployed; the frontend remains unchanged and Download
 remains ungated. Provider/account acceptance, resources, secrets, deployment,
 route, Cron, real delivery, and production activation remain open.
+
+P3-A03-E04-A06 implements and freezes the repository Email Download Gate
+frontend at commit `676241c8307c525bca98521ad4a984897920eed7`. A06-A01 final
+code review passed; the actual lazy dialog, CSS, Poparooz Logo, and approved
+floral asset were rendered in Chrome at Desktop `1440 x 1000` / `1440 x 800`
+and Mobile `390 x 844` / `375 x 667`. The V1 focus and status-semantic defects
+were closed, and the user approved Desktop and Mobile while accepting the two
+recorded V2 visual qualifications as-is. Local unlock, original-Pattern
+identity, stale-response rejection, exactly-once completion, lazy presentation,
+and canonical server-import containment are frozen by
+`docs/POPAROOZ_P3_A03_E04_A06_FRONTEND_FREEZE.md`. Production still injects
+`UNAVAILABLE_EMAIL_GATE_CAPABILITY`; current Download remains ungated. No
+Worker, D1, Turnstile, real email, provider, route, secret, Shopify protocol, or
+manual deployment was activated.
 
 P3-A03-SCOPE-A02 retains Recommendation Policy v1 only as a post-generation
 material-policy result for the already-generated current Pattern. It does not
@@ -764,6 +784,7 @@ P3-A03-E04-A04-A00 Email Gate Backend Foundation Completed / frozen / committed 
 P3-A03-E04-A05-A01 Delivery Copy V1 Freeze       Completed / copy frozen / renderer blocked / production inactive
 P3-A03-E04-A05-A02-A01 Sender / Reply-To Decision Completed / frozen / renderer ready for implementation / production inactive
 P3-A03-E04-A05-A03-A00 Renderer V1 Freeze       Completed / frozen / committed / production inactive
+P3-A03-E04-A06 Email Download Gate Frontend Freeze Completed / code reviewed / visually approved / frozen / committed / production inactive
 P3-A03-SCOPE Product Completeness Audit             Complete / corrections synchronized by A01
 P3-A03-SCOPE-A01 Governance Synchronization         Completed / scope closure synchronized
 P3-A03-SCOPE-A02 Results / Materials Decision       Completed / frozen with applicability qualifications

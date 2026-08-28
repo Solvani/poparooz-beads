@@ -1,16 +1,19 @@
 import {
   act,
   cleanup,
+  fireEvent,
   render,
   screen,
   waitFor,
   within,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { StrictMode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PublicPatternResult } from "../domain/pattern/public-pattern.types";
 import type { GenerationRuntime } from "../features/generator/generation.types";
+import type { EmailGateCapability } from "../email-gate/email-gate-capability";
 import { createPublicPattern } from "../features/pattern-canvas/test/pattern-result";
 import { App } from "./App";
 
@@ -54,6 +57,32 @@ type AvailableGenerationRuntime = Extract<
   GenerationRuntime,
   { readonly availability: { readonly available: true } }
 >;
+
+type EnabledEmailGateCapability = Extract<
+  EmailGateCapability,
+  { readonly availability: { readonly available: true } }
+>;
+
+function enabledEmailGate(
+  unlocked: boolean | (() => boolean),
+  overrides: Partial<EnabledEmailGateCapability["client"]> = {},
+): EnabledEmailGateCapability {
+  return {
+    availability: { available: true },
+    client: {
+      issueChallenge: vi.fn(),
+      verifyChallenge: vi.fn(),
+      ...overrides,
+    },
+    issueProofProvider: { getFreshIssueToken: vi.fn() },
+    unlockStore: {
+      isUnlocked: vi.fn(() =>
+        typeof unlocked === "function" ? unlocked() : unlocked,
+      ),
+      writeUnlocked: vi.fn(() => true),
+    },
+  };
+}
 
 function availableRuntime(
   tasks: readonly Promise<PublicPatternResult>[],
@@ -121,6 +150,43 @@ async function completeInputs() {
   await userEvent.clear(screen.getByLabelText("Maximum Colors"));
   await userEvent.type(screen.getByLabelText("Maximum Colors"), "16");
   await userEvent.click(screen.getByRole("radio", { name: /Full Background/ }));
+}
+
+async function generatePatternAndOpenGate(
+  gate: EnabledEmailGateCapability,
+  tasks: readonly Promise<PublicPatternResult>[] = [
+    Promise.resolve(PUBLIC_RESULT),
+  ],
+  strict = false,
+) {
+  const app = (
+    <App
+      generationRuntime={availableRuntime(tasks)}
+      emailGateCapability={gate}
+    />
+  );
+  render(strict ? <StrictMode>{app}</StrictMode> : app);
+  await completeInputs();
+  await userEvent.click(
+    await screen.findByRole("button", { name: "Generate Pattern" }),
+  );
+  await screen.findByRole("heading", { name: "Pattern Summary" });
+  await userEvent.click(
+    screen.getByRole("button", { name: "Save / Download Pattern" }),
+  );
+  await screen.findByRole("dialog", { name: "Unlock your pattern download" });
+}
+
+async function beginGateVerification() {
+  await userEvent.type(screen.getByLabelText("Email address"), "a@example.com");
+  await userEvent.click(
+    screen.getByRole("button", { name: "Send verification code" }),
+  );
+  const code = await screen.findByLabelText("8-digit verification code");
+  await userEvent.type(code, "01234567");
+  await userEvent.click(
+    screen.getByRole("button", { name: "Verify & download" }),
+  );
 }
 
 beforeEach(() => {
@@ -1012,5 +1078,410 @@ describe("App", () => {
     expect(
       screen.getByRole("heading", { name: "Recommended Board Setup" }),
     ).toBeInTheDocument();
+  });
+
+  it("bypasses the enabled Gate entirely when the strict local marker is valid", async () => {
+    Object.defineProperty(HTMLImageElement.prototype, "decode", {
+      configurable: true,
+      value: vi.fn(async () => {}),
+    });
+    vi.spyOn(HTMLImageElement.prototype, "naturalWidth", "get").mockReturnValue(
+      1154,
+    );
+    vi.spyOn(
+      HTMLImageElement.prototype,
+      "naturalHeight",
+      "get",
+    ).mockReturnValue(428);
+    const anchorClickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => {});
+    const gate = enabledEmailGate(true);
+    render(
+      <App
+        generationRuntime={availableRuntime([Promise.resolve(PUBLIC_RESULT)])}
+        emailGateCapability={gate}
+      />,
+    );
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await screen.findByRole("heading", { name: "Pattern Summary" });
+    await userEvent.click(
+      screen.getByRole("button", { name: "Save / Download Pattern" }),
+    );
+    await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledOnce());
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(gate.client.issueChallenge).not.toHaveBeenCalled();
+    expect(gate.issueProofProvider.getFreshIssueToken).not.toHaveBeenCalled();
+  });
+
+  it("opens the Gate for a locked browser without making a request before email submit", async () => {
+    const gate = enabledEmailGate(false);
+    render(
+      <App
+        generationRuntime={availableRuntime([Promise.resolve(PUBLIC_RESULT)])}
+        emailGateCapability={gate}
+      />,
+    );
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await screen.findByRole("heading", { name: "Pattern Summary" });
+    await userEvent.click(
+      screen.getByRole("button", { name: "Save / Download Pattern" }),
+    );
+    expect(
+      await screen.findByRole("dialog", {
+        name: "Unlock your pattern download",
+      }),
+    ).toBeInTheDocument();
+    expect(gate.client.issueChallenge).not.toHaveBeenCalled();
+    expect(gate.issueProofProvider.getFreshIssueToken).not.toHaveBeenCalled();
+    await userEvent.click(screen.getByRole("button", { name: "Close" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("does not unlock or download Pattern A when Pattern B commits before stale verification resolves", async () => {
+    let resolveReplacement!: (value: PublicPatternResult) => void;
+    let resolveVerification!: (value: {
+      ok: true;
+      response: {
+        schemaVersion: 1;
+        result: "verification_succeeded";
+        verified: true;
+      };
+    }) => void;
+    const replacement = new Promise<PublicPatternResult>(
+      (resolve) => void (resolveReplacement = resolve),
+    );
+    const verification = new Promise<Parameters<typeof resolveVerification>[0]>(
+      (resolve) => void (resolveVerification = resolve),
+    );
+    const gate = enabledEmailGate(false, {
+      issueChallenge: vi.fn(async () => ({
+        ok: true as const,
+        response: {
+          schemaVersion: 1 as const,
+          result: "challenge_issued" as const,
+          challengeId: "abcdefab-cdef-4abc-8def-abcdefabcdef",
+          expiresInSeconds: 580,
+          resendAfterSeconds: 45,
+        },
+      })),
+      verifyChallenge: vi.fn(() => verification),
+    });
+    const anchorClickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => {});
+
+    await generatePatternAndOpenGate(gate, [
+      Promise.resolve(PUBLIC_RESULT),
+      replacement,
+    ]);
+    await beginGateVerification();
+    fireEvent.change(screen.getByLabelText("Maximum Colors"), {
+      target: { value: "20" },
+    });
+    const regenerate = Array.from(document.querySelectorAll("button")).find(
+      (button) => button.textContent === "Regenerate Pattern",
+    );
+    expect(regenerate).toBeDefined();
+    fireEvent.click(regenerate!);
+    await act(async () => resolveReplacement(PUBLIC_RESULT));
+    await screen.findByRole("heading", { name: "Your pattern changed" });
+    await act(async () =>
+      resolveVerification({
+        ok: true,
+        response: {
+          schemaVersion: 1,
+          result: "verification_succeeded",
+          verified: true,
+        },
+      }),
+    );
+
+    expect(gate.unlockStore.writeUnlocked).not.toHaveBeenCalled();
+    expect(anchorClickSpy).not.toHaveBeenCalled();
+  });
+
+  it("does not unlock or download when the image is removed during verification", async () => {
+    let resolveVerification!: (value: {
+      ok: true;
+      response: {
+        schemaVersion: 1;
+        result: "verification_succeeded";
+        verified: true;
+      };
+    }) => void;
+    const verification = new Promise<Parameters<typeof resolveVerification>[0]>(
+      (resolve) => void (resolveVerification = resolve),
+    );
+    const gate = enabledEmailGate(false, {
+      issueChallenge: vi.fn(async () => ({
+        ok: true as const,
+        response: {
+          schemaVersion: 1 as const,
+          result: "challenge_issued" as const,
+          challengeId: "abcdefab-cdef-4abc-8def-abcdefabcdef",
+          expiresInSeconds: 580,
+          resendAfterSeconds: 45,
+        },
+      })),
+      verifyChallenge: vi.fn(() => verification),
+    });
+    const anchorClickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => {});
+
+    await generatePatternAndOpenGate(gate);
+    await beginGateVerification();
+    const remove = Array.from(document.querySelectorAll("button")).find(
+      (button) => button.textContent === "Remove Image",
+    );
+    expect(remove).toBeDefined();
+    fireEvent.click(remove!);
+    await act(async () =>
+      resolveVerification({
+        ok: true,
+        response: {
+          schemaVersion: 1,
+          result: "verification_succeeded",
+          verified: true,
+        },
+      }),
+    );
+
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(gate.unlockStore.writeUnlocked).not.toHaveBeenCalled();
+    expect(anchorClickSpy).not.toHaveBeenCalled();
+  });
+
+  it("ignores a stale verification response even when the client resolves after abort", async () => {
+    let resolveVerification!: (value: {
+      ok: true;
+      response: {
+        schemaVersion: 1;
+        result: "verification_succeeded";
+        verified: true;
+      };
+    }) => void;
+    let verificationSignal: AbortSignal | undefined;
+    const verification = new Promise<Parameters<typeof resolveVerification>[0]>(
+      (resolve) => void (resolveVerification = resolve),
+    );
+    const gate = enabledEmailGate(false, {
+      issueChallenge: vi.fn(async () => ({
+        ok: true as const,
+        response: {
+          schemaVersion: 1 as const,
+          result: "challenge_issued" as const,
+          challengeId: "abcdefab-cdef-4abc-8def-abcdefabcdef",
+          expiresInSeconds: 580,
+          resendAfterSeconds: 45,
+        },
+      })),
+      verifyChallenge: vi.fn((_input, signal) => {
+        verificationSignal = signal;
+        return verification;
+      }),
+    });
+    const anchorClickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => {});
+
+    await generatePatternAndOpenGate(gate);
+    await beginGateVerification();
+    await userEvent.click(screen.getByRole("button", { name: "Change email" }));
+    expect(verificationSignal?.aborted).toBe(true);
+    await act(async () =>
+      resolveVerification({
+        ok: true,
+        response: {
+          schemaVersion: 1,
+          result: "verification_succeeded",
+          verified: true,
+        },
+      }),
+    );
+
+    expect(screen.getByLabelText("Email address")).toBeInTheDocument();
+    expect(gate.unlockStore.writeUnlocked).not.toHaveBeenCalled();
+    expect(anchorClickSpy).not.toHaveBeenCalled();
+  });
+
+  it("keeps close-during-request fail closed and consumes duplicate StrictMode submit once", async () => {
+    let resolveVerification!: (value: {
+      ok: true;
+      response: {
+        schemaVersion: 1;
+        result: "verification_succeeded";
+        verified: true;
+      };
+    }) => void;
+    const verification = new Promise<Parameters<typeof resolveVerification>[0]>(
+      (resolve) => void (resolveVerification = resolve),
+    );
+    const gate = enabledEmailGate(false, {
+      issueChallenge: vi.fn(async () => ({
+        ok: true as const,
+        response: {
+          schemaVersion: 1 as const,
+          result: "challenge_issued" as const,
+          challengeId: "abcdefab-cdef-4abc-8def-abcdefabcdef",
+          expiresInSeconds: 580,
+          resendAfterSeconds: 45,
+        },
+      })),
+      verifyChallenge: vi.fn(() => verification),
+    });
+    const anchorClickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => {});
+
+    await generatePatternAndOpenGate(
+      gate,
+      [Promise.resolve(PUBLIC_RESULT)],
+      true,
+    );
+    await userEvent.type(
+      screen.getByLabelText("Email address"),
+      "a@example.com",
+    );
+    await userEvent.click(
+      screen.getByRole("button", { name: "Send verification code" }),
+    );
+    const code = await screen.findByLabelText("8-digit verification code");
+    await userEvent.type(code, "01234567");
+    const form = screen
+      .getByRole("button", { name: "Verify & download" })
+      .closest("form")!;
+    fireEvent.submit(form);
+    fireEvent.submit(form);
+    expect(gate.client.verifyChallenge).toHaveBeenCalledOnce();
+    await userEvent.click(screen.getByRole("button", { name: "Close" }));
+    await act(async () =>
+      resolveVerification({
+        ok: true,
+        response: {
+          schemaVersion: 1,
+          result: "verification_succeeded",
+          verified: true,
+        },
+      }),
+    );
+
+    expect(gate.unlockStore.writeUnlocked).not.toHaveBeenCalled();
+    expect(anchorClickSpy).not.toHaveBeenCalled();
+  });
+
+  it("unlocks and downloads exactly once for duplicate successful submits in StrictMode", async () => {
+    Object.defineProperty(HTMLImageElement.prototype, "decode", {
+      configurable: true,
+      value: vi.fn(async () => {}),
+    });
+    vi.spyOn(HTMLImageElement.prototype, "naturalWidth", "get").mockReturnValue(
+      1154,
+    );
+    vi.spyOn(
+      HTMLImageElement.prototype,
+      "naturalHeight",
+      "get",
+    ).mockReturnValue(428);
+    const anchorClickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => {});
+    const gate = enabledEmailGate(false, {
+      issueChallenge: vi.fn(async () => ({
+        ok: true as const,
+        response: {
+          schemaVersion: 1 as const,
+          result: "challenge_issued" as const,
+          challengeId: "abcdefab-cdef-4abc-8def-abcdefabcdef",
+          expiresInSeconds: 580,
+          resendAfterSeconds: 45,
+        },
+      })),
+      verifyChallenge: vi.fn(async () => ({
+        ok: true as const,
+        response: {
+          schemaVersion: 1 as const,
+          result: "verification_succeeded" as const,
+          verified: true as const,
+        },
+      })),
+    });
+
+    await generatePatternAndOpenGate(
+      gate,
+      [Promise.resolve(PUBLIC_RESULT)],
+      true,
+    );
+    await userEvent.type(
+      screen.getByLabelText("Email address"),
+      "a@example.com",
+    );
+    await userEvent.click(
+      screen.getByRole("button", { name: "Send verification code" }),
+    );
+    const code = await screen.findByLabelText("8-digit verification code");
+    await userEvent.type(code, "01234567");
+    const form = screen
+      .getByRole("button", { name: "Verify & download" })
+      .closest("form")!;
+    fireEvent.submit(form);
+    fireEvent.submit(form);
+
+    await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledOnce());
+    expect(gate.client.verifyChallenge).toHaveBeenCalledOnce();
+    expect(gate.unlockStore.writeUnlocked).toHaveBeenCalledOnce();
+  });
+
+  it("rechecks a cleared unlock marker during the same App lifecycle", async () => {
+    Object.defineProperty(HTMLImageElement.prototype, "decode", {
+      configurable: true,
+      value: vi.fn(async () => {}),
+    });
+    vi.spyOn(HTMLImageElement.prototype, "naturalWidth", "get").mockReturnValue(
+      1154,
+    );
+    vi.spyOn(
+      HTMLImageElement.prototype,
+      "naturalHeight",
+      "get",
+    ).mockReturnValue(428);
+    const anchorClickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => {});
+    let unlocked = true;
+    const gate = enabledEmailGate(() => unlocked);
+
+    render(
+      <App
+        generationRuntime={availableRuntime([Promise.resolve(PUBLIC_RESULT)])}
+        emailGateCapability={gate}
+      />,
+    );
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await screen.findByRole("heading", { name: "Pattern Summary" });
+    const download = screen.getByRole("button", {
+      name: "Save / Download Pattern",
+    });
+    await userEvent.click(download);
+    await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledOnce());
+
+    unlocked = false;
+    await userEvent.click(download);
+    await screen.findByRole("dialog", {
+      name: "Unlock your pattern download",
+    });
+    expect(gate.client.issueChallenge).not.toHaveBeenCalled();
+    expect(gate.client.verifyChallenge).not.toHaveBeenCalled();
+    expect(anchorClickSpy).toHaveBeenCalledOnce();
   });
 });

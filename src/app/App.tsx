@@ -1,4 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+import {
+  Component,
+  Suspense,
+  lazy,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 import { AppHeader } from "../components/layout/AppHeader";
 import { GeneratorWorkspaceShell } from "../components/layout/GeneratorWorkspaceShell";
@@ -35,13 +45,28 @@ import { ImagePreview } from "../features/upload/ImagePreview";
 import { ImageUpload } from "../features/upload/ImageUpload";
 import { useImageSource } from "../features/upload/use-image-source";
 import { useGeneratorEmbedBridge } from "../runtime/embed/generator-embed-bridge";
+import {
+  UNAVAILABLE_EMAIL_GATE_CAPABILITY,
+  type EmailGateCapability,
+} from "../email-gate/email-gate-capability";
+import {
+  createEmailGateDownloadCoordinator,
+  type EmailGateCompletion,
+} from "../email-gate/download-coordinator";
+
+const EmailGateDialog = lazy(async () => {
+  const presentation = await import("../email-gate/EmailGateDialog");
+  return { default: presentation.EmailGateDialog };
+});
 
 export interface AppProps {
   readonly generationRuntime?: GenerationRuntime;
+  readonly emailGateCapability?: EmailGateCapability;
 }
 
 export function App({
   generationRuntime = UNAVAILABLE_GENERATION_RUNTIME,
+  emailGateCapability = UNAVAILABLE_EMAIL_GATE_CAPABILITY,
 }: AppProps) {
   useGeneratorEmbedBridge();
   const image = useImageSource();
@@ -57,6 +82,22 @@ export function App({
   );
   const [focusedColorIndex, setFocusedColorIndex] = useState<number | null>(
     null,
+  );
+  const [emailGateOpen, setEmailGateOpen] = useState(false);
+  const [pendingDownloadIdentity, setPendingDownloadIdentity] = useState<
+    number | null
+  >(null);
+  const committedLastSuccessIdentityRef = useRef<number | null>(null);
+  const enabledEmailGate =
+    "client" in emailGateCapability ? emailGateCapability : null;
+  const downloadCoordinator = useMemo(
+    () =>
+      enabledEmailGate === null
+        ? null
+        : createEmailGateDownloadCoordinator<number>(
+            enabledEmailGate.unlockStore,
+          ),
+    [enabledEmailGate],
   );
   const generator = useGeneratorController({
     file: image.source?.file ?? null,
@@ -83,6 +124,10 @@ export function App({
     return selected ? `${selected.size}-Color Set` : null;
   }, [generationRuntime, lastSuccess]);
   const patternBackground = lastSuccess?.snapshot.settings.background ?? null;
+  const emailGatePatternReplaced =
+    emailGateOpen &&
+    pendingDownloadIdentity !== null &&
+    lastSuccess?.snapshot.jobId !== pendingDownloadIdentity;
   const patternActionState = toPatternActionState(generator.state);
   const compactResultMode =
     workspaceMode === "compact" && visiblePattern !== undefined;
@@ -98,7 +143,17 @@ export function App({
     if (!compactResultMode) closeSheet();
   }, [closeSheet, compactResultMode]);
 
+  useLayoutEffect(() => {
+    const committedIdentity = lastSuccess?.snapshot.jobId ?? null;
+    committedLastSuccessIdentityRef.current = committedIdentity;
+    if (!emailGateOpen || downloadCoordinator === null) return;
+    downloadCoordinator.cancelUnless(committedIdentity);
+  }, [downloadCoordinator, emailGateOpen, lastSuccess]);
+
   const removeImage = () => {
+    downloadCoordinator?.cancel();
+    setEmailGateOpen(false);
+    setPendingDownloadIdentity(null);
     closeSheet();
     setFocusedColorIndex(null);
     generator.reset();
@@ -220,11 +275,39 @@ export function App({
         message: "We couldn’t prepare this pattern download.",
       });
     }
-    return patternDownloader.download({
+    const input = {
       pattern: lastSuccess.result,
       selectedColorSetLabel,
-    });
+    };
+    if (enabledEmailGate === null) {
+      return patternDownloader.download(input);
+    }
+    if (enabledEmailGate.unlockStore.isUnlocked()) {
+      return patternDownloader.download(input);
+    }
+    downloadCoordinator?.begin(lastSuccess.snapshot.jobId, () =>
+      patternDownloader.download(input),
+    );
+    setPendingDownloadIdentity(lastSuccess.snapshot.jobId);
+    setEmailGateOpen(true);
+    return Promise.resolve({ ok: true as const });
   }
+
+  const closeEmailGate = () => {
+    downloadCoordinator?.cancel();
+    setEmailGateOpen(false);
+    setPendingDownloadIdentity(null);
+  };
+
+  const completeEmailGate = async (): Promise<EmailGateCompletion> => {
+    if (enabledEmailGate === null) {
+      return { outcome: "pattern-replaced" };
+    }
+    if (downloadCoordinator === null) return { outcome: "pattern-replaced" };
+    return downloadCoordinator.complete(
+      committedLastSuccessIdentityRef.current,
+    );
+  };
 
   return (
     <div ref={containerRef} className="app-root">
@@ -291,6 +374,65 @@ export function App({
           {sheetContent(activePanel)}
         </BottomSheet>
       ) : null}
+      {emailGateOpen && enabledEmailGate !== null ? (
+        <EmailGatePresentationBoundary onClose={closeEmailGate}>
+          <Suspense
+            fallback={<EmailGateLoadingFallback onClose={closeEmailGate} />}
+          >
+            <EmailGateDialog
+              capability={enabledEmailGate}
+              patternReplaced={emailGatePatternReplaced}
+              onClose={closeEmailGate}
+              onVerified={completeEmailGate}
+            />
+          </Suspense>
+        </EmailGatePresentationBoundary>
+      ) : null}
+    </div>
+  );
+}
+
+interface EmailGateBoundaryProps {
+  readonly children: ReactNode;
+  readonly onClose: () => void;
+}
+
+class EmailGatePresentationBoundary extends Component<
+  EmailGateBoundaryProps,
+  Readonly<{ failed: boolean }>
+> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  render() {
+    if (this.state.failed) {
+      return (
+        <div role="alertdialog" aria-label="Download unlock unavailable">
+          <p>Download unlock is temporarily unavailable.</p>
+          <button type="button" onClick={this.props.onClose}>
+            Close
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+function EmailGateLoadingFallback({
+  onClose,
+}: {
+  readonly onClose: () => void;
+}) {
+  return (
+    <div role="dialog" aria-modal="true" aria-label="Loading download unlock">
+      <p>Loading download unlock…</p>
+      <button type="button" onClick={onClose}>
+        Close
+      </button>
     </div>
   );
 }

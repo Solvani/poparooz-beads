@@ -106,8 +106,9 @@ describe("Application Runtime Bootstrap boundary", () => {
     expect(mainSource).toContain(
       "bootstrap: bootstrapApprovedApplicationRuntime",
     );
+    expect(mainSource).toContain("generationRuntime={generationRuntime}");
     expect(mainSource).toContain(
-      "<App generationRuntime={generationRuntime} />",
+      "emailGateCapability={UNAVAILABLE_EMAIL_GATE_CAPABILITY}",
     );
     expect(mainSource.indexOf("startApplication({")).toBeLessThan(
       mainSource.indexOf("createRoot(rootElement).render("),

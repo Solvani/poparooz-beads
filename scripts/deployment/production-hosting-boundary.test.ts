@@ -158,11 +158,19 @@ describe("production hosting boundary", () => {
     expect(wrangler).toContain('"main": "worker/email-gate/index.ts"');
     expect(wrangler).toContain('"workers_dev": false');
     expect(wrangler).toContain('"preview_urls": false');
+    expect(wrangler).toContain('"binding": "EMAIL_GATE_DB"');
+    expect(wrangler).toContain('"database_name": "poparooz-email-gate-prod"');
+    expect(wrangler).toContain(
+      '"database_id": "6a2833a3-3825-43cf-8a76-9ac0943bc93b"',
+    );
+    expect(wrangler).toContain(
+      '"migrations_dir": "worker/email-gate/migrations"',
+    );
     expect(wrangler).toContain('"observability"');
     expect(wrangler).not.toMatch(/"routes?"\s*:/);
     expect(wrangler).not.toMatch(/"custom_domain"\s*:/);
-    expect(wrangler).not.toMatch(/"triggers"\s*:/);
-    expect(wrangler).not.toMatch(/"d1_databases"\s*:/);
+    expect(wrangler).toContain('"triggers"');
+    expect(wrangler).toContain('"crons": ["0 * * * *"]');
 
     const workerFiles = listFiles("worker/email-gate").filter((file) =>
       file.endsWith(".ts"),

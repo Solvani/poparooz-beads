@@ -395,6 +395,12 @@ E04-A06 implementation subject: feat: add email download gate frontend
 E04-A06 authority: docs/POPAROOZ_P3_A03_E04_A06_FRONTEND_FREEZE.md
 E04-A06 browser QA: DESKTOP AND MOBILE USER APPROVED / V1 FOCUS AND STATUS DEFECTS CLOSED
 E04-A06 qualification: PRODUCTION CAPABILITY UNAVAILABLE / DOWNLOAD UNGATED / V2 VISUAL OBSERVATIONS ACCEPTED AS-IS / NO BACKEND OR PRODUCTION ACTIVATION
+P3-A03-E04-A07-A02: COMPLETED / OTP KEY PRODUCTION CONTRACT FROZEN / CONTROLLED PROVISIONING NOT PERFORMED / PRODUCTION INACTIVE
+E04-A07-A02 authority: docs/POPAROOZ_P3_A03_E04_A07_A02_OTP_KEY_PRODUCTION_CONTRACT.md
+E04-A07-A02 key contract: 32 CSPRNG BYTES -> 43 UNPADDED BASE64URL ASCII CHARACTERS -> CURRENT WORKER UTF-8 BYTES / VERSION 1
+E04-A07-A02 implementation delta: NO CODE CHANGE REQUIRED FOR INITIAL V1 / VERSION-AWARE RUNTIME CHANGE REQUIRED BEFORE V2 ROTATION
+E04-A07-A02 remote entry state: INTENDED D1 AND PRODUCTION TURNSTILE WIDGET EXIST / WORKER, ROUTE, CUSTOM DOMAIN, CRON, TARGET SECRETS, AND D1 USER SCHEMA ABSENT
+E04-A07-A02 qualification: NO REAL KEY / SECRET WRITE / DEPLOYMENT / D1 MUTATION / ROUTE / CRON / EMAIL / FRONTEND ACTIVATION
 Canonical active customer-facing term: Generation Color Set
 Production GenerationRuntime: Available and production verified
 Cloudflare Pages: Active
@@ -494,6 +500,17 @@ and canonical server-import containment are frozen by
 `UNAVAILABLE_EMAIL_GATE_CAPABILITY`; current Download remains ungated. No
 Worker, D1, Turnstile, real email, provider, route, secret, Shopify protocol, or
 manual deployment was activated.
+
+P3-A03-E04-A07-A02 freezes initial production OTP key version 1 as exactly 32
+CSPRNG source bytes encoded into 43 unpadded Base64url ASCII characters. The
+current Worker performs no Base64url decode: it uses `TextEncoder` and imports
+the UTF-8 bytes of that exact text as the HMAC-SHA-256 key. D1 persists the
+version for every challenge, and both same-event delivery recovery and
+verification need the recorded historical key. Initial v1 provisioning requires
+no code change, but the current production entry point registers only version 1;
+dual-version overlap must be implemented and reviewed before any v2 rotation.
+No real key, Worker secret, deployment, migration, route, Cron, email, or
+frontend activation was created by this governance stage.
 
 P3-A03-SCOPE-A02 retains Recommendation Policy v1 only as a post-generation
 material-policy result for the already-generated current Pattern. It does not
@@ -785,6 +802,7 @@ P3-A03-E04-A05-A01 Delivery Copy V1 Freeze       Completed / copy frozen / rende
 P3-A03-E04-A05-A02-A01 Sender / Reply-To Decision Completed / frozen / renderer ready for implementation / production inactive
 P3-A03-E04-A05-A03-A00 Renderer V1 Freeze       Completed / frozen / committed / production inactive
 P3-A03-E04-A06 Email Download Gate Frontend Freeze Completed / code reviewed / visually approved / frozen / committed / production inactive
+P3-A03-E04-A07-A02 OTP Key Production Contract Completed / frozen / ready for controlled infrastructure provisioning / production inactive
 P3-A03-SCOPE Product Completeness Audit             Complete / corrections synchronized by A01
 P3-A03-SCOPE-A01 Governance Synchronization         Completed / scope closure synchronized
 P3-A03-SCOPE-A02 Results / Materials Decision       Completed / frozen with applicability qualifications

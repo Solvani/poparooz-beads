@@ -1,10 +1,10 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; synchronized through P3-A03-E04-A06 Email Download Gate frontend freeze**
+Status: **Production active; synchronized through P3-A03-E04-A07-A02 OTP key production contract**
 
-Baseline version: **3.11**
+Baseline version: **3.12**
 
-Last reviewed: **2026-08-28**
+Last reviewed: **2026-08-31**
 
 ## Authority
 
@@ -105,6 +105,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_E04_A05_A01_DELIVERY_COPY_V1_FREEZE.md`](POPAROOZ_P3_A03_E04_A05_A01_DELIVERY_COPY_V1_FREEZE.md): exact Delivery Copy V1 subject and text, minimal-HTML semantics, OTP and expiry presentation, transactional-only boundary, and unresolved sender/blocked-renderer status.
 - [`POPAROOZ_P3_A03_E04_A05_A02_A01_SENDER_REPLY_TO_DECISION.md`](POPAROOZ_P3_A03_E04_A05_A02_A01_SENDER_REPLY_TO_DECISION.md): accepted production sending domain, immutable From and Reply-To identities, disabled tracking and receiving policy, and Renderer V1 implementation-entry status.
 - [`POPAROOZ_P3_A03_E04_A05_A03_A00_RENDERER_V1_FREEZE.md`](POPAROOZ_P3_A03_E04_A05_A03_A00_RENDERER_V1_FREEZE.md): independently reviewed Production Delivery Renderer V1 implementation, deterministic payload authority, sequential verification recovery, and production-inactive boundary.
+- [`POPAROOZ_P3_A03_E04_A07_A02_OTP_KEY_PRODUCTION_CONTRACT.md`](POPAROOZ_P3_A03_E04_A07_A02_OTP_KEY_PRODUCTION_CONTRACT.md): frozen production OTP key entropy, exact Base64url-text-as-UTF-8 consumption, version-1 identity, rotation overlap, compromise, escrow, provisioning, and production-inactive boundary.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
@@ -218,12 +219,13 @@ Before implementation begins, read this file and every formal document relevant 
 - P3-A03-E04-A05-A02-A01: **Sender accepted / Reply-To frozen / Renderer V1 ready for implementation / production inactive**
 - P3-A03-E04-A05-A03-A00: **Renderer V1 implemented / independently reviewed / registered / frozen / committed / production inactive**
 - P3-A03-E04-A06: **Frontend implemented / code reviewed / Desktop and Mobile visually approved / frozen / committed / production inactive**
+- P3-A03-E04-A07-A02: **OTP key production contract frozen / initial v1 needs no code change / controlled provisioning not performed / production inactive**
 - Email backend foundation: **Implemented in repository as one standalone Worker / not deployed / Production Renderer V1 registered**
 - Email Delivery Copy V1: **Exact subject, text, deterministic HTML, sender, and Reply-To frozen / Renderer V1 implemented and registered in repository / not deployed**
 - Email Gate frontend: **Implemented and frozen in the repository / production capability unavailable**
 - Current Download interception: **Inactive / Download remains ungated**
-- Cloudflare Email Gate infrastructure: **Not created**
-- Email provider and topology: **Frozen governance direction only / resources not created / provider not integrated / provider-default audit unperformed**
+- Cloudflare Email Gate infrastructure: **Intended D1 and production Turnstile widget exist / Worker, route, custom domain, Cron, target secrets, and D1 user schema absent**
+- Email provider and topology: **Remote inventory completed / controlled provisioning and production acceptance remain open**
 
 The production acceptance includes upload, 40/80/104 White and Transparent generation, the 221-color set, Maximum Colors, Pattern preview, bead/material totals, selected package display, local PNG download, production Worker execution, desktop/mobile Shopify embedding, direct refresh, custom-domain HTTPS, Poparooz-only customer branding, and gallery regression after the external Shopify schema correction.
 
@@ -302,6 +304,18 @@ while accepting the two recorded V2 visual qualifications as-is. Production
 continues to inject `UNAVAILABLE_EMAIL_GATE_CAPABILITY`, so current customer
 Download remains ungated. No Worker, Route, D1 resource, Turnstile, provider,
 secret, real email, Shopify protocol, or manual deployment was activated.
+
+P3-A03-E04-A07-A02 freezes the production `OTP_DERIVATION_KEY` contract without
+generating or provisioning a real key. Initial version 1 uses exactly 32 CSPRNG
+source bytes encoded as 43 unpadded Base64url characters; the current Worker
+uses the UTF-8 bytes of that exact text as its HMAC key and does not decode the
+representation. Initial v1 provisioning requires no code change. The current
+production entry point cannot retain version 1 and version 2 concurrently, so
+any rotation requires a separately authorized version-aware runtime change and
+must retain the old key until no eligible non-expired old-version challenge can
+verify or retry. A07-A01 inventory found the intended D1 and production
+Turnstile widget present, but no standalone Worker, route/custom domain, Cron,
+target secrets, or D1 user schema. Production remains inactive.
 
 P3-A03-SCOPE found no P0 blocker in the repository-level audit, code contracts,
 or accepted evidence. It did not perform new real-device, keyboard/screen-reader,

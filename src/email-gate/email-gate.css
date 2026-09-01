@@ -179,6 +179,32 @@
   color: var(--warning);
 }
 
+.email-gate-turnstile {
+  display: grid;
+  min-width: 0;
+  place-items: center;
+}
+
+.email-gate-turnstile:empty {
+  display: none;
+}
+
+.email-gate-focus-guard {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip-path: inset(50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.email-gate-focus-guard:focus {
+  outline: none;
+}
+
 .email-gate-form {
   display: grid;
   gap: 12px;

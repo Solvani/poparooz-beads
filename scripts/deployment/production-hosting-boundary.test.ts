@@ -96,7 +96,13 @@ describe("production hosting boundary", () => {
     expect(csp).toContain("frame-ancestors https://poparooz.com");
     expect(csp).not.toContain("https://www.poparooz.com");
     expect(csp).not.toMatch(/frame-ancestors[^;]*\*/);
-    expect(csp).toContain("script-src 'self'");
+    expect(csp).toContain(
+      "script-src 'self' https://challenges.cloudflare.com",
+    );
+    expect(csp).toContain("frame-src https://challenges.cloudflare.com");
+    expect(csp).toContain("connect-src 'self'");
+    expect(csp).not.toMatch(/(?:script-src|frame-src|connect-src)[^;]*\*/);
+    expect(csp.match(/https:\/\/challenges\.cloudflare\.com/g)).toHaveLength(2);
     expect(csp).toContain("worker-src 'self'");
     expect(csp).toContain("img-src 'self' blob:");
     expect(csp).toContain("style-src-attr 'unsafe-inline'");

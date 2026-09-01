@@ -3,6 +3,10 @@ import type { EmailGateUnlockStore } from "./local-unlock";
 
 export interface EmailGateIssueProofProvider {
   getFreshIssueToken(signal: AbortSignal): Promise<string>;
+  readonly interaction?: Readonly<{
+    isActive(): boolean;
+    subscribe(listener: () => void): () => void;
+  }>;
 }
 
 export type EmailGateCapability =

@@ -25,16 +25,56 @@ const TEST_DIRECTORY_NAMES = new Set(["test", "tests", "__tests__"]);
 const FRONTEND_ASSET_PATTERN = /\.(?:css|png|jpe?g|gif|svg|webp|avif)$/i;
 
 describe("Email Gate production boundary", () => {
-  it("injects only the unavailable capability from the production entry", () => {
+  it("injects the explicit production capability from one audited composition", () => {
     const main = readFileSync(
       path.join(repositoryRoot, "src/main.tsx"),
       "utf8",
     );
-    expect(main).toContain(
-      "emailGateCapability={UNAVAILABLE_EMAIL_GATE_CAPABILITY}",
+    const composition = readFileSync(
+      path.join(
+        repositoryRoot,
+        "src/email-gate/production-email-gate-capability.ts",
+      ),
+      "utf8",
     );
+
+    expect(main).toContain(
+      "const emailGateCapability = createProductionEmailGateCapability()",
+    );
+    expect(main).toContain("emailGateCapability={emailGateCapability}");
     expect(main).not.toMatch(
-      /VITE_.*EMAIL_GATE|createEmailGateBrowserClient|createBrowserEmailGateUnlockStore/,
+      /VITE_.*EMAIL_GATE|UNAVAILABLE_EMAIL_GATE_CAPABILITY/,
+    );
+    expect(composition).toContain("createEmailGateBrowserClient()");
+    expect(composition).toContain("createBrowserEmailGateUnlockStore()");
+    expect(composition).toContain("createTurnstileIssueProofProvider({");
+    expect(composition).toContain("sitekey: EMAIL_GATE_TURNSTILE_SITEKEY");
+    expect(composition).toContain("action: EMAIL_GATE_TURNSTILE_ACTION");
+    expect(composition).toContain('appearance: "interaction-only"');
+    expect(composition).toContain("tabindex: 0");
+    expect(composition).toContain("available: true as const");
+    expect(composition).not.toMatch(
+      /VITE_.*EMAIL_GATE|import\.meta\.env|fetch\s*\(/,
+    );
+  });
+
+  it("keeps Turnstile proof data out of persistence, URLs, logging, and Shopify messaging", () => {
+    const provider = readFileSync(
+      path.join(
+        repositoryRoot,
+        "src/email-gate/turnstile-issue-proof-provider.ts",
+      ),
+      "utf8",
+    );
+    expect(provider).toContain('"response-field": false');
+    expect(provider).toContain('"before-interactive-callback"');
+    expect(provider).toContain('"after-interactive-callback"');
+    expect(provider).not.toMatch(/querySelector[^\n]*(?:iframe|shadow)/i);
+    expect(provider).not.toMatch(
+      /localStorage|sessionStorage|indexedDB|postMessage|console\.|URLSearchParams/,
+    );
+    expect(provider).not.toMatch(
+      /turnstileToken|Pattern|filename|materials|Shopify/,
     );
   });
 

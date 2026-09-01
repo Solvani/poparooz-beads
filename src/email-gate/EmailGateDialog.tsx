@@ -1,10 +1,14 @@
 import {
+  useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useReducer,
   useRef,
   useState,
+  useSyncExternalStore,
   type FormEvent,
+  type FocusEvent as ReactFocusEvent,
 } from "react";
 import { createPortal } from "react-dom";
 
@@ -22,6 +26,7 @@ import {
 } from "./email-gate-reducer";
 import type { EmailGateCompletion } from "./download-coordinator";
 import { createEmailGateOperationIdentity } from "./operation-identity";
+import { EMAIL_GATE_TURNSTILE_CONTAINER_ID } from "./turnstile-issue-proof-provider";
 import "./email-gate.css";
 
 export interface EmailGateDialogProps {
@@ -44,8 +49,11 @@ export function EmailGateDialog({
   const instructionsId = useId();
   const statusId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
+  const turnstileMountRef = useRef<HTMLDivElement>(null);
+  const turnstileEndGuardRef = useRef<HTMLSpanElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const codeRef = useRef<HTMLInputElement>(null);
+  const onCloseRef = useRef(onClose);
   const [issueOperation] = useState(createEmailGateOperationIdentity);
   const [verifyOperation] = useState(createEmailGateOperationIdentity);
   const completionStarted = useRef(false);
@@ -57,6 +65,38 @@ export function EmailGateDialog({
   const [submittedEmail, setSubmittedEmail] = useState("");
   const [code, setCode] = useState("");
   const [emailError, setEmailError] = useState<string | null>(null);
+  const [turnstileEndGuardArmed, setTurnstileEndGuardArmed] = useState(false);
+  const interaction = capability.issueProofProvider.interaction;
+  const subscribeToInteraction = useCallback(
+    (notify: () => void) => {
+      if (!interaction) return NOOP_UNSUBSCRIBE;
+      return interaction.subscribe(() => {
+        if (!interaction.isActive()) {
+          setTurnstileEndGuardArmed(false);
+        }
+        notify();
+      });
+    },
+    [interaction],
+  );
+  const readInteractionActive = useCallback(
+    () => interaction?.isActive() === true,
+    [interaction],
+  );
+  const turnstileInteractionActive = useSyncExternalStore(
+    subscribeToInteraction,
+    readInteractionActive,
+    READ_INACTIVE_INTERACTION,
+  );
+  const turnstileInteractionActiveRef = useRef(turnstileInteractionActive);
+
+  useLayoutEffect(() => {
+    turnstileInteractionActiveRef.current = turnstileInteractionActive;
+  }, [turnstileInteractionActive]);
+
+  useLayoutEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     if (state.resendAfterSeconds <= 0) return;
@@ -64,7 +104,7 @@ export function EmailGateDialog({
     return () => window.clearInterval(timer);
   }, [state.resendAfterSeconds]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!patternReplaced) return;
     issueOperation.supersede();
     verifyOperation.supersede();
@@ -91,14 +131,40 @@ export function EmailGateDialog({
     });
     window.requestAnimationFrame(() => emailRef.current?.focus());
 
+    const onWindowBlur = (event: FocusEvent) => {
+      if (
+        event.target !== event.currentTarget ||
+        event.eventPhase !== Event.AT_TARGET ||
+        !turnstileInteractionActiveRef.current
+      ) {
+        return;
+      }
+      const activeElement = document.activeElement;
+      const turnstileMount = turnstileMountRef.current;
+      if (
+        !(activeElement instanceof HTMLElement) ||
+        turnstileMount?.contains(activeElement) !== true
+      ) {
+        return;
+      }
+      setTurnstileEndGuardArmed(true);
+    };
+
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
-        onClose();
+        setTurnstileEndGuardArmed(false);
+        onCloseRef.current();
         return;
       }
       if (event.key !== "Tab") return;
       const focusable = getFocusableElements(dialogRef.current);
+      if (turnstileInteractionActiveRef.current) {
+        const first = focusable[0];
+        if (!event.shiftKey || document.activeElement !== first) return;
+        event.preventDefault();
+        return;
+      }
       if (focusable.length === 0) {
         event.preventDefault();
         return;
@@ -113,10 +179,12 @@ export function EmailGateDialog({
         first.focus();
       }
     };
+    window.addEventListener("blur", onWindowBlur, true);
     document.addEventListener("keydown", onKeyDown);
     return () => {
       issueOperation.supersede();
       verifyOperation.supersede();
+      window.removeEventListener("blur", onWindowBlur, true);
       document.removeEventListener("keydown", onKeyDown);
       if (background) {
         if (previousAriaHidden === null)
@@ -129,7 +197,7 @@ export function EmailGateDialog({
       window.scrollTo(0, scrollY);
       previousFocus?.focus();
     };
-  }, [issueOperation, onClose, verifyOperation]);
+  }, [issueOperation, verifyOperation]);
 
   useEffect(() => {
     if (state.phase === "code-entry" || state.phase === "invalid-code") {
@@ -138,6 +206,7 @@ export function EmailGateDialog({
   }, [state.phase]);
 
   const issueChallenge = async (normalizedEmail: string) => {
+    setTurnstileEndGuardArmed(false);
     const operation = issueOperation.begin();
     verifyOperation.supersede();
     dispatch({ type: "ISSUE_STARTED" });
@@ -147,6 +216,7 @@ export function EmailGateDialog({
           operation.signal,
         );
       if (!issueOperation.isCurrent(operation.generation)) return;
+      setTurnstileEndGuardArmed(false);
       const result = await capability.client.issueChallenge(
         { email: normalizedEmail, turnstileToken },
         operation.signal,
@@ -173,6 +243,7 @@ export function EmailGateDialog({
       }
     } catch {
       if (issueOperation.isCurrent(operation.generation)) {
+        setTurnstileEndGuardArmed(false);
         dispatch({ type: "SHOW", phase: "temporary-unavailable" });
       }
     }
@@ -245,12 +316,44 @@ export function EmailGateDialog({
   };
 
   const changeEmail = () => {
+    setTurnstileEndGuardArmed(false);
     issueOperation.supersede();
     verifyOperation.supersede();
     completionStarted.current = false;
     setCode("");
     dispatch({ type: "CHANGE_EMAIL" });
     window.requestAnimationFrame(() => emailRef.current?.focus());
+  };
+
+  const handleDialogFocusCapture = (event: ReactFocusEvent<HTMLDivElement>) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    if (
+      target !== turnstileEndGuardRef.current &&
+      turnstileMountRef.current?.contains(target) !== true
+    ) {
+      setTurnstileEndGuardArmed(false);
+    }
+  };
+
+  const handleTurnstileEndGuardFocus = () => {
+    const firstDialogTarget = getFocusableElements(dialogRef.current)[0];
+    setTurnstileEndGuardArmed(false);
+    firstDialogTarget?.focus();
+  };
+
+  const handleTurnstileFocusOut = (event: ReactFocusEvent<HTMLDivElement>) => {
+    const nextTarget = event.relatedTarget;
+    if (
+      (nextTarget instanceof Node &&
+        turnstileMountRef.current?.contains(nextTarget) === true) ||
+      nextTarget === turnstileEndGuardRef.current
+    ) {
+      return;
+    }
+    if (nextTarget instanceof HTMLElement || !turnstileInteractionActive) {
+      setTurnstileEndGuardArmed(false);
+    }
   };
 
   return createPortal(
@@ -262,6 +365,7 @@ export function EmailGateDialog({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={`${instructionsId} ${statusId}`}
+        onFocusCapture={handleDialogFocusCapture}
       >
         <aside className="email-gate-editorial" aria-hidden="true">
           <img
@@ -295,7 +399,10 @@ export function EmailGateDialog({
             <button
               type="button"
               className="email-gate-close"
-              onClick={onClose}
+              onClick={() => {
+                setTurnstileEndGuardArmed(false);
+                onClose();
+              }}
             >
               Close
             </button>
@@ -321,6 +428,26 @@ export function EmailGateDialog({
             >
               {statusFor(state.phase)}
             </div>
+
+            <div
+              ref={turnstileMountRef}
+              id={EMAIL_GATE_TURNSTILE_CONTAINER_ID}
+              className="email-gate-turnstile"
+              onBlurCapture={handleTurnstileFocusOut}
+            />
+            <span
+              ref={turnstileEndGuardRef}
+              className="email-gate-focus-guard"
+              data-email-gate-end-focus-guard=""
+              tabIndex={
+                turnstileEndGuardArmed &&
+                turnstileInteractionActive &&
+                !patternReplaced
+                  ? 0
+                  : -1
+              }
+              onFocus={handleTurnstileEndGuardFocus}
+            />
 
             {isEmailPhase(state.phase, state.challengeId) ? (
               <form
@@ -452,7 +579,10 @@ export function EmailGateDialog({
               <button
                 type="button"
                 className="email-gate-secondary"
-                onClick={onClose}
+                onClick={() => {
+                  setTurnstileEndGuardArmed(false);
+                  onClose();
+                }}
               >
                 Close
               </button>
@@ -473,6 +603,9 @@ export function EmailGateDialog({
     document.body,
   );
 }
+
+const NOOP_UNSUBSCRIBE = () => {};
+const READ_INACTIVE_INTERACTION = () => false;
 
 function completionPhase(
   completion: EmailGateCompletion,
@@ -591,5 +724,10 @@ function getFocusableElements(root: HTMLElement | null): HTMLElement[] {
     root.querySelectorAll<HTMLElement>(
       'button:not([disabled]), input:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
     ),
-  ).filter((element) => !element.hasAttribute("hidden"));
+  ).filter(
+    (element) =>
+      !element.hasAttribute("hidden") &&
+      !element.hasAttribute("data-email-gate-end-focus-guard") &&
+      element.closest(`#${EMAIL_GATE_TURNSTILE_CONTAINER_ID}`) === null,
+  );
 }

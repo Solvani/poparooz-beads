@@ -5,7 +5,7 @@ import { App } from "./app/App";
 import { ErrorBoundary } from "./app/ErrorBoundary";
 import { bootstrapApprovedApplicationRuntime } from "./runtime/bootstrap/application-runtime-bootstrap";
 import { startApplication } from "./runtime/bootstrap/application-startup";
-import { UNAVAILABLE_EMAIL_GATE_CAPABILITY } from "./email-gate/email-gate-capability";
+import { createProductionEmailGateCapability } from "./email-gate/production-email-gate-capability";
 import "./styles.css";
 
 const rootElement = document.getElementById("root");
@@ -13,6 +13,8 @@ const rootElement = document.getElementById("root");
 if (rootElement === null) {
   throw new Error("Application root element was not found.");
 }
+
+const emailGateCapability = createProductionEmailGateCapability();
 
 startApplication({
   bootstrap: bootstrapApprovedApplicationRuntime,
@@ -22,7 +24,7 @@ startApplication({
         <ErrorBoundary>
           <App
             generationRuntime={generationRuntime}
-            emailGateCapability={UNAVAILABLE_EMAIL_GATE_CAPABILITY}
+            emailGateCapability={emailGateCapability}
           />
         </ErrorBoundary>
       </StrictMode>,

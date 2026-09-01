@@ -108,8 +108,9 @@ describe("Application Runtime Bootstrap boundary", () => {
     );
     expect(mainSource).toContain("generationRuntime={generationRuntime}");
     expect(mainSource).toContain(
-      "emailGateCapability={UNAVAILABLE_EMAIL_GATE_CAPABILITY}",
+      "const emailGateCapability = createProductionEmailGateCapability()",
     );
+    expect(mainSource).toContain("emailGateCapability={emailGateCapability}");
     expect(mainSource.indexOf("startApplication({")).toBeLessThan(
       mainSource.indexOf("createRoot(rootElement).render("),
     );

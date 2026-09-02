@@ -20,7 +20,7 @@ interface CapturedTurnstileOptions {
   readonly "response-field": boolean;
   readonly callback: (token: string) => void;
   readonly "expired-callback": () => void;
-  readonly "error-callback": () => void;
+  readonly "error-callback": (errorCode: unknown) => boolean;
   readonly "timeout-callback": () => void;
   readonly "before-interactive-callback": () => void;
   readonly "after-interactive-callback": () => void;
@@ -137,7 +137,7 @@ describe("Turnstile issue proof provider", () => {
       execution: "execute",
       appearance: "interaction-only",
       tabindex: 0,
-      retry: "never",
+      retry: "auto",
       "response-field": false,
     });
     expect(api.execute).toHaveBeenCalledWith("widget-1");
@@ -268,7 +268,6 @@ describe("Turnstile issue proof provider", () => {
 
   it.each([
     ["expiry", "expired-callback"],
-    ["widget error", "error-callback"],
     ["challenge timeout", "timeout-callback"],
   ] as const)("fails closed on %s", async (_label, callbackName) => {
     const container = installContainer();
@@ -284,6 +283,114 @@ describe("Turnstile issue proof provider", () => {
     expect(provider.interaction?.isActive()).toBe(false);
     expect(api.remove).toHaveBeenCalledWith("widget-1");
     expect(container).toBeEmptyDOMElement();
+  });
+
+  it("recovers from a retryable 600010 error through a later successful callback", async () => {
+    const container = installContainer();
+    const { api, options } = installTurnstileApi();
+    const provider = createProvider();
+    const proof = provider.getFreshIssueToken(new AbortController().signal);
+    const resolution = vi.fn();
+    void proof.then(resolution);
+    await vi.waitFor(() => expect(options).toHaveLength(1));
+
+    options[0]!["before-interactive-callback"]();
+    expect(provider.interaction?.isActive()).toBe(true);
+    expect(options[0]!["error-callback"]("600010")).toBe(false);
+    await Promise.resolve();
+    expect(resolution).not.toHaveBeenCalled();
+    expect(api.remove).not.toHaveBeenCalled();
+    expect(container).not.toBeEmptyDOMElement();
+    options[0]!["after-interactive-callback"]();
+    expect(provider.interaction?.isActive()).toBe(false);
+
+    options[0]!.callback("recovered-token");
+    options[0]!.callback("duplicate-token");
+    await expect(proof).resolves.toBe("recovered-token");
+    expect(resolution).toHaveBeenCalledTimes(1);
+    expect(resolution).toHaveBeenCalledWith("recovered-token");
+    expect(api.remove).toHaveBeenCalledTimes(1);
+    expect(api.remove).toHaveBeenCalledWith("widget-1");
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("fails closed after two retryable errors on the same proof", async () => {
+    const container = installContainer();
+    const { api, options } = installTurnstileApi();
+    const provider = createProvider();
+    const proof = provider.getFreshIssueToken(new AbortController().signal);
+    const resolution = vi.fn();
+    void proof.then(resolution, () => undefined);
+    await vi.waitFor(() => expect(options).toHaveLength(1));
+
+    expect(options[0]!["error-callback"]("600010")).toBe(false);
+    expect(options[0]!["error-callback"]("600010")).toBe(false);
+    expect(api.remove).not.toHaveBeenCalled();
+    expect(options[0]!["error-callback"]("600010")).toBe(true);
+    await expect(proof).rejects.toThrow("proof is unavailable");
+    expect(api.remove).toHaveBeenCalledTimes(1);
+    expect(container).toBeEmptyDOMElement();
+
+    options[0]!.callback("stale-token");
+    expect(resolution).not.toHaveBeenCalled();
+    expect(api.remove).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(["110600", "110620", "200500", "300000", "600010"])(
+    "keeps the proof pending for documented retryable code %s",
+    async (errorCode) => {
+      installContainer();
+      const { api, options } = installTurnstileApi();
+      const provider = createProvider();
+      const operation = new AbortController();
+      const proof = provider.getFreshIssueToken(operation.signal);
+      await vi.waitFor(() => expect(options).toHaveLength(1));
+
+      expect(options[0]!["error-callback"](errorCode)).toBe(false);
+      expect(api.remove).not.toHaveBeenCalled();
+      operation.abort();
+      await expect(proof).rejects.toThrow("proof is unavailable");
+    },
+  );
+
+  it.each([
+    ["a non-retryable code", "110200"],
+    ["an unknown code", "999999"],
+    ["a malformed code", "600*"],
+    ["a missing code", undefined],
+  ])("fails closed immediately for %s", async (_label, errorCode) => {
+    const container = installContainer();
+    const { api, options } = installTurnstileApi();
+    const provider = createProvider();
+    const proof = provider.getFreshIssueToken(new AbortController().signal);
+    await vi.waitFor(() => expect(options).toHaveLength(1));
+
+    expect(options[0]!["error-callback"](errorCode)).toBe(true);
+    await expect(proof).rejects.toThrow("proof is unavailable");
+    expect(api.remove).toHaveBeenCalledTimes(1);
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("fails closed when aborted during an automatic retry wait", async () => {
+    const container = installContainer();
+    const { api, options } = installTurnstileApi();
+    const provider = createProvider();
+    const operation = new AbortController();
+    const proof = provider.getFreshIssueToken(operation.signal);
+    const resolution = vi.fn();
+    void proof.then(resolution, () => undefined);
+    await vi.waitFor(() => expect(options).toHaveLength(1));
+
+    expect(options[0]!["error-callback"]("600010")).toBe(false);
+    expect(api.remove).not.toHaveBeenCalled();
+    operation.abort();
+    await expect(proof).rejects.toThrow("proof is unavailable");
+    expect(api.remove).toHaveBeenCalledTimes(1);
+    expect(container).toBeEmptyDOMElement();
+
+    options[0]!.callback("stale-token");
+    expect(resolution).not.toHaveBeenCalled();
+    expect(api.remove).toHaveBeenCalledTimes(1);
   });
 
   it("removes the widget when the dialog operation is aborted", async () => {

@@ -9,6 +9,8 @@ export const TURNSTILE_EXPLICIT_SCRIPT_URL =
 
 const TURNSTILE_SCRIPT_LOAD_TIMEOUT_MS = 10_000;
 const TURNSTILE_SCRIPT_MARKER = "data-poparooz-turnstile-api";
+const MAX_RETRYABLE_TURNSTILE_ERRORS = 2;
+const RETRYABLE_TURNSTILE_ERROR_CODES = new Set(["110600", "110620", "200500"]);
 
 interface TurnstileRenderOptions {
   readonly sitekey: string;
@@ -16,11 +18,11 @@ interface TurnstileRenderOptions {
   readonly execution: "execute";
   readonly appearance: TurnstileAppearance;
   readonly tabindex: 0;
-  readonly retry: "never";
+  readonly retry: "auto";
   readonly "response-field": false;
   readonly callback: (token: string) => void;
   readonly "expired-callback": () => void;
-  readonly "error-callback": () => void;
+  readonly "error-callback": (errorCode: unknown) => boolean;
   readonly "timeout-callback": () => void;
   readonly "before-interactive-callback": () => void;
   readonly "after-interactive-callback": () => void;
@@ -94,6 +96,7 @@ export function createTurnstileIssueProofProvider(
         let api: TurnstileBrowserApi | null = null;
         let widgetId: string | null = null;
         let settled = false;
+        let retryableErrorCount = 0;
 
         const ownsOperation = () => cancelActiveProof === cancel;
         const setInteractionActiveForCurrentOperation = (active: boolean) => {
@@ -132,6 +135,17 @@ export function createTurnstileIssueProofProvider(
           resolve(token);
         };
         const cancel = () => fail();
+        const handleError = (errorCode: unknown) => {
+          if (
+            isRetryableTurnstileErrorCode(errorCode) &&
+            retryableErrorCount < MAX_RETRYABLE_TURNSTILE_ERRORS
+          ) {
+            retryableErrorCount += 1;
+            return false;
+          }
+          fail();
+          return true;
+        };
 
         cancelActiveProof = cancel;
         if (signal.aborted) {
@@ -162,11 +176,11 @@ export function createTurnstileIssueProofProvider(
               execution: "execute",
               appearance: renderConfiguration.appearance,
               tabindex: renderConfiguration.tabindex,
-              retry: "never",
+              retry: "auto",
               "response-field": false,
               callback: succeed,
               "expired-callback": fail,
-              "error-callback": fail,
+              "error-callback": handleError,
               "timeout-callback": fail,
               "before-interactive-callback": () =>
                 setInteractionActiveForCurrentOperation(true),
@@ -195,6 +209,24 @@ export function createTurnstileIssueProofProvider(
       });
     },
   });
+}
+
+function isRetryableTurnstileErrorCode(errorCode: unknown): boolean {
+  const normalizedCode =
+    typeof errorCode === "string"
+      ? errorCode
+      : typeof errorCode === "number" &&
+          Number.isInteger(errorCode) &&
+          errorCode >= 100_000 &&
+          errorCode <= 999_999
+        ? String(errorCode)
+        : null;
+  if (normalizedCode === null || !/^\d{6}$/.test(normalizedCode)) return false;
+  return (
+    RETRYABLE_TURNSTILE_ERROR_CODES.has(normalizedCode) ||
+    normalizedCode.startsWith("300") ||
+    normalizedCode.startsWith("600")
+  );
 }
 
 function browserEnvironment(): TurnstileIssueProofEnvironment {

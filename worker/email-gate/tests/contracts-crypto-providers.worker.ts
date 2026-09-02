@@ -135,8 +135,14 @@ describe("provider adapters", () => {
     ).resolves.toBe(true);
     expect(accepted).toHaveBeenCalledOnce();
     const init = accepted.mock.calls[0]?.[1];
+    const body = init?.body;
     expect(init?.method).toBe("POST");
-    expect(init?.body).toBeInstanceOf(FormData);
+    expect(body).toBeInstanceOf(FormData);
+    expect(init).not.toHaveProperty("redirect");
+    expect(init?.signal).toBeInstanceOf(AbortSignal);
+    if (!(body instanceof FormData)) throw new TypeError("Expected FormData");
+    expect(body.get("secret")).toBe("test-secret");
+    expect(body.get("response")).toBe("x");
   });
 
   it.each([
@@ -176,35 +182,6 @@ describe("provider adapters", () => {
       createTurnstileAdapter("test-secret", fetchPort).validate("token"),
     ).resolves.toBe(false);
   });
-
-  it.each([301, 302, 303, 307, 308])(
-    "blocks Turnstile %i redirects without forwarding the secret body",
-    async (status) => {
-      const redirectTargetRequests: RequestInit[] = [];
-      const outboundRequests: RequestInit[] = [];
-      const fetchPort = vi.fn<FetchPort>(async (_input, init) => {
-        outboundRequests.push(init!);
-        if (init?.redirect === "error") {
-          throw new TypeError(`redirect ${status} blocked`);
-        }
-        redirectTargetRequests.push(init!);
-        return new Response(
-          JSON.stringify({
-            success: true,
-            hostname: "generator.poparooz.com",
-            action: "email_gate_issue_v1",
-          }),
-        );
-      });
-
-      await expect(
-        createTurnstileAdapter("test-secret", fetchPort).validate("token"),
-      ).resolves.toBe(false);
-      expect(outboundRequests).toHaveLength(1);
-      expect(outboundRequests[0]?.redirect).toBe("error");
-      expect(redirectTargetRequests).toHaveLength(0);
-    },
-  );
 
   it("fails Turnstile closed at the five-second timeout", async () => {
     vi.useFakeTimers();

@@ -40,7 +40,6 @@ export function createTurnstileAdapter(
         const response = await fetchPort(TURNSTILE_SITEVERIFY_URL, {
           method: "POST",
           body: form,
-          redirect: "error",
           signal: controller.signal,
         });
         if (!response.ok) return false;

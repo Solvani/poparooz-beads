@@ -19,7 +19,7 @@ import {
   createDeliveryPayloadRendererRegistry,
   createTestFixtureRenderer,
 } from "../delivery/payload-renderer";
-import { createResendAdapter } from "../providers/resend";
+import { createResendAdapter, RESEND_EMAILS_URL } from "../providers/resend";
 import { createTurnstileAdapter } from "../providers/turnstile";
 import type { FetchPort } from "../runtime-ports";
 import type { EmailGateService } from "../service/email-gate-service";
@@ -228,10 +228,25 @@ describe("provider adapters", () => {
         text: "test",
       }),
     ).resolves.toEqual({ outcome });
+    expect(fetchPort).toHaveBeenCalledOnce();
+    expect(fetchPort.mock.calls[0]?.[0]).toBe(RESEND_EMAILS_URL);
     const init = fetchPort.mock.calls[0]?.[1];
-    expect(new Headers(init?.headers).get("Idempotency-Key")).toBe(
-      "poparooz-email-gate/v1/event-id",
-    );
+    expect(init?.method).toBe("POST");
+    expect([...new Headers(init?.headers).entries()]).toEqual([
+      ["authorization", "Bearer test-key"],
+      ["content-type", "application/json"],
+      ["idempotency-key", "poparooz-email-gate/v1/event-id"],
+      ["user-agent", "poparooz-email-gate/1.0"],
+    ]);
+    expect(JSON.parse(String(init?.body))).toEqual({
+      from: "test@example.invalid",
+      to: ["a@example.com"],
+      subject: "test",
+      text: "test",
+      reply_to: "replies@example.invalid",
+    });
+    expect(init?.redirect).toBe("error");
+    expect(init?.signal).toBeInstanceOf(AbortSignal);
   });
 
   it.each([

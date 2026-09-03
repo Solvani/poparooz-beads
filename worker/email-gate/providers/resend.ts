@@ -55,6 +55,7 @@ export function createResendAdapter(
             Authorization: `Bearer ${apiKey}`,
             "Content-Type": "application/json",
             "Idempotency-Key": `poparooz-email-gate/v1/${providerSendEventId}`,
+            "User-Agent": "poparooz-email-gate/1.0",
           },
           body: JSON.stringify(requestBody),
           redirect: "error",

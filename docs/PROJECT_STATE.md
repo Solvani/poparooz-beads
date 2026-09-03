@@ -14,6 +14,7 @@ A02 entry baseline commit: docs: synchronize product scope governance
 Live HEAD at P3-A03-SCOPE-A01 entry: 71e601ff3d1e17a779d8d01aa906eb6816af4697
 Live worktree at P3-A03-SCOPE-A01 entry: clean
 Upstream: origin/main
+Latest audited implementation HEAD: 119adc1062c0506cbe2f4edf9c74a2c7c6d1c202
 Push state at entry: local main and origin/main synchronized
 ```
 
@@ -333,6 +334,78 @@ A08-H02: Closed; corrected opaque near-white source-background contamination by 
 
 ## Current Phase
 
+The current Email Gate governance below supersedes inactive-state summaries
+from earlier stage checkpoints. Historical stages retain their original scope
+and side-effect limits; they are not credited with later deployments.
+
+```text
+Phase: Phase 3
+Parent stage: P3-A03-E04-A08
+Stage name: Email Gate Production Acceptance & Governance Reconciliation
+Parent status: REVIEW
+Completed substage: P3-A03-E04-A08-A00
+Substage name: Governance State Catch-up Audit
+A00 status: COMPLETED / READ-ONLY / GOVERNANCE RECONCILED
+Reconciliation baseline: d02f1433eddbdb11b9b8a2ade92652264103ead8
+Previous audited implementation HEAD: a5d39baf5f761e4d65678743aaef91e7d1cd42eb
+Latest audited implementation HEAD: 119adc1062c0506cbe2f4edf9c74a2c7c6d1c202
+Post-baseline audited implementation commits: 6
+Next stage: P3-A03-E04-A08-A01
+Next stage name: Bounded Production Acceptance Verification
+A01 status: NOT STARTED
+A01 authorization: REQUIRED SEPARATELY AFTER A00 GOVERNANCE COMMIT REVIEW
+```
+
+Authority:
+[`POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md`](POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md).
+
+Email Gate is production-configured in the repository. The real production
+capability is injected; a locked-browser Download enters the gate, while a
+valid local unlock permits the existing browser-local PNG download. Image,
+Pattern, and PNG processing remain browser-local. This is a normal-flow
+verification gate, not DRM.
+
+Repository configuration represents one standalone production Worker,
+`EMAIL_GATE_DB` D1 binding, hourly Cron, and fetch/scheduled handlers. Production
+Delivery Renderer V1 and OTP key version 1 are registered. The Route remains
+externally managed rather than declared in Wrangler configuration. These facts
+do not establish current remote inventory, migrations, or execution.
+
+Turnstile browser retry recovery changes implementation reliability, not the
+product contract. Siteverify no longer explicitly rejects redirects; the prior
+transport guarantee is superseded, without evidence here of any actual
+redirect or disclosure incident. The Shopify reference sandbox adds only
+`allow-forms`; popup/top-navigation permissions remain absent. That hotfix
+leaves CSP, including `form-action 'none'`, and existing data boundaries
+unchanged. The repository snippet does not prove the published theme state.
+
+Resend requests now include `User-Agent: poparooz-email-gate/1.0`. The sixth
+commit adds provider transport compatibility and request-contract assertions,
+not a new customer capability. Product flow, OTP, delivery identity/content,
+privacy, local unlock, Shopify, and Turnstile contracts are unchanged by it.
+
+Acceptance remains open: deployment-to-`119adc1062c0506cbe2f4edf9c74a2c7c6d1c202`,
+the current published Shopify snippet, and complete real-email -> verification
+-> original PNG download have not been established by this reconciliation.
+The H12 `invalid_request` versus `version_unsupported` smoke discrepancy lacks
+closure. Real Resend delivery with the production User-Agent contract must be
+confirmed within the separately authorized delivery acceptance scope.
+Route/migration/Cron/secret/provider/cleanup/live-browser state must not be
+inferred from repository configuration or mocks. Archived deployment reports
+are historical evidence, not fresh verification of the latest implementation.
+
+All retained frozen decisions and the exact six-commit chain are recorded in
+the dedicated authority. A00 completion records the read-only audit and its
+governance reconciliation; this docs-only record does not close production
+acceptance or start A01.
+
+## Historical accepted phase checkpoints through A07-A02
+
+The following entries and explanatory paragraphs preserve their stage-local
+facts. Terms such as current, inactive, not started, unavailable, ungated,
+empty registry, or absent resources below refer to those historical
+checkpoints, not the Current Phase recorded above.
+
 ```text
 Phase: Phase 3
 Status: production active
@@ -406,8 +479,8 @@ Production GenerationRuntime: Available and production verified
 Cloudflare Pages: Active
 Shopify embed: Active
 Production implementation resume: Conditional
-Current E04 governance state: P3-A03-E04-A06 frontend implemented / code reviewed / visually approved / frozen / committed / production inactive
-Next E04 stage: PROVIDER, INFRASTRUCTURE, AND PRODUCTION ACTIVATION GATES REMAIN SEPARATELY AUTHORIZED / OPEN
+Historical E04 governance state at the A07-A02 checkpoint: P3-A03-E04-A06 frontend implemented / code reviewed / visually approved / frozen / committed / production inactive
+Next E04 gates recorded at that historical checkpoint: PROVIDER, INFRASTRUCTURE, AND PRODUCTION ACTIVATION GATES REMAIN SEPARATELY AUTHORIZED / OPEN
 ```
 
 The production Runtime and the A08 deployment remain active. The formal
@@ -758,6 +831,10 @@ Default for v1: true
 
 ## Current Roadmap
 
+Email Gate rows through A07-A02 preserve historical stage-local availability
+and side-effect limits. A08 is the current parent; the dedicated A00 record
+supersedes those older availability summaries for the current repository.
+
 ```text
 P3-D01     Formal Palette Contract               Frozen
 P3-A01.1   Schema Compatibility Foundation       Frozen
@@ -808,7 +885,9 @@ P3-A03-SCOPE-A01 Governance Synchronization         Completed / scope closure sy
 P3-A03-SCOPE-A02 Results / Materials Decision       Completed / frozen with applicability qualifications
 P3-A03-SCOPE-A03 Unified Derived Material Requirement Contract Completed / frozen / committed / pushed / closed with frozen evidence applicability qualification
 P3-A03-SCOPE-A04 Export Terminology / Material Contract Completed / frozen / closed with evidence applicability qualifications
-Next       Requires separate explicit authorization
+P3-A03-E04-A08 Email Gate Production Acceptance & Governance Reconciliation REVIEW
+P3-A03-E04-A08-A00 Governance State Catch-up Audit COMPLETED / READ-ONLY / GOVERNANCE RECONCILED
+Next P3-A03-E04-A08-A01 Bounded Production Acceptance Verification NOT STARTED / REQUIRES SEPARATE AUTHORIZATION AFTER A00 GOVERNANCE COMMIT REVIEW
 ```
 
 The frozen P3-A02-D01 implementation boundary is:

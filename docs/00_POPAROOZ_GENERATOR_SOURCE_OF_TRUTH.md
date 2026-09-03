@@ -1,10 +1,10 @@
 # Poparooz Generator Source of Truth
 
-Status: **Production active; synchronized through P3-A03-E04-A07-A02 OTP key production contract**
+Status: **Generator production baseline retained; Email Gate P3-A03-E04-A08 REVIEW; synchronized through A08-A00 governance reconciliation**
 
-Baseline version: **3.12**
+Baseline version: **3.13**
 
-Last reviewed: **2026-08-31**
+Last reviewed: **2026-09-03**
 
 ## Authority
 
@@ -15,10 +15,11 @@ This document is the single governing baseline for the current Poparooz Generato
 - Poparooz is the only customer-visible product, color-display, sales, and website brand. Customer content never displays MARD or another third-party brand name, logo, or icon.
 - Scope may not expand without an explicit product decision and a corresponding update to this baseline.
 - Every phase is implemented and accepted independently. Passing one phase is required before entering the next.
-- The current production scope has no account, database, cloud project storage,
-  community system, or Shopify Cart API bridge. Historical MVP-A decisions are
-  retained below as historical baselines, not as a complete description of the
-  later accepted product.
+- The current scope has no account system, cloud project storage, community
+  system, or Shopify Cart API bridge. Email Gate separately uses bounded D1
+  persistence; core image/Pattern/PNG processing remains browser-local.
+  Historical MVP-A decisions are retained as historical baselines, not as a
+  complete description of the later implementation or its acceptance.
 
 ## Product definition
 
@@ -62,11 +63,12 @@ filenames, paths, file metadata, Pattern Matrix data, image or Pattern hashes,
 internal/reference/supplier color identity, and arbitrary generator state remain
 prohibited.
 
-Current production does not use a Shopify App, Embedded App, Admin App, App
-Proxy, Shopify CLI project, server-side image processing, authentication, a
-database, or Cart API integration. Shopify integration does not change this
-repository into a Shopify App. Any future Cart bridge requires a separately
-approved Commerce contract and remains parent-owned.
+The implementation does not use a Shopify App, Embedded App, Admin App, App
+Proxy, Shopify CLI project, server-side image processing, account authentication,
+or Cart API integration. Email Gate has bounded D1 persistence, separate from
+the browser-local generator. Shopify integration does not change this repository
+into a Shopify App. Any future Cart bridge requires a separately approved
+Commerce contract and remains parent-owned.
 
 Production uses `https://generator.poparooz.com`; a `vercel.app` deployment is limited to development or deployment verification and is not the long-term public entry. Preview origins are not automatically trusted by production.
 
@@ -106,7 +108,12 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_E04_A05_A02_A01_SENDER_REPLY_TO_DECISION.md`](POPAROOZ_P3_A03_E04_A05_A02_A01_SENDER_REPLY_TO_DECISION.md): accepted production sending domain, immutable From and Reply-To identities, disabled tracking and receiving policy, and Renderer V1 implementation-entry status.
 - [`POPAROOZ_P3_A03_E04_A05_A03_A00_RENDERER_V1_FREEZE.md`](POPAROOZ_P3_A03_E04_A05_A03_A00_RENDERER_V1_FREEZE.md): independently reviewed Production Delivery Renderer V1 implementation, deterministic payload authority, sequential verification recovery, and production-inactive boundary.
 - [`POPAROOZ_P3_A03_E04_A07_A02_OTP_KEY_PRODUCTION_CONTRACT.md`](POPAROOZ_P3_A03_E04_A07_A02_OTP_KEY_PRODUCTION_CONTRACT.md): frozen production OTP key entropy, exact Base64url-text-as-UTF-8 consumption, version-1 identity, rotation overlap, compromise, escrow, provisioning, and production-inactive boundary.
+- [`POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md`](POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md): canonical A08 REVIEW / completed A00 / A01 not-started decision, six-commit reconciliation, and open production acceptance qualifications.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
+
+The earlier Email Gate references describe their stage-local freeze and
+activation limits; the A08-A00 record supersedes their stale availability
+summaries, not their retained product/privacy contracts.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
 
@@ -188,6 +195,9 @@ Before implementation begins, read this file and every formal document relevant 
 
 ## Current production state
 
+Generator deployment/acceptance bullets retain the earlier MVP evidence;
+they are not fresh Email Gate production acceptance at the latest audited HEAD.
+
 - A02 entry / pre-freeze repository baseline:
   `0a85392fb48798234fb4a46243bf1de449de63fe`
 - Accepted repository baseline at P3-A03-SCOPE-A01 entry:
@@ -200,7 +210,7 @@ Before implementation begins, read this file and every formal document relevant 
 - Shopify page: `https://poparooz.com/pages/fuse-bead-pattern-maker`
 - Desktop and mobile Shopify embed smoke: **Passed**
 - Browser-local privacy: **Preserved**
-- Production backend, database, Pages Functions, Cloudflare runtime Worker, Shopify App, App Proxy, and OAuth backend: **Not used**
+- Core generation: **Browser-local; no server-side image/Pattern/PNG processing**. Email Gate separately has a production-configured Worker/D1 backend. Pages Functions, Shopify App, App Proxy, and OAuth backend remain outside this implementation.
 - Current Cart API/material-message bridge: **Not implemented**
 - Formal Generation Color Sets: **24 / 48 / 72 / 120 / 168 / 221**
 - Canonical active customer-facing term: **Generation Color Set**
@@ -211,6 +221,57 @@ Before implementation begins, read this file and every formal document relevant 
 - Customer-facing Auto / Recommended for Your Image: **Not active / not displayed**
 - Customer-facing Recommended Bead Set: **Temporarily hidden / inactive**
 - Customer-facing Required Bead Set, Bead Requirements, and Additional Refill Packs: **Active**
+
+### Current Email Gate governance
+
+- Parent stage: **P3-A03-E04-A08 — Email Gate Production Acceptance & Governance Reconciliation**
+- Parent status: **REVIEW**
+- A00: **P3-A03-E04-A08-A00 — Governance State Catch-up Audit**
+- A00 status: **COMPLETED / READ-ONLY / GOVERNANCE RECONCILED**
+- Reconciliation baseline: `d02f1433eddbdb11b9b8a2ade92652264103ead8`
+- Latest audited implementation HEAD: `119adc1062c0506cbe2f4edf9c74a2c7c6d1c202`
+- Audited range: **Exactly six implementation commits after the baseline**
+- Email Gate: **Production-configured; real production capability injected**
+- Download: **Locked browsers enter Email Gate; valid local unlock permits browser-local PNG download**
+- Processing: **Image, Pattern, and PNG stay browser-local; the gate is normal-flow verification, not DRM**
+- Worker configuration: **Standalone production Worker, EMAIL_GATE_DB D1 binding, hourly Cron, fetch/scheduled handlers, Production Renderer V1, and OTP v1**
+- Route: **Externally managed; not declared in Wrangler configuration**
+- Turnstile: **Retry recovery preserves the product contract; Siteverify's former explicit redirect-rejection guarantee is superseded**
+- Shopify reference sandbox: **Adds allow-forms only; no popup/top-navigation permission, CSP relaxation by this hotfix, or new marketing/data transfer**
+- Resend: **Fixed User-Agent poparooz-email-gate/1.0; provider transport compatibility/reliability correction without product or payload-semantic changes**
+- Next stage: **P3-A03-E04-A08-A01 — Bounded Production Acceptance Verification**
+- A01 status: **NOT STARTED; requires separate authorization after A00 governance commit review**
+
+The detailed six-commit evidence, retained contracts, superseded historical
+claims, and incremental Resend audit are authoritative in
+[`POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md`](POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md).
+
+Current deployment-to-latest-HEAD and published Shopify snippet verification
+remain open. Complete real-email -> verification -> original PNG acceptance
+is not established, including real Resend delivery with the production
+User-Agent contract. The H12 `invalid_request` versus `version_unsupported`
+smoke discrepancy lacks closure. Current Route/migration/Cron/secret/provider/
+cleanup/live-browser state cannot be inferred from configuration or mocks.
+Archived deployment reports are historical, not a current production-success
+claim. No actual redirect/disclosure incident is established by this record.
+
+### Retained generator MVP acceptance
+
+The following acceptance belongs to the earlier generator MVP scope and does
+not close Email Gate production acceptance.
+
+The production acceptance includes upload, 40/80/104 White and Transparent generation, the 221-color set, Maximum Colors, Pattern preview, bead/material totals, selected package display, local PNG download, production Worker execution, desktop/mobile Shopify embedding, direct refresh, custom-domain HTTPS, Poparooz-only customer branding, and gallery regression after the external Shopify schema correction.
+
+User images remain browser-local through upload, browser decode, resize/normalization, local Worker execution, Pattern creation, local preview, and local PNG download. There is no image-upload backend, photo database, persistent photo storage, or deployment-introduced image logging. The production iframe bridge sends only bounded protocol-version-1 readiness and height metadata; it does not transfer images or Pattern content.
+
+## Historical accepted checkpoints through A07-A02
+
+The following stage summaries and narrative preserve their original evidence
+and side-effect limits. References to current, unavailable, ungated, empty,
+not deployed, or absent resources describe those historical checkpoints only.
+They do not override Current Email Gate governance above or attribute later
+activation to an earlier freeze.
+
 - P3-A03-E04-A01: **Email Download Gate contract frozen / production implementation not started**
 - P3-A03-E04-A02-A01: **Provider, topology, and retention decision completed / frozen / production implementation not started**
 - P3-A03-E04-A02-A02: **Completed / frozen**
@@ -223,13 +284,9 @@ Before implementation begins, read this file and every formal document relevant 
 - Email backend foundation: **Implemented in repository as one standalone Worker / not deployed / Production Renderer V1 registered**
 - Email Delivery Copy V1: **Exact subject, text, deterministic HTML, sender, and Reply-To frozen / Renderer V1 implemented and registered in repository / not deployed**
 - Email Gate frontend: **Implemented and frozen in the repository / production capability unavailable**
-- Current Download interception: **Inactive / Download remains ungated**
+- Download interception at the A07-A02 checkpoint: **Inactive / Download remains ungated**
 - Cloudflare Email Gate infrastructure: **Intended D1 and production Turnstile widget exist / Worker, route, custom domain, Cron, target secrets, and D1 user schema absent**
 - Email provider and topology: **Remote inventory completed / controlled provisioning and production acceptance remain open**
-
-The production acceptance includes upload, 40/80/104 White and Transparent generation, the 221-color set, Maximum Colors, Pattern preview, bead/material totals, selected package display, local PNG download, production Worker execution, desktop/mobile Shopify embedding, direct refresh, custom-domain HTTPS, Poparooz-only customer branding, and gallery regression after the external Shopify schema correction.
-
-User images remain browser-local through upload, browser decode, resize/normalization, local Worker execution, Pattern creation, local preview, and local PNG download. There is no image-upload backend, photo database, persistent photo storage, or deployment-introduced image logging. The production iframe bridge sends only bounded protocol-version-1 readiness and height metadata; it does not transfer images or Pattern content.
 
 P3-A03-E04-A01 supersedes the historical whole-stage deferral only for a
 bounded governance contract. A future Email Download Gate may verify an email

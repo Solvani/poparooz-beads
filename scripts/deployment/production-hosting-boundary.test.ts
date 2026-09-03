@@ -284,10 +284,19 @@ describe("production hosting boundary", () => {
 
     expect(snippet).toContain('src="https://generator.poparooz.com/"');
     expect(snippet).toContain("width: 100%");
+    const sandbox = snippet.match(/\bsandbox="([^"]+)"/)?.[1];
+    expect(sandbox?.split(/\s+/)).toEqual([
+      "allow-scripts",
+      "allow-same-origin",
+      "allow-downloads",
+      "allow-forms",
+    ]);
     expect(snippet).toContain(
-      'sandbox="allow-scripts allow-same-origin allow-downloads"',
+      'sandbox="allow-scripts allow-same-origin allow-downloads allow-forms"',
     );
-    expect(snippet).not.toMatch(/allow-popups|allow-top-navigation/);
+    expect(snippet).not.toMatch(
+      /\ballow-popups(?:-to-escape-sandbox)?\b|\ballow-top-navigation(?:-by-user-activation)?\b/,
+    );
     expect(snippet).toContain(
       'const generatorOrigin = "https://generator.poparooz.com"',
     );

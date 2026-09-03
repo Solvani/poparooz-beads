@@ -81,7 +81,7 @@ The reviewed implementation reference is [`shopify/poparooz-generator-embed.liqu
     title="Poparooz Fuse Bead Pattern Generator"
     loading="lazy"
     referrerpolicy="strict-origin-when-cross-origin"
-    sandbox="allow-scripts allow-same-origin allow-downloads"
+    sandbox="allow-scripts allow-same-origin allow-downloads allow-forms"
   ></iframe>
 
   <p>
@@ -95,6 +95,8 @@ The reviewed implementation reference is [`shopify/poparooz-generator-embed.liqu
   </p>
 </div>
 ```
+
+Email Gate introduces a real form-submit interaction inside the Poparooz Generator iframe. The iframe therefore requires `allow-forms` so the browser delivers that submit interaction. Direct Generator operation is unaffected because it is not sandboxed by Shopify. This addition is limited to the Poparooz Generator iframe and does not authorize popups or top navigation. Generator CSP remains authoritative, including `form-action 'none'`.
 
 P3-A02-A08-I01 implements and tests the sandbox tokens, generator CSP, exact `frame-ancestors`, download permission, production origins, and bounded ready/resize protocol. Cloudflare Pages deployment, custom-domain HTTPS, direct generator operation, and desktop/mobile Shopify embedding have passed production acceptance. The live Shopify theme insertion remains external platform state and is not implicitly represented by this repository.
 
@@ -155,7 +157,7 @@ The frozen production state is:
 - generator CSP `frame-ancestors` lists only the approved Shopify parent origin;
 - the Shopify page embeds only the production generator origin;
 - HTTPS and the custom domain are active and verified;
-- sandbox behavior passed desktop and mobile production smoke with `allow-scripts allow-same-origin allow-downloads`; every addition needs a recorded reason;
+- sandbox behavior passed desktop and mobile production smoke with `allow-scripts allow-same-origin allow-downloads`; Email Gate form submission adds the narrowly authorized `allow-forms` capability, and every further addition needs a recorded reason;
 - download, clipboard, new-window, and full-screen capabilities are minimized and tested across target browsers;
 - popup permission is absent unless an accepted user flow requires it;
 - the full-screen link uses `noopener noreferrer`;

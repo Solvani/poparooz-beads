@@ -14,7 +14,7 @@ A02 entry baseline commit: docs: synchronize product scope governance
 Live HEAD at P3-A03-SCOPE-A01 entry: 71e601ff3d1e17a779d8d01aa906eb6816af4697
 Live worktree at P3-A03-SCOPE-A01 entry: clean
 Upstream: origin/main
-Latest audited implementation HEAD: 119adc1062c0506cbe2f4edf9c74a2c7c6d1c202
+Latest accepted implementation HEAD: ca49d9f05a49a39d09e57ff86c909864f8dfb856
 Push state at entry: local main and origin/main synchronized
 ```
 
@@ -342,22 +342,30 @@ and side-effect limits; they are not credited with later deployments.
 Phase: Phase 3
 Parent stage: P3-A03-E04-A08
 Stage name: Email Gate Production Acceptance & Governance Reconciliation
-Parent status: REVIEW
+Parent status: COMPLETED / PRODUCTION VERIFIED / FROZEN / CLOSED
 Completed substage: P3-A03-E04-A08-A00
 Substage name: Governance State Catch-up Audit
 A00 status: COMPLETED / READ-ONLY / GOVERNANCE RECONCILED
 Reconciliation baseline: d02f1433eddbdb11b9b8a2ade92652264103ead8
 Previous audited implementation HEAD: a5d39baf5f761e4d65678743aaef91e7d1cd42eb
-Latest audited implementation HEAD: 119adc1062c0506cbe2f4edf9c74a2c7c6d1c202
-Post-baseline audited implementation commits: 6
-Next stage: P3-A03-E04-A08-A01
-Next stage name: Bounded Production Acceptance Verification
-A01 status: NOT STARTED
-A01 authorization: REQUIRED SEPARATELY AFTER A00 GOVERNANCE COMMIT REVIEW
+Accepted substage: P3-A03-E04-A08-A01
+Accepted substage name: Bounded Production Acceptance Verification
+A01 status: COMPLETED / PRODUCTION VERIFIED / ACCEPTED
+Latest accepted implementation HEAD: ca49d9f05a49a39d09e57ff86c909864f8dfb856
+A00 post-baseline audited implementation commits: 6
+Production Worker: 428f410a-a6ce-496d-b5b2-75e40c2edbdf @ 100%
+Next eligible product-data work: Marketing Consent v1 implementation
+Marketing Consent implementation authorization: REQUIRED SEPARATELY
+Ops Dashboard v1: HOLD
 ```
 
-Authority:
-[`POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md`](POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md).
+Authorities:
+
+- [`POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md`](POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md)
+  preserves the historical catch-up audit.
+- [`POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md`](POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md)
+  records the later bounded production evidence and supersedes A00's open
+  acceptance qualifications.
 
 Email Gate is production-configured in the repository. The real production
 capability is injected; a locked-browser Download enters the gate, while a
@@ -372,32 +380,37 @@ externally managed rather than declared in Wrangler configuration. These facts
 do not establish current remote inventory, migrations, or execution.
 
 Turnstile browser retry recovery changes implementation reliability, not the
-product contract. Siteverify no longer explicitly rejects redirects; the prior
-transport guarantee is superseded, without evidence here of any actual
-redirect or disclosure incident. The Shopify reference sandbox adds only
-`allow-forms`; popup/top-navigation permissions remain absent. That hotfix
-leaves CSP, including `form-action 'none'`, and existing data boundaries
-unchanged. The repository snippet does not prove the published theme state.
+product contract. The earlier Siteverify redirect-policy correction resolved
+the historical transport failure. The accepted live Shopify embed used
+`sandbox="allow-scripts allow-same-origin allow-downloads allow-forms"`;
+`allow-forms` restored Email Gate form submission while popup and
+top-navigation permissions remained absent.
 
-Resend requests now include `User-Agent: poparooz-email-gate/1.0`. The sixth
-commit adds provider transport compatibility and request-contract assertions,
-not a new customer capability. Product flow, OTP, delivery identity/content,
-privacy, local unlock, Shopify, and Turnstile contracts are unchanged by it.
+Production acceptance at `ca49d9f05a49a39d09e57ff86c909864f8dfb856`
+and Worker `428f410a-a6ce-496d-b5b2-75e40c2edbdf @ 100%` established the live
+Shopify form path, locked-browser gate entry, Turnstile/Siteverify processing,
+Resend delivery, server-authoritative OTP verification, verified D1 terminal
+state, original browser-local PNG continuation, same-session local unlock, and
+fresh-private-session relocking.
 
-Acceptance remains open: deployment-to-`119adc1062c0506cbe2f4edf9c74a2c7c6d1c202`,
-the current published Shopify snippet, and complete real-email -> verification
--> original PNG download have not been established by this reconciliation.
-The H12 `invalid_request` versus `version_unsupported` smoke discrepancy lacks
-closure. Real Resend delivery with the production User-Agent contract must be
-confirmed within the separately authorized delivery acceptance scope.
-Route/migration/Cron/secret/provider/cleanup/live-browser state must not be
-inferred from repository configuration or mocks. Archived deployment reports
-are historical evidence, not fresh verification of the latest implementation.
+The production Resend transport failure was resolved by replacing explicit
+`redirect: "error"` with `redirect: "manual"`. The exact
+`https://api.resend.com/emails` endpoint, POST,
+Authorization, Content-Type, Idempotency-Key, request body, timeout,
+`AbortSignal`, bounded response parsing, fail-closed classification, and
+`User-Agent: poparooz-email-gate/1.0` remain. No redirect follower, Location
+processing, or second fetch was added. The User-Agent is retained compatibility
+hardening, but is not documented as the uniquely proven historical root cause.
 
-All retained frozen decisions and the exact six-commit chain are recorded in
-the dedicated authority. A00 completion records the read-only audit and its
-governance reconciliation; this docs-only record does not close production
-acceptance or start A01.
+The historical H12 unsupported-version mismatch was a Windows `curl`
+command-quoting false negative. A later Node `JSON.stringify` reproduction
+returned HTTP 400, `schemaVersion: 1`, and `result: version_unsupported`; no
+open parser-defect claim is retained.
+
+Long-horizon cleanup, rotation, provider-outage, and browser/platform concerns
+remain operational work rather than acceptance blockers. Marketing Consent v1
+`MC-A00` remains approved/frozen and is eligible only for a separately explicit
+implementation release. Ops Dashboard v1 remains on HOLD.
 
 ## Historical accepted phase checkpoints through A07-A02
 
@@ -832,8 +845,8 @@ Default for v1: true
 ## Current Roadmap
 
 Email Gate rows through A07-A02 preserve historical stage-local availability
-and side-effect limits. A08 is the current parent; the dedicated A00 record
-supersedes those older availability summaries for the current repository.
+and side-effect limits. The dedicated A00 record preserves the catch-up audit;
+A01 supersedes its open production-acceptance qualifications and closes A08.
 
 ```text
 P3-D01     Formal Palette Contract               Frozen
@@ -885,9 +898,11 @@ P3-A03-SCOPE-A01 Governance Synchronization         Completed / scope closure sy
 P3-A03-SCOPE-A02 Results / Materials Decision       Completed / frozen with applicability qualifications
 P3-A03-SCOPE-A03 Unified Derived Material Requirement Contract Completed / frozen / committed / pushed / closed with frozen evidence applicability qualification
 P3-A03-SCOPE-A04 Export Terminology / Material Contract Completed / frozen / closed with evidence applicability qualifications
-P3-A03-E04-A08 Email Gate Production Acceptance & Governance Reconciliation REVIEW
+P3-A03-E04-A08 Email Gate Production Acceptance & Governance Reconciliation COMPLETED / PRODUCTION VERIFIED / FROZEN / CLOSED
 P3-A03-E04-A08-A00 Governance State Catch-up Audit COMPLETED / READ-ONLY / GOVERNANCE RECONCILED
-Next P3-A03-E04-A08-A01 Bounded Production Acceptance Verification NOT STARTED / REQUIRES SEPARATE AUTHORIZATION AFTER A00 GOVERNANCE COMMIT REVIEW
+P3-A03-E04-A08-A01 Bounded Production Acceptance Verification COMPLETED / PRODUCTION VERIFIED / ACCEPTED
+Marketing Consent v1 implementation ELIGIBLE ONLY AFTER SEPARATE EXPLICIT RELEASE
+Ops Dashboard v1 HOLD
 ```
 
 The frozen P3-A02-D01 implementation boundary is:

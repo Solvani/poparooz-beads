@@ -245,7 +245,7 @@ describe("provider adapters", () => {
       text: "test",
       reply_to: "replies@example.invalid",
     });
-    expect(init?.redirect).toBe("error");
+    expect(init?.redirect).toBe("manual");
     expect(init?.signal).toBeInstanceOf(AbortSignal);
   });
 
@@ -409,16 +409,11 @@ describe("provider adapters", () => {
   it.each([301, 302, 303, 307, 308])(
     "blocks Resend %i redirects without forwarding Authorization",
     async (status) => {
-      const redirectTargetRequests: RequestInit[] = [];
-      const outboundRequests: RequestInit[] = [];
-      const fetchPort = vi.fn<FetchPort>(async (_input, init) => {
-        outboundRequests.push(init!);
-        if (init?.redirect === "error") {
-          throw new TypeError(`redirect ${status} blocked`);
-        }
-        redirectTargetRequests.push(init!);
-        return new Response(JSON.stringify({ id: "redirect-accepted" }), {
-          status: 201,
+      const redirectTarget = "https://redirect-target.example.invalid/emails";
+      const fetchPort = vi.fn<FetchPort>(async () => {
+        return new Response(null, {
+          status,
+          headers: { Location: redirectTarget },
         });
       });
 
@@ -426,14 +421,23 @@ describe("provider adapters", () => {
         createResendAdapter("test-key", fetchPort).send("event", {
           from: "test@example.invalid",
           replyTo: "replies@example.invalid",
-          to: ["a@example.com"],
+          to: ["recipient@example.invalid"],
           subject: "test",
           text: "test",
         }),
       ).resolves.toEqual({ outcome: "ambiguous" });
-      expect(outboundRequests).toHaveLength(1);
-      expect(outboundRequests[0]?.redirect).toBe("error");
-      expect(redirectTargetRequests).toHaveLength(0);
+      expect(fetchPort).toHaveBeenCalledOnce();
+      expect(fetchPort.mock.calls[0]?.[0]).toBe(RESEND_EMAILS_URL);
+      const init = fetchPort.mock.calls[0]?.[1];
+      expect(init?.redirect).toBe("manual");
+      expect(new Headers(init?.headers).get("Authorization")).toBe(
+        "Bearer test-key",
+      );
+      expect(
+        fetchPort.mock.calls.some(
+          ([input]) => String(input) === redirectTarget,
+        ),
+      ).toBe(false);
     },
   );
 

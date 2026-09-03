@@ -58,7 +58,7 @@ export function createResendAdapter(
             "User-Agent": "poparooz-email-gate/1.0",
           },
           body: JSON.stringify(requestBody),
-          redirect: "error",
+          redirect: "manual",
           signal: controller.signal,
         });
 

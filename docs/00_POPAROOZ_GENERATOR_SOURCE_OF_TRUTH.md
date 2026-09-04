@@ -111,6 +111,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md`](POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md): historical A08 REVIEW / completed A00 / A01 not-started decision, six-commit reconciliation, and the production-acceptance qualifications open at that time.
 - [`POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md`](POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md): bounded live production evidence that supersedes A00's open acceptance qualifications and records A01 acceptance and A08 closure, with the later `f8852d2` docs-only regression retained as historical provenance.
 - [`POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md`](POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md): frozen Marketing Consent v1 product, optionality, same-email verification, effective-grant, D1-first data, retention, withdrawal, privacy-isolation, provider, and implementation-entry authority.
+- [POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md](POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md): MC-A02 separate-API runtime, security, persistence, withdrawal, retention, and rollout contract approved for freeze; it becomes authoritative and frozen only upon successful commit of the synchronized MC-A02-A02 governance set.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 The earlier Email Gate references describe their stage-local freeze and
@@ -118,11 +119,17 @@ activation limits. A08-A00 preserves the historical catch-up audit, while
 A08-A01 supersedes its open production-acceptance qualifications. Neither
 supersedes retained product/privacy contracts.
 
-The Marketing Consent MC-A00 authority supersedes only the deferred
-Marketing-specific decisions in the historical Email Download Gate contract.
-It preserves that document as historical evidence and does not alter frozen
-Email Gate verification behavior or reopen the closed A08 stage.
-
+The Marketing Consent MC-A00 authority freezes the product, data, and privacy
+requirements. MC-A01 synchronized that authority and is completed and closed.
+The MC-A02 freeze decision is approved and uses a separate Marketing Consent
+API without altering either strict Email Gate v1 request, either response
+contract, or the email_gate_challenges schema. The freeze becomes effective
+only upon successful commit of the synchronized MC-A02-A02 governance set.
+Before that commit, MC-A02 is NOT FROZEN. After that commit, MC-A02-A02 resolves
+to COMPLETED / CONTRACT APPROVED / FROZEN. The preserved runtime candidate
+remains uncommitted and not accepted. All Email Gate security, verification,
+provider, rate-limit, response, retention, and lifecycle rules remain frozen,
+and the closed A08 stage is not reopened.
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
 
 ## Historical Phase 0 scope boundary
@@ -256,10 +263,13 @@ accepted implementation HEAD.
 - Marketing Consent v1 MC-A00: **APPROVED / FROZEN / REPOSITORY AUTHORITY SYNCHRONIZED**
 - Marketing Consent implementation release: **GRANTED**
 - MC-A01 Marketing Consent authority synchronization: **COMPLETED / AUTHORITY SYNCHRONIZED / CLOSED**
-- Marketing Consent runtime implementation: **NOT STARTED**
-- MC-A02 Marketing Consent runtime implementation: **READY TO START / NOT STARTED**
+- MC-A02-A02 Contract Freeze: **APPROVED / EFFECTIVE UPON SUCCESSFUL GOVERNANCE COMMIT**
+- MC-A02 current state before commit: **NOT FROZEN**
+- MC-A02 resolved state after successful commit: **MC-A02-A02 COMPLETED / CONTRACT APPROVED / FROZEN**
+- MC-A02 architecture: **SEPARATE MARKETING CONSENT API / EMAIL GATE V1 UNCHANGED**
+- Marketing Consent runtime candidate: **PRESERVED / UNCOMMITTED / NOT ACCEPTED**
+- Post-freeze next action: **MC-A02-B01 - DIRTY CANDIDATE RECONCILIATION**
 - Ops Dashboard v1: **HOLD**
-
 The six-commit catch-up evidence and the qualifications that were open at that
 time remain historical in
 [`POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md`](POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md).
@@ -267,7 +277,12 @@ The later bounded production evidence and closure are authoritative in
 [`POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md`](POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md).
 Marketing Consent v1 is governed by
 [`POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md`](POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md).
-
+The MC-A02 runtime, API, and persistence contract approved for freeze is in
+[POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md](POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md).
+It preserves the exact historical Email Gate v1 authority. Its freeze becomes
+effective only upon successful commit of the synchronized MC-A02-A02 governance
+set: before that commit MC-A02 is NOT FROZEN; after it, MC-A02-A02 resolves to
+COMPLETED / CONTRACT APPROVED / FROZEN.
 Commit `f8852d2d5a14ceff38848e35b284dc375f72399a` was a published docs-only
 governance regression that downgraded already accepted production evidence. It
 did not alter Worker or production runtime behavior. The R03 forward correction

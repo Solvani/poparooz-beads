@@ -110,12 +110,18 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_E04_A07_A02_OTP_KEY_PRODUCTION_CONTRACT.md`](POPAROOZ_P3_A03_E04_A07_A02_OTP_KEY_PRODUCTION_CONTRACT.md): frozen production OTP key entropy, exact Base64url-text-as-UTF-8 consumption, version-1 identity, rotation overlap, compromise, escrow, provisioning, and production-inactive boundary.
 - [`POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md`](POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md): historical A08 REVIEW / completed A00 / A01 not-started decision, six-commit reconciliation, and the production-acceptance qualifications open at that time.
 - [`POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md`](POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md): bounded live production evidence that supersedes A00's open acceptance qualifications and records A01 acceptance and A08 closure, with the later `f8852d2` docs-only regression retained as historical provenance.
+- [`POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md`](POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md): frozen Marketing Consent v1 product, optionality, same-email verification, effective-grant, D1-first data, retention, withdrawal, privacy-isolation, provider, and implementation-entry authority.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 The earlier Email Gate references describe their stage-local freeze and
 activation limits. A08-A00 preserves the historical catch-up audit, while
 A08-A01 supersedes its open production-acceptance qualifications. Neither
 supersedes retained product/privacy contracts.
+
+The Marketing Consent MC-A00 authority supersedes only the deferred
+Marketing-specific decisions in the historical Email Download Gate contract.
+It preserves that document as historical evidence and does not alter frozen
+Email Gate verification behavior or reopen the closed A08 stage.
 
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
 
@@ -247,8 +253,10 @@ accepted implementation HEAD.
 - Production acceptance: **Live Shopify form entry, gate enforcement, Turnstile/Siteverify, Resend delivery, OTP verification, verified D1 state, browser-local PNG continuation, same-session unlock, and fresh-private-session relocking confirmed**
 - Resend: **Production transport failure resolved by `redirect: "error"` -> `redirect: "manual"`; fixed User-Agent retained as compatibility hardening, not claimed as the uniquely proven historical root cause**
 - H12 smoke: **Original Windows curl result reconciled as a quoting/serialization false negative; Node JSON.stringify reproduced HTTP 400 / schemaVersion 1 / version_unsupported**
-- Marketing Consent v1: **MC-A00 APPROVED / FROZEN; implementation release separately granted; runtime implementation not started**
-- MC-A01 Marketing Consent authority synchronization: **NOT STARTED**
+- Marketing Consent v1: **MC-A00 APPROVED / FROZEN**
+- Marketing Consent implementation release: **GRANTED**
+- MC-A01 Marketing Consent authority synchronization: **AUTHORITY SYNCHRONIZATION IN REVIEW**
+- Marketing Consent runtime implementation: **NOT STARTED**
 - Ops Dashboard v1: **HOLD**
 
 The six-commit catch-up evidence and the qualifications that were open at that
@@ -256,6 +264,8 @@ time remain historical in
 [`POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md`](POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md).
 The later bounded production evidence and closure are authoritative in
 [`POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md`](POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md).
+Marketing Consent v1 is governed by
+[`POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md`](POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md).
 
 Commit `f8852d2d5a14ceff38848e35b284dc375f72399a` was a published docs-only
 governance regression that downgraded already accepted production evidence. It

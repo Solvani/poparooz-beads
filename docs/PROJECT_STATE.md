@@ -355,9 +355,9 @@ Latest accepted implementation HEAD: ca49d9f05a49a39d09e57ff86c909864f8dfb856
 A00 post-baseline audited implementation commits: 6
 Production Worker: 428f410a-a6ce-496d-b5b2-75e40c2edbdf @ 100%
 Marketing Consent v1 MC-A00: APPROVED / FROZEN
-Marketing Consent implementation release: GRANTED SEPARATELY
+Marketing Consent implementation release: GRANTED
 Marketing Consent runtime implementation: NOT STARTED
-MC-A01 Marketing Consent authority synchronization: NOT STARTED
+MC-A01 Marketing Consent authority synchronization: AUTHORITY SYNCHRONIZATION IN REVIEW
 Ops Dashboard v1: HOLD
 ```
 
@@ -368,6 +368,11 @@ Authorities:
 - [`POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md`](POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md)
   records the later bounded production evidence and supersedes A00's open
   acceptance qualifications.
+- [`POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md`](POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md)
+  is the approved and frozen Marketing Consent v1 product, data, and privacy
+  authority. It supersedes only deferred Marketing-specific decisions in the
+  historical Email Gate contract and does not reopen A08 or alter Email Gate
+  verification.
 
 Email Gate is production-configured in the repository. The real production
 capability is injected; a locked-browser Download enters the gate, while a
@@ -913,8 +918,8 @@ P3-A03-E04-A08 Email Gate Production Acceptance & Governance Reconciliation COMP
 P3-A03-E04-A08-A00 Governance State Catch-up Audit COMPLETED / READ-ONLY / GOVERNANCE RECONCILED
 P3-A03-E04-A08-A01 Bounded Production Acceptance Verification COMPLETED / PRODUCTION VERIFIED / ACCEPTED
 Marketing Consent v1 MC-A00 APPROVED / FROZEN
-Marketing Consent v1 implementation RELEASE GRANTED SEPARATELY / RUNTIME NOT STARTED
-MC-A01 Marketing Consent authority synchronization NOT STARTED
+Marketing Consent v1 implementation RELEASE GRANTED / RUNTIME NOT STARTED
+MC-A01 Marketing Consent authority synchronization AUTHORITY SYNCHRONIZATION IN REVIEW
 Ops Dashboard v1 HOLD
 ```
 

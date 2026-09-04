@@ -253,10 +253,11 @@ accepted implementation HEAD.
 - Production acceptance: **Live Shopify form entry, gate enforcement, Turnstile/Siteverify, Resend delivery, OTP verification, verified D1 state, browser-local PNG continuation, same-session unlock, and fresh-private-session relocking confirmed**
 - Resend: **Production transport failure resolved by `redirect: "error"` -> `redirect: "manual"`; fixed User-Agent retained as compatibility hardening, not claimed as the uniquely proven historical root cause**
 - H12 smoke: **Original Windows curl result reconciled as a quoting/serialization false negative; Node JSON.stringify reproduced HTTP 400 / schemaVersion 1 / version_unsupported**
-- Marketing Consent v1: **MC-A00 APPROVED / FROZEN**
+- Marketing Consent v1 MC-A00: **APPROVED / FROZEN / REPOSITORY AUTHORITY SYNCHRONIZED**
 - Marketing Consent implementation release: **GRANTED**
-- MC-A01 Marketing Consent authority synchronization: **AUTHORITY SYNCHRONIZATION IN REVIEW**
+- MC-A01 Marketing Consent authority synchronization: **COMPLETED / AUTHORITY SYNCHRONIZED / CLOSED**
 - Marketing Consent runtime implementation: **NOT STARTED**
+- MC-A02 Marketing Consent runtime implementation: **READY TO START / NOT STARTED**
 - Ops Dashboard v1: **HOLD**
 
 The six-commit catch-up evidence and the qualifications that were open at that

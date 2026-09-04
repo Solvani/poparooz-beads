@@ -354,10 +354,11 @@ A01 status: COMPLETED / PRODUCTION VERIFIED / ACCEPTED
 Latest accepted implementation HEAD: ca49d9f05a49a39d09e57ff86c909864f8dfb856
 A00 post-baseline audited implementation commits: 6
 Production Worker: 428f410a-a6ce-496d-b5b2-75e40c2edbdf @ 100%
-Marketing Consent v1 MC-A00: APPROVED / FROZEN
+Marketing Consent v1 MC-A00: APPROVED / FROZEN / REPOSITORY AUTHORITY SYNCHRONIZED
 Marketing Consent implementation release: GRANTED
 Marketing Consent runtime implementation: NOT STARTED
-MC-A01 Marketing Consent authority synchronization: AUTHORITY SYNCHRONIZATION IN REVIEW
+MC-A01 Marketing Consent authority synchronization: COMPLETED / AUTHORITY SYNCHRONIZED / CLOSED
+MC-A02 Marketing Consent runtime implementation: READY TO START / NOT STARTED
 Ops Dashboard v1: HOLD
 ```
 
@@ -422,9 +423,10 @@ remains intact.
 
 Long-horizon cleanup, rotation, provider-outage, and browser/platform concerns
 remain operational work rather than acceptance blockers. Marketing Consent v1
-`MC-A00` remains approved/frozen; its implementation release was granted
-separately, but runtime implementation and MC-A01 authority synchronization
-remain not started. Ops Dashboard v1 remains on HOLD.
+`MC-A00` is approved/frozen with repository authority synchronized; its
+implementation release is granted. MC-A01 authority synchronization is
+completed and closed. Runtime implementation remains not started, and MC-A02
+is ready to start but not started. Ops Dashboard v1 remains on HOLD.
 
 ## Historical accepted phase checkpoints through A07-A02
 
@@ -917,9 +919,10 @@ P3-A03-SCOPE-A04 Export Terminology / Material Contract Completed / frozen / clo
 P3-A03-E04-A08 Email Gate Production Acceptance & Governance Reconciliation COMPLETED / PRODUCTION VERIFIED / FROZEN / CLOSED
 P3-A03-E04-A08-A00 Governance State Catch-up Audit COMPLETED / READ-ONLY / GOVERNANCE RECONCILED
 P3-A03-E04-A08-A01 Bounded Production Acceptance Verification COMPLETED / PRODUCTION VERIFIED / ACCEPTED
-Marketing Consent v1 MC-A00 APPROVED / FROZEN
+Marketing Consent v1 MC-A00 APPROVED / FROZEN / REPOSITORY AUTHORITY SYNCHRONIZED
 Marketing Consent v1 implementation RELEASE GRANTED / RUNTIME NOT STARTED
-MC-A01 Marketing Consent authority synchronization AUTHORITY SYNCHRONIZATION IN REVIEW
+MC-A01 Marketing Consent authority synchronization COMPLETED / AUTHORITY SYNCHRONIZED / CLOSED
+MC-A02 Marketing Consent runtime implementation READY TO START / NOT STARTED
 Ops Dashboard v1 HOLD
 ```
 

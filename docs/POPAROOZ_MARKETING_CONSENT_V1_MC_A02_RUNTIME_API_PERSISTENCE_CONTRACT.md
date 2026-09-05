@@ -12,12 +12,11 @@ PUSHED
 
 Freeze commit: 416bd457c5578b9435b9e9010dfdaed0b0261ee0
 
-MC-A02-A02-H01 CONTRACT REVIEW PASSED /
-FORMAT GATE PASSED WITH PRE-EXISTING FORMAT-DEBT QUALIFICATION /
-COMMIT AUTHORIZED
+MC-A02-A02-H01 CORRECTION APPROVED /
+EFFECTIVE UPON SUCCESSFUL EXACT 3-FILE GOVERNANCE COMMIT
 
-Before successful H01 commit: UNCOMMITTED / NOT PUSHED
-After successful H01 commit: COMMITTED / NOT PUSHED
+Before successful H01 commit: APPROVED / NOT EFFECTIVE / UNCOMMITTED / NOT PUSHED
+After successful H01 commit: COMPLETED / CORRECTION APPROVED / COMMITTED / NOT PUSHED
 
 Stage: MC-A02-A02
 Project: Poparooz Generator
@@ -33,13 +32,12 @@ MC-A02-A02 freeze governance set in commit
 APPROVED / FROZEN / COMMITTED / PUSHED. No implementation or runtime acceptance
 is implied.
 
-MC-A02-A02-H01 prepares a narrow uncommitted correction to stale withdrawal
-authority, v1 source-context alignment, and logical-versus-physical metadata
-clarity. It is CONTRACT REVIEW PASSED / FORMAT GATE PENDING / UNCOMMITTED / NOT
-PUSHED before final status synchronization. The final status synchronization
-records FORMAT GATE PASSED WITH PRE-EXISTING FORMAT-DEBT QUALIFICATION / COMMIT
-AUTHORIZED. It resolves to COMMITTED / NOT PUSHED only after the authorized H01
-commit succeeds.
+MC-A02-A02-H01 is an approved narrow correction to stale withdrawal authority,
+v1 source-context alignment, and logical-versus-physical metadata clarity. The
+correction becomes effective only upon successful commit of the exact three-file
+governance set. Before that commit it is APPROVED / NOT EFFECTIVE / UNCOMMITTED /
+NOT PUSHED. After that commit it resolves to COMPLETED / CORRECTION APPROVED /
+COMMITTED / NOT PUSHED.
 
 MC-A00 remains the approved and frozen Marketing Consent v1 product, data, and
 privacy authority. MC-A01 remains completed, authority-synchronized, and
@@ -487,9 +485,8 @@ source_context
 event_timestamp
 ```
 
-Additional physical columns introduced by MC-A02 for concurrency, idempotency,
-transition ordering, retention scheduling, version sequencing, and internal
-integrity are INTERNAL PHYSICAL METADATA ONLY. These include at minimum:
+The following are the MC-A02 physical-only fields added beyond the MC-A00
+logical contract in the frozen DDL.
 
 ```text
 consent_version_sequence
@@ -499,6 +496,9 @@ last_transition_operation_key
 subscription_state_version
 operation_key
 ```
+
+No additional physical field is authorized by this clarification. Any further
+schema field requires a separate contract change.
 
 They do not create additional product-level consent states or expand MC-A00's
 logical Marketing Consent event contract. They are not customer-visible,
@@ -769,16 +769,19 @@ FREEZE COMMIT:
 416bd457c5578b9435b9e9010dfdaed0b0261ee0
 
 MC-A02-A02-H01:
-CONTRACT REVIEW PASSED /
-FORMAT GATE PASSED WITH PRE-EXISTING FORMAT-DEBT QUALIFICATION /
-COMMIT AUTHORIZED
+CORRECTION APPROVED /
+EFFECTIVE UPON SUCCESSFUL EXACT 3-FILE GOVERNANCE COMMIT
 
 H01 COMMIT TRANSITION:
 Before successful H01 commit:
+APPROVED /
+NOT EFFECTIVE /
 UNCOMMITTED /
 NOT PUSHED
 
 After successful H01 commit:
+COMPLETED /
+CORRECTION APPROVED /
 COMMITTED /
 NOT PUSHED
 
@@ -795,10 +798,10 @@ NOT ACCEPTED
 
 NEXT ACTION:
 Before successful H01 commit:
-AUTHORIZED H01 COMMIT
+AUTHORIZED H01 AMEND
 
 After successful H01 commit:
-SEPARATE H01 PUSH AUTHORIZATION
+MC-A02-C01 — D1 / Repository Implementation
 
 OPS DASHBOARD:
 HOLD

@@ -359,13 +359,13 @@ Marketing Consent implementation release: GRANTED
 MC-A01 Marketing Consent authority synchronization: COMPLETED / AUTHORITY SYNCHRONIZED / CLOSED
 MC-A02-A02: COMPLETED / CONTRACT APPROVED / FROZEN / COMMITTED / PUSHED
 MC-A02-A02 freeze commit: 416bd457c5578b9435b9e9010dfdaed0b0261ee0
-MC-A02-A02-H01: CONTRACT REVIEW PASSED / FORMAT GATE PASSED WITH PRE-EXISTING FORMAT-DEBT QUALIFICATION / COMMIT AUTHORIZED
-H01 commit transition before success: UNCOMMITTED / NOT PUSHED
-H01 commit transition after success: COMMITTED / NOT PUSHED
+MC-A02-A02-H01: CORRECTION APPROVED / EFFECTIVE UPON SUCCESSFUL EXACT 3-FILE GOVERNANCE COMMIT
+H01 commit transition before success: APPROVED / NOT EFFECTIVE / UNCOMMITTED / NOT PUSHED
+H01 commit transition after success: COMPLETED / CORRECTION APPROVED / COMMITTED / NOT PUSHED
 MC-A02 architecture: SEPARATE MARKETING CONSENT API / EMAIL GATE V1 UNCHANGED
 Marketing Consent runtime candidate: PRESERVED / UNCOMMITTED / NOT ACCEPTED
-Next action before H01 commit: AUTHORIZED H01 COMMIT
-Next action after H01 commit: SEPARATE H01 PUSH AUTHORIZATION
+Next action before H01 commit: AUTHORIZED H01 AMEND
+Next action after H01 commit: MC-A02-C01 — D1 / Repository Implementation
 Ops Dashboard v1: HOLD
 ```
 
@@ -383,12 +383,12 @@ Authorities:
   is the frozen and published separate-API runtime, security, persistence,
   withdrawal, retention, and rollout contract. MC-A02-A02 is COMPLETED /
   CONTRACT APPROVED / FROZEN / COMMITTED / PUSHED at commit
-  `416bd457c5578b9435b9e9010dfdaed0b0261ee0`. MC-A02-A02-H01 is CONTRACT REVIEW
-  PASSED / FORMAT GATE PASSED WITH PRE-EXISTING FORMAT-DEBT QUALIFICATION /
-  COMMIT AUTHORIZED. It remains UNCOMMITTED / NOT PUSHED before the authorized
-  commit succeeds and resolves to COMMITTED / NOT PUSHED afterward. Both strict
-  Email Gate v1 requests, all Email Gate responses, and the
-  email_gate_challenges schema remain unchanged.
+  `416bd457c5578b9435b9e9010dfdaed0b0261ee0`. The MC-A02-A02-H01 correction is
+  approved but becomes effective only upon successful commit of the exact
+  three-file governance set. Before that commit it is APPROVED / NOT EFFECTIVE /
+  UNCOMMITTED / NOT PUSHED; afterward it resolves to COMPLETED / CORRECTION
+  APPROVED / COMMITTED / NOT PUSHED. Both strict Email Gate v1 requests, all
+  Email Gate responses, and the email_gate_challenges schema remain unchanged.
 Email Gate is production-configured in the repository. The real production
 capability is injected; a locked-browser Download enters the gate, while a
 valid local unlock permits the existing browser-local PNG download. Image,
@@ -441,14 +441,14 @@ MC-A00 is approved/frozen with repository authority synchronized; its
 implementation release is granted. MC-A01 authority synchronization is
 completed and closed. MC-A02-A02 is completed, contract approved, frozen,
 committed, and pushed at commit
-`416bd457c5578b9435b9e9010dfdaed0b0261ee0`. MC-A02-A02-H01 has passed contract
-review and the format gate with the pre-existing format-debt qualification, and
-its commit is authorized. Before successful commit it remains uncommitted and
-not pushed; afterward it resolves to committed and not pushed. The architecture
-is a separate Marketing Consent API and Email Gate v1 is unchanged. The
-preserved runtime candidate is uncommitted and not accepted. The next action is
-the authorized H01 commit, followed only after success by separate H01 push
-authorization. Ops Dashboard v1 remains on HOLD.
+`416bd457c5578b9435b9e9010dfdaed0b0261ee0`. The MC-A02-A02-H01 correction is
+approved but becomes effective only upon successful commit of the exact
+three-file governance set. Before that commit it is not effective, uncommitted,
+and not pushed; afterward it resolves to completed, correction approved,
+committed, and not pushed. The architecture is a separate Marketing Consent API
+and Email Gate v1 is unchanged. The preserved runtime candidate is uncommitted
+and not accepted. After successful H01 commit, the next action is MC-A02-C01 —
+D1 / Repository Implementation. Ops Dashboard v1 remains on HOLD.
 ## Historical accepted phase checkpoints through A07-A02
 
 The following entries and explanatory paragraphs preserve their stage-local
@@ -945,13 +945,13 @@ Marketing Consent v1 implementation RELEASE GRANTED
 MC-A01 Marketing Consent authority synchronization COMPLETED / AUTHORITY SYNCHRONIZED / CLOSED
 MC-A02-A02 COMPLETED / CONTRACT APPROVED / FROZEN / COMMITTED / PUSHED
 MC-A02-A02 freeze commit 416bd457c5578b9435b9e9010dfdaed0b0261ee0
-MC-A02-A02-H01 CONTRACT REVIEW PASSED / FORMAT GATE PASSED WITH PRE-EXISTING FORMAT-DEBT QUALIFICATION / COMMIT AUTHORIZED
-H01 commit transition before success UNCOMMITTED / NOT PUSHED
-H01 commit transition after success COMMITTED / NOT PUSHED
+MC-A02-A02-H01 CORRECTION APPROVED / EFFECTIVE UPON SUCCESSFUL EXACT 3-FILE GOVERNANCE COMMIT
+H01 commit transition before success APPROVED / NOT EFFECTIVE / UNCOMMITTED / NOT PUSHED
+H01 commit transition after success COMPLETED / CORRECTION APPROVED / COMMITTED / NOT PUSHED
 MC-A02 architecture SEPARATE MARKETING CONSENT API / EMAIL GATE V1 UNCHANGED
 Marketing Consent runtime candidate PRESERVED / UNCOMMITTED / NOT ACCEPTED
-Next action before H01 commit AUTHORIZED H01 COMMIT
-Next action after H01 commit SEPARATE H01 PUSH AUTHORIZATION
+Next action before H01 commit AUTHORIZED H01 AMEND
+Next action after H01 commit MC-A02-C01 — D1 / Repository Implementation
 Ops Dashboard v1 HOLD
 ```
 

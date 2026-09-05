@@ -111,7 +111,7 @@ See [`reviews/P0_A01_CURRENT_STATE_AUDIT.md`](reviews/P0_A01_CURRENT_STATE_AUDIT
 - [`POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md`](POPAROOZ_P3_A03_E04_A08_A00_PRODUCTION_GOVERNANCE_RECONCILIATION.md): historical A08 REVIEW / completed A00 / A01 not-started decision, six-commit reconciliation, and the production-acceptance qualifications open at that time.
 - [`POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md`](POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md): bounded live production evidence that supersedes A00's open acceptance qualifications and records A01 acceptance and A08 closure, with the later `f8852d2` docs-only regression retained as historical provenance.
 - [`POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md`](POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md): frozen Marketing Consent v1 product, optionality, same-email verification, effective-grant, D1-first data, retention, withdrawal, privacy-isolation, provider, and implementation-entry authority.
-- [POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md](POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md): MC-A02 separate-API runtime, security, persistence, withdrawal, retention, and rollout contract approved for freeze; it becomes authoritative and frozen only upon successful commit of the synchronized MC-A02-A02 governance set.
+- [POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md](POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md): frozen and published MC-A02 separate-API runtime, security, persistence, withdrawal, retention, and rollout contract; MC-A02-A02-H01 passed contract review and its format gate with the pre-existing format-debt qualification, and is authorized for commit without push.
 - [`reviews/P2_I10_PHASE_2_FINAL_AUDIT.md`](reviews/P2_I10_PHASE_2_FINAL_AUDIT.md): final repository, history, regression, scope, privacy, brand, and resource audit evidence.
 
 The earlier Email Gate references describe their stage-local freeze and
@@ -121,15 +121,16 @@ supersedes retained product/privacy contracts.
 
 The Marketing Consent MC-A00 authority freezes the product, data, and privacy
 requirements. MC-A01 synchronized that authority and is completed and closed.
-The MC-A02 freeze decision is approved and uses a separate Marketing Consent
-API without altering either strict Email Gate v1 request, either response
-contract, or the email_gate_challenges schema. The freeze becomes effective
-only upon successful commit of the synchronized MC-A02-A02 governance set.
-Before that commit, MC-A02 is NOT FROZEN. After that commit, MC-A02-A02 resolves
-to COMPLETED / CONTRACT APPROVED / FROZEN. The preserved runtime candidate
-remains uncommitted and not accepted. All Email Gate security, verification,
-provider, rate-limit, response, retention, and lifecycle rules remain frozen,
-and the closed A08 stage is not reopened.
+MC-A02-A02 is completed, contract approved, frozen, committed, and pushed at
+freeze commit `416bd457c5578b9435b9e9010dfdaed0b0261ee0`. It uses a separate
+Marketing Consent API without altering either strict Email Gate v1 request,
+either response contract, or the email_gate_challenges schema. MC-A02-A02-H01
+is CONTRACT REVIEW PASSED / FORMAT GATE PASSED WITH PRE-EXISTING FORMAT-DEBT
+QUALIFICATION / COMMIT AUTHORIZED. Before successful commit it remains
+UNCOMMITTED / NOT PUSHED; after successful commit it resolves to COMMITTED / NOT
+PUSHED. The preserved runtime candidate remains uncommitted and not accepted.
+All Email Gate security, verification, provider, rate-limit, response, retention,
+and lifecycle rules remain frozen, and the closed A08 stage is not reopened.
 These documents are subordinate to this index but normative where referenced. A change is not approved until conflicting sections across the formal decision set are updated together.
 
 ## Historical Phase 0 scope boundary
@@ -263,12 +264,13 @@ accepted implementation HEAD.
 - Marketing Consent v1 MC-A00: **APPROVED / FROZEN / REPOSITORY AUTHORITY SYNCHRONIZED**
 - Marketing Consent implementation release: **GRANTED**
 - MC-A01 Marketing Consent authority synchronization: **COMPLETED / AUTHORITY SYNCHRONIZED / CLOSED**
-- MC-A02-A02 Contract Freeze: **APPROVED / EFFECTIVE UPON SUCCESSFUL GOVERNANCE COMMIT**
-- MC-A02 current state before commit: **NOT FROZEN**
-- MC-A02 resolved state after successful commit: **MC-A02-A02 COMPLETED / CONTRACT APPROVED / FROZEN**
+- MC-A02-A02 Contract Freeze: **COMPLETED / CONTRACT APPROVED / FROZEN / COMMITTED / PUSHED**
+- MC-A02-A02 freeze commit: **416bd457c5578b9435b9e9010dfdaed0b0261ee0**
+- MC-A02-A02-H01: **CONTRACT REVIEW PASSED / FORMAT GATE PASSED WITH PRE-EXISTING FORMAT-DEBT QUALIFICATION / COMMIT AUTHORIZED**
+- H01 commit transition: **Before successful commit: UNCOMMITTED / NOT PUSHED; after successful commit: COMMITTED / NOT PUSHED**
 - MC-A02 architecture: **SEPARATE MARKETING CONSENT API / EMAIL GATE V1 UNCHANGED**
 - Marketing Consent runtime candidate: **PRESERVED / UNCOMMITTED / NOT ACCEPTED**
-- Post-freeze next action: **MC-A02-B01 - DIRTY CANDIDATE RECONCILIATION**
+- Next action: **Before successful H01 commit: AUTHORIZED H01 COMMIT; after successful H01 commit: SEPARATE H01 PUSH AUTHORIZATION**
 - Ops Dashboard v1: **HOLD**
 The six-commit catch-up evidence and the qualifications that were open at that
 time remain historical in
@@ -277,12 +279,15 @@ The later bounded production evidence and closure are authoritative in
 [`POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md`](POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md).
 Marketing Consent v1 is governed by
 [`POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md`](POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md).
-The MC-A02 runtime, API, and persistence contract approved for freeze is in
+The frozen and published MC-A02 runtime, API, and persistence contract is in
 [POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md](POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md).
-It preserves the exact historical Email Gate v1 authority. Its freeze becomes
-effective only upon successful commit of the synchronized MC-A02-A02 governance
-set: before that commit MC-A02 is NOT FROZEN; after it, MC-A02-A02 resolves to
-COMPLETED / CONTRACT APPROVED / FROZEN.
+It preserves the exact historical Email Gate v1 authority. MC-A02-A02 is
+COMPLETED / CONTRACT APPROVED / FROZEN / COMMITTED / PUSHED at commit
+`416bd457c5578b9435b9e9010dfdaed0b0261ee0`. MC-A02-A02-H01 is a correction
+candidate that is CONTRACT REVIEW PASSED / FORMAT GATE PASSED WITH PRE-EXISTING
+FORMAT-DEBT QUALIFICATION / COMMIT AUTHORIZED. It remains UNCOMMITTED / NOT
+PUSHED until the authorized commit succeeds, then resolves to COMMITTED / NOT
+PUSHED.
 Commit `f8852d2d5a14ceff38848e35b284dc375f72399a` was a published docs-only
 governance regression that downgraded already accepted production evidence. It
 did not alter Worker or production runtime behavior. The R03 forward correction

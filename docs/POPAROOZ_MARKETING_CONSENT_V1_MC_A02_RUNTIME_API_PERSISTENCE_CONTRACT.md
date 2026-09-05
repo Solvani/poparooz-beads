@@ -4,8 +4,20 @@
 
 Status:
 
-FREEZE APPROVED /
-EFFECTIVE UPON SUCCESSFUL GOVERNANCE COMMIT
+MC-A02-A02 COMPLETED /
+CONTRACT APPROVED /
+FROZEN /
+COMMITTED /
+PUSHED
+
+Freeze commit: 416bd457c5578b9435b9e9010dfdaed0b0261ee0
+
+MC-A02-A02-H01 CONTRACT REVIEW PASSED /
+FORMAT GATE PASSED WITH PRE-EXISTING FORMAT-DEBT QUALIFICATION /
+COMMIT AUTHORIZED
+
+Before successful H01 commit: UNCOMMITTED / NOT PUSHED
+After successful H01 commit: COMMITTED / NOT PUSHED
 
 Stage: MC-A02-A02
 Project: Poparooz Generator
@@ -13,16 +25,21 @@ Pre-freeze authority baseline: 3309d558926a4fff368e1b84803e57badf812c1b
 
 ## 1. Authority and scope
 
-The content of this MC-A02 runtime, API, and persistence contract is approved
-for freeze. Editing or staging this document does not make the freeze
-effective. This contract becomes authoritative and frozen only when this
-document, together with the synchronized Source of Truth and Project State
-updates, is successfully committed as the MC-A02-A02 freeze governance set.
+The content of this MC-A02 runtime, API, and persistence contract became
+authoritative and frozen when this document, together with the synchronized
+Source of Truth and Project State updates, was successfully committed as the
+MC-A02-A02 freeze governance set in commit
+416bd457c5578b9435b9e9010dfdaed0b0261ee0. MC-A02-A02 is COMPLETED / CONTRACT
+APPROVED / FROZEN / COMMITTED / PUSHED. No implementation or runtime acceptance
+is implied.
 
-The successful governance commit is the state-transition event. Before that
-commit exists, MC-A02 remains NOT FROZEN. After that commit exists, MC-A02-A02
-resolves to COMPLETED / CONTRACT APPROVED / FROZEN. No implementation or
-runtime acceptance is implied.
+MC-A02-A02-H01 prepares a narrow uncommitted correction to stale withdrawal
+authority, v1 source-context alignment, and logical-versus-physical metadata
+clarity. It is CONTRACT REVIEW PASSED / FORMAT GATE PENDING / UNCOMMITTED / NOT
+PUSHED before final status synchronization. The final status synchronization
+records FORMAT GATE PASSED WITH PRE-EXISTING FORMAT-DEBT QUALIFICATION / COMMIT
+AUTHORIZED. It resolves to COMMITTED / NOT PUSHED only after the authorized H01
+commit succeeds.
 
 MC-A00 remains the approved and frozen Marketing Consent v1 product, data, and
 privacy authority. MC-A01 remains completed, authority-synchronized, and
@@ -174,8 +191,9 @@ timestamp rewrite. A different operation against an already-withdrawn
 subscription returns already_withdrawn. No retained subscription returns
 not_active.
 
-Grant source context is generator_email_download_gate. Withdrawal source context
-is the server-owned generator_verified_email_unsubscribe. No source context is
+Grant and withdrawal source context is the server-owned
+generator_email_download_gate frozen by MC-A00. Withdrawal remains
+distinguishable through event_type = withdrawn. No source context is
 client-authoritative.
 
 ## 6. Verified challenge authority
@@ -227,6 +245,33 @@ It performs no subscription mutation, state_version increment, event
 insertion, timestamp rewrite, or retention change. The response does not reveal
 whether created_at, verified_at, withdrawn_timestamp, or the ordinary authority
 window caused the failure.
+
+### Active-withdrawal freshness
+
+When the resolved Marketing subscription currently has status active, a
+withdrawal request has these additional authority requirements:
+
+```text
+challenge.created_at > subscription.consent_timestamp
+challenge.verified_at > subscription.consent_timestamp
+```
+
+Both comparisons are strict. Equality fails. The consent_timestamp is the
+server-authoritative timestamp of the current effective grant or regrant. A
+challenge created before or at that grant, including one verified after the
+grant, cannot withdraw the newly active subscription. The normal inclusive
+600000-millisecond authority window remains necessary but is not sufficient.
+
+If either active-withdrawal freshness predicate fails, the endpoint returns:
+
+```text
+409 {"schemaVersion":1,"result":"verification_authority_invalid"}
+```
+
+The subscription remains active. No state_version, consent_timestamp,
+withdrawn_timestamp, or retention_delete_after value changes; no withdrawal
+event is inserted; and no timestamp or retention value is rewritten. The
+response does not reveal which freshness predicate failed.
 
 ## 7. Browser consent lifecycle
 
@@ -334,6 +379,22 @@ event_id remains an independent random UUID and is not logical idempotency
 authority. Replaying the same logical operation is idempotent success, not a
 constraint error.
 
+Withdrawal idempotency is evaluated against current subscription state. If
+withdrawal operation A is replayed while the subscription remains withdrawn,
+the replay returns withdrawn without a second event, state_version increment,
+timestamp rewrite, or retention rewrite. If a later fresh valid grant or
+regrant B returns the subscription to active, replaying old withdrawal A must
+first satisfy active-withdrawal freshness against B's current
+consent_timestamp. Historical idempotency does not override current active
+state:
+
+```text
+withdraw A
+-> regrant B
+-> replay old withdrawal A
+-> verification_authority_invalid
+```
+
 ## 11. State transitions
 
 First grant creates one active subscription, one granted transition event, the
@@ -370,9 +431,13 @@ Any grant based on a challenge created or verified at or before the current
 withdrawn_timestamp is not regrant authority. It returns
 verification_authority_invalid with no state mutation.
 
-Withdrawal changes active to withdrawn immediately, increments state_version,
-creates one withdrawal transition event, and sets withdrawal and retention
-timestamps. Already-withdrawn state is not rewritten.
+A fresh authorized withdrawal changes active to withdrawn immediately,
+increments state_version, creates one withdrawal transition event, and sets
+withdrawal and retention timestamps. A withdrawal challenge created or verified
+at or before the current consent_timestamp is stale and returns
+verification_authority_invalid without mutation. Already-withdrawn state is not
+rewritten, and a same-operation replay while still withdrawn returns withdrawn
+without another mutation.
 
 ## 12. Concurrency contract
 
@@ -409,6 +474,39 @@ marketing_consent_events
 ~~~
 
 email_gate_challenges is not altered.
+
+MC-A00 freezes the logical Marketing Consent data model. The logical
+marketing_consent_events field contract remains exactly:
+
+```text
+event_id
+subscription_id
+event_type
+consent_version
+source_context
+event_timestamp
+```
+
+Additional physical columns introduced by MC-A02 for concurrency, idempotency,
+transition ordering, retention scheduling, version sequencing, and internal
+integrity are INTERNAL PHYSICAL METADATA ONLY. These include at minimum:
+
+```text
+consent_version_sequence
+retention_delete_after
+state_version
+last_transition_operation_key
+subscription_state_version
+operation_key
+```
+
+They do not create additional product-level consent states or expand MC-A00's
+logical Marketing Consent event contract. They are not customer-visible,
+client-authoritative, API response, analytics, or CRM fields. They contain no
+additional email identity; no Pattern, image, PNG, material, or color data; no
+Shopify data; and no marketing-provider data. They exist only as internal
+physical implementation metadata supporting the MC-A02 state-transition
+contract and are retained in the physical schema for those mechanics.
 
 FROZEN D1 TARGET UPON FREEZE-COMMIT EFFECTIVENESS:
 
@@ -607,6 +705,32 @@ Post-withdrawal regrant freshness tests must additionally prove:
    verification_authority_invalid result without revealing which challenge or
    withdrawal timestamp predicate failed.
 
+Active-withdrawal freshness tests must additionally prove:
+
+1. **Same-operation replay while still withdrawn:** the first withdrawal
+   succeeds; replay returns withdrawn; and no second event, state_version
+   increment, timestamp rewrite, or retention rewrite occurs.
+2. **Old withdrawal replay after valid regrant:** withdraw A, perform fresh
+   post-withdrawal regrant B, then replay old withdrawal A while A's challenge
+   remains inside its ordinary 10-minute window. The result is
+   verification_authority_invalid; the subscription remains active;
+   state_version is unchanged; consent_timestamp remains B's current timestamp;
+   and no withdrawal event or retention timestamp is created.
+3. **Pre-current-grant create, post-current-grant verify:** a challenge created
+   before or at the current consent_timestamp is rejected even if verification
+   occurs after the current consent_timestamp.
+4. **Equality boundaries:** withdrawal is rejected when either
+   challenge.created_at or challenge.verified_at equals the current
+   consent_timestamp.
+5. **Valid fresh withdrawal:** a new challenge created and verified strictly
+   after the current consent_timestamp and inside the ordinary
+   600000-millisecond window withdraws exactly once, changes status to withdrawn,
+   increments state_version exactly once, inserts exactly one withdrawn event,
+   and writes withdrawn_timestamp and the correct retention_delete_after.
+6. **No information leak:** every stale active-withdrawal failure returns the
+   same verification_authority_invalid result without revealing which timestamp
+   predicate failed.
+
 ## 18. Future stage sequence
 
 ~~~text
@@ -626,7 +750,7 @@ MC-A02-F03  Bounded Production Acceptance
 MC-A02-R01 and MC-A02-R02 are not reused. Provider integration is a separate
 later stage or project. No later stage begins here.
 
-## 19. Conditional freeze conclusion
+## 19. Freeze and correction status
 
 ~~~text
 MC-A02-A02
@@ -635,18 +759,28 @@ Runtime / API / Persistence Contract Freeze Gate
 FREEZE DECISION:
 APPROVED
 
-EFFECTIVENESS:
-PENDING SUCCESSFUL GOVERNANCE COMMIT
-
-STATE RESOLUTION:
-
-Before successful commit:
-NOT FROZEN
-
-After successful commit:
 COMPLETED /
 CONTRACT APPROVED /
-FROZEN
+FROZEN /
+COMMITTED /
+PUSHED
+
+FREEZE COMMIT:
+416bd457c5578b9435b9e9010dfdaed0b0261ee0
+
+MC-A02-A02-H01:
+CONTRACT REVIEW PASSED /
+FORMAT GATE PASSED WITH PRE-EXISTING FORMAT-DEBT QUALIFICATION /
+COMMIT AUTHORIZED
+
+H01 COMMIT TRANSITION:
+Before successful H01 commit:
+UNCOMMITTED /
+NOT PUSHED
+
+After successful H01 commit:
+COMMITTED /
+NOT PUSHED
 
 ARCHITECTURE:
 SEPARATE MARKETING CONSENT API
@@ -656,11 +790,15 @@ UNCHANGED
 
 RUNTIME CANDIDATE:
 PRESERVED /
+UNCOMMITTED /
 NOT ACCEPTED
 
-POST-FREEZE NEXT:
-MC-A02-B01
-DIRTY CANDIDATE RECONCILIATION
+NEXT ACTION:
+Before successful H01 commit:
+AUTHORIZED H01 COMMIT
+
+After successful H01 commit:
+SEPARATE H01 PUSH AUTHORIZATION
 
 OPS DASHBOARD:
 HOLD

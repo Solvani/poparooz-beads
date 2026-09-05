@@ -9,6 +9,7 @@ import type {
 import type {
   MarketingConsentGrantResult,
   MarketingConsentRepository,
+  MarketingConsentWithdrawalResult,
 } from "../repository/marketing-consent-repository";
 import {
   MARKETING_CONSENT_AUTHORITY_WINDOW_MS,
@@ -49,9 +50,12 @@ function fixture(
   );
   const authorityRepository: MarketingConsentAuthorityRepository =
     Object.freeze({ findChallengeAuthority });
+  const withdraw = vi.fn(
+    async (): Promise<MarketingConsentWithdrawalResult> => "withdrawn",
+  );
   const marketingRepository: MarketingConsentRepository = Object.freeze({
     grant,
-    withdraw: vi.fn(async () => "not_active" as const),
+    withdraw,
   });
   const randomUuid = vi
     .fn<() => string>()
@@ -63,7 +67,7 @@ function fixture(
     now: () => now,
     randomUuid,
   });
-  return { service, findChallengeAuthority, grant, randomUuid };
+  return { service, findChallengeAuthority, grant, withdraw, randomUuid };
 }
 
 describe("Marketing Consent authority service", () => {
@@ -197,5 +201,129 @@ describe("Marketing Consent authority service", () => {
       "delivery_failed",
     ]);
     expect(covered.size).toBe(7);
+  });
+});
+
+describe("Marketing Consent withdrawal authority service", () => {
+  const request = Object.freeze({
+    schemaVersion: 1 as const,
+    challengeId: CHALLENGE_ID,
+  });
+
+  it("passes only server authority, time and one server UUID to withdraw", async () => {
+    const test = fixture();
+    test.randomUuid.mockReset().mockReturnValue(EVENT_ID);
+    await expect(test.service.withdraw(request)).resolves.toBe("withdrawn");
+    expect(test.findChallengeAuthority).toHaveBeenCalledExactlyOnceWith(
+      CHALLENGE_ID,
+    );
+    expect(test.withdraw).toHaveBeenCalledExactlyOnceWith({
+      canonicalEmail: "server-owned@example.invalid",
+      challengeId: CHALLENGE_ID,
+      challengeCreatedAt: 100,
+      challengeVerifiedAt: 200,
+      timestamp: 300,
+      eventId: EVENT_ID,
+    });
+    expect(test.randomUuid).toHaveBeenCalledOnce();
+    expect(test.grant).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    [0, "withdrawn"],
+    [600_000, "withdrawn"],
+    [600_001, "verification_authority_invalid"],
+    [-1, "verification_authority_invalid"],
+  ] as const)("classifies withdrawal authority age %i", async (age, result) => {
+    const test = fixture(authority(), 200 + age);
+    await expect(test.service.withdraw(request)).resolves.toBe(result);
+    expect(test.withdraw).toHaveBeenCalledTimes(result === "withdrawn" ? 1 : 0);
+    expect(test.randomUuid).toHaveBeenCalledTimes(
+      result === "withdrawn" ? 1 : 0,
+    );
+  });
+
+  it.each([
+    "delivery_pending",
+    "active",
+    "expired",
+    "superseded",
+    "terminal_failed",
+    "delivery_failed",
+  ] as const)("rejects nonverified withdrawal authority %s", async (state) => {
+    const test = fixture(authority({ state }));
+    await expect(test.service.withdraw(request)).resolves.toBe(
+      "verification_authority_invalid",
+    );
+    expect(test.withdraw).not.toHaveBeenCalled();
+    expect(test.randomUuid).not.toHaveBeenCalled();
+  });
+
+  it("rejects missing, malformed and null-verified authority without persistence", async () => {
+    for (const row of [
+      null,
+      authority({ verifiedAt: null }),
+      authority({ challengeId: "00000000-0000-4000-8000-000000000099" }),
+      authority({ normalizedEmail: "" }),
+      authority({ createdAt: -1 }),
+      authority({ createdAt: 201 }),
+      authority({ verifiedAt: Number.NaN }),
+    ]) {
+      const test = fixture(row);
+      await expect(test.service.withdraw(request)).resolves.toBe(
+        "verification_authority_invalid",
+      );
+      expect(test.withdraw).not.toHaveBeenCalled();
+      expect(test.randomUuid).not.toHaveBeenCalled();
+    }
+  });
+
+  it.each([
+    "withdrawn",
+    "already_withdrawn",
+    "not_active",
+    "verification_authority_invalid",
+  ] as const)("preserves repository withdrawal outcome %s", async (result) => {
+    const test = fixture();
+    test.withdraw.mockResolvedValueOnce(result);
+    await expect(test.service.withdraw(request)).resolves.toBe(result);
+  });
+
+  it("fails closed on lookup, persistence, clock and UUID dependency failures", async () => {
+    const lookup = fixture();
+    lookup.findChallengeAuthority.mockRejectedValueOnce(
+      new Error("private lookup detail"),
+    );
+    await expect(lookup.service.withdraw(request)).resolves.toBe(
+      "service_unavailable",
+    );
+    expect(lookup.withdraw).not.toHaveBeenCalled();
+
+    const persistence = fixture();
+    persistence.withdraw.mockRejectedValueOnce(
+      new Error("private database detail"),
+    );
+    await expect(persistence.service.withdraw(request)).resolves.toBe(
+      "service_unavailable",
+    );
+
+    for (const timestamp of [
+      Number.NaN,
+      -1,
+      1.5,
+      Number.MAX_SAFE_INTEGER + 1,
+    ]) {
+      const test = fixture(authority(), timestamp);
+      await expect(test.service.withdraw(request)).resolves.toBe(
+        "service_unavailable",
+      );
+      expect(test.withdraw).not.toHaveBeenCalled();
+    }
+    const uuid = fixture();
+    uuid.randomUuid.mockReset().mockReturnValue("not-a-uuid");
+    await expect(uuid.service.withdraw(request)).resolves.toBe(
+      "service_unavailable",
+    );
+    expect(uuid.withdraw).not.toHaveBeenCalled();
   });
 });

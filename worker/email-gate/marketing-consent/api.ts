@@ -3,7 +3,9 @@ import {
   MARKETING_CONSENT_MAX_BODY_BYTES,
   MARKETING_CONSENT_PRODUCTION_ORIGIN,
   MARKETING_CONSENT_SCHEMA_VERSION,
+  MARKETING_CONSENT_WITHDRAWAL_PATH,
   marketingConsentGrantRequestSchema,
+  marketingConsentWithdrawalRequestSchema,
   type MarketingConsentResponse,
   type MarketingConsentResponseResult,
 } from "../../../src/contracts/marketing-consent/marketing-consent-contract";
@@ -29,23 +31,55 @@ export function createMarketingConsentFetchHandler(
       if (request.headers.get("Content-Type") !== "application/json") {
         return failure(400, "invalid_request");
       }
-      if (url.pathname !== MARKETING_CONSENT_GRANT_PATH) {
+      if (
+        url.pathname !== MARKETING_CONSENT_GRANT_PATH &&
+        url.pathname !== MARKETING_CONSENT_WITHDRAWAL_PATH
+      ) {
         return failure(400, "invalid_request");
       }
 
       const parsedBody = await readBoundedJson(request);
       if (!parsedBody.ok) return failure(400, "invalid_request");
-      const parsed = marketingConsentGrantRequestSchema.safeParse(
+      if (url.pathname === MARKETING_CONSENT_GRANT_PATH) {
+        const parsed = marketingConsentGrantRequestSchema.safeParse(
+          parsedBody.value,
+        );
+        if (!parsed.success) {
+          return hasRecognizedUnsupportedSchemaVersion(
+            parsedBody.value,
+            marketingConsentGrantRequestSchema,
+          )
+            ? failure(400, "version_unsupported")
+            : failure(400, "invalid_request");
+        }
+
+        const result = await service.grant(parsed.data);
+        if (result === "grant_persisted" || result === "already_active") {
+          return json(200, result);
+        }
+        return result === "verification_authority_invalid"
+          ? failure(409, result)
+          : failure(503, "service_unavailable");
+      }
+
+      const parsed = marketingConsentWithdrawalRequestSchema.safeParse(
         parsedBody.value,
       );
       if (!parsed.success) {
-        return hasRecognizedUnsupportedSchemaVersion(parsedBody.value)
+        return hasRecognizedUnsupportedSchemaVersion(
+          parsedBody.value,
+          marketingConsentWithdrawalRequestSchema,
+        )
           ? failure(400, "version_unsupported")
           : failure(400, "invalid_request");
       }
 
-      const result = await service.grant(parsed.data);
-      if (result === "grant_persisted" || result === "already_active") {
+      const result = await service.withdraw(parsed.data);
+      if (
+        result === "withdrawn" ||
+        result === "already_withdrawn" ||
+        result === "not_active"
+      ) {
         return json(200, result);
       }
       return result === "verification_authority_invalid"
@@ -111,7 +145,14 @@ async function readBoundedJson(request: Request): Promise<BoundedJsonResult> {
   }
 }
 
-function hasRecognizedUnsupportedSchemaVersion(value: unknown): boolean {
+interface StrictRequestSchema {
+  safeParse(value: unknown): Readonly<{ success: boolean }>;
+}
+
+function hasRecognizedUnsupportedSchemaVersion(
+  value: unknown,
+  requestSchema: StrictRequestSchema,
+): boolean {
   if (
     typeof value !== "object" ||
     value === null ||
@@ -123,7 +164,7 @@ function hasRecognizedUnsupportedSchemaVersion(value: unknown): boolean {
     return false;
   }
 
-  return marketingConsentGrantRequestSchema.safeParse({
+  return requestSchema.safeParse({
     ...value,
     schemaVersion: MARKETING_CONSENT_SCHEMA_VERSION,
   }).success;

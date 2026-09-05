@@ -5,6 +5,7 @@ import {
   MARKETING_CONSENT_VERSION,
   marketingConsentGrantRequestSchema,
   marketingConsentResponseSchema,
+  marketingConsentWithdrawalRequestSchema,
 } from "./marketing-consent-contract";
 
 describe("Marketing Consent shared contract", () => {
@@ -13,6 +14,10 @@ describe("Marketing Consent shared contract", () => {
     challengeId: "abcdefab-cdef-4abc-8def-abcdefabcdef",
     consentVersion: MARKETING_CONSENT_VERSION,
     affirmativeIntent: true,
+  });
+  const validWithdrawalRequest = Object.freeze({
+    schemaVersion: 1,
+    challengeId: "abcdefab-cdef-4abc-8def-abcdefabcdef",
   });
 
   it("accepts only the exact frozen grant request", () => {
@@ -91,10 +96,92 @@ describe("Marketing Consent shared contract", () => {
     ).toBe(false);
   });
 
+  it("accepts only the exact frozen withdrawal request", () => {
+    expect(
+      marketingConsentWithdrawalRequestSchema.safeParse(validWithdrawalRequest)
+        .success,
+    ).toBe(true);
+  });
+
+  it.each([
+    ["missing challenge id", { schemaVersion: 1 }],
+    [
+      "malformed UUID",
+      { ...validWithdrawalRequest, challengeId: "not-a-uuid" },
+    ],
+    [
+      "non-v4 UUID",
+      {
+        ...validWithdrawalRequest,
+        challengeId: "abcdefab-cdef-1abc-8def-abcdefabcdef",
+      },
+    ],
+    [
+      "uppercase UUID",
+      {
+        ...validWithdrawalRequest,
+        challengeId: "ABCDEFAB-CDEF-4ABC-8DEF-ABCDEFABCDEF",
+      },
+    ],
+    [
+      "email",
+      { ...validWithdrawalRequest, email: "forbidden@example.invalid" },
+    ],
+    [
+      "consent version",
+      { ...validWithdrawalRequest, consentVersion: MARKETING_CONSENT_VERSION },
+    ],
+    [
+      "affirmative intent",
+      { ...validWithdrawalRequest, affirmativeIntent: true },
+    ],
+    [
+      "source context",
+      { ...validWithdrawalRequest, sourceContext: "forbidden" },
+    ],
+    ["timestamp", { ...validWithdrawalRequest, timestamp: 1 }],
+    [
+      "subscription id",
+      { ...validWithdrawalRequest, subscriptionId: "forbidden" },
+    ],
+    ["event id", { ...validWithdrawalRequest, eventId: "forbidden" }],
+    ["operation key", { ...validWithdrawalRequest, operationKey: "forbidden" }],
+    ["Shopify", { ...validWithdrawalRequest, shopify: {} }],
+    ["provider", { ...validWithdrawalRequest, provider: "forbidden" }],
+    ["Pattern", { ...validWithdrawalRequest, pattern: "forbidden" }],
+    ["image", { ...validWithdrawalRequest, image: "forbidden" }],
+    ["materials", { ...validWithdrawalRequest, materials: [] }],
+    ["colors", { ...validWithdrawalRequest, colors: [] }],
+    ["unknown field", { ...validWithdrawalRequest, unknown: true }],
+    ["unsupported schema", { ...validWithdrawalRequest, schemaVersion: 2 }],
+  ])("rejects invalid withdrawal request shape: %s", (_label, request) => {
+    expect(
+      marketingConsentWithdrawalRequestSchema.safeParse(request).success,
+    ).toBe(false);
+  });
+
+  it.each([
+    null,
+    [],
+    [validWithdrawalRequest],
+    "value",
+    1,
+    true,
+    {},
+    { schemaVersion: 1, challengeId: {} },
+  ])("rejects malformed withdrawal value %j", (request) => {
+    expect(
+      marketingConsentWithdrawalRequestSchema.safeParse(request).success,
+    ).toBe(false);
+  });
+
   it("keeps every public response envelope closed", () => {
     for (const result of [
       "grant_persisted",
       "already_active",
+      "withdrawn",
+      "already_withdrawn",
+      "not_active",
       "invalid_request",
       "version_unsupported",
       "verification_authority_invalid",

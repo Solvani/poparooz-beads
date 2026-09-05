@@ -1,12 +1,14 @@
 import {
   MARKETING_CONSENT_CHALLENGE_ID_REGEX,
   type MarketingConsentGrantRequest,
+  type MarketingConsentWithdrawalRequest,
 } from "../../../src/contracts/marketing-consent/marketing-consent-contract";
 import type { MarketingConsentAuthorityRow } from "../repository/marketing-consent-authority-repository";
 import type { MarketingConsentAuthorityRepository } from "../repository/marketing-consent-authority-repository";
 import type {
   MarketingConsentGrantInput,
   MarketingConsentRepository,
+  MarketingConsentWithdrawalInput,
 } from "../repository/marketing-consent-repository";
 
 export const MARKETING_CONSENT_AUTHORITY_WINDOW_MS = 600_000 as const;
@@ -17,10 +19,20 @@ export type MarketingConsentGrantServiceResult =
   | "verification_authority_invalid"
   | "service_unavailable";
 
+export type MarketingConsentWithdrawalServiceResult =
+  | "withdrawn"
+  | "already_withdrawn"
+  | "not_active"
+  | "verification_authority_invalid"
+  | "service_unavailable";
+
 export interface MarketingConsentService {
   grant(
     request: MarketingConsentGrantRequest,
   ): Promise<MarketingConsentGrantServiceResult>;
+  withdraw(
+    request: MarketingConsentWithdrawalRequest,
+  ): Promise<MarketingConsentWithdrawalServiceResult>;
 }
 
 export interface MarketingConsentServiceDependencies {
@@ -46,9 +58,7 @@ export function createMarketingConsentService(
         );
         const timestamp = now();
         if (!isSafeServerTimestamp(timestamp)) return "service_unavailable";
-        if (
-          !hasValidGrantAuthority(challenge, request.challengeId, timestamp)
-        ) {
+        if (!hasValidAuthority(challenge, request.challengeId, timestamp)) {
           return "verification_authority_invalid";
         }
 
@@ -75,10 +85,42 @@ export function createMarketingConsentService(
         return "service_unavailable";
       }
     },
+
+    async withdraw(
+      request: MarketingConsentWithdrawalRequest,
+    ): Promise<MarketingConsentWithdrawalServiceResult> {
+      try {
+        const challenge = await authorityRepository.findChallengeAuthority(
+          request.challengeId,
+        );
+        const timestamp = now();
+        if (!isSafeServerTimestamp(timestamp)) return "service_unavailable";
+        if (!hasValidAuthority(challenge, request.challengeId, timestamp)) {
+          return "verification_authority_invalid";
+        }
+
+        const eventId = randomUuid();
+        if (!MARKETING_CONSENT_CHALLENGE_ID_REGEX.test(eventId)) {
+          return "service_unavailable";
+        }
+
+        const input: MarketingConsentWithdrawalInput = Object.freeze({
+          canonicalEmail: challenge.normalizedEmail,
+          challengeId: challenge.challengeId,
+          challengeCreatedAt: challenge.createdAt,
+          challengeVerifiedAt: challenge.verifiedAt,
+          timestamp,
+          eventId,
+        });
+        return await marketingRepository.withdraw(input);
+      } catch {
+        return "service_unavailable";
+      }
+    },
   });
 }
 
-function hasValidGrantAuthority(
+function hasValidAuthority(
   challenge: MarketingConsentAuthorityRow | null,
   requestedChallengeId: string,
   timestamp: number,

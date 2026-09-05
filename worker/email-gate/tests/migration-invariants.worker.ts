@@ -2,7 +2,7 @@ import { applyD1Migrations, env } from "cloudflare:test";
 import { describe, expect, it } from "vitest";
 
 describe("Email Gate D1 migration", () => {
-  it("applies from empty storage and creates only the three frozen tables", async () => {
+  it("applies the Email Gate and Marketing Consent tables from empty storage", async () => {
     const tables = await env.EMAIL_GATE_DB.prepare(
       `SELECT name FROM sqlite_master
        WHERE type = 'table' AND name LIKE 'email_gate_%'
@@ -13,6 +13,194 @@ describe("Email Gate D1 migration", () => {
       "email_gate_daily_aggregates",
       "email_gate_send_reservations",
     ]);
+    const marketingTables = await env.EMAIL_GATE_DB.prepare(
+      `SELECT name FROM sqlite_master
+       WHERE type = 'table' AND name LIKE 'marketing_%'
+       ORDER BY name`,
+    ).all<Readonly<{ name: string }>>();
+    expect(marketingTables.results.map((row) => row.name)).toEqual([
+      "marketing_consent_events",
+      "marketing_subscriptions",
+    ]);
+
+    const emailGateColumns = await tableColumns("email_gate_challenges");
+    expect(emailGateColumns.some((name) => name.includes("marketing"))).toBe(
+      false,
+    );
+  });
+
+  it("creates exactly the frozen Marketing Consent physical field set", async () => {
+    await expect(tableColumns("marketing_subscriptions")).resolves.toEqual([
+      "subscription_id",
+      "canonical_email",
+      "status",
+      "consent_version",
+      "consent_version_sequence",
+      "consent_source_context",
+      "consent_timestamp",
+      "withdrawn_timestamp",
+      "retention_delete_after",
+      "state_version",
+      "last_transition_operation_key",
+      "created_at",
+      "updated_at",
+    ]);
+    await expect(tableColumns("marketing_consent_events")).resolves.toEqual([
+      "event_id",
+      "subscription_id",
+      "subscription_state_version",
+      "operation_key",
+      "event_type",
+      "consent_version",
+      "consent_version_sequence",
+      "source_context",
+      "event_timestamp",
+    ]);
+  });
+
+  it("enforces frozen Marketing Consent uniqueness and row invariants", async () => {
+    await env.EMAIL_GATE_DB.prepare(
+      `INSERT INTO marketing_subscriptions (
+         subscription_id, canonical_email, status, consent_version,
+         consent_version_sequence, consent_source_context, consent_timestamp,
+         state_version, last_transition_operation_key, created_at, updated_at
+       ) VALUES (
+         'subscription-1', 'a@example.com', 'active', 'v1', 1, 'source', 1,
+         1, ?, 1, 1
+       )`,
+    )
+      .bind("a".repeat(64))
+      .run();
+    await expect(
+      env.EMAIL_GATE_DB.prepare(
+        `INSERT INTO marketing_subscriptions (
+           subscription_id, canonical_email, status, consent_version,
+           consent_version_sequence, consent_source_context, consent_timestamp,
+           state_version, last_transition_operation_key, created_at, updated_at
+         ) VALUES (
+           'subscription-2', 'a@example.com', 'active', 'v1', 1, 'source', 1,
+           1, ?, 1, 1
+         )`,
+      )
+        .bind("b".repeat(64))
+        .run(),
+    ).rejects.toThrow();
+    await expect(
+      env.EMAIL_GATE_DB.prepare(
+        `INSERT INTO marketing_subscriptions (
+           subscription_id, canonical_email, status, consent_version,
+           consent_version_sequence, consent_source_context, consent_timestamp,
+           state_version, last_transition_operation_key, created_at, updated_at
+         ) VALUES (
+           'subscription-bad-status', 'b@example.com', 'paused', 'v1', 1,
+           'source', 1, 1, ?, 1, 1
+         )`,
+      )
+        .bind("c".repeat(64))
+        .run(),
+    ).rejects.toThrow();
+    await expect(
+      env.EMAIL_GATE_DB.prepare(
+        `INSERT INTO marketing_subscriptions (
+           subscription_id, canonical_email, status, consent_version,
+           consent_version_sequence, consent_source_context, consent_timestamp,
+           state_version, last_transition_operation_key, created_at, updated_at
+         ) VALUES (
+           'subscription-bad-key', 'c@example.com', 'active', 'v1', 1,
+           'source', 1, 1, 'NOT-LOWERCASE-HEX', 1, 1
+         )`,
+      ).run(),
+    ).rejects.toThrow();
+    await expect(
+      env.EMAIL_GATE_DB.prepare(
+        `INSERT INTO marketing_subscriptions (
+           subscription_id, canonical_email, status, consent_version,
+           consent_version_sequence, consent_source_context, consent_timestamp,
+           withdrawn_timestamp, retention_delete_after, state_version,
+           last_transition_operation_key, created_at, updated_at
+         ) VALUES (
+           'subscription-bad-retention', 'd@example.com', 'withdrawn', 'v1', 1,
+           'source', 1, 2, 3, 2, ?, 1, 2
+         )`,
+      )
+        .bind("d".repeat(64))
+        .run(),
+    ).rejects.toThrow();
+    await expect(
+      env.EMAIL_GATE_DB.prepare(
+        `INSERT INTO marketing_consent_events (
+           event_id, subscription_id, subscription_state_version, operation_key,
+           event_type, consent_version, consent_version_sequence,
+           source_context, event_timestamp
+         ) VALUES (
+           'event-bad', 'subscription-1', 1, ?, 'unknown', 'v1', 1, 'source', 1
+         )`,
+      )
+        .bind("e".repeat(64))
+        .run(),
+    ).rejects.toThrow();
+    await expect(
+      env.EMAIL_GATE_DB.prepare(
+        `INSERT INTO marketing_consent_events (
+           event_id, subscription_id, subscription_state_version, operation_key,
+           event_type, consent_version, consent_version_sequence,
+           source_context, event_timestamp
+         ) VALUES (
+           'event-orphan', 'missing-subscription', 1, ?, 'granted', 'v1', 1,
+           'source', 1
+         )`,
+      )
+        .bind("f".repeat(64))
+        .run(),
+    ).rejects.toThrow();
+  });
+
+  it("creates the frozen Marketing Consent indexes and cleanup cascade", async () => {
+    const indexes = await env.EMAIL_GATE_DB.prepare(
+      `SELECT name FROM sqlite_master
+       WHERE type = 'index' AND name LIKE 'marketing_%'
+       ORDER BY name`,
+    ).all<Readonly<{ name: string }>>();
+    expect(indexes.results.map((row) => row.name)).toEqual([
+      "marketing_consent_events_subscription_time",
+      "marketing_subscriptions_retention_due",
+    ]);
+
+    await env.EMAIL_GATE_DB.prepare(
+      `INSERT INTO marketing_subscriptions (
+         subscription_id, canonical_email, status, consent_version,
+         consent_version_sequence, consent_source_context, consent_timestamp,
+         state_version, last_transition_operation_key, created_at, updated_at
+       ) VALUES (
+         'subscription-cascade', 'cascade@example.com', 'active', 'v1', 1,
+         'source', 1, 1, ?, 1, 1
+       )`,
+    )
+      .bind("1".repeat(64))
+      .run();
+    await env.EMAIL_GATE_DB.prepare(
+      `INSERT INTO marketing_consent_events (
+         event_id, subscription_id, subscription_state_version, operation_key,
+         event_type, consent_version, consent_version_sequence,
+         source_context, event_timestamp
+       ) VALUES (
+         'event-cascade', 'subscription-cascade', 1, ?, 'granted', 'v1', 1,
+         'source', 1
+       )`,
+    )
+      .bind("2".repeat(64))
+      .run();
+    await env.EMAIL_GATE_DB.prepare(
+      "DELETE FROM marketing_subscriptions WHERE subscription_id = ?",
+    )
+      .bind("subscription-cascade")
+      .run();
+    const event = await env.EMAIL_GATE_DB.prepare(
+      "SELECT event_id FROM marketing_consent_events WHERE event_id = ?",
+    )
+      .bind("event-cascade")
+      .first();
+    expect(event).toBeNull();
   });
 
   it("creates the required uniqueness, rolling, expiry, and reconciliation indexes", async () => {
@@ -196,6 +384,15 @@ describe("Email Gate D1 migration", () => {
     expect(row).toBeNull();
   });
 });
+
+async function tableColumns(tableName: string): Promise<readonly string[]> {
+  const result = await env.EMAIL_GATE_DB.prepare(
+    `SELECT name FROM pragma_table_info(?) ORDER BY cid`,
+  )
+    .bind(tableName)
+    .all<Readonly<{ name: string }>>();
+  return result.results.map((row) => row.name);
+}
 
 async function insertChallenge(
   challengeId: string,

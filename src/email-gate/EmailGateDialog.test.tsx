@@ -217,9 +217,37 @@ describe("Email Gate Marketing intent", () => {
     ).toBeEnabled();
   });
 
+  it("uses phase-aware Marketing privacy copy after email entry", async () => {
+    renderDialog(capability(), { marketingConsentAvailable: true });
+    await enterEmail(false);
+    expect(
+      screen.getByText(
+        "Email verification is required for download. Poparooz updates and offers are optional and only enabled if you chose them during the previous step.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText("No account. No password.")).toBeInTheDocument();
+  });
+
+  it("keeps verification-only privacy copy after email entry when Marketing is unavailable", async () => {
+    renderDialog(capability());
+    await enterEmail(false);
+    expect(
+      screen.getByText(
+        "Email verification is required for download. Your email is used only for this verification flow.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText("No account. No password.")).toBeInTheDocument();
+  });
+
   it("hides unavailable Marketing and resets intent on any email edit", async () => {
     const view = renderDialog(capability());
     expect(screen.queryByRole("checkbox")).toBeNull();
+    expect(
+      screen.getByText(
+        "Email verification is required for download. Your email is used only for this verification flow.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText("No account. No password.")).toBeInTheDocument();
     view.unmount();
     renderDialog(capability(), { marketingConsentAvailable: true });
     await userEvent.type(

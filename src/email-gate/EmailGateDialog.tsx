@@ -12,8 +12,8 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
+import editorialBeadboardUrl from "../assets/branding/email-gate-editorial-beadboard.jpg";
 import poparoozLogoUrl from "../assets/branding/poparooz-logo.png";
-import editorialFloralUrl from "../assets/branding/email-gate-editorial-floral.webp";
 import {
   EMAIL_GATE_OTP_REGEX,
   normalizeEmailAddressV1,
@@ -399,7 +399,7 @@ export function EmailGateDialog({
         <aside className="email-gate-editorial" aria-hidden="true">
           <img
             className="email-gate-editorial__photo"
-            src={editorialFloralUrl}
+            src={editorialBeadboardUrl}
             alt=""
           />
           <div className="email-gate-editorial__copy">
@@ -646,8 +646,11 @@ export function EmailGateDialog({
             <p>
               <strong>We respect your privacy.</strong>
               <br />
-              Email verification is required for download. Poparooz updates and
-              offers are optional and only enabled if you choose them above.
+              {marketingConsentAvailable
+                ? isEmailPhase(state.phase, state.challengeId)
+                  ? "Email verification is required for download. Poparooz updates and offers are optional and only enabled if you choose them above."
+                  : "Email verification is required for download. Poparooz updates and offers are optional and only enabled if you chose them during the previous step."
+                : "Email verification is required for download. Your email is used only for this verification flow."}
             </p>
             <p>No account. No password.</p>
           </footer>

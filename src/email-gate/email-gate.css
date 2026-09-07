@@ -27,17 +27,32 @@
   background: #f5ecdf;
 }
 
+.email-gate-editorial::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgb(251 247 238 / 78%) 0%,
+    rgb(251 247 238 / 52%) 42%,
+    rgb(251 247 238 / 0%) 69%
+  );
+  content: "";
+  pointer-events: none;
+}
+
 .email-gate-editorial__photo {
   position: absolute;
   width: 100%;
   height: 100%;
   inset: 0;
   object-fit: cover;
+  object-position: center 58%;
 }
 
 .email-gate-editorial__copy {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: grid;
   gap: 12px;
   padding: 42px 36px;
@@ -73,7 +88,7 @@
 
 .email-gate-editorial__body {
   max-width: 25ch;
-  color: #5d655f;
+  color: #3f4d47;
   font-size: 0.95rem;
   line-height: 1.6;
 }
@@ -151,7 +166,7 @@
 
 .email-gate-instructions {
   margin: 14px 0 0;
-  color: var(--text-secondary);
+  color: #46534e;
   line-height: 1.55;
   overflow-wrap: anywhere;
 }
@@ -159,7 +174,7 @@
 .email-gate-status {
   min-height: 24px;
   margin-top: 12px;
-  color: var(--text-secondary);
+  color: #46534e;
   font-size: 0.875rem;
 }
 
@@ -238,7 +253,10 @@
   gap: 10px;
   min-width: 0;
   min-height: 44px;
-  padding: 6px 0;
+  padding: 10px 12px;
+  border-radius: 9px;
+  color: #34433e;
+  background: #f3eee4;
   font-weight: 400;
   line-height: 1.5;
   cursor: pointer;
@@ -266,6 +284,10 @@
 
 .email-gate-marketing-consent input:disabled {
   cursor: not-allowed;
+}
+
+.email-gate-marketing-consent:has(input:disabled) {
+  opacity: 0.68;
 }
 
 .email-gate-form input[aria-invalid="true"] {
@@ -346,8 +368,9 @@
   gap: 14px;
   padding: 18px 42px 26px;
   border-top: 1px solid #e2dcd2;
-  color: var(--text-secondary);
-  font-size: 0.78rem;
+  color: #46534e;
+  font-size: 0.8125rem;
+  line-height: 1.5;
 }
 
 .email-gate-footer p {
@@ -424,14 +447,28 @@
   .email-gate-footer::after {
     position: absolute;
     z-index: 0;
-    right: -15%;
-    bottom: -92px;
-    width: 72%;
-    height: 230px;
-    background: url("../assets/branding/email-gate-editorial-floral.webp")
-      center bottom / cover no-repeat;
+    right: -7%;
+    bottom: 0;
+    width: 68%;
+    height: 100%;
+    background: url("../assets/branding/email-gate-editorial-beadboard.jpg")
+      center 72% / cover no-repeat;
     content: "";
-    opacity: 0.92;
+    opacity: 0.36;
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(0 0 0 / 18%) 24%,
+      rgb(0 0 0 / 72%) 52%,
+      #000 72%
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(0 0 0 / 18%) 24%,
+      rgb(0 0 0 / 72%) 52%,
+      #000 72%
+    );
     pointer-events: none;
   }
 

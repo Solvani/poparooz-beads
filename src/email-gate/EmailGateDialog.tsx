@@ -19,6 +19,7 @@ import {
   normalizeEmailAddressV1,
 } from "../contracts/email-gate/email-gate-contract";
 import type { EmailGateCapability } from "./email-gate-capability";
+import type { VerifiedConsentIntent } from "../marketing-consent/marketing-consent-intent";
 import {
   INITIAL_EMAIL_GATE_STATE,
   emailGateReducer,
@@ -35,13 +36,17 @@ export interface EmailGateDialogProps {
     { availability: { available: true } }
   >;
   readonly patternReplaced: boolean;
+  readonly marketingConsentAvailable?: boolean;
   readonly onClose: () => void;
-  readonly onVerified: () => Promise<EmailGateCompletion>;
+  readonly onVerified: (
+    context: VerifiedConsentIntent,
+  ) => Promise<EmailGateCompletion>;
 }
 
 export function EmailGateDialog({
   capability,
   patternReplaced,
+  marketingConsentAvailable = false,
   onClose,
   onVerified,
 }: EmailGateDialogProps) {
@@ -63,6 +68,10 @@ export function EmailGateDialog({
   );
   const [email, setEmail] = useState("");
   const [submittedEmail, setSubmittedEmail] = useState("");
+  const [marketingConsent, setMarketingConsent] = useState(false);
+  const submittedMarketingIntent = useRef<
+    Readonly<{ marketingConsent: boolean }>
+  >(Object.freeze({ marketingConsent: false }));
   const [code, setCode] = useState("");
   const [emailError, setEmailError] = useState<string | null>(null);
   const [turnstileEndGuardArmed, setTurnstileEndGuardArmed] = useState(false);
@@ -205,7 +214,11 @@ export function EmailGateDialog({
     }
   }, [state.phase]);
 
-  const issueChallenge = async (normalizedEmail: string) => {
+  const issueChallenge = async (
+    normalizedEmail: string,
+    intent = submittedMarketingIntent.current,
+  ) => {
+    submittedMarketingIntent.current = intent;
     setTurnstileEndGuardArmed(false);
     const operation = issueOperation.begin();
     verifyOperation.supersede();
@@ -251,6 +264,7 @@ export function EmailGateDialog({
 
   const submitEmail = (event: FormEvent) => {
     event.preventDefault();
+    if (state.phase === "issuing") return;
     const normalized = normalizeEmailAddressV1(email);
     if (!normalized.ok) {
       setEmailError("Enter a valid email address.");
@@ -258,7 +272,12 @@ export function EmailGateDialog({
       return;
     }
     setEmailError(null);
-    void issueChallenge(normalized.normalizedEmail);
+    void issueChallenge(
+      normalized.normalizedEmail,
+      Object.freeze({
+        marketingConsent: marketingConsentAvailable && marketingConsent,
+      }),
+    );
   };
 
   const submitCode = async (event: FormEvent) => {
@@ -289,7 +308,12 @@ export function EmailGateDialog({
     }
     switch (result.response.result) {
       case "verification_succeeded": {
-        const completion = await onVerified();
+        const completion = await onVerified(
+          Object.freeze({
+            challengeId: state.challengeId,
+            marketingConsent: submittedMarketingIntent.current.marketingConsent,
+          }),
+        );
         if (!verifyOperation.isCurrent(operation.generation)) return;
         dispatch({
           type: "SHOW",
@@ -320,6 +344,11 @@ export function EmailGateDialog({
     issueOperation.supersede();
     verifyOperation.supersede();
     completionStarted.current = false;
+    setMarketingConsent(false);
+    submittedMarketingIntent.current = Object.freeze({
+      marketingConsent: false,
+    });
+    setSubmittedEmail("");
     setCode("");
     dispatch({ type: "CHANGE_EMAIL" });
     window.requestAnimationFrame(() => emailRef.current?.focus());
@@ -468,6 +497,13 @@ export function EmailGateDialog({
                   }
                   disabled={state.phase === "issuing"}
                   onChange={(event) => {
+                    if (state.phase === "issuing") return;
+                    if (event.target.value !== email) {
+                      setMarketingConsent(false);
+                      submittedMarketingIntent.current = Object.freeze({
+                        marketingConsent: false,
+                      });
+                    }
                     setEmail(event.target.value);
                     setEmailError(null);
                   }}
@@ -480,6 +516,23 @@ export function EmailGateDialog({
                   >
                     {emailError}
                   </p>
+                ) : null}
+                {marketingConsentAvailable ? (
+                  <label className="email-gate-marketing-consent">
+                    <input
+                      type="checkbox"
+                      checked={marketingConsent}
+                      disabled={state.phase === "issuing"}
+                      onChange={(event) => {
+                        if (state.phase !== "issuing")
+                          setMarketingConsent(event.target.checked);
+                      }}
+                    />
+                    <span>
+                      Optional — Email me occasional Poparooz updates, pattern
+                      ideas, and offers. Unsubscribe anytime.
+                    </span>
+                  </label>
                 ) : null}
                 <button
                   className="email-gate-primary"
@@ -593,7 +646,8 @@ export function EmailGateDialog({
             <p>
               <strong>We respect your privacy.</strong>
               <br />
-              Your email is used only for this verification flow.
+              Email verification is required for download. Poparooz updates and
+              offers are optional and only enabled if you choose them above.
             </p>
             <p>No account. No password.</p>
           </footer>

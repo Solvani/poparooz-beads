@@ -1,14 +1,23 @@
-import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useEffect } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { EmailGateBrowserClient } from "./email-gate-client";
+import { createEmailGateBrowserClient } from "./email-gate-client";
 import type {
   EmailGateCapability,
   EmailGateIssueProofProvider,
 } from "./email-gate-capability";
 import { EmailGateDialog } from "./EmailGateDialog";
+import type { EmailGateDialogProps } from "./EmailGateDialog";
 
 const CHALLENGE_ID = "abcdefab-cdef-4abc-8def-abcdefabcdef";
 
@@ -82,14 +91,23 @@ function interactionSignal(initial = false) {
 
 function renderDialog(
   enabled: EnabledCapability,
-  options: { readonly onClose?: () => void } = {},
+  options: Partial<
+    Pick<
+      EmailGateDialogProps,
+      "onClose" | "onVerified" | "marketingConsentAvailable"
+    >
+  > = {},
 ) {
   return render(
     <EmailGateDialog
       capability={enabled}
       patternReplaced={false}
       onClose={options.onClose ?? vi.fn()}
-      onVerified={vi.fn(async () => ({ outcome: "downloaded" as const }))}
+      onVerified={
+        options.onVerified ??
+        vi.fn(async () => ({ outcome: "downloaded" as const }))
+      }
+      marketingConsentAvailable={options.marketingConsentAvailable}
     />,
   );
 }
@@ -152,6 +170,326 @@ afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
   document.body.innerHTML = "";
+});
+
+describe("Email Gate Marketing intent", () => {
+  const copy =
+    "Optional — Email me occasional Poparooz updates, pattern ideas, and offers. Unsubscribe anytime.";
+  async function enterEmail(checked = false) {
+    await userEvent.type(
+      screen.getByLabelText("Email address"),
+      "test@example.invalid",
+    );
+    if (checked)
+      await userEvent.click(screen.getByRole("checkbox", { name: copy }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Send verification code" }),
+    );
+    await screen.findByLabelText("8-digit verification code");
+  }
+  async function verify() {
+    await userEvent.type(
+      screen.getByLabelText("8-digit verification code"),
+      "01234567",
+    );
+    await userEvent.click(
+      screen.getByRole("button", { name: "Verify & download" }),
+    );
+  }
+
+  it("defaults unchecked with exact accessible copy, native keyboard control and truthful footer", async () => {
+    renderDialog(capability(), { marketingConsentAvailable: true });
+    const checkbox = screen.getByRole("checkbox", { name: copy });
+    expect(checkbox).not.toBeChecked();
+    screen.getByLabelText("Email address").focus();
+    await userEvent.tab();
+    expect(checkbox).toHaveFocus();
+    await userEvent.keyboard(" ");
+    expect(checkbox).toBeChecked();
+    expect(
+      screen.getByText(
+        "Email verification is required for download. Poparooz updates and offers are optional and only enabled if you choose them above.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText("No account. No password.")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Send verification code" }),
+    ).toBeEnabled();
+  });
+
+  it("hides unavailable Marketing and resets intent on any email edit", async () => {
+    const view = renderDialog(capability());
+    expect(screen.queryByRole("checkbox")).toBeNull();
+    view.unmount();
+    renderDialog(capability(), { marketingConsentAvailable: true });
+    await userEvent.type(
+      screen.getByLabelText("Email address"),
+      "test@example.invalid",
+    );
+    await userEvent.click(screen.getByRole("checkbox"));
+    await userEvent.type(screen.getByLabelText("Email address"), "x");
+    expect(screen.getByRole("checkbox")).not.toBeChecked();
+  });
+
+  it.each([false, true])(
+    "keeps actual Email Gate wire bodies unchanged with intent %s",
+    async (checked) => {
+      const fetchMock = vi.fn<typeof fetch>(
+        async (path) =>
+          new Response(
+            JSON.stringify(
+              path === "/api/email-gate/v1/challenges"
+                ? {
+                    schemaVersion: 1,
+                    result: "challenge_issued",
+                    challengeId: CHALLENGE_ID,
+                    expiresInSeconds: 580,
+                    resendAfterSeconds: 45,
+                  }
+                : {
+                    schemaVersion: 1,
+                    result: "verification_succeeded",
+                    verified: true,
+                  },
+            ),
+            {
+              status: path === "/api/email-gate/v1/challenges" ? 201 : 200,
+              headers: { "Content-Type": "application/json; charset=utf-8" },
+            },
+          ),
+      );
+      const onVerified = vi.fn<EmailGateDialogProps["onVerified"]>(
+        async () => ({
+          outcome: "downloaded" as const,
+        }),
+      );
+      renderDialog(
+        capability(createEmailGateBrowserClient({ fetch: fetchMock })),
+        { marketingConsentAvailable: true, onVerified },
+      );
+      await enterEmail(checked);
+      expect(screen.queryByRole("checkbox")).toBeNull();
+      expect(onVerified).not.toHaveBeenCalled();
+      await verify();
+      await screen.findByRole("dialog", { name: "Email verified" });
+      expect(fetchMock.mock.calls.map(([path]) => path)).toEqual([
+        "/api/email-gate/v1/challenges",
+        "/api/email-gate/v1/verifications",
+      ]);
+      expect(JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body))).toEqual({
+        schemaVersion: 1,
+        email: "test@example.invalid",
+        turnstileToken: "proof",
+      });
+      expect(JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body))).toEqual({
+        schemaVersion: 1,
+        challengeId: CHALLENGE_ID,
+        code: "01234567",
+      });
+      expect(onVerified).toHaveBeenCalledExactlyOnceWith({
+        challengeId: CHALLENGE_ID,
+        marketingConsent: checked,
+      });
+      expect(Object.isFrozen(onVerified.mock.calls[0]?.[0])).toBe(true);
+      expect(screen.queryByRole("checkbox")).toBeNull();
+    },
+  );
+
+  it("disables issue-time edits and preserves the submitted snapshot through resend", async () => {
+    let resolveIssue!: (
+      value: Awaited<ReturnType<EmailGateBrowserClient["issueChallenge"]>>,
+    ) => void;
+    const issued = new Promise<
+      Awaited<ReturnType<EmailGateBrowserClient["issueChallenge"]>>
+    >((resolve) => {
+      resolveIssue = resolve;
+    });
+    const nextId = "abcdefab-cdef-4abc-8def-abcdefabcdea";
+    const gate = capability({
+      issueChallenge: vi
+        .fn()
+        .mockReturnValueOnce(issued)
+        .mockResolvedValue({
+          ok: true,
+          response: {
+            schemaVersion: 1,
+            result: "challenge_issued",
+            challengeId: nextId,
+            expiresInSeconds: 580,
+            resendAfterSeconds: 0,
+          },
+        }),
+    });
+    const onVerified = vi.fn(async () => ({ outcome: "downloaded" as const }));
+    renderDialog(gate, { marketingConsentAvailable: true, onVerified });
+    await userEvent.type(
+      screen.getByLabelText("Email address"),
+      "test@example.invalid",
+    );
+    const checkbox = screen.getByRole("checkbox");
+    await userEvent.click(checkbox);
+    await userEvent.click(
+      screen.getByRole("button", { name: "Send verification code" }),
+    );
+    expect(checkbox).toBeDisabled();
+    await userEvent.click(checkbox);
+    fireEvent.change(screen.getByLabelText("Email address"), {
+      target: { value: "other@example.invalid" },
+    });
+    expect(checkbox).toBeChecked();
+    await act(async () =>
+      resolveIssue({
+        ok: true,
+        response: {
+          schemaVersion: 1,
+          result: "challenge_issued",
+          challengeId: CHALLENGE_ID,
+          expiresInSeconds: 580,
+          resendAfterSeconds: 0,
+        },
+      }),
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Resend code" }));
+    await waitFor(() =>
+      expect(gate.client.issueChallenge).toHaveBeenCalledTimes(2),
+    );
+    for (const call of vi.mocked(gate.client.issueChallenge).mock.calls)
+      expect(call[0]).toEqual({
+        email: "test@example.invalid",
+        turnstileToken: "proof",
+      });
+    await verify();
+    await waitFor(() =>
+      expect(onVerified).toHaveBeenCalledExactlyOnceWith({
+        challengeId: nextId,
+        marketingConsent: true,
+      }),
+    );
+  });
+
+  it("Change email clears both checkbox and submitted intent", async () => {
+    const onVerified = vi.fn(async () => ({ outcome: "downloaded" as const }));
+    renderDialog(capability(), { marketingConsentAvailable: true, onVerified });
+    await enterEmail(true);
+    await userEvent.click(screen.getByRole("button", { name: "Change email" }));
+    expect(screen.getByRole("checkbox")).not.toBeChecked();
+    await userEvent.clear(screen.getByLabelText("Email address"));
+    await enterEmail();
+    await verify();
+    await waitFor(() =>
+      expect(onVerified).toHaveBeenCalledExactlyOnceWith({
+        challengeId: CHALLENGE_ID,
+        marketingConsent: false,
+      }),
+    );
+  });
+
+  it.each([
+    "verification_invalid",
+    "verification_expired",
+    "verification_locked",
+  ] as const)(
+    "hides the checkbox for %s and preserves intent on request-new-code",
+    async (result) => {
+      const gate = capability({
+        verifyChallenge: vi.fn(async () => ({
+          ok: true as const,
+          response: { schemaVersion: 1 as const, result },
+        })),
+      });
+      const onVerified = vi.fn(async () => ({
+        outcome: "downloaded" as const,
+      }));
+      renderDialog(gate, { marketingConsentAvailable: true, onVerified });
+      await enterEmail(true);
+      await verify();
+      expect(screen.queryByRole("checkbox")).toBeNull();
+      expect(onVerified).not.toHaveBeenCalled();
+      vi.mocked(gate.client.verifyChallenge).mockResolvedValue({
+        ok: true,
+        response: {
+          schemaVersion: 1,
+          result: "verification_succeeded",
+          verified: true,
+        },
+      });
+      if (result !== "verification_invalid")
+        await userEvent.click(
+          screen.getByRole("button", { name: "Request a new code" }),
+        );
+      await screen.findByLabelText("8-digit verification code");
+      await userEvent.clear(screen.getByLabelText("8-digit verification code"));
+      await verify();
+      await waitFor(() =>
+        expect(onVerified).toHaveBeenCalledExactlyOnceWith({
+          challengeId: CHALLENGE_ID,
+          marketingConsent: true,
+        }),
+      );
+    },
+  );
+
+  it("retries the new email and its intent after changing email and an issue failure", async () => {
+    const gate = capability();
+    const onVerified = vi.fn(async () => ({ outcome: "downloaded" as const }));
+    renderDialog(gate, { marketingConsentAvailable: true, onVerified });
+    await enterEmail(true);
+    await userEvent.click(screen.getByRole("button", { name: "Change email" }));
+    await userEvent.clear(screen.getByLabelText("Email address"));
+    await userEvent.type(
+      screen.getByLabelText("Email address"),
+      "new@example.invalid",
+    );
+    await userEvent.click(screen.getByRole("checkbox"));
+    vi.mocked(gate.client.issueChallenge).mockResolvedValueOnce({
+      ok: false,
+      reason: "network",
+    });
+    await userEvent.click(
+      screen.getByRole("button", { name: "Send verification code" }),
+    );
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Request a new code" }),
+    );
+    await screen.findByLabelText("8-digit verification code");
+    expect(vi.mocked(gate.client.issueChallenge).mock.calls[2]?.[0]).toEqual({
+      email: "new@example.invalid",
+      turnstileToken: "proof",
+    });
+    await verify();
+    await waitFor(() =>
+      expect(onVerified).toHaveBeenCalledExactlyOnceWith({
+        challengeId: CHALLENGE_ID,
+        marketingConsent: true,
+      }),
+    );
+  });
+
+  it("hides the checkbox in persistence-warning and pattern-replaced phases", async () => {
+    const gate = capability();
+    const onVerified = vi.fn(async () => ({
+      outcome: "persistence-warning" as const,
+    }));
+    const view = renderDialog(gate, {
+      marketingConsentAvailable: true,
+      onVerified,
+    });
+    await enterEmail(true);
+    await verify();
+    await screen.findByRole("heading", { name: "Download unlocked for now" });
+    expect(screen.queryByRole("checkbox")).toBeNull();
+    view.rerender(
+      <EmailGateDialog
+        capability={gate}
+        marketingConsentAvailable
+        patternReplaced
+        onClose={vi.fn()}
+        onVerified={onVerified}
+      />,
+    );
+    await screen.findByRole("heading", { name: "Your pattern changed" });
+    expect(screen.queryByRole("checkbox")).toBeNull();
+  });
 });
 
 describe("Email Gate dialog", () => {

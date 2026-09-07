@@ -6,6 +6,7 @@ import { ErrorBoundary } from "./app/ErrorBoundary";
 import { bootstrapApprovedApplicationRuntime } from "./runtime/bootstrap/application-runtime-bootstrap";
 import { startApplication } from "./runtime/bootstrap/application-startup";
 import { createProductionEmailGateCapability } from "./email-gate/production-email-gate-capability";
+import { createProductionMarketingConsentCapability } from "./marketing-consent/production-marketing-consent-capability";
 import "./styles.css";
 
 const rootElement = document.getElementById("root");
@@ -15,6 +16,7 @@ if (rootElement === null) {
 }
 
 const emailGateCapability = createProductionEmailGateCapability();
+const marketingConsentCapability = createProductionMarketingConsentCapability();
 
 startApplication({
   bootstrap: bootstrapApprovedApplicationRuntime,
@@ -25,6 +27,7 @@ startApplication({
           <App
             generationRuntime={generationRuntime}
             emailGateCapability={emailGateCapability}
+            marketingConsentCapability={marketingConsentCapability}
           />
         </ErrorBoundary>
       </StrictMode>,

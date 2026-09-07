@@ -14,6 +14,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PublicPatternResult } from "../domain/pattern/public-pattern.types";
 import type { GenerationRuntime } from "../features/generator/generation.types";
 import type { EmailGateCapability } from "../email-gate/email-gate-capability";
+import {
+  UNAVAILABLE_MARKETING_CONSENT_CAPABILITY,
+  type MarketingConsentCapability,
+} from "../marketing-consent/marketing-consent-capability";
+import type {
+  MarketingConsentBrowserClient,
+  MarketingConsentClientResult,
+} from "../marketing-consent/marketing-consent-client";
 import { createPublicPattern } from "../features/pattern-canvas/test/pattern-result";
 import { App } from "./App";
 
@@ -158,11 +166,13 @@ async function generatePatternAndOpenGate(
     Promise.resolve(PUBLIC_RESULT),
   ],
   strict = false,
+  marketingConsentCapability: MarketingConsentCapability = UNAVAILABLE_MARKETING_CONSENT_CAPABILITY,
 ) {
   const app = (
     <App
       generationRuntime={availableRuntime(tasks)}
       emailGateCapability={gate}
+      marketingConsentCapability={marketingConsentCapability}
     />
   );
   render(strict ? <StrictMode>{app}</StrictMode> : app);
@@ -228,6 +238,305 @@ afterEach(() => {
   });
   document.body.removeAttribute("style");
   Reflect.deleteProperty(HTMLImageElement.prototype, "decode");
+});
+
+describe("App Marketing Consent orchestration", () => {
+  const challengeId = "abcdefab-cdef-4abc-8def-abcdefabcdef";
+  function fixture(grant: MarketingConsentBrowserClient["grant"]) {
+    Object.defineProperty(HTMLImageElement.prototype, "decode", {
+      configurable: true,
+      value: vi.fn(async () => {}),
+    });
+    vi.spyOn(HTMLImageElement.prototype, "naturalWidth", "get").mockReturnValue(
+      1154,
+    );
+    vi.spyOn(
+      HTMLImageElement.prototype,
+      "naturalHeight",
+      "get",
+    ).mockReturnValue(428);
+    const download = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => {});
+    let unlocked = false;
+    const gate = enabledEmailGate(() => unlocked, {
+      issueChallenge: vi.fn(async () => ({
+        ok: true as const,
+        response: {
+          schemaVersion: 1 as const,
+          result: "challenge_issued" as const,
+          challengeId,
+          expiresInSeconds: 580,
+          resendAfterSeconds: 0,
+        },
+      })),
+      verifyChallenge: vi.fn(async () => ({
+        ok: true as const,
+        response: {
+          schemaVersion: 1 as const,
+          result: "verification_succeeded" as const,
+          verified: true as const,
+        },
+      })),
+    });
+    vi.mocked(gate.unlockStore.writeUnlocked).mockImplementation(() => {
+      unlocked = true;
+      return true;
+    });
+    vi.mocked(gate.issueProofProvider.getFreshIssueToken).mockResolvedValue(
+      "proof",
+    );
+    const marketing: MarketingConsentCapability = {
+      availability: { available: true },
+      client: { grant },
+    };
+    return { gate, marketing, download };
+  }
+  async function submitIntent(checked: boolean) {
+    await userEvent.type(
+      screen.getByLabelText("Email address"),
+      "test@example.invalid",
+    );
+    if (checked) await userEvent.click(screen.getByRole("checkbox"));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Send verification code" }),
+    );
+    await screen.findByLabelText("8-digit verification code");
+  }
+  async function verify() {
+    await userEvent.type(
+      screen.getByLabelText("8-digit verification code"),
+      "01234567",
+    );
+    await userEvent.click(
+      screen.getByRole("button", { name: "Verify & download" }),
+    );
+  }
+
+  it.each([false, true])(
+    "downloads with submitted intent %s and invokes only the eligible grant",
+    async (checked) => {
+      const grant = vi.fn<MarketingConsentBrowserClient["grant"]>(async () => ({
+        ok: true,
+        response: { schemaVersion: 1, result: "grant_persisted" },
+      }));
+      const test = fixture(grant);
+      await generatePatternAndOpenGate(
+        test.gate,
+        undefined,
+        true,
+        test.marketing,
+      );
+      await submitIntent(checked);
+      expect(grant).not.toHaveBeenCalled();
+      await userEvent.click(
+        screen.getByRole("button", { name: "Resend code" }),
+      );
+      await waitFor(() =>
+        expect(test.gate.client.issueChallenge).toHaveBeenCalledTimes(2),
+      );
+      expect(grant).not.toHaveBeenCalled();
+      await userEvent.type(
+        screen.getByLabelText("8-digit verification code"),
+        "0123",
+      );
+      expect(grant).not.toHaveBeenCalled();
+      await userEvent.clear(screen.getByLabelText("8-digit verification code"));
+      await verify();
+      await screen.findByRole("heading", { name: "Email verified" });
+      expect(test.download).toHaveBeenCalledOnce();
+      expect(test.gate.unlockStore.writeUnlocked).toHaveBeenCalledOnce();
+      expect(grant).toHaveBeenCalledTimes(checked ? 1 : 0);
+      if (checked)
+        expect(grant).toHaveBeenCalledExactlyOnceWith({ challengeId });
+      if (checked) {
+        expect(
+          vi.mocked(test.gate.unlockStore.writeUnlocked).mock
+            .invocationCallOrder[0],
+        ).toBeLessThan(grant.mock.invocationCallOrder[0]!);
+      }
+      expect(screen.queryByText(/Subscribed successfully/i)).toBeNull();
+    },
+  );
+
+  it("completes Download and success while Marketing stays pending across dialog closure", async () => {
+    const grant = vi.fn<MarketingConsentBrowserClient["grant"]>(
+      () => new Promise(() => {}),
+    );
+    const test = fixture(grant);
+    await generatePatternAndOpenGate(
+      test.gate,
+      undefined,
+      false,
+      test.marketing,
+    );
+    await submitIntent(true);
+    await verify();
+    await screen.findByRole("heading", { name: "Email verified" });
+    expect(grant).toHaveBeenCalledOnce();
+    expect(test.download).toHaveBeenCalledOnce();
+    expect(test.gate.unlockStore.isUnlocked()).toBe(true);
+    await userEvent.click(screen.getAllByRole("button", { name: "Close" })[0]!);
+    expect(screen.queryByRole("dialog")).toBeNull();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Save / Download Pattern" }),
+    );
+    await waitFor(() => expect(test.download).toHaveBeenCalledTimes(2));
+    expect(grant).toHaveBeenCalledOnce();
+    expect(test.gate.client.verifyChallenge).toHaveBeenCalledOnce();
+  });
+
+  const outcomes: readonly [string, MarketingConsentClientResult][] = [
+    [
+      "already_active",
+      { ok: true, response: { schemaVersion: 1, result: "already_active" } },
+    ],
+    [
+      "invalid_request",
+      { ok: true, response: { schemaVersion: 1, result: "invalid_request" } },
+    ],
+    [
+      "version_unsupported",
+      {
+        ok: true,
+        response: { schemaVersion: 1, result: "version_unsupported" },
+      },
+    ],
+    [
+      "authority_invalid",
+      {
+        ok: true,
+        response: {
+          schemaVersion: 1,
+          result: "verification_authority_invalid",
+        },
+      },
+    ],
+    [
+      "service_unavailable",
+      {
+        ok: true,
+        response: { schemaVersion: 1, result: "service_unavailable" },
+      },
+    ],
+    ["network", { ok: false, reason: "network" }],
+    ["timeout", { ok: false, reason: "timeout" }],
+    ["invalid-response", { ok: false, reason: "invalid-response" }],
+  ];
+  it.each(outcomes)(
+    "contains Marketing %s without relock or Email Gate failure",
+    async (_name, result) => {
+      const grant = vi.fn<MarketingConsentBrowserClient["grant"]>(
+        async () => result,
+      );
+      const test = fixture(grant);
+      await generatePatternAndOpenGate(
+        test.gate,
+        undefined,
+        false,
+        test.marketing,
+      );
+      await submitIntent(true);
+      await verify();
+      await screen.findByRole("heading", { name: "Email verified" });
+      expect(test.download).toHaveBeenCalledOnce();
+      expect(test.gate.unlockStore.isUnlocked()).toBe(true);
+      expect(test.gate.client.verifyChallenge).toHaveBeenCalledOnce();
+      expect(grant).toHaveBeenCalledExactlyOnceWith({ challengeId });
+      expect(
+        screen.queryByText(/Verification is temporarily unavailable/),
+      ).toBeNull();
+    },
+  );
+
+  it.each(["throw", "reject"] as const)(
+    "contains an injected Marketing client %s",
+    async (kind) => {
+      const grant = vi.fn<MarketingConsentBrowserClient["grant"]>(() => {
+        if (kind === "throw") throw new Error("private detail");
+        return Promise.reject(new Error("private detail"));
+      });
+      const test = fixture(grant);
+      await generatePatternAndOpenGate(
+        test.gate,
+        undefined,
+        false,
+        test.marketing,
+      );
+      await submitIntent(true);
+      await verify();
+      await screen.findByRole("heading", { name: "Email verified" });
+      expect(test.download).toHaveBeenCalledOnce();
+      expect(test.gate.unlockStore.isUnlocked()).toBe(true);
+      expect(screen.queryByText(/private detail/)).toBeNull();
+    },
+  );
+
+  it("keeps Email Gate fully functional when Marketing is unavailable", async () => {
+    const grant = vi.fn<MarketingConsentBrowserClient["grant"]>();
+    const test = fixture(grant);
+    await generatePatternAndOpenGate(test.gate);
+    expect(screen.queryByRole("checkbox")).toBeNull();
+    await submitIntent(false);
+    await verify();
+    await screen.findByRole("heading", { name: "Email verified" });
+    expect(test.download).toHaveBeenCalledOnce();
+    expect(grant).not.toHaveBeenCalled();
+  });
+
+  it.each(["close", "replace"] as const)(
+    "makes no Marketing call when %s invalidates pending verification",
+    async (kind) => {
+      const grant = vi.fn<MarketingConsentBrowserClient["grant"]>();
+      const test = fixture(grant);
+      let finish!: (
+        value: Awaited<
+          ReturnType<EnabledEmailGateCapability["client"]["verifyChallenge"]>
+        >,
+      ) => void;
+      vi.mocked(test.gate.client.verifyChallenge).mockImplementation(
+        () =>
+          new Promise((resolve) => {
+            finish = resolve;
+          }),
+      );
+      await generatePatternAndOpenGate(
+        test.gate,
+        [Promise.resolve(PUBLIC_RESULT), Promise.resolve(PUBLIC_RESULT)],
+        false,
+        test.marketing,
+      );
+      await submitIntent(true);
+      await verify();
+      expect(grant).not.toHaveBeenCalled();
+      if (kind === "close")
+        await userEvent.click(screen.getByRole("button", { name: "Close" }));
+      else {
+        fireEvent.change(screen.getByLabelText("Maximum Colors"), {
+          target: { value: "20" },
+        });
+        const regenerate = Array.from(document.querySelectorAll("button")).find(
+          (button) => button.textContent === "Regenerate Pattern",
+        );
+        expect(regenerate).toBeDefined();
+        fireEvent.click(regenerate!);
+        await screen.findByRole("heading", { name: "Your pattern changed" });
+      }
+      await act(async () =>
+        finish({
+          ok: true,
+          response: {
+            schemaVersion: 1,
+            result: "verification_succeeded",
+            verified: true,
+          },
+        }),
+      );
+      expect(grant).not.toHaveBeenCalled();
+      expect(test.download).not.toHaveBeenCalled();
+      expect(test.gate.unlockStore.writeUnlocked).not.toHaveBeenCalled();
+    },
+  );
 });
 
 describe("App", () => {

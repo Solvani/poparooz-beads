@@ -232,6 +232,42 @@
   outline-offset: 2px;
 }
 
+.email-gate-form .email-gate-marketing-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 6px 0;
+  font-weight: 400;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.email-gate-marketing-consent span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.email-gate-marketing-consent input {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  min-height: 20px;
+  margin: 1px 0 0;
+  padding: 0;
+  accent-color: var(--brand-700);
+}
+
+.email-gate-marketing-consent input:focus-visible {
+  outline: 3px solid var(--brand-600);
+  outline-offset: 2px;
+}
+
+.email-gate-marketing-consent input:disabled {
+  cursor: not-allowed;
+}
+
 .email-gate-form input[aria-invalid="true"] {
   border-color: var(--danger);
 }

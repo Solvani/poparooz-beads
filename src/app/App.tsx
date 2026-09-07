@@ -53,6 +53,11 @@ import {
   createEmailGateDownloadCoordinator,
   type EmailGateCompletion,
 } from "../email-gate/download-coordinator";
+import type { VerifiedConsentIntent } from "../marketing-consent/marketing-consent-intent";
+import {
+  UNAVAILABLE_MARKETING_CONSENT_CAPABILITY,
+  type MarketingConsentCapability,
+} from "../marketing-consent/marketing-consent-capability";
 
 const EmailGateDialog = lazy(async () => {
   const presentation = await import("../email-gate/EmailGateDialog");
@@ -62,11 +67,13 @@ const EmailGateDialog = lazy(async () => {
 export interface AppProps {
   readonly generationRuntime?: GenerationRuntime;
   readonly emailGateCapability?: EmailGateCapability;
+  readonly marketingConsentCapability?: MarketingConsentCapability;
 }
 
 export function App({
   generationRuntime = UNAVAILABLE_GENERATION_RUNTIME,
   emailGateCapability = UNAVAILABLE_EMAIL_GATE_CAPABILITY,
+  marketingConsentCapability = UNAVAILABLE_MARKETING_CONSENT_CAPABILITY,
 }: AppProps) {
   useGeneratorEmbedBridge();
   const image = useImageSource();
@@ -299,14 +306,28 @@ export function App({
     setPendingDownloadIdentity(null);
   };
 
-  const completeEmailGate = async (): Promise<EmailGateCompletion> => {
+  const completeEmailGate = async (
+    context: VerifiedConsentIntent,
+  ): Promise<EmailGateCompletion> => {
     if (enabledEmailGate === null) {
       return { outcome: "pattern-replaced" };
     }
     if (downloadCoordinator === null) return { outcome: "pattern-replaced" };
-    return downloadCoordinator.complete(
+    const completion = downloadCoordinator.complete(
       committedLastSuccessIdentityRef.current,
     );
+    if (context.marketingConsent && "client" in marketingConsentCapability) {
+      // Unlock and Download have already started. Marketing cannot gate either
+      // this completion or the dialog lifetime, including injected client throws.
+      void Promise.resolve()
+        .then(() =>
+          marketingConsentCapability.client.grant({
+            challengeId: context.challengeId,
+          }),
+        )
+        .catch(() => {});
+    }
+    return completion;
   };
 
   return (
@@ -381,6 +402,9 @@ export function App({
           >
             <EmailGateDialog
               capability={enabledEmailGate}
+              marketingConsentAvailable={
+                marketingConsentCapability.availability.available
+              }
               patternReplaced={emailGatePatternReplaced}
               onClose={closeEmailGate}
               onVerified={completeEmailGate}

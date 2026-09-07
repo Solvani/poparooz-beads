@@ -4,3 +4,14 @@ docs/POPAROOZ_DATA_AND_ALGORITHM_CONTRACTS.md
 docs/POPAROOZ_IFRAME_AND_SHOPIFY_CONTRACT.md
 docs/POPAROOZ_PRODUCT_DECISIONS.md
 docs/reviews/P0_A01_CURRENT_STATE_AUDIT.md
+data-source/quality/generator-baselines/1.0.0/generator-quality-scorecard.json
+data-source/quality/generator-baselines/1.0.0/generator-quality-summary.md
+data-source/quality/generator-e05-d04-a02-c2/1.0.0/e05-d04-a02-c2-three-reviewer-analysis.json
+data-source/quality/generator-e05-d04-a02/1.0.0/e05-d04-a02-structural-evidence.json
+data-source/quality/generator-e05-d04-a02/1.0.0/poparooz-d04-a02-blind-review.html
+data-source/quality/generator-e05-d04-evidence/1.0.0/e05-d04-six-profile-pattern-evidence.json
+data-source/quality/generator-e05-evidence/1.0.0/e05-production-evidence.json
+data-source/quality/generator-e05-evidence/1.0.0/e05-recommendation-policy-evaluation.json
+docs/POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md
+docs/PROJECT_STATE.md
+worker-configuration.d.ts

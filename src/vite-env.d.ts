@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   readonly VITE_GENERATOR_PUBLIC_URL?: string;
   readonly VITE_ALLOWED_PARENT_ORIGINS?: string;
   readonly VITE_MARKETING_CONSENT_ENABLED?: string;
+  readonly VITE_MARKETING_WITHDRAWAL_ENABLED?: string;
 }
 
 interface ImportMeta {

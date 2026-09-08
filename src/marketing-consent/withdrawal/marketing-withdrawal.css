@@ -1,0 +1,89 @@
+.marketing-withdrawal-page {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: clamp(24px, 6vw, 72px);
+  background:
+    radial-gradient(circle at 78% 18%, rgb(225 240 236 / 72%), transparent 32%),
+    #fcfaf5;
+}
+
+.marketing-withdrawal-card {
+  width: min(100%, 640px);
+  padding: clamp(32px, 7vw, 64px);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-extra-large);
+  background: rgb(255 255 255 / 88%);
+  box-shadow: var(--shadow-large);
+}
+
+.marketing-withdrawal-logo {
+  display: block;
+  width: min(154px, 46vw);
+  height: auto;
+  margin-bottom: clamp(36px, 8vw, 64px);
+}
+
+.marketing-withdrawal-eyebrow {
+  margin: 0 0 12px;
+  color: var(--brand-700);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.marketing-withdrawal-card h1 {
+  max-width: 15ch;
+  margin: 0;
+  color: #19332c;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.marketing-withdrawal-message {
+  max-width: 48ch;
+  margin: 24px 0 0;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.marketing-withdrawal-privacy {
+  margin: 36px 0 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.marketing-withdrawal-home {
+  display: inline-flex;
+  min-height: var(--minimum-touch-target);
+  align-items: center;
+  margin-top: 18px;
+  color: var(--brand-700);
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 520px) {
+  .marketing-withdrawal-page {
+    align-items: stretch;
+    padding: 0;
+    background: #fcfaf5;
+  }
+
+  .marketing-withdrawal-card {
+    min-height: 100dvh;
+    padding: max(28px, env(safe-area-inset-top)) 22px
+      calc(32px + env(safe-area-inset-bottom));
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .marketing-withdrawal-logo {
+    margin-bottom: clamp(72px, 18vh, 140px);
+  }
+}

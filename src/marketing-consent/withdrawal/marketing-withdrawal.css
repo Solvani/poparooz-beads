@@ -34,7 +34,7 @@
 }
 
 .marketing-withdrawal-card h1 {
-  max-width: 15ch;
+  max-width: 17ch;
   margin: 0;
   color: #19332c;
   font-family: Georgia, "Times New Roman", serif;
@@ -48,6 +48,90 @@
   margin: 24px 0 0;
   color: var(--text-secondary);
   line-height: 1.65;
+}
+
+.marketing-withdrawal-form label {
+  display: block;
+  margin: 30px 0 8px;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 750;
+}
+
+.marketing-withdrawal-form input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-medium);
+  background: #fff;
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.marketing-withdrawal-form input:focus-visible {
+  border-color: var(--brand-700);
+  outline: 3px solid rgb(42 115 94 / 18%);
+  outline-offset: 1px;
+}
+
+.marketing-withdrawal-form input[name="code"] {
+  max-width: 290px;
+  font-size: 1.4rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.22em;
+}
+
+.marketing-withdrawal-form > button,
+.marketing-withdrawal-status > button {
+  min-height: 48px;
+  margin-top: 20px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: var(--radius-medium);
+  background: var(--brand-700);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.marketing-withdrawal-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.marketing-withdrawal-error {
+  margin: 10px 0 0;
+  color: #9b332b;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.marketing-withdrawal-secondary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-top: 18px;
+}
+
+.marketing-withdrawal-secondary-actions button,
+.marketing-withdrawal-status > button + button {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--brand-700);
+  font: inherit;
+  font-weight: 750;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.marketing-withdrawal-status > button + button {
+  margin-left: 16px;
 }
 
 .marketing-withdrawal-privacy {
@@ -67,6 +151,12 @@
   text-underline-offset: 4px;
 }
 
+.marketing-withdrawal-turnstile {
+  max-width: 100%;
+  margin-top: 18px;
+  overflow: hidden;
+}
+
 @media (max-width: 520px) {
   .marketing-withdrawal-page {
     align-items: stretch;
@@ -84,6 +174,10 @@
   }
 
   .marketing-withdrawal-logo {
-    margin-bottom: clamp(72px, 18vh, 140px);
+    margin-bottom: clamp(58px, 12vh, 100px);
+  }
+
+  .marketing-withdrawal-form input[name="code"] {
+    max-width: 100%;
   }
 }

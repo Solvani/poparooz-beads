@@ -10,6 +10,7 @@ import { createProductionEmailGateCapability } from "./email-gate/production-ema
 import { createProductionMarketingConsentCapability } from "./marketing-consent/production-marketing-consent-capability";
 import { MarketingWithdrawalPage } from "./marketing-consent/withdrawal/MarketingWithdrawalPage";
 import { resolveProductionMarketingWithdrawalAvailability } from "./marketing-consent/withdrawal/marketing-withdrawal-availability";
+import { createProductionMarketingWithdrawalRouteCapability } from "./marketing-consent/withdrawal/production-marketing-withdrawal-verification-capability";
 import "./styles.css";
 
 const rootElement = document.getElementById("root");
@@ -24,10 +25,15 @@ startApplicationRoute({
   pathname: window.location.pathname,
   renderMarketingWithdrawal: () => {
     const availability = resolveProductionMarketingWithdrawalAvailability();
+    const capability =
+      createProductionMarketingWithdrawalRouteCapability(availability);
     root.render(
       <StrictMode>
         <ErrorBoundary>
-          <MarketingWithdrawalPage availability={availability} />
+          <MarketingWithdrawalPage
+            availability={availability}
+            capability={capability}
+          />
         </ErrorBoundary>
       </StrictMode>,
     );

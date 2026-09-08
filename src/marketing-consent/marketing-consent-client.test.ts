@@ -224,7 +224,7 @@ describe("Marketing Consent browser grant client", () => {
     const fetchMock = vi
       .spyOn(window, "fetch")
       .mockImplementation(async () => json());
-    const capability = createProductionMarketingConsentCapability();
+    const capability = createProductionMarketingConsentCapability(true);
     expect(capability.availability.available).toBe(true);
     expect(fetchMock).not.toHaveBeenCalled();
     await expect(capability.client.grant({ challengeId })).resolves.toEqual({

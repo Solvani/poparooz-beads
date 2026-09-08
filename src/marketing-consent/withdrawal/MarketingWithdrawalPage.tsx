@@ -399,10 +399,10 @@ export function MarketingWithdrawalPage({
         <form className="marketing-withdrawal-form" onSubmit={submitEmail}>
           <p className="marketing-withdrawal-eyebrow">Email preferences</p>
           <h1 id="marketing-withdrawal-heading">
-            Unsubscribe from Poparooz emails.
+            Unsubscribe from Poparooz marketing emails.
           </h1>
           <p className="marketing-withdrawal-message">
-            Verify your email to update your marketing preferences privately.
+            Verify your email to unsubscribe securely.
           </p>
           <label htmlFor="withdrawal-email">Email address</label>
           <input
@@ -533,7 +533,7 @@ function SuccessContent() {
         Your marketing preferences are updated.
       </h1>
       <p className="marketing-withdrawal-message" role="status">
-        You will not receive Poparooz marketing emails from this subscription.
+        You won&apos;t receive Poparooz marketing emails at this email address.
       </p>
       <p className="marketing-withdrawal-privacy">No account. No password.</p>
       <a className="marketing-withdrawal-home" href="/">

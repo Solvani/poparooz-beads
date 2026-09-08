@@ -151,6 +151,27 @@ describe("MarketingWithdrawalPage", () => {
     expect(capability.withdrawal.client.withdraw).not.toHaveBeenCalled();
   });
 
+  it("uses exact Marketing-specific entry copy", () => {
+    render(
+      <MarketingWithdrawalPage
+        availability={enabledAvailability}
+        capability={gate()}
+      />,
+    );
+
+    expect(
+      screen.getByRole("heading", {
+        name: "Unsubscribe from Poparooz marketing emails.",
+      }),
+    ).toBeVisible();
+    expect(
+      screen.getByText("Verify your email to unsubscribe securely."),
+    ).toBeVisible();
+    expect(document.body).not.toHaveTextContent(
+      "Unsubscribe from Poparooz emails.",
+    );
+  });
+
   it("normalizes email, obtains fresh proof, and issues before any withdrawal", async () => {
     const capability = gate();
     await reachCodeEntry(capability);
@@ -227,6 +248,14 @@ describe("MarketingWithdrawalPage", () => {
       await screen.findByRole("heading", {
         name: "Your marketing preferences are updated.",
       });
+      expect(
+        screen.getByText(
+          "You won't receive Poparooz marketing emails at this email address.",
+        ),
+      ).toBeVisible();
+      expect(document.body).not.toHaveTextContent(
+        "You won't receive Poparooz emails",
+      );
       expect(
         capability.verification.client.verifyChallenge,
       ).toHaveBeenCalledWith(

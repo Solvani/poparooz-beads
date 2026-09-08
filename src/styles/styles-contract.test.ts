@@ -68,6 +68,8 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
     expect(workspace).toContain(
       "grid-template-columns: auto minmax(0, 1fr) minmax(220px, auto)",
     );
+    expect(workspace).toContain(".app-header__marketing-preferences");
+    expect(workspace).toContain("text-underline-offset: 3px");
   });
 
   it("uses whole-card background selection and a compact Generate action", () => {

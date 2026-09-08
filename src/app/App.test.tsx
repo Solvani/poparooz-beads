@@ -167,12 +167,14 @@ async function generatePatternAndOpenGate(
   ],
   strict = false,
   marketingConsentCapability: MarketingConsentCapability = UNAVAILABLE_MARKETING_CONSENT_CAPABILITY,
+  marketingWithdrawalAvailable = false,
 ) {
   const app = (
     <App
       generationRuntime={availableRuntime(tasks)}
       emailGateCapability={gate}
       marketingConsentCapability={marketingConsentCapability}
+      marketingWithdrawalAvailable={marketingWithdrawalAvailable}
     />
   );
   render(strict ? <StrictMode>{app}</StrictMode> : app);
@@ -312,6 +314,35 @@ describe("App Marketing Consent orchestration", () => {
       screen.getByRole("button", { name: "Verify & download" }),
     );
   }
+
+  it.each([
+    [false, false],
+    [false, true],
+    [true, false],
+    [true, true],
+  ])(
+    "keeps grant=%s and withdrawal=%s presentation independent",
+    async (grantEnabled, withdrawalEnabled) => {
+      const test = fixture(vi.fn());
+      await generatePatternAndOpenGate(
+        test.gate,
+        undefined,
+        false,
+        grantEnabled
+          ? test.marketing
+          : UNAVAILABLE_MARKETING_CONSENT_CAPABILITY,
+        withdrawalEnabled,
+      );
+
+      expect(screen.queryByRole("checkbox") !== null).toBe(grantEnabled);
+      expect(
+        screen.queryByRole("link", {
+          name: "Marketing preferences",
+          hidden: true,
+        }) !== null,
+      ).toBe(withdrawalEnabled);
+    },
+  );
 
   it.each([false, true])(
     "downloads with submitted intent %s and invokes only the eligible grant",

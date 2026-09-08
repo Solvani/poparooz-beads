@@ -50,6 +50,14 @@
   font-size: 0.8125rem;
 }
 
+.app-header__marketing-preferences {
+  display: inline-block;
+  margin-left: var(--space-2);
+  color: var(--brand-700);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+
 .app-progress {
   grid-area: progress;
   display: flex;

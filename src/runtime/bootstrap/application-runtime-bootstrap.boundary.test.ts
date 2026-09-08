@@ -111,8 +111,11 @@ describe("Application Runtime Bootstrap boundary", () => {
       "const emailGateCapability = createProductionEmailGateCapability()",
     );
     expect(mainSource).toContain("emailGateCapability={emailGateCapability}");
-    expect(mainSource.indexOf("startApplication({")).toBeLessThan(
-      mainSource.indexOf("createRoot(rootElement).render("),
+    expect(mainSource.indexOf("createRoot(rootElement)")).toBeLessThan(
+      mainSource.indexOf("startApplicationRoute({"),
+    );
+    expect(mainSource.indexOf("startApplicationRoute({")).toBeLessThan(
+      mainSource.indexOf("startApplication({"),
     );
   });
 });

@@ -68,12 +68,14 @@ export interface AppProps {
   readonly generationRuntime?: GenerationRuntime;
   readonly emailGateCapability?: EmailGateCapability;
   readonly marketingConsentCapability?: MarketingConsentCapability;
+  readonly marketingWithdrawalAvailable?: boolean;
 }
 
 export function App({
   generationRuntime = UNAVAILABLE_GENERATION_RUNTIME,
   emailGateCapability = UNAVAILABLE_EMAIL_GATE_CAPABILITY,
   marketingConsentCapability = UNAVAILABLE_MARKETING_CONSENT_CAPABILITY,
+  marketingWithdrawalAvailable = false,
 }: AppProps) {
   useGeneratorEmbedBridge();
   const image = useImageSource();
@@ -332,7 +334,7 @@ export function App({
 
   return (
     <div ref={containerRef} className="app-root">
-      <AppHeader />
+      <AppHeader marketingWithdrawalAvailable={marketingWithdrawalAvailable} />
       <div className="page-frame">
         <GeneratorWorkspaceShell
           workspaceMode={workspaceMode}

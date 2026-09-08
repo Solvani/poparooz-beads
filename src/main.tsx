@@ -42,6 +42,8 @@ startApplicationRoute({
     const emailGateCapability = createProductionEmailGateCapability();
     const marketingConsentCapability =
       createProductionMarketingConsentCapability();
+    const marketingWithdrawalAvailability =
+      resolveProductionMarketingWithdrawalAvailability();
 
     startApplication({
       bootstrap: bootstrapApprovedApplicationRuntime,
@@ -53,6 +55,9 @@ startApplicationRoute({
                 generationRuntime={generationRuntime}
                 emailGateCapability={emailGateCapability}
                 marketingConsentCapability={marketingConsentCapability}
+                marketingWithdrawalAvailable={
+                  marketingWithdrawalAvailability.enabled
+                }
               />
             </ErrorBoundary>
           </StrictMode>,

@@ -25,4 +25,17 @@ describe("AppHeader", () => {
       screen.getByRole("list", { name: "Pattern maker steps" }),
     ).toHaveTextContent("UploadSettingsGeneratePatternResults");
   });
+
+  it("shows the direct withdrawal entry only when withdrawal is enabled", () => {
+    const view = render(<AppHeader marketingWithdrawalAvailable />);
+    const link = screen.getByRole("link", { name: "Marketing preferences" });
+    expect(link).toHaveAttribute("href", "/unsubscribe");
+    expect(link.getAttribute("href")).not.toContain("?");
+    expect(link.getAttribute("href")).not.toContain("email");
+
+    view.rerender(<AppHeader marketingWithdrawalAvailable={false} />);
+    expect(
+      screen.queryByRole("link", { name: "Marketing preferences" }),
+    ).toBeNull();
+  });
 });

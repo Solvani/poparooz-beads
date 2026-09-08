@@ -1,6 +1,12 @@
 import poparoozLogo from "../../assets/branding/poparooz-logo.png";
 
-export function AppHeader() {
+export interface AppHeaderProps {
+  readonly marketingWithdrawalAvailable?: boolean;
+}
+
+export function AppHeader({
+  marketingWithdrawalAvailable = false,
+}: AppHeaderProps) {
   return (
     <header className="app-header">
       <div className="app-header__inner">
@@ -15,7 +21,17 @@ export function AppHeader() {
           )}
         </ol>
         <p className="app-header__privacy">
-          Your image is processed on this device and is not uploaded.
+          <span>
+            Your image is processed on this device and is not uploaded.
+          </span>
+          {marketingWithdrawalAvailable ? (
+            <a
+              className="app-header__marketing-preferences"
+              href="/unsubscribe"
+            >
+              Marketing preferences
+            </a>
+          ) : null}
         </p>
       </div>
     </header>

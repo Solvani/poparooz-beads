@@ -1,150 +1,111 @@
-# Repository Agent Rules
+# Poparooz Generator Repository Rules
 
-This file contains durable repository-wide rules for Codex and other coding agents. Current accepted project state belongs in `docs/PROJECT_STATE.md`, not here.
+Durable repository rules live here. Current facts belong in
+`docs/PROJECT_STATE.md`; reusable procedures belong in `docs/AGENT_RUNBOOK.md`.
 
-## 1. Required Context
+## 1. Required context and instruction order
 
-Before editing:
+Before work, read: active global `AGENTS.md`; this file; the nearest nested
+`AGENTS.md` governing scoped files; `docs/PROJECT_STATE.md`;
+`docs/AGENT_RUNBOOK.md` when applicable; then task instructions, contracts,
+source, and tests.
 
-1. Read this file and `docs/PROJECT_STATE.md`.
-2. Read `package.json`, the relevant source files, governing documents, and tests.
-3. Check the current branch, HEAD, and worktree.
-4. Confirm that the task does not conflict with a frozen or unauthorized area.
+Task instructions have highest authority for their exact scope. Nearest scoped
+rules may specialize parents but MUST NOT silently weaken brand, privacy, Git,
+contract, or production safety. Verify branch, HEAD, live remote when required,
+ahead/behind, worktree, locks, authorized paths, and frozen boundaries. Stop on
+unexpected dirt, a moving worktree, wrong baseline, conflict, or unauthorized
+frozen area.
 
-Stop and report the conflict when:
+## 2. Product and brand
 
-- the worktree contains unexpected changes;
-- instructions conflict;
-- the task requires changing an unauthorized frozen area; or
-- actual repository state differs from the task baseline.
+- This repository owns the Poparooz fuse-bead pattern generator for the US
+  Shopify store.
+- Poparooz is the only customer-facing brand.
+- `MARD` may appear only in historical internal-reference or compatibility data.
+- Never expose supplier identity, a third-party brand, or internal Palette fields.
+- `M1` through `M15` are Poparooz-owned customer color codes.
+- Customer copy defaults to English and MUST NOT invent brand, performance,
+  safety, color-accuracy, or compliance claims.
 
-Instruction precedence is:
+## 3. Browser-local image privacy
 
-```text
-explicit task-specific requirements
-> AGENTS.md repository rules
-> docs/PROJECT_STATE.md state record
-```
+User images MUST remain in the browser. MUST NOT upload, remotely persist, log,
+or send image contents to analytics. MUST NOT add server-side image processing or
+a network dependency to core generation. Changes require explicit product and
+architecture authority.
 
-A task prompt cannot implicitly override brand, privacy, or Git safety boundaries. Such an override must be explicit and authorized.
+## 4. Scope, quality, and dependencies
 
-## 2. Product Boundaries
+Implement only the authorized task. Avoid unrelated refactors, renames, formatting
+sweeps, dependency upgrades, migrations, and UI rewrites. Reuse existing types,
+components, utilities, tokens, and tests. Use npm and the committed lockfile.
+Production dependency additions/upgrades require approval. Do not bypass problems
+with broad `any`, unsafe casts, suppression, fallback, or weakened tests.
 
-- This repository contains the fuse-bead pattern generator for the Poparooz United States Shopify store.
-- Poparooz is the only customer-visible brand.
-- `MARD` may remain only in historical internal-reference or compatibility data.
-- Never expose a third-party brand, supplier identity, or internal Palette field to customers.
-- `M1` through `M15` are Poparooz-owned M-series customer color codes.
+Preserve the Poparooz Design System and frozen Phase 2 UI. UI work must address
+affected desktop, mobile, keyboard, and accessibility states; claim only QA done.
 
-## 3. Privacy
+## 5. Git and Pages production semantics
 
-- User images must remain in the browser.
-- Do not upload or remotely persist user images.
-- Do not add server-side image processing.
-- Do not log image contents or send image data to analytics services.
-- Do not introduce a network dependency into the core generation path.
+The production branch is `main`. A normal push to `main` triggers Git-connected
+Cloudflare Pages production deployment. A `main` push is a remote and
+production-affecting write and MUST be authorized accordingly. Never report
+`push performed / no production deployment` for it. After pushing, distinguish
+the deployment trigger from a verified successful deployment.
 
-Changing these boundaries requires explicit product and architecture authorization.
+No add, commit, push, pull, merge, rebase, reset, clean, switch, checkout, tag,
+or remote change is authorized unless explicitly permitted. Follow global race
+gates and the relevant runbook.
 
-## 4. Scope Discipline
+## 6. Durable production resource identities
 
-- Implement only the current authorized task.
-- Do not perform unrelated refactors, renames, formatting sweeps, dependency upgrades, architecture migrations, UI redesigns, or documentation rewrites.
-- Do not modify frozen modules without explicit authorization.
-- Prefer existing types, components, utilities, design tokens, and test patterns.
-- Make the smallest complete change that satisfies the acceptance criteria.
+- Pages production branch: `main`
+- Worker: `poparooz-email-gate-prod`
+- D1 database: `poparooz-email-gate-prod`
+- D1 binding: `EMAIL_GATE_DB`
+- Email Gate route family: `/api/email-gate/*`
+- Marketing route family: `/api/marketing-consent/*`
 
-## 5. Dependencies and Type Safety
+Current SHAs, deployments, versions, flags, migrations, and route status belong
+in `docs/PROJECT_STATE.md`. Repository authority does not authorize Worker, D1,
+Route, Shopify, provider, secret, or other production mutations; each requires
+exact authority and its own lock.
 
-- Use the repository's existing package manager and lockfile.
-- Do not add or upgrade production dependencies without explicit approval.
-- Do not use broad `any`, unsafe casts, error suppression, or silent fallback behavior to bypass a problem.
-- Do not delete, skip, or weaken unrelated tests merely to obtain a passing result.
+## 7. Email Gate and Marketing invariants
 
-## 6. Customer-Facing UI
+- Email verification remains required for Download; Marketing Consent is optional.
+- Marketing failure MUST NOT block or reverse OTP, verification, unlock, or Download.
+- Grant and withdrawal are separate capabilities with independent production flags.
+- Withdrawal MUST be production-capable before grant activation.
+- Marketing persistence does not imply a Marketing provider.
+- Email Gate v1 contracts MUST NOT be casually changed; use a separate governed
+  API or explicit versioned evolution.
 
-- Customer-facing copy defaults to English.
-- Preserve the existing Poparooz Design System.
-- UI changes must cover affected desktop, mobile, keyboard, and accessibility states.
-- Do not invent brand, performance, safety, color-accuracy, or compliance claims.
-- Do not casually rewrite the frozen Phase 2 UI.
+Backend rules: `worker/email-gate/AGENTS.md`. Frontend Marketing rules:
+`src/marketing-consent/AGENTS.md`.
 
-## 7. Git Safety
+## 8. Feishu governance triggers
 
-At task start and completion, check:
+Codex MUST NOT write Feishu unless exact records/fields are explicitly authorized.
+Tell the controlling Chat `FEISHU SYNC MAY BE REQUIRED` after formal publication,
+production deployment/verification, approval/freeze/acceptance/closure,
+HOLD/RELEASE, or Current Stage/Next Action change. Do not request sync for normal
+implementation, an unaccepted candidate, tests in progress, local-only commit, or
+read-only audit.
 
-```bash
-git branch --show-current
-git rev-parse HEAD
-git status --short
-```
+## 9. Ops Dashboard
 
-Unless the task explicitly authorizes it, do not run:
+MUST NOT release or mutate Ops Dashboard without explicit authorization. Current
+HOLD/RELEASE state belongs in `docs/PROJECT_STATE.md`.
 
-```text
-git add
-git commit
-git push
-git pull
-git merge
-git rebase
-git reset
-git clean
-git switch
-git checkout
-git tag
-```
+## 10. Verification and completion
 
-Never discard user changes, overwrite unexpected worktree content, rewrite history, modify remotes, or automatically repair an `origin/main [gone]` state.
+Use repository scripts. Run targeted and broader checks proportionately or as a
+gate requires. Documentation-only changes need no application suite. Before
+completion run `git diff --check`, `git diff --stat`, and `git status --short`.
 
-## 8. Verification
-
-- Use only repository-provided scripts and tools.
-- Run targeted tests and, when appropriate to the change, the full suite, production build, TypeScript checks, lint, and formatting checks.
-- A documentation-only task should not run unrelated full tests merely for formality; report that they were not run because no code changed.
-- Before completion, run:
-
-```bash
-git diff --check
-git diff --stat
-git status --short
-```
-
-Do not claim browser, mobile-device, visual, or assistive-technology validation that was not actually performed.
-
-## 9. Definition of Done
-
-A task is ready for review only when:
-
-- the requested behavior is implemented;
-- acceptance criteria are satisfied;
-- necessary tests are added or updated;
-- required checks pass, or failures are reported accurately;
-- the final diff has been reviewed;
-- no unrelated changes are present; and
-- no unauthorized commit or push occurred.
-
-A Codex report of completion does not mean that project control has accepted or frozen the task.
-
-## 10. Completion Report
-
-Every final report must include:
-
-```text
-Task
-Implementation
-Changed files
-Verification
-Checks not run
-Risks
-Git state
-```
-
-Git state must report:
-
-- branch;
-- HEAD;
-- worktree status;
-- `git diff --stat`;
-- whether a commit was performed; and
-- whether a push was performed.
+Final reports MUST include Task, Implementation, Changed files, Verification,
+Checks not run, Risks, and Git state. Git state includes branch, HEAD, worktree,
+diff stat, staged state, commit, and push. Codex completion is not project-control
+acceptance or freeze.

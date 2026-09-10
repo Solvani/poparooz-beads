@@ -14,4 +14,5 @@ data-source/quality/generator-e05-evidence/1.0.0/e05-production-evidence.json
 data-source/quality/generator-e05-evidence/1.0.0/e05-recommendation-policy-evaluation.json
 docs/POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md
 docs/PROJECT_STATE.md
+docs/history/PROJECT_STATE_PRE_TOOLING_G01.md
 worker-configuration.d.ts

@@ -12,9 +12,11 @@ Project: POPAROOZ_GENERATOR
 Repository: D:\Projects\poparooz-beads
 Remote: https://github.com/Solvani/poparooz-beads.git
 Branch: main
-Authoritative HEAD: d9248f97a16a6936b0654bd95907fea10f69d97e
-Sync state: local HEAD = local origin/main = live origin/main; ahead/behind 0/0
-Worktree at TOOLING-G01 entry: CLEAN
+Accepted P03 source/release HEAD: ec61d56f4db9e5957f415171635c6b01eb47e5b0
+P03-R01 reconciliation parent: ec61d56f4db9e5957f415171635c6b01eb47e5b0
+Sync state at P03-R01 entry: local HEAD = local origin/main = live origin/main;
+  ahead/behind 0/0
+Worktree at P03-R01 entry: CLEAN
 ```
 
 The task-specific baseline governs when explicitly supplied. A normal push to
@@ -25,28 +27,29 @@ a production-affecting action.
 
 ```text
 Parent stage: MC-A02-E02
-Completed stage: MC-A02-E02-P02 — Marketing Route Activation / Backend Reachability Gate
-P02 status: COMPLETED / MARKETING ROUTE ACTIVATED / BACKEND REACHABLE /
-  AUTHORITY ENFORCEMENT VERIFIED / ACCEPTED / CLOSED /
-  WITH NON-BLOCKING QUALIFICATION
+Completed stage: MC-A02-E02-P03 — Withdrawal-Only Activation
+P03 status: COMPLETED / PUSHED / CLOUDFLARE PAGES AUTO-DEPLOYED /
+  PRODUCTION VERIFIED / ACCEPTED / CLOSED
 Current status: HOLD
-Next production action: MC-A02-E02-P03 — Withdrawal-Only Activation
-P03 status: PAUSED / NOT STARTED
+Next action: MC-A02-E02-P04 — Controlled Marketing Lifecycle E2E
+P04 status: NOT STARTED / BLOCKED
+P04 blocker: AUTHORIZED CONTROLLED QA MAILBOX REQUIRED BEFORE REAL OTP E2E
 Ops Dashboard v1: HOLD
 ```
 
-P03 has no implementation, deployment, activation, acceptance, or closure credit.
+P03 changed Cloudflare Pages only. It did not modify the Worker, D1, or Routes.
+P04 remains blocked and must not start without the required controlled-QA authority
+and test identity.
 
-## Accepted production state from P02/W10
+## Accepted production state from P03
 
 ### Cloudflare Pages
 
 ```text
-State: DEPLOYED / VERIFIED
-Production source commit: d9248f97a16a6936b0654bd95907fea10f69d97e
-Serving deployment: 8ee16dc5-c7f1-43e9-8f84-6c9cc4ef2152
+State: CLOUDFLARE PAGES AUTO-DEPLOYED / PRODUCTION VERIFIED
+Production source commit: ec61d56f4db9e5957f415171635c6b01eb47e5b0
 VITE_MARKETING_CONSENT_ENABLED=false
-VITE_MARKETING_WITHDRAWAL_ENABLED=false
+VITE_MARKETING_WITHDRAWAL_ENABLED=true
 ```
 
 ### Worker and D1
@@ -82,8 +85,7 @@ Overlapping duplicate Marketing route: ABSENT
   required for Download.
 - Marketing backend routes are reachable and reject invalid authority safely.
 - Marketing grant UI is disabled; no Marketing checkbox is shown.
-- Marketing withdrawal UI is disabled; `/unsubscribe` fails closed as
-  `FEATURE_UNAVAILABLE`, including its trailing-slash alias.
+- Marketing withdrawal self-service is active through `/unsubscribe`.
 - Marketing collection is disabled. No Marketing provider integration is active
   or implied.
 - User image, Pattern, and PNG processing remain browser-local.
@@ -122,7 +124,7 @@ Primary frozen authorities:
 
 Until a later task explicitly authorizes them, MUST NOT:
 
-- start or mark P03 in progress;
+- start P04 or run a real OTP lifecycle without an authorized controlled QA mailbox;
 - change either production Marketing flag;
 - deploy Pages or Worker;
 - mutate D1, Worker Routes, secrets, providers, Shopify, or Feishu;
@@ -130,6 +132,7 @@ Until a later task explicitly authorizes them, MUST NOT:
 - activate Marketing grant; or
 - release Ops Dashboard.
 
-The only recorded next production action is
-`MC-A02-E02-P03 — Withdrawal-Only Activation`, and it remains
-`PAUSED / NOT STARTED`.
+The recorded next action is
+`MC-A02-E02-P04 — Controlled Marketing Lifecycle E2E`. It remains
+`NOT STARTED / BLOCKED` by
+`AUTHORIZED CONTROLLED QA MAILBOX REQUIRED BEFORE REAL OTP E2E`.

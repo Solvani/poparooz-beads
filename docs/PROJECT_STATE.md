@@ -12,45 +12,56 @@ Project: POPAROOZ_GENERATOR
 Repository: D:\Projects\poparooz-beads
 Remote: https://github.com/Solvani/poparooz-beads.git
 Branch: main
+Current repository authority before this governance reconciliation: b33bdb2ab1f6008c2c27dcc68324d5028dee6662
 Accepted P03 source/release HEAD: ec61d56f4db9e5957f415171635c6b01eb47e5b0
 P03-R01 reconciliation parent: ec61d56f4db9e5957f415171635c6b01eb47e5b0
-Sync state at P03-R01 entry: local HEAD = local origin/main = live origin/main;
-  ahead/behind 0/0
-Worktree at P03-R01 entry: CLEAN
+Current production source authority: b33bdb2ab1f6008c2c27dcc68324d5028dee6662
+Current production evidence authority: a162876a8dd7445883c1902f100fa0bf2e87d901302a8738dfc099d9ce4f34ea
 ```
 
 The task-specific baseline governs when explicitly supplied. A normal push to
 `main` triggers the Git-connected Cloudflare Pages production deployment and is
-a production-affecting action.
+a production-affecting action. Repository authority, historical P03 source,
+current production source, and production evidence authority are distinct and
+must not be substituted for one another.
 
 ## Current stage
 
 ```text
 Parent stage: MC-A02-E02
-Completed stage: MC-A02-E02-P03 — Withdrawal-Only Activation
-P03 status: COMPLETED / PUSHED / CLOUDFLARE PAGES AUTO-DEPLOYED /
-  PRODUCTION VERIFIED / ACCEPTED / CLOSED
-Current status: HOLD
-Next action: MC-A02-E02-P04 — Controlled Marketing Lifecycle E2E
-P04 status: NOT STARTED / BLOCKED
-P04 blocker: AUTHORIZED CONTROLLED QA MAILBOX REQUIRED BEFORE REAL OTP E2E
+Completed stage: MC-A02-E02-P04 — Controlled Marketing Lifecycle E2E
+P04 status: CLOSED
+Final disposition: WITHDRAWAL-ONLY PRODUCTION BASELINE PRESERVED /
+  MARKETING GRANT DISABLED / WITHDRAWAL ENABLED
+Full Marketing lifecycle G1 -> W1 -> G2 -> W2: NOT PROVEN / DEFERRED
+Further P04 production retry: NOT AUTHORIZED
+Current status: CLOSED
+Next action: Fresh GEN-COST-PATTERN-EXPORT-V2-D00 readiness rerun requires
+  separate authorization after repository-governance reconciliation
 Ops Dashboard v1: HOLD
 ```
 
-P03 changed Cloudflare Pages only. It did not modify the Worker, D1, or Routes.
-P04 remains blocked and must not start without the required controlled-QA authority
-and test identity.
+P04 closed under the accepted withdrawal-only final production disposition.
+The final controlled retry did not prove the full Marketing lifecycle and must
+not be represented as a lifecycle PASS. Future Marketing Grant enablement
+requires a new separately authorized stage.
 
-## Accepted production state from P03
+## Accepted final P04 production state
 
 ### Cloudflare Pages
 
 ```text
-State: CLOUDFLARE PAGES AUTO-DEPLOYED / PRODUCTION VERIFIED
-Production source commit: ec61d56f4db9e5957f415171635c6b01eb47e5b0
+State: SAFE RESTORATION VERIFIED / WITHDRAWAL-ONLY
+Final production deployment: e01f7436-d29c-4f3d-b65b-619bf6f0f53a
+Production source commit: b33bdb2ab1f6008c2c27dcc68324d5028dee6662
 VITE_MARKETING_CONSENT_ENABLED=false
 VITE_MARKETING_WITHDRAWAL_ENABLED=true
 ```
+
+P04/R06 produced no OTP issuance or acceptance, Marketing transition, D1
+business mutation, Worker write, Route write, or Git write. The two accepted
+Pages writes belong to the activation/restoration history. The CDP controller
+session and the full Marketing lifecycle remain unproven.
 
 ### Worker and D1
 
@@ -90,6 +101,23 @@ Overlapping duplicate Marketing route: ABSENT
   or implied.
 - User image, Pattern, and PNG processing remain browser-local.
 
+## Current PatternCosting cross-module dependency
+
+```text
+Contract: PatternCostingExportV2 v2.1.0
+Status: COMPLETED / COST MASTER APPROVED / FROZEN / CLOSED
+Freeze authority SHA-256: 3030f8ed06b786f914dda8dab5b39a879b806d691f672183584fed6df97079e1
+Freeze scope: V2.1 CONTRACT SEMANTICS ONLY
+Generator P04 prerequisite: SATISFIED / RELEASED
+```
+
+This cross-module freeze records contract semantics only. It does not authorize
+Generator implementation, Generator repository implementation writes,
+`canonicalize@2.1.0` installation, an implementation branch or worktree,
+Central Table or Feishu business-data writes, deployment, or a fresh D00 rerun.
+Historical PatternCostingExportV2 v2.0 authority remains historical and is not
+modified by the v2.1 freeze.
+
 ## Known non-blocking qualifications
 
 - P02's live GitHub verification encountered a connection reset; its controlling
@@ -124,15 +152,18 @@ Primary frozen authorities:
 
 Until a later task explicitly authorizes them, MUST NOT:
 
-- start P04 or run a real OTP lifecycle without an authorized controlled QA mailbox;
+- retry P04 or run another real OTP lifecycle;
 - change either production Marketing flag;
 - deploy Pages or Worker;
 - mutate D1, Worker Routes, secrets, providers, Shopify, or Feishu;
 - send an OTP;
 - activate Marketing grant; or
+- implement PatternCostingExportV2;
+- install `canonicalize@2.1.0`;
+- create a PatternCosting implementation branch or worktree;
+- rerun GEN-COST-PATTERN-EXPORT-V2-D00 without separate authorization; or
 - release Ops Dashboard.
 
-The recorded next action is
-`MC-A02-E02-P04 — Controlled Marketing Lifecycle E2E`. It remains
-`NOT STARTED / BLOCKED` by
-`AUTHORIZED CONTROLLED QA MAILBOX REQUIRED BEFORE REAL OTP E2E`.
+P04 is closed. The next PatternCosting action is a fresh
+`GEN-COST-PATTERN-EXPORT-V2-D00` readiness rerun only after separate
+authorization.

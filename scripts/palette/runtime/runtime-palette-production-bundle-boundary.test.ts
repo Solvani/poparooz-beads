@@ -197,6 +197,7 @@ describe("Runtime Palette production bundle boundary", () => {
     "codeA",
     "codeB",
     "applicationPolicy",
+    "generatedBy",
     "MARD",
     "data-source/runtime-locks",
   ])("rejects forbidden emitted content: %s", (forbidden) => {
@@ -206,6 +207,7 @@ describe("Runtime Palette production bundle boundary", () => {
       "codeA",
       "codeB",
       "applicationPolicy",
+      "generatedBy",
     ].includes(forbidden)
       ? `{${forbidden}:\"A1\"}`
       : forbidden;
@@ -218,6 +220,21 @@ describe("Runtime Palette production bundle boundary", () => {
         ),
       "RUNTIME_BUNDLE_EMITTED_CONTENT_FORBIDDEN",
     );
+  });
+
+  it("allows generatedAt in unrelated emitted application code", () => {
+    expect(
+      verifyRuntimePaletteProductionBundleBoundary(
+        validInspection({
+          emittedFiles: [
+            {
+              relativePath: "assets/app.js",
+              content: '{generatedAt:"2026-09-17T00:00:00Z"}',
+            },
+          ],
+        }),
+      ),
+    ).toMatchObject({ verified: true });
   });
 
   it.each([
@@ -255,6 +272,11 @@ describe("Runtime Palette production bundle boundary", () => {
       "nested provenance",
       (artifact: MutableArtifact) =>
         (artifact.colors[0]!.rgb.sourceSha256 = "not allowed"),
+    ],
+    [
+      "generatedAt",
+      (artifact: MutableArtifact) =>
+        (artifact.generatedAt = "2026-09-17T00:00:00Z"),
     ],
   ])("rejects an Artifact %s field", async (_label, mutate) => {
     const artifact = await readApprovedArtifact();

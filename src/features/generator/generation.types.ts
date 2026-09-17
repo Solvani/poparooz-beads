@@ -10,6 +10,10 @@ import type { GenerationColorSetSnapshot } from "../../runtime/generation-color-
 import type { PatternSettingsValue } from "../settings/settings.types";
 import type { ColorSetProfileOption } from "../settings/settings.types";
 import type { ProcessingPolicySnapshot } from "../../runtime/processing-policy/processing-policy.types";
+import type {
+  PatternCostingAttemptContext,
+  PatternCostingRuntimeAuthority,
+} from "../pattern-costing/pattern-costing.types";
 
 export type GenerationUnavailableReason =
   | "palette-unavailable"
@@ -35,6 +39,7 @@ export interface GenerationCandidate {
 
 export interface GenerationInputSnapshot extends GenerationCandidate {
   readonly jobId: number;
+  readonly patternCosting?: PatternCostingAttemptContext;
 }
 
 export interface GenerationWorkerClient {
@@ -66,6 +71,7 @@ export type GenerationRuntime =
       readonly availability: { readonly available: true };
       readonly service: GenerationService;
       readonly colorSetProfiles: readonly ColorSetProfileOption[];
+      readonly patternCostingRuntimeAuthorities?: readonly PatternCostingRuntimeAuthority[];
     }
   | {
       readonly availability: {

@@ -89,7 +89,6 @@ const forbiddenEmittedContent = [
     "isSellable",
     "isSpecialFinish",
     "packSize",
-    "generatedAt",
     "generatedBy",
   ].map((field) => ({
     label: field,

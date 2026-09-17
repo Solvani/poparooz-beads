@@ -21,6 +21,7 @@ import { projectGenerationPaletteForColorSet } from "../../runtime/generation-co
 import { ProcessingPolicyError } from "../../runtime/processing-policy/processing-policy.errors";
 import { parseProcessingPolicySnapshot } from "../../runtime/processing-policy/processing-policy.schema";
 import { GenerationRequestError } from "./generation-error";
+import { createPatternCostingRuntimeAuthorities } from "../pattern-costing/runtime-authority";
 import type {
   GenerationDependencies,
   GenerationInputSnapshot,
@@ -190,10 +191,18 @@ export function createGenerationRuntime(
       Object.freeze({ profileId: profile.profileId, size: profile.size }),
     ),
   );
+  const patternCostingRuntimeAuthorities =
+    createPatternCostingRuntimeAuthorities({
+      palette: dependencies.palette,
+      colorSets: dependencies.colorSets,
+      boardProfile: dependencies.boardProfile,
+      processingPolicy: dependencies.processingPolicy,
+    });
   return Object.freeze({
     availability: Object.freeze({ available: true as const }),
     service,
     colorSetProfiles,
+    patternCostingRuntimeAuthorities,
   });
 }
 

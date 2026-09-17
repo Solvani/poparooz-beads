@@ -15,6 +15,13 @@ import type {
   GenerationInputSnapshot,
   GenerationRuntime,
 } from "./generation.types";
+import { assertPrevalidatedBoundControlledGenerationAuthority } from "../pattern-costing/manifest";
+import { assertPatternCostingRuntimeAuthority } from "../pattern-costing/runtime-authority";
+import type {
+  PatternCostingAttemptContext,
+  PatternCostingGenerationControl,
+  PatternCostingRuntimeAuthority,
+} from "../pattern-costing/pattern-costing.types";
 
 interface ActiveGeneration {
   readonly jobId: number;
@@ -29,6 +36,7 @@ export interface UseGeneratorControllerOptions {
   readonly imageVersion: number;
   readonly settings: PatternSettingsDraft;
   readonly runtime: GenerationRuntime;
+  readonly patternCosting?: PatternCostingGenerationControl;
 }
 
 export function useGeneratorController({
@@ -36,6 +44,7 @@ export function useGeneratorController({
   imageVersion,
   settings,
   runtime,
+  patternCosting = DISABLED_PATTERN_COSTING,
 }: UseGeneratorControllerOptions) {
   const [state, dispatch] = useReducer(
     generatorReducer,
@@ -48,22 +57,44 @@ export function useGeneratorController({
     runtime.availability.available && "colorSetProfiles" in runtime
       ? runtime.colorSetProfiles
       : NO_COLOR_SET_PROFILES;
+  const patternCostingMode = patternCosting.mode;
+  const controlledPatternCostingAuthority =
+    patternCosting.mode === "controlled" ? patternCosting.authority : null;
 
   const input = useMemo<CurrentGeneratorInput | null>(() => {
     if (file === null) return null;
     const validation = validatePatternSettings(settings, colorSetProfiles);
     if (!validation.valid) return { imageVersion, candidate: null };
     const stableSettings = Object.freeze({ ...validation.value });
+    const costingAuthorityKey =
+      patternCostingMode === "disabled"
+        ? "pattern-costing-disabled"
+        : patternCostingAuthorityKey({
+            mode: "controlled",
+            authority: controlledPatternCostingAuthority!,
+          });
+    if (costingAuthorityKey === null) return { imageVersion, candidate: null };
     return Object.freeze({
       imageVersion,
       candidate: Object.freeze({
         file,
         imageVersion,
         settings: stableSettings,
-        inputKey: createInputKey(imageVersion, stableSettings),
+        inputKey: createInputKey(
+          imageVersion,
+          stableSettings,
+          costingAuthorityKey,
+        ),
       }),
     });
-  }, [colorSetProfiles, file, imageVersion, settings]);
+  }, [
+    colorSetProfiles,
+    controlledPatternCostingAuthority,
+    file,
+    imageVersion,
+    patternCostingMode,
+    settings,
+  ]);
   const inputRef = useRef(input);
 
   useEffect(() => {
@@ -98,10 +129,20 @@ export function useGeneratorController({
 
     const jobId = nextJobId.current;
     nextJobId.current += 1;
+    const patternCostingContext = preparePatternCostingAttemptContext(
+      patternCosting,
+      runtime,
+      candidate.settings.selectedColorSetProfileId,
+    );
+    if (patternCosting.mode === "controlled" && patternCostingContext === null)
+      return false;
     const snapshot: GenerationInputSnapshot = Object.freeze({
       ...candidate,
       settings: Object.freeze({ ...candidate.settings }),
       jobId,
+      ...(patternCostingContext === null
+        ? {}
+        : { patternCosting: patternCostingContext }),
     });
     const controller = new AbortController();
     active.current = { jobId, inputKey: snapshot.inputKey, controller };
@@ -128,7 +169,7 @@ export function useGeneratorController({
       },
     );
     return true;
-  }, [runtime]);
+  }, [patternCosting, runtime]);
 
   const abort = useCallback((): boolean => {
     const current = active.current;
@@ -175,6 +216,7 @@ function createInputKey(
     readonly background: string;
     readonly selectedColorSetProfileId: string;
   },
+  costingAuthorityKey: string,
 ): string {
   return [
     imageVersion,
@@ -183,5 +225,60 @@ function createInputKey(
     settings.maxColors,
     settings.background,
     settings.selectedColorSetProfileId,
+    costingAuthorityKey,
   ].join(":");
+}
+
+const DISABLED_PATTERN_COSTING = Object.freeze({
+  mode: "disabled" as const,
+});
+
+function patternCostingAuthorityKey(
+  control: PatternCostingGenerationControl,
+): string | null {
+  if (control.mode === "disabled") return "pattern-costing-disabled";
+  const authority = control.authority;
+  if (
+    typeof authority !== "object" ||
+    authority === null ||
+    typeof authority.manifestDigest !== "string" ||
+    typeof authority.assertion?.assertionId !== "string" ||
+    typeof authority.assertion?.generationAttemptId !== "string"
+  )
+    return null;
+  return [
+    authority.manifestDigest,
+    authority.assertion.assertionId,
+    authority.assertion.generationAttemptId,
+  ].join("|");
+}
+
+function preparePatternCostingAttemptContext(
+  control: PatternCostingGenerationControl,
+  runtime: GenerationRuntime,
+  selectedProfileId: string,
+): PatternCostingAttemptContext | null {
+  if (control.mode === "disabled") return null;
+  if (
+    !runtime.availability.available ||
+    !("patternCostingRuntimeAuthorities" in runtime)
+  )
+    return null;
+  const runtimeAuthority = runtime.patternCostingRuntimeAuthorities?.find(
+    (candidate: PatternCostingRuntimeAuthority) =>
+      candidate.generationColorSetProfileId === selectedProfileId,
+  );
+  if (runtimeAuthority === undefined) return null;
+  try {
+    assertPrevalidatedBoundControlledGenerationAuthority(control.authority);
+    assertPatternCostingRuntimeAuthority(runtimeAuthority);
+  } catch {
+    return null;
+  }
+  const context = Object.freeze({
+    authority: control.authority,
+    runtimeAuthority,
+    generatedAt: new Date().toISOString(),
+  });
+  return context;
 }

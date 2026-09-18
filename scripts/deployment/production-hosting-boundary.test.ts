@@ -271,7 +271,7 @@ describe("production hosting boundary", () => {
       "VITE_SHOP_URL=https://poparooz.com",
       "VITE_GENERATOR_PUBLIC_URL=https://generator.poparooz.com",
       "VITE_ALLOWED_PARENT_ORIGINS=https://poparooz.com",
-      "VITE_MARKETING_CONSENT_ENABLED=false",
+      "VITE_MARKETING_CONSENT_ENABLED=true",
       "VITE_MARKETING_WITHDRAWAL_ENABLED=true",
     ]);
     expect(productionEnvironment).not.toMatch(/http:\/\//);

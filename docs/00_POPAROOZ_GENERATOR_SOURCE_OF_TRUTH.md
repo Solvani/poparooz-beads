@@ -4,7 +4,7 @@ Status: **Generator production baseline retained; Email Gate P3-A03-E04-A08 comp
 
 Baseline version: **3.14**
 
-Last reviewed: **2026-09-03**
+Last reviewed: **2026-09-18**
 
 ## Authority
 
@@ -270,22 +270,26 @@ accepted implementation HEAD.
 - MC-A02-A02-H01: **COMPLETED / CORRECTION EFFECTIVE; original commit-transition language retained as historical provenance in the frozen contract**
 - MC-A02 architecture: **SEPARATE MARKETING CONSENT API / EMAIL GATE V1 UNCHANGED**
 - Generator Marketing parent stage: **MC-A02-E02**
-- Completed production stage: **MC-A02-E02-P04 — Controlled Marketing Lifecycle E2E**
+- Historical production stage: **MC-A02-E02-P04 — Controlled Marketing Lifecycle E2E**
+- Accepted production stage: **MC-A02-E02-P05 — Marketing Grant Production Completion**
 - Accepted P03 runtime/source baseline: `ec61d56f4db9e5957f415171635c6b01eb47e5b0`
 - P03 status: **COMPLETED / PUSHED / PAGES DEPLOYED / WITHDRAWAL ENABLED / GRANT DISABLED / PRODUCTION VERIFIED / ACCEPTED / CLOSED / WITH REAL OTP LIFECYCLE E2E PENDING**
-- P04 status: **CLOSED / WITHDRAWAL-ONLY PRODUCTION BASELINE PRESERVED / MARKETING GRANT DISABLED / WITHDRAWAL ENABLED**
-- Full Marketing lifecycle: **NOT PROVEN / DEFERRED**
-- Further P04 production retry: **NOT AUTHORIZED**
-- Final production source: `b33bdb2ab1f6008c2c27dcc68324d5028dee6662`
-- Final production deployment: `e01f7436-d29c-4f3d-b65b-619bf6f0f53a`
-- Marketing production configuration: `VITE_MARKETING_CONSENT_ENABLED=false`; `VITE_MARKETING_WITHDRAWAL_ENABLED=true`
-- Current customer behavior: **Marketing checkbox absent; grant and collection disabled; withdrawal self-service enabled; `/unsubscribe` active**
+- P04 status: **CLOSED / HISTORICAL WITHDRAWAL-ONLY FINAL DISPOSITION**
+- P05 status: **PASS / MARKETING GRANT + WITHDRAWAL PRODUCTION LIFECYCLE VERIFIED / READY FOR FINAL GOVERNANCE CLOSURE**
+- Full Marketing lifecycle: **G1 -> W1 -> G2 -> W2 / PROVEN / PASS**
+- Marketing functional implementation authority: `a547d01ffad9294de934f00c9a20cbc7105ecd99`
+- Accepted P05 lifecycle deployment: `b5425c91-110f-448e-9758-f06cc7f28d8e`
+- Marketing production configuration: `VITE_MARKETING_CONSENT_ENABLED=true`; `VITE_MARKETING_WITHDRAWAL_ENABLED=true`
+- Current customer behavior: **Marketing checkbox enabled and optional; grant enabled; withdrawal self-service enabled; `/unsubscribe` active**
+- P05 final QA state: **subscription withdrawn / state_version 4 / granted -> withdrawn -> granted -> withdrawn / rollback 0**
+- Marketing integration qualification: **No Resend Contacts/Audiences, campaigns, Shopify Marketing mutation, CRM sync, or Marketing sending integration is implemented or authorized**
 - PatternCostingExportV2 cross-module dependency: **v2.1.0 / COMPLETED / COST MASTER APPROVED / FROZEN / CLOSED / CONTRACT SEMANTICS ONLY**
 - PatternCostingExportV2 v2.1 freeze authority: `3030f8ed06b786f914dda8dab5b39a879b806d691f672183584fed6df97079e1`
-- PatternCosting implementation authority: **NOT GRANTED**
-- Next controlled action: **Fresh GEN-COST-PATTERN-EXPORT-V2-D00 readiness rerun requires separate authorization**
-- Evidence qualification: **P04 closed under the accepted withdrawal-only final production disposition. R06 safe restoration was verified, but its CDP controller session and the full Marketing lifecycle were not proven; R06 is not a lifecycle PASS. This repository-governance reconciliation records the accepted live authority and does not independently rerun production or D00.**
-- Current repository Git authority: **Determine from live Git inspection; governance-only commits may advance it without changing the accepted P03 runtime/source baseline.**
+- PatternCosting Generator status: **V2.1 CLOSED**
+- PatternCosting implementation authority: `a0005ecf885db2d458679b20ec7c6006d7b12b79`
+- PatternCosting next action: **No fresh D00 rerun is current; reopening requires separate authority**
+- Evidence qualification: **P04 remains the historical withdrawal-only disposition. P05 is the later accepted lifecycle authority and proves G1 -> W1 -> G2 -> W2 without rewriting P03/P04 history. This docs reconciliation does not rerun production or change runtime behavior.**
+- Repository authority entering this docs-only reconciliation: `a547d01ffad9294de934f00c9a20cbc7105ecd99`; **the docs-only commit containing this text becomes repository and production source authority after its normal `main` push without replacing the Marketing functional implementation authority**
 - Ops Dashboard v1: **HOLD**
 The six-commit catch-up evidence and the qualifications that were open at that
 time remain historical in
@@ -301,14 +305,15 @@ COMPLETED / CONTRACT APPROVED / FROZEN / COMMITTED / PUSHED at commit
 `416bd457c5578b9435b9e9010dfdaed0b0261ee0`. The MC-A02-A02-H01 correction
 became effective through its successful exact three-file governance commit; the
 frozen contract's before/after transition language remains historical provenance.
-Current Marketing production authority is the final MC-A02-E02-P04
-withdrawal-only disposition: P04 is CLOSED, Marketing Grant is DISABLED,
-Withdrawal is ENABLED, the full Marketing lifecycle is NOT PROVEN / DEFERRED,
-and further P04 retry is NOT AUTHORIZED. PatternCostingExportV2 v2.1.0 is a
-separate frozen Costing contract-semantics dependency with freeze authority
-`3030f8ed06b786f914dda8dab5b39a879b806d691f672183584fed6df97079e1`.
-It grants no PatternCosting implementation, dependency installation,
-Central Table or Feishu business-data write, deployment, or fresh D00 rerun
+P04 remains CLOSED as the historical withdrawal-only final disposition. Current
+Marketing production authority is the later accepted MC-A02-E02-P05 lifecycle:
+Marketing Grant and Withdrawal are ENABLED, G1 -> W1 -> G2 -> W2 is PROVEN /
+PASS, the final QA subscription is withdrawn at state_version 4, and rollback
+count is zero. Marketing persistence does not imply a provider or sending
+integration. PatternCostingExportV2 v2.1.0 remains a separate frozen Costing
+contract dependency, and its Generator implementation is CLOSED at authority
+`a0005ecf885db2d458679b20ec7c6006d7b12b79`. No fresh D00 rerun is the current
+next action; reopening or adjacent business-data mutation requires separate
 authority.
 Commit `f8852d2d5a14ceff38848e35b284dc375f72399a` was a published docs-only
 governance regression that downgraded already accepted production evidence. It

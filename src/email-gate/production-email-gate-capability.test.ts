@@ -15,7 +15,7 @@ describe("production Email Gate capability", () => {
       Promise.resolve(
         new Response(
           JSON.stringify({
-            schemaVersion: 1,
+            schemaVersion: 2,
             result: "service_unavailable",
           }),
           {
@@ -41,10 +41,10 @@ describe("production Email Gate capability", () => {
     });
     expect(result).toEqual({
       ok: true,
-      response: { schemaVersion: 1, result: "service_unavailable" },
+      response: { schemaVersion: 2, result: "service_unavailable" },
     });
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/email-gate/v1/challenges",
+      "/api/email-gate/v2/challenges",
       expect.objectContaining({
         method: "POST",
         credentials: "omit",

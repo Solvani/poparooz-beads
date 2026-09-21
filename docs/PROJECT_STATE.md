@@ -25,6 +25,21 @@ authority. Repository authority, functional implementation authority,
 historical stage authority, deployment identity, and production evidence remain
 distinct.
 
+## Active Email Gate OTP V2 execution candidate
+
+`EMAIL-GATE-OTP-UX-P01` is authorized to retain frozen OTP V1 as the strict
+eight-digit legacy protocol and introduce strict six-digit OTP V2 for new flows.
+The candidate uses separate `/api/email-gate/v1/*` and
+`/api/email-gate/v2/*` routes plus trusted D1 `delivery_payload_version`
+discrimination. No D1 migration is required or authorized.
+
+The V2 authority is documented in
+[`POPAROOZ_EMAIL_GATE_OTP_V2_CONTRACT.md`](POPAROOZ_EMAIL_GATE_OTP_V2_CONTRACT.md).
+The commit containing this snapshot establishes repository implementation
+authority; it does not establish deployment, production verification, master
+acceptance, or closure. The production Worker and Pages IDs below therefore
+remain the verified pre-change rollback anchors.
+
 ## Marketing stage disposition
 
 ```text
@@ -152,7 +167,9 @@ modified by the V2.1 closure.
 
 - Poparooz is the only customer-facing brand.
 - User images stay in the browser.
-- Email Gate v1 remains unchanged; Marketing uses separate APIs.
+- Email Gate OTP V1 remains frozen at exactly eight digits for legacy
+  compatibility; the separately versioned OTP V2 candidate is exactly six
+  digits for new issuance and client UX.
 - Marketing consent remains optional and separate from Download authority.
 - Grant and withdrawal flags and capabilities remain independent.
 - Withdrawal must remain production-capable while grant is enabled.
@@ -162,6 +179,7 @@ Primary frozen authorities:
 - [`POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md`](POPAROOZ_MARKETING_CONSENT_V1_MC_A00_PRODUCT_DATA_PRIVACY_CONTRACT.md)
 - [`POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md`](POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md)
 - [`POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md`](POPAROOZ_P3_A03_E04_EMAIL_DOWNLOAD_GATE_CONTRACT.md)
+- [`POPAROOZ_EMAIL_GATE_OTP_V2_CONTRACT.md`](POPAROOZ_EMAIL_GATE_OTP_V2_CONTRACT.md)
 - [`POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md`](POPAROOZ_P3_A03_E04_A08_A01_BOUNDED_PRODUCTION_ACCEPTANCE_VERIFICATION.md)
 
 ## Explicitly forbidden next-step actions

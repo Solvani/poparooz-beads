@@ -1,52 +1,36 @@
-import {
-  EMAIL_GATE_DELIVERY_PAYLOAD_VERSION,
-  EMAIL_GATE_DELIVERY_PAYLOAD_VERSION_V2,
-} from "../model";
-import {
-  createDeliveryPayloadRendererRegistry,
-  type DeliveryPayload,
-  type DeliveryPayloadRenderer,
-  type DeliveryPayloadRendererRegistry,
+import { EMAIL_GATE_DELIVERY_PAYLOAD_VERSION_V2 } from "../model";
+import type {
+  DeliveryPayload,
+  DeliveryPayloadRenderer,
 } from "./payload-renderer";
-import { PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V2 } from "./production-renderer-v2";
 
-const PRODUCTION_FROM_V1 =
+const PRODUCTION_FROM_V2 =
   "Poparooz <verification@notify.poparooz.com>" as const;
-const PRODUCTION_REPLY_TO_V1 = "poparooz2026@gmail.com" as const;
-const PRODUCTION_SUBJECT_V1 = "Your Poparooz verification code" as const;
+const PRODUCTION_REPLY_TO_V2 = "poparooz2026@gmail.com" as const;
+const PRODUCTION_SUBJECT_V2 = "Your Poparooz verification code" as const;
 
-export const PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V1 = Object.freeze({
-  version: EMAIL_GATE_DELIVERY_PAYLOAD_VERSION,
+export const PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V2 = Object.freeze({
+  version: EMAIL_GATE_DELIVERY_PAYLOAD_VERSION_V2,
   render({
     normalizedEmail,
     otp,
   }: Readonly<{ normalizedEmail: string; otp: string }>): DeliveryPayload {
-    if (!/^[0-9]{8}$/.test(otp)) {
+    if (!/^[0-9]{6}$/.test(otp)) {
       throw new TypeError("Invalid production delivery OTP.");
     }
 
     return Object.freeze({
-      from: PRODUCTION_FROM_V1,
-      replyTo: PRODUCTION_REPLY_TO_V1,
+      from: PRODUCTION_FROM_V2,
+      replyTo: PRODUCTION_REPLY_TO_V2,
       to: Object.freeze([normalizedEmail]) as readonly [string],
-      subject: PRODUCTION_SUBJECT_V1,
-      text: renderProductionTextV1(otp),
-      html: renderProductionHtmlV1(otp),
+      subject: PRODUCTION_SUBJECT_V2,
+      text: renderProductionTextV2(otp),
+      html: renderProductionHtmlV2(otp),
     });
   },
 }) satisfies DeliveryPayloadRenderer;
 
-export function createProductionDeliveryPayloadRendererRegistry(): DeliveryPayloadRendererRegistry {
-  return createDeliveryPayloadRendererRegistry(
-    EMAIL_GATE_DELIVERY_PAYLOAD_VERSION_V2,
-    [
-      PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V1,
-      PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V2,
-    ],
-  );
-}
-
-function renderProductionTextV1(otp: string): string {
+function renderProductionTextV2(otp: string): string {
   return `Your Poparooz verification code is:
 
 ${otp}
@@ -60,7 +44,7 @@ If you didn't request this code, you can ignore this email.
 Poparooz`;
 }
 
-function renderProductionHtmlV1(otp: string): string {
+function renderProductionHtmlV2(otp: string): string {
   return `<!doctype html>
 <html lang="en">
 <head>

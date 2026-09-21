@@ -1,12 +1,18 @@
 import { env } from "cloudflare:test";
 import { describe, expect, it, vi } from "vitest";
 
-import { createOtpKeyRegistry, decodeHexKey, deriveOtpV1 } from "../crypto/otp";
+import {
+  createOtpKeyRegistry,
+  decodeHexKey,
+  deriveOtpV1,
+  deriveOtpV2,
+} from "../crypto/otp";
 import {
   createDeliveryPayloadRendererRegistry,
   createTestFixtureRenderer,
 } from "../delivery/payload-renderer";
 import { PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V1 } from "../delivery/production-renderer-v1";
+import { PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V2 } from "../delivery/production-renderer-v2";
 import type { ProviderSendResult } from "../model";
 import { createEmailGateRepository } from "../repository/email-gate-repository";
 import {
@@ -57,6 +63,91 @@ describe("Email Gate service lifecycle", () => {
         code,
       }),
     ).resolves.toBe("verification_invalid");
+  });
+
+  it("issues and verifies V2 while challenge state remains version-authoritative", async () => {
+    const fixture = createFixture(["accepted"]);
+    await expect(
+      fixture.service.issue(issueRequestV2()),
+    ).resolves.toMatchObject({
+      result: "challenge_issued",
+      challengeId: CHALLENGE_A,
+    });
+    const challenge = await fixture.repository.findChallenge(CHALLENGE_A);
+    expect(challenge?.deliveryPayloadVersion).toBe(2);
+    expect(fixture.resend.send.mock.calls[0]?.[1]).toMatchObject({
+      text: expect.stringMatching(/Test-only verification code: [0-9]{6}$/),
+    });
+
+    const key = await fixture.otpKeys.getKey(1);
+    const v1Code = await deriveOtpV1(key!, CHALLENGE_A);
+    const v2Code = await deriveOtpV2(key!, CHALLENGE_A);
+    expect(v2Code).toMatch(/^[0-9]{6}$/);
+    await expect(
+      fixture.service.verify({
+        schemaVersion: 1,
+        challengeId: CHALLENGE_A,
+        code: v1Code,
+      }),
+    ).resolves.toBe("verification_invalid");
+    expect(
+      (await fixture.repository.findChallenge(CHALLENGE_A))?.attemptCount,
+    ).toBe(0);
+    await expect(
+      fixture.service.verify({
+        schemaVersion: 2,
+        challengeId: CHALLENGE_A,
+        code: v2Code,
+      }),
+    ).resolves.toBe("verification_succeeded");
+  });
+
+  it("does not reinterpret a V1 challenge through V2 semantics", async () => {
+    const fixture = createFixture(["accepted"]);
+    await fixture.service.issue(issueRequest());
+    await expect(
+      fixture.service.verify({
+        schemaVersion: 2,
+        challengeId: CHALLENGE_A,
+        code: "123456",
+      }),
+    ).resolves.toBe("verification_invalid");
+    expect(
+      (await fixture.repository.findChallenge(CHALLENGE_A))?.attemptCount,
+    ).toBe(0);
+
+    const key = await fixture.otpKeys.getKey(1);
+    await expect(
+      fixture.service.verify({
+        schemaVersion: 1,
+        challengeId: CHALLENGE_A,
+        code: await deriveOtpV1(key!, CHALLENGE_A),
+      }),
+    ).resolves.toBe("verification_succeeded");
+  });
+
+  it("terminalizes a recoverable incompatible V1 pending attempt before fresh V2 issuance after cooldown", async () => {
+    const fixture = createFixture(["ambiguous", "accepted"]);
+    await expect(fixture.service.issue(issueRequest())).resolves.toEqual({
+      result: "retry_later",
+    });
+    fixture.advance(60_001);
+
+    const issued = await fixture.service.issue(issueRequestV2("v2-proof"));
+    expect(issued).toMatchObject({
+      result: "challenge_issued",
+      challengeId: "00000000-0000-4000-8000-000000000001",
+    });
+    expect((await fixture.repository.findChallenge(CHALLENGE_A))?.state).toBe(
+      "delivery_failed",
+    );
+    expect(
+      (
+        await fixture.repository.findChallenge(
+          "00000000-0000-4000-8000-000000000001",
+        )
+      )?.deliveryPayloadVersion,
+    ).toBe(2);
   });
 
   it("reconstructs an identical production payload for same-event recovery", async () => {
@@ -573,6 +664,14 @@ function issueRequest(turnstileToken = "token") {
   });
 }
 
+function issueRequestV2(turnstileToken = "token") {
+  return Object.freeze({
+    schemaVersion: 2 as const,
+    email: "User@example.com",
+    turnstileToken,
+  });
+}
+
 function createFixture(
   outcomes: readonly ProviderSendResult["outcome"][],
   options: Readonly<{
@@ -602,14 +701,15 @@ function createFixture(
     options.key === false ? new Map() : new Map([[1, TEST_KEY]]),
   );
   const payloadRenderers = createDeliveryPayloadRendererRegistry(
-    1,
+    2,
     options.renderer === false
       ? []
-      : [
-          options.productionRenderer === true
-            ? PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V1
-            : createTestFixtureRenderer(1),
-        ],
+      : options.productionRenderer === true
+        ? [
+            PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V1,
+            PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V2,
+          ]
+        : [createTestFixtureRenderer(1), createTestFixtureRenderer(2)],
   );
   const repository = createEmailGateRepository(env.EMAIL_GATE_DB);
   const service = createEmailGateService({

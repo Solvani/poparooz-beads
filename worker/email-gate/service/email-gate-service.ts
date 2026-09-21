@@ -2,16 +2,20 @@ import {
   normalizeEmailAddressV1,
   type EmailGateChallengeRequest,
   type EmailGateVerificationRequest,
+  type EmailGateV2ChallengeRequest,
+  type EmailGateV2VerificationRequest,
 } from "../../../src/contracts/email-gate/email-gate-contract";
 import type { DeliveryPayloadRendererRegistry } from "../delivery/payload-renderer";
 import {
-  deriveOtpV1,
+  deriveOtpForDeliveryVersion,
   type OtpKeyRegistry,
-  timingSafeOtpEqual,
+  timingSafeOtpEqualForDeliveryVersion,
 } from "../crypto/otp";
 import {
   EMAIL_GATE_CHALLENGE_TTL_MS,
   EMAIL_GATE_COOLDOWN_MS,
+  EMAIL_GATE_DELIVERY_PAYLOAD_VERSION,
+  EMAIL_GATE_DELIVERY_PAYLOAD_VERSION_V2,
   EMAIL_GATE_PROVIDER_LEASE_MS,
   remainingSeconds,
   type VerificationResult,
@@ -32,8 +36,12 @@ export interface IssueChallengeResult {
 }
 
 export interface EmailGateService {
-  issue(request: EmailGateChallengeRequest): Promise<IssueChallengeResult>;
-  verify(request: EmailGateVerificationRequest): Promise<VerificationResult>;
+  issue(
+    request: EmailGateChallengeRequest | EmailGateV2ChallengeRequest,
+  ): Promise<IssueChallengeResult>;
+  verify(
+    request: EmailGateVerificationRequest | EmailGateV2VerificationRequest,
+  ): Promise<VerificationResult>;
   scheduled(): Promise<number>;
 }
 
@@ -62,7 +70,7 @@ export function createEmailGateService(
 
   return Object.freeze({
     async issue(
-      request: EmailGateChallengeRequest,
+      request: EmailGateChallengeRequest | EmailGateV2ChallengeRequest,
     ): Promise<IssueChallengeResult> {
       const normalized = normalizeEmailAddressV1(request.email);
       if (!normalized.ok) return Object.freeze({ result: "invalid_request" });
@@ -71,13 +79,29 @@ export function createEmailGateService(
       }
 
       const decisionNow = now();
+      const deliveryPayloadVersion =
+        request.schemaVersion === 1
+          ? EMAIL_GATE_DELIVERY_PAYLOAD_VERSION
+          : EMAIL_GATE_DELIVERY_PAYLOAD_VERSION_V2;
       await repository.settleIneligiblePending(
         normalized.normalizedEmail,
+        decisionNow,
+      );
+      await repository.settleIncompatiblePending(
+        normalized.normalizedEmail,
+        deliveryPayloadVersion,
         decisionNow,
       );
       let challenge = await repository.findPendingByEmail(
         normalized.normalizedEmail,
       );
+
+      if (
+        challenge !== null &&
+        challenge.deliveryPayloadVersion !== deliveryPayloadVersion
+      ) {
+        return Object.freeze({ result: "retry_later" });
+      }
 
       if (challenge === null) {
         const challengeId = randomUuid();
@@ -87,7 +111,7 @@ export function createEmailGateService(
           normalizedEmail: normalized.normalizedEmail,
           otpKeyVersion: otpKeys.activeVersion,
           providerSendEventId,
-          deliveryPayloadVersion: payloadRenderers.activeVersion,
+          deliveryPayloadVersion,
           createdAt: decisionNow,
           expiresAt: decisionNow + EMAIL_GATE_CHALLENGE_TTL_MS,
         });
@@ -120,7 +144,11 @@ export function createEmailGateService(
 
       let otp: string;
       try {
-        otp = await deriveOtpV1(key, reserved.challengeId);
+        otp = await deriveOtpForDeliveryVersion(
+          reserved.deliveryPayloadVersion,
+          key,
+          reserved.challengeId,
+        );
       } catch {
         return Object.freeze({ result: "service_unavailable" });
       }
@@ -183,7 +211,7 @@ export function createEmailGateService(
     },
 
     async verify(
-      request: EmailGateVerificationRequest,
+      request: EmailGateVerificationRequest | EmailGateV2VerificationRequest,
     ): Promise<VerificationResult> {
       const lookupNow = now();
       let challenge = await repository.findChallenge(request.challengeId);
@@ -194,12 +222,19 @@ export function createEmailGateService(
       }
       if (challenge.state === "terminal_failed") return "verification_locked";
       if (challenge.state !== "active") return "verification_invalid";
+      if (challenge.deliveryPayloadVersion !== request.schemaVersion) {
+        return "verification_invalid";
+      }
 
       const key = await otpKeys.getKey(challenge.otpKeyVersion);
       if (key === null) return "service_unavailable";
       let expectedOtp: string;
       try {
-        expectedOtp = await deriveOtpV1(key, challenge.challengeId);
+        expectedOtp = await deriveOtpForDeliveryVersion(
+          challenge.deliveryPayloadVersion,
+          key,
+          challenge.challengeId,
+        );
       } catch {
         return "service_unavailable";
       }
@@ -210,7 +245,11 @@ export function createEmailGateService(
         return "verification_expired";
       }
 
-      const correct = timingSafeOtpEqual(request.code, expectedOtp);
+      const correct = timingSafeOtpEqualForDeliveryVersion(
+        challenge.deliveryPayloadVersion,
+        request.code,
+        expectedOtp,
+      );
       if (correct) {
         if (
           await repository.verifyActive(

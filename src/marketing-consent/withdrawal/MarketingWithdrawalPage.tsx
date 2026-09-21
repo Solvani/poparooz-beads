@@ -10,7 +10,7 @@ import {
 
 import poparoozLogo from "../../assets/branding/poparooz-logo.png";
 import {
-  EMAIL_GATE_OTP_REGEX,
+  EMAIL_GATE_V2_OTP_REGEX,
   normalizeEmailAddressV1,
 } from "../../contracts/email-gate/email-gate-contract";
 import { createEmailGateOperationIdentity } from "../../email-gate/operation-identity";
@@ -197,7 +197,7 @@ export function MarketingWithdrawalPage({
 
   const submitCode = async (event: FormEvent) => {
     event.preventDefault();
-    if (!EMAIL_GATE_OTP_REGEX.test(code)) {
+    if (!EMAIL_GATE_V2_OTP_REGEX.test(code)) {
       dispatch({ type: "SHOW_CODE_ERROR" });
       codeRef.current?.focus();
       return;
@@ -339,7 +339,7 @@ export function MarketingWithdrawalPage({
       ) : codeFlow ? (
         <form className="marketing-withdrawal-form" onSubmit={submitCode}>
           <p className="marketing-withdrawal-eyebrow">Verify your email</p>
-          <h1 id="marketing-withdrawal-heading">Enter your 8-digit code.</h1>
+          <h1 id="marketing-withdrawal-heading">Enter your 6-digit code.</h1>
           <p className="marketing-withdrawal-message">
             We sent a fresh verification code to {submittedEmail}.
           </p>
@@ -351,17 +351,17 @@ export function MarketingWithdrawalPage({
             type="text"
             inputMode="numeric"
             autoComplete="one-time-code"
-            pattern="[0-9]{8}"
-            maxLength={8}
+            pattern="[0-9]{6}"
+            maxLength={6}
             value={code}
             onChange={(event) =>
-              setCode(event.target.value.replace(/\D/g, "").slice(0, 8))
+              setCode(event.target.value.replace(/\D/g, "").slice(0, 6))
             }
             aria-invalid={state.phase === "CODE_ERROR"}
           />
           {state.phase === "CODE_ERROR" && (
             <p className="marketing-withdrawal-error" role="alert">
-              Enter the valid 8-digit verification code.
+              Enter the valid 6-digit verification code.
             </p>
           )}
           {state.phase === "RATE_LIMITED" && (

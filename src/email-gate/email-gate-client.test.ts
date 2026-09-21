@@ -11,7 +11,7 @@ function jsonResponse(body: unknown, status = 201) {
 
 function issueSuccess() {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     result: "challenge_issued",
     challengeId: CHALLENGE_ID,
     expiresInSeconds: 580,
@@ -30,13 +30,13 @@ describe("Email Gate browser API client", () => {
       }),
     ).resolves.toEqual({ ok: true, response: issueSuccess() });
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/email-gate/v1/challenges",
+      "/api/email-gate/v2/challenges",
       expect.objectContaining({
         method: "POST",
         credentials: "omit",
         redirect: "error",
         body: JSON.stringify({
-          schemaVersion: 1,
+          schemaVersion: 2,
           email: "Name@example.com",
           turnstileToken: "fresh-proof",
         }),
@@ -76,15 +76,15 @@ describe("Email Gate browser API client", () => {
     ],
     [
       "unsupported version",
-      jsonResponse({ ...issueSuccess(), schemaVersion: 2 }),
+      jsonResponse({ ...issueSuccess(), schemaVersion: 1 }),
     ],
     [
       "404 route response",
-      jsonResponse({ schemaVersion: 1, result: "invalid_request" }, 404),
+      jsonResponse({ schemaVersion: 2, result: "invalid_request" }, 404),
     ],
     [
       "405 route response",
-      jsonResponse({ schemaVersion: 1, result: "invalid_request" }, 405),
+      jsonResponse({ schemaVersion: 2, result: "invalid_request" }, 405),
     ],
     ["invalid status/result pair", jsonResponse(issueSuccess(), 200)],
   ])("fails closed for %s", async (_name, response) => {
@@ -142,7 +142,7 @@ describe("Email Gate browser API client", () => {
       fetch: vi.fn(async () =>
         jsonResponse(
           {
-            schemaVersion: 1,
+            schemaVersion: 2,
             result: "verification_succeeded",
             verified: true,
           },
@@ -151,11 +151,11 @@ describe("Email Gate browser API client", () => {
       ),
     });
     await expect(
-      client.verifyChallenge({ challengeId: CHALLENGE_ID, code: "01234567" }),
+      client.verifyChallenge({ challengeId: CHALLENGE_ID, code: "012345" }),
     ).resolves.toEqual({
       ok: true,
       response: {
-        schemaVersion: 1,
+        schemaVersion: 2,
         result: "verification_succeeded",
         verified: true,
       },
@@ -170,14 +170,14 @@ describe("Email Gate browser API client", () => {
   ] as const)("accepts issue result %s:%s", async (status, result) => {
     const client = createEmailGateBrowserClient({
       fetch: vi.fn(async () =>
-        jsonResponse({ schemaVersion: 1, result }, status),
+        jsonResponse({ schemaVersion: 2, result }, status),
       ),
     });
     await expect(
       client.issueChallenge({ email: "a@example.com", turnstileToken: "x" }),
     ).resolves.toEqual({
       ok: true,
-      response: { schemaVersion: 1, result },
+      response: { schemaVersion: 2, result },
     });
   });
 
@@ -192,14 +192,14 @@ describe("Email Gate browser API client", () => {
   ] as const)("accepts verify result %s:%s", async (status, result) => {
     const client = createEmailGateBrowserClient({
       fetch: vi.fn(async () =>
-        jsonResponse({ schemaVersion: 1, result }, status),
+        jsonResponse({ schemaVersion: 2, result }, status),
       ),
     });
     await expect(
-      client.verifyChallenge({ challengeId: CHALLENGE_ID, code: "01234567" }),
+      client.verifyChallenge({ challengeId: CHALLENGE_ID, code: "012345" }),
     ).resolves.toEqual({
       ok: true,
-      response: { schemaVersion: 1, result },
+      response: { schemaVersion: 2, result },
     });
   });
 
@@ -208,11 +208,11 @@ describe("Email Gate browser API client", () => {
     async (status) => {
       const client = createEmailGateBrowserClient({
         fetch: vi.fn(async () =>
-          jsonResponse({ schemaVersion: 1, result: "invalid_request" }, status),
+          jsonResponse({ schemaVersion: 2, result: "invalid_request" }, status),
         ),
       });
       await expect(
-        client.verifyChallenge({ challengeId: CHALLENGE_ID, code: "01234567" }),
+        client.verifyChallenge({ challengeId: CHALLENGE_ID, code: "012345" }),
       ).resolves.toEqual({ ok: false, reason: "invalid-response" });
     },
   );
@@ -232,7 +232,7 @@ describe("Email Gate browser API client", () => {
           jsonResponse(
             result === "challenge_issued"
               ? issueSuccess()
-              : { schemaVersion: 1, result },
+              : { schemaVersion: 2, result },
             status,
           ),
         ),
@@ -245,7 +245,7 @@ describe("Email Gate browser API client", () => {
             })
           : client.verifyChallenge({
               challengeId: CHALLENGE_ID,
-              code: "01234567",
+              code: "012345",
             });
       await expect(response).resolves.toEqual({
         ok: false,

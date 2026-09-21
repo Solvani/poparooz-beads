@@ -15,7 +15,7 @@ import { createPortal } from "react-dom";
 import editorialBeadboardUrl from "../assets/branding/email-gate-editorial-beadboard.jpg";
 import poparoozLogoUrl from "../assets/branding/poparooz-logo.png";
 import {
-  EMAIL_GATE_OTP_REGEX,
+  EMAIL_GATE_V2_OTP_REGEX,
   normalizeEmailAddressV1,
 } from "../contracts/email-gate/email-gate-contract";
 import type { EmailGateCapability } from "./email-gate-capability";
@@ -283,11 +283,11 @@ export function EmailGateDialog({
   const submitCode = async (event: FormEvent) => {
     event.preventDefault();
     if (
-      !EMAIL_GATE_OTP_REGEX.test(code) ||
+      !EMAIL_GATE_V2_OTP_REGEX.test(code) ||
       state.challengeId === null ||
       completionStarted.current
     ) {
-      if (!EMAIL_GATE_OTP_REGEX.test(code)) {
+      if (!EMAIL_GATE_V2_OTP_REGEX.test(code)) {
         dispatch({ type: "SHOW", phase: "invalid-code" });
         codeRef.current?.focus();
       }
@@ -549,7 +549,7 @@ export function EmailGateDialog({
             {isCodePhase(state.phase, state.challengeId) ? (
               <form className="email-gate-form" onSubmit={submitCode}>
                 <label className="visually-hidden" htmlFor="email-gate-code">
-                  8-digit verification code
+                  6-digit verification code
                 </label>
                 <div className="email-gate-code-field">
                   <input
@@ -558,17 +558,17 @@ export function EmailGateDialog({
                     type="text"
                     inputMode="numeric"
                     autoComplete="one-time-code"
-                    maxLength={8}
+                    maxLength={6}
                     value={code}
                     aria-invalid={state.phase === "invalid-code"}
                     onChange={(event) =>
                       setCode(
-                        event.target.value.replace(/[^0-9]/g, "").slice(0, 8),
+                        event.target.value.replace(/[^0-9]/g, "").slice(0, 6),
                       )
                     }
                   />
                   <div className="email-gate-code-slots" aria-hidden="true">
-                    {Array.from({ length: 8 }, (_, index) => (
+                    {Array.from({ length: 6 }, (_, index) => (
                       <span key={index}>{code[index] ?? ""}</span>
                     ))}
                   </div>
@@ -576,7 +576,7 @@ export function EmailGateDialog({
                 <button
                   className="email-gate-primary"
                   type="submit"
-                  disabled={state.phase === "verifying" || code.length !== 8}
+                  disabled={state.phase === "verifying" || code.length !== 6}
                 >
                   {state.phase === "verifying"
                     ? "Verifying…"
@@ -706,7 +706,7 @@ function titleFor(phase: EmailGatePhase, challengeId: string | null) {
   if (phase === "success") return "Email verified";
   if (phase === "persistence-warning") return "Download unlocked for now";
   if (phase === "pattern-replaced") return "Your pattern changed";
-  return "Enter the 8-digit code";
+  return "Enter the 6-digit code";
 }
 
 function instructionsFor(

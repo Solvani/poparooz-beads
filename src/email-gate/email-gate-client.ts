@@ -1,19 +1,23 @@
 import {
-  EMAIL_GATE_CHALLENGE_PATH,
   EMAIL_GATE_MAX_BODY_BYTES,
-  EMAIL_GATE_SCHEMA_VERSION,
-  EMAIL_GATE_VERIFICATION_PATH,
-  emailGateChallengeRequestSchema,
-  emailGateResponseSchema,
-  emailGateVerificationRequestSchema,
+  EMAIL_GATE_V2_CHALLENGE_PATH,
+  EMAIL_GATE_V2_SCHEMA_VERSION,
+  EMAIL_GATE_V2_VERIFICATION_PATH,
+  emailGateV2ChallengeRequestSchema,
+  emailGateV2ResponseSchema,
+  emailGateV2VerificationRequestSchema,
   type EmailGateResponse,
+  type EmailGateV2Response,
 } from "../contracts/email-gate/email-gate-contract";
 
 const EMAIL_GATE_JSON_MEDIA_TYPE = "application/json; charset=utf-8";
 const DEFAULT_TIMEOUT_MS = 10_000;
 
 export type EmailGateClientResult =
-  | Readonly<{ ok: true; response: EmailGateResponse }>
+  | Readonly<{
+      ok: true;
+      response: EmailGateResponse | EmailGateV2Response;
+    }>
   | Readonly<{
       ok: false;
       reason: "aborted" | "network" | "invalid-response";
@@ -45,13 +49,13 @@ export function createEmailGateBrowserClient(
       input: Readonly<{ email: string; turnstileToken: string }>,
       signal?: AbortSignal,
     ) {
-      const body = emailGateChallengeRequestSchema.parse({
-        schemaVersion: EMAIL_GATE_SCHEMA_VERSION,
+      const body = emailGateV2ChallengeRequestSchema.parse({
+        schemaVersion: EMAIL_GATE_V2_SCHEMA_VERSION,
         email: input.email,
         turnstileToken: input.turnstileToken,
       });
       return request(
-        EMAIL_GATE_CHALLENGE_PATH,
+        EMAIL_GATE_V2_CHALLENGE_PATH,
         body,
         "issue",
         environment,
@@ -62,13 +66,13 @@ export function createEmailGateBrowserClient(
       input: Readonly<{ challengeId: string; code: string }>,
       signal?: AbortSignal,
     ) {
-      const body = emailGateVerificationRequestSchema.parse({
-        schemaVersion: EMAIL_GATE_SCHEMA_VERSION,
+      const body = emailGateV2VerificationRequestSchema.parse({
+        schemaVersion: EMAIL_GATE_V2_SCHEMA_VERSION,
         challengeId: input.challengeId,
         code: input.code,
       });
       return request(
-        EMAIL_GATE_VERIFICATION_PATH,
+        EMAIL_GATE_V2_VERIFICATION_PATH,
         body,
         "verify",
         environment,
@@ -119,7 +123,7 @@ async function request(
     } catch {
       return { ok: false, reason: "invalid-response" };
     }
-    const parsed = emailGateResponseSchema.safeParse(value);
+    const parsed = emailGateV2ResponseSchema.safeParse(value);
     if (
       !parsed.success ||
       !isAllowedPair(operation, response.status, parsed.data.result)
@@ -175,7 +179,7 @@ function isAllowedStatus(operation: "issue" | "verify", status: number) {
 function isAllowedPair(
   operation: "issue" | "verify",
   status: number,
-  result: EmailGateResponse["result"],
+  result: EmailGateV2Response["result"],
 ) {
   const key = `${status}:${result}`;
   return operation === "issue"

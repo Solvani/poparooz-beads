@@ -185,12 +185,12 @@ describe("Email Gate Marketing intent", () => {
     await userEvent.click(
       screen.getByRole("button", { name: "Send verification code" }),
     );
-    await screen.findByLabelText("8-digit verification code");
+    await screen.findByLabelText("6-digit verification code");
   }
   async function verify() {
     await userEvent.type(
-      screen.getByLabelText("8-digit verification code"),
-      "01234567",
+      screen.getByLabelText("6-digit verification code"),
+      "012345",
     );
     await userEvent.click(
       screen.getByRole("button", { name: "Verify & download" }),
@@ -260,28 +260,28 @@ describe("Email Gate Marketing intent", () => {
   });
 
   it.each([false, true])(
-    "keeps actual Email Gate wire bodies unchanged with intent %s",
+    "keeps Marketing intent out of the V2 Email Gate wire bodies with intent %s",
     async (checked) => {
       const fetchMock = vi.fn<typeof fetch>(
         async (path) =>
           new Response(
             JSON.stringify(
-              path === "/api/email-gate/v1/challenges"
+              path === "/api/email-gate/v2/challenges"
                 ? {
-                    schemaVersion: 1,
+                    schemaVersion: 2,
                     result: "challenge_issued",
                     challengeId: CHALLENGE_ID,
                     expiresInSeconds: 580,
                     resendAfterSeconds: 45,
                   }
                 : {
-                    schemaVersion: 1,
+                    schemaVersion: 2,
                     result: "verification_succeeded",
                     verified: true,
                   },
             ),
             {
-              status: path === "/api/email-gate/v1/challenges" ? 201 : 200,
+              status: path === "/api/email-gate/v2/challenges" ? 201 : 200,
               headers: { "Content-Type": "application/json; charset=utf-8" },
             },
           ),
@@ -301,18 +301,18 @@ describe("Email Gate Marketing intent", () => {
       await verify();
       await screen.findByRole("dialog", { name: "Email verified" });
       expect(fetchMock.mock.calls.map(([path]) => path)).toEqual([
-        "/api/email-gate/v1/challenges",
-        "/api/email-gate/v1/verifications",
+        "/api/email-gate/v2/challenges",
+        "/api/email-gate/v2/verifications",
       ]);
       expect(JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body))).toEqual({
-        schemaVersion: 1,
+        schemaVersion: 2,
         email: "test@example.invalid",
         turnstileToken: "proof",
       });
       expect(JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body))).toEqual({
-        schemaVersion: 1,
+        schemaVersion: 2,
         challengeId: CHALLENGE_ID,
-        code: "01234567",
+        code: "012345",
       });
       expect(onVerified).toHaveBeenCalledExactlyOnceWith({
         challengeId: CHALLENGE_ID,
@@ -445,8 +445,8 @@ describe("Email Gate Marketing intent", () => {
         await userEvent.click(
           screen.getByRole("button", { name: "Request a new code" }),
         );
-      await screen.findByLabelText("8-digit verification code");
-      await userEvent.clear(screen.getByLabelText("8-digit verification code"));
+      await screen.findByLabelText("6-digit verification code");
+      await userEvent.clear(screen.getByLabelText("6-digit verification code"));
       await verify();
       await waitFor(() =>
         expect(onVerified).toHaveBeenCalledExactlyOnceWith({
@@ -479,7 +479,7 @@ describe("Email Gate Marketing intent", () => {
     await userEvent.click(
       await screen.findByRole("button", { name: "Request a new code" }),
     );
-    await screen.findByLabelText("8-digit verification code");
+    await screen.findByLabelText("6-digit verification code");
     expect(vi.mocked(gate.client.issueChallenge).mock.calls[2]?.[0]).toEqual({
       email: "new@example.invalid",
       turnstileToken: "proof",
@@ -653,8 +653,8 @@ describe("Email Gate dialog", () => {
     await userEvent.click(
       screen.getByRole("button", { name: "Send verification code" }),
     );
-    const code = await screen.findByLabelText("8-digit verification code");
-    await userEvent.type(code, "01234567");
+    const code = await screen.findByLabelText("6-digit verification code");
+    await userEvent.type(code, "012345");
     await userEvent.click(
       screen.getByRole("button", { name: "Verify & download" }),
     );
@@ -1046,7 +1046,7 @@ describe("Email Gate dialog", () => {
     );
   });
 
-  it("supports email, 8-digit paste, cooldown, verification, and success announcement", async () => {
+  it("supports email, 6-digit paste, cooldown, verification, and success announcement", async () => {
     const enabled = capability();
     const onVerified = vi.fn(async () => ({ outcome: "downloaded" as const }));
     render(
@@ -1065,7 +1065,7 @@ describe("Email Gate dialog", () => {
       screen.getByRole("button", { name: "Send verification code" }),
     );
     expect(
-      await screen.findByRole("heading", { name: "Enter the 8-digit code" }),
+      await screen.findByRole("heading", { name: "Enter the 6-digit code" }),
     ).toBeInTheDocument();
     expect(enabled.client.issueChallenge).toHaveBeenCalledWith(
       { email: "Name@example.com", turnstileToken: "proof" },
@@ -1074,9 +1074,9 @@ describe("Email Gate dialog", () => {
     expect(
       screen.getByRole("button", { name: "Resend in 45s" }),
     ).toBeDisabled();
-    const code = screen.getByLabelText("8-digit verification code");
+    const code = screen.getByLabelText("6-digit verification code");
     await userEvent.click(code);
-    await userEvent.paste("01234567");
+    await userEvent.paste("012345");
     await userEvent.click(
       screen.getByRole("button", { name: "Verify & download" }),
     );
@@ -1085,7 +1085,7 @@ describe("Email Gate dialog", () => {
       await screen.findByText("Email verified. Your download has started."),
     ).toHaveAttribute("data-tone", "success");
     expect(enabled.client.verifyChallenge).toHaveBeenCalledWith(
-      { challengeId: CHALLENGE_ID, code: "01234567" },
+      { challengeId: CHALLENGE_ID, code: "012345" },
       expect.any(AbortSignal),
     );
   });
@@ -1107,12 +1107,12 @@ describe("Email Gate dialog", () => {
     await userEvent.click(
       screen.getByRole("button", { name: "Send verification code" }),
     );
-    await screen.findByLabelText("8-digit verification code");
+    await screen.findByLabelText("6-digit verification code");
     await userEvent.click(screen.getByRole("button", { name: "Change email" }));
     expect(
       screen.getByRole("heading", { name: "Unlock your pattern download" }),
     ).toBeInTheDocument();
-    expect(screen.queryByLabelText("8-digit verification code")).toBeNull();
+    expect(screen.queryByLabelText("6-digit verification code")).toBeNull();
   });
 
   it("invalidates an armed guard and stale issue operation when the original Pattern is replaced", async () => {
@@ -1337,9 +1337,9 @@ describe("Email Gate dialog", () => {
     await userEvent.click(
       screen.getByRole("button", { name: "Send verification code" }),
     );
-    const code = await screen.findByLabelText("8-digit verification code");
+    const code = await screen.findByLabelText("6-digit verification code");
     await userEvent.click(code);
-    await userEvent.paste("01234567");
+    await userEvent.paste("012345");
     await userEvent.click(
       screen.getByRole("button", { name: "Verify & download" }),
     );

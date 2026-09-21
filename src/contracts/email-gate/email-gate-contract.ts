@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const EMAIL_GATE_SCHEMA_VERSION = 1 as const;
+export const EMAIL_GATE_V2_SCHEMA_VERSION = 2 as const;
 export const EMAIL_GATE_MAX_BODY_BYTES = 4_096 as const;
 export const EMAIL_GATE_PRODUCTION_ORIGIN =
   "https://generator.poparooz.com" as const;
@@ -8,10 +9,15 @@ export const EMAIL_GATE_CHALLENGE_PATH =
   "/api/email-gate/v1/challenges" as const;
 export const EMAIL_GATE_VERIFICATION_PATH =
   "/api/email-gate/v1/verifications" as const;
+export const EMAIL_GATE_V2_CHALLENGE_PATH =
+  "/api/email-gate/v2/challenges" as const;
+export const EMAIL_GATE_V2_VERIFICATION_PATH =
+  "/api/email-gate/v2/verifications" as const;
 
 export const EMAIL_GATE_CHALLENGE_ID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 export const EMAIL_GATE_OTP_REGEX = /^[0-9]{8}$/;
+export const EMAIL_GATE_V2_OTP_REGEX = /^[0-9]{6}$/;
 
 const EMAIL_GATE_ATEXT_LOCAL_PART_REGEX =
   /^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*$/;
@@ -33,6 +39,22 @@ export const emailGateVerificationRequestSchema = z
   })
   .strict();
 
+export const emailGateV2ChallengeRequestSchema = z
+  .object({
+    schemaVersion: z.literal(EMAIL_GATE_V2_SCHEMA_VERSION),
+    email: z.string(),
+    turnstileToken: z.string().min(1).max(2_048),
+  })
+  .strict();
+
+export const emailGateV2VerificationRequestSchema = z
+  .object({
+    schemaVersion: z.literal(EMAIL_GATE_V2_SCHEMA_VERSION),
+    challengeId: z.string().regex(EMAIL_GATE_CHALLENGE_ID_REGEX),
+    code: z.string().regex(EMAIL_GATE_V2_OTP_REGEX),
+  })
+  .strict();
+
 const challengeIssuedSchema = z
   .object({
     schemaVersion: z.literal(EMAIL_GATE_SCHEMA_VERSION),
@@ -46,6 +68,24 @@ const challengeIssuedSchema = z
 const verificationSucceededSchema = z
   .object({
     schemaVersion: z.literal(EMAIL_GATE_SCHEMA_VERSION),
+    result: z.literal("verification_succeeded"),
+    verified: z.literal(true),
+  })
+  .strict();
+
+const challengeIssuedV2Schema = z
+  .object({
+    schemaVersion: z.literal(EMAIL_GATE_V2_SCHEMA_VERSION),
+    result: z.literal("challenge_issued"),
+    challengeId: z.string().regex(EMAIL_GATE_CHALLENGE_ID_REGEX),
+    expiresInSeconds: z.number().int().positive(),
+    resendAfterSeconds: z.number().int().nonnegative(),
+  })
+  .strict();
+
+const verificationSucceededV2Schema = z
+  .object({
+    schemaVersion: z.literal(EMAIL_GATE_V2_SCHEMA_VERSION),
     result: z.literal("verification_succeeded"),
     verified: z.literal(true),
   })
@@ -70,10 +110,25 @@ const failureSchemas = failureResults.map((result) =>
     .strict(),
 );
 
+const failureV2Schemas = failureResults.map((result) =>
+  z
+    .object({
+      schemaVersion: z.literal(EMAIL_GATE_V2_SCHEMA_VERSION),
+      result: z.literal(result),
+    })
+    .strict(),
+);
+
 export const emailGateResponseSchema = z.union([
   challengeIssuedSchema,
   verificationSucceededSchema,
   ...failureSchemas,
+]);
+
+export const emailGateV2ResponseSchema = z.union([
+  challengeIssuedV2Schema,
+  verificationSucceededV2Schema,
+  ...failureV2Schemas,
 ]);
 
 export type EmailGateChallengeRequest = z.infer<
@@ -82,7 +137,16 @@ export type EmailGateChallengeRequest = z.infer<
 export type EmailGateVerificationRequest = z.infer<
   typeof emailGateVerificationRequestSchema
 >;
+export type EmailGateV2ChallengeRequest = z.infer<
+  typeof emailGateV2ChallengeRequestSchema
+>;
+export type EmailGateV2VerificationRequest = z.infer<
+  typeof emailGateV2VerificationRequestSchema
+>;
 export type EmailGateResponse = z.infer<typeof emailGateResponseSchema>;
+export type EmailGateV2Response = z.infer<typeof emailGateV2ResponseSchema>;
+export type EmailGateProtocolVersion =
+  typeof EMAIL_GATE_SCHEMA_VERSION | typeof EMAIL_GATE_V2_SCHEMA_VERSION;
 export type EmailGateFailureResult = (typeof failureResults)[number];
 
 export type EmailNormalizationResult =

@@ -7,8 +7,12 @@ import { describe, expect, it } from "vitest";
 import {
   EMAIL_GATE_CHALLENGE_ID_REGEX,
   EMAIL_GATE_OTP_REGEX,
+  EMAIL_GATE_V2_OTP_REGEX,
   emailGateChallengeRequestSchema,
   emailGateResponseSchema,
+  emailGateV2ChallengeRequestSchema,
+  emailGateV2ResponseSchema,
+  emailGateV2VerificationRequestSchema,
   emailGateVerificationRequestSchema,
   normalizeEmailAddressV1,
 } from "./email-gate-contract";
@@ -112,6 +116,56 @@ describe("Email Gate shared contract", () => {
         schemaVersion: 1,
         result: "retry_later",
         retryAfterSeconds: 60,
+      }).success,
+    ).toBe(false);
+  });
+
+  it("keeps V2 separate, strict, and exactly six ASCII digits", () => {
+    const challengeId = "abcdefab-cdef-4abc-8def-abcdefabcdef";
+    expect(EMAIL_GATE_V2_OTP_REGEX.test("012345")).toBe(true);
+    expect(EMAIL_GATE_V2_OTP_REGEX.test("12345")).toBe(false);
+    expect(EMAIL_GATE_V2_OTP_REGEX.test("1234567")).toBe(false);
+    expect(EMAIL_GATE_V2_OTP_REGEX.test("１２３４５６")).toBe(false);
+    expect(
+      emailGateV2ChallengeRequestSchema.safeParse({
+        schemaVersion: 2,
+        email: "a@example.com",
+        turnstileToken: "x",
+      }).success,
+    ).toBe(true);
+    expect(
+      emailGateV2VerificationRequestSchema.safeParse({
+        schemaVersion: 2,
+        challengeId,
+        code: "012345",
+      }).success,
+    ).toBe(true);
+    expect(
+      emailGateV2VerificationRequestSchema.safeParse({
+        schemaVersion: 2,
+        challengeId,
+        code: "01234567",
+      }).success,
+    ).toBe(false);
+    expect(
+      emailGateVerificationRequestSchema.safeParse({
+        schemaVersion: 1,
+        challengeId,
+        code: "012345",
+      }).success,
+    ).toBe(false);
+    expect(
+      emailGateV2ResponseSchema.safeParse({
+        schemaVersion: 2,
+        result: "verification_succeeded",
+        verified: true,
+      }).success,
+    ).toBe(true);
+    expect(
+      emailGateResponseSchema.safeParse({
+        schemaVersion: 2,
+        result: "verification_succeeded",
+        verified: true,
       }).success,
     ).toBe(false);
   });

@@ -45,6 +45,11 @@ export interface NewPendingChallengeInput {
 
 export interface EmailGateRepository {
   settleIneligiblePending(normalizedEmail: string, now: number): Promise<void>;
+  settleIncompatiblePending(
+    normalizedEmail: string,
+    deliveryPayloadVersion: number,
+    now: number,
+  ): Promise<void>;
   findPendingByEmail(
     normalizedEmail: string,
   ): Promise<EmailGateChallengeRow | null>;
@@ -107,6 +112,33 @@ export function createEmailGateRepository(
           )
           .bind(now, now, EMAIL_GATE_RETENTION_MS, normalizedEmail, now),
       ]);
+    },
+
+    async settleIncompatiblePending(
+      normalizedEmail: string,
+      deliveryPayloadVersion: number,
+      now: number,
+    ): Promise<void> {
+      await db
+        .prepare(
+          `UPDATE email_gate_challenges
+           SET state = 'delivery_failed', terminal_at = ?,
+               deletion_eligible_at = ? + ?, provider_attempt_lease_until = NULL,
+               row_version = row_version + 1
+           WHERE normalized_email = ? AND state = 'delivery_pending'
+             AND delivery_payload_version <> ?
+             AND provider_attempt_count >= 1
+             AND (provider_attempt_lease_until IS NULL OR provider_attempt_lease_until <= ?)`,
+        )
+        .bind(
+          now,
+          now,
+          EMAIL_GATE_RETENTION_MS,
+          normalizedEmail,
+          deliveryPayloadVersion,
+          now,
+        )
+        .run();
     },
 
     async findPendingByEmail(

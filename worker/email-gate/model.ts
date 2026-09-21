@@ -8,6 +8,7 @@ export const EMAIL_GATE_MAX_WRONG_ATTEMPTS = 5 as const;
 export const EMAIL_GATE_GLOBAL_RESERVATION_LIMIT = 90 as const;
 export const EMAIL_GATE_OTP_KEY_VERSION = 1 as const;
 export const EMAIL_GATE_DELIVERY_PAYLOAD_VERSION = 1 as const;
+export const EMAIL_GATE_DELIVERY_PAYLOAD_VERSION_V2 = 2 as const;
 export const EMAIL_GATE_AGGREGATE_SCHEMA_VERSION = 1 as const;
 export const EMAIL_GATE_RECONCILIATION_VERSION = 1 as const;
 

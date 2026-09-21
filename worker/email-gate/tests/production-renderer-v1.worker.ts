@@ -5,6 +5,7 @@ import {
   PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V1,
 } from "../delivery/production-renderer-v1";
 import { createTestFixtureRenderer } from "../delivery/payload-renderer";
+import { PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V2 } from "../delivery/production-renderer-v2";
 
 const EXPECTED_TEXT = `Your Poparooz verification code is:
 
@@ -124,16 +125,52 @@ describe("Production Delivery Renderer V1", () => {
     ).toThrow("Invalid production delivery OTP.");
   });
 
-  it("registers only production V1 and never substitutes an unknown version", () => {
+  it("retains production V1, activates V2, and rejects unknown versions", () => {
     const registry = createProductionDeliveryPayloadRendererRegistry();
     const fixture = createTestFixtureRenderer(1);
 
-    expect(registry.activeVersion).toBe(1);
+    expect(registry.activeVersion).toBe(2);
     expect(registry.getRenderer(1)).toBe(
       PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V1,
     );
     expect(registry.getRenderer(1)).not.toBe(fixture);
     expect(registry.getRenderer(0)).toBeNull();
-    expect(registry.getRenderer(2)).toBeNull();
+    expect(registry.getRenderer(2)).toBe(
+      PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V2,
+    );
   });
+});
+
+describe("Production Delivery Renderer V2", () => {
+  it("renders exactly six digits with retained sender and expiry semantics", () => {
+    const payload = PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V2.render({
+      normalizedEmail: "User+pattern@example.com",
+      otp: "012345",
+    });
+
+    expect(PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V2.version).toBe(2);
+    expect(payload.from).toBe("Poparooz <verification@notify.poparooz.com>");
+    expect(payload.replyTo).toBe("poparooz2026@gmail.com");
+    expect(payload.subject).toBe("Your Poparooz verification code");
+    expect(payload.to).toEqual(["User+pattern@example.com"]);
+    expect(payload.text).toContain("\n012345\n");
+    expect(payload.html).toContain(">012345</p>");
+    expect(payload.text).toContain(
+      "This code is valid for up to 10 minutes after it was requested.",
+    );
+    expect(payload.text).not.toContain("User+pattern@example.com");
+    expect(payload.html).not.toContain("User+pattern@example.com");
+  });
+
+  it.each(["12345", "1234567", "123 456", "１２３４５６", "abcdef"])(
+    "fails closed for non-canonical V2 OTP %s",
+    (otp) => {
+      expect(() =>
+        PRODUCTION_DELIVERY_PAYLOAD_RENDERER_V2.render({
+          normalizedEmail: "a@example.com",
+          otp,
+        }),
+      ).toThrow("Invalid production delivery OTP.");
+    },
+  );
 });

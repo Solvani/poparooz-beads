@@ -194,8 +194,8 @@ async function beginGateVerification() {
   await userEvent.click(
     screen.getByRole("button", { name: "Send verification code" }),
   );
-  const code = await screen.findByLabelText("8-digit verification code");
-  await userEvent.type(code, "01234567");
+  const code = await screen.findByLabelText("6-digit verification code");
+  await userEvent.type(code, "012345");
   await userEvent.click(
     screen.getByRole("button", { name: "Verify & download" }),
   );
@@ -303,12 +303,12 @@ describe("App Marketing Consent orchestration", () => {
     await userEvent.click(
       screen.getByRole("button", { name: "Send verification code" }),
     );
-    await screen.findByLabelText("8-digit verification code");
+    await screen.findByLabelText("6-digit verification code");
   }
   async function verify() {
     await userEvent.type(
-      screen.getByLabelText("8-digit verification code"),
-      "01234567",
+      screen.getByLabelText("6-digit verification code"),
+      "012345",
     );
     await userEvent.click(
       screen.getByRole("button", { name: "Verify & download" }),
@@ -368,11 +368,11 @@ describe("App Marketing Consent orchestration", () => {
       );
       expect(grant).not.toHaveBeenCalled();
       await userEvent.type(
-        screen.getByLabelText("8-digit verification code"),
+        screen.getByLabelText("6-digit verification code"),
         "0123",
       );
       expect(grant).not.toHaveBeenCalled();
-      await userEvent.clear(screen.getByLabelText("8-digit verification code"));
+      await userEvent.clear(screen.getByLabelText("6-digit verification code"));
       await verify();
       await screen.findByRole("heading", { name: "Email verified" });
       expect(test.download).toHaveBeenCalledOnce();
@@ -1693,8 +1693,8 @@ describe("App", () => {
     await userEvent.click(
       screen.getByRole("button", { name: "Send verification code" }),
     );
-    const code = await screen.findByLabelText("8-digit verification code");
-    await userEvent.type(code, "01234567");
+    const code = await screen.findByLabelText("6-digit verification code");
+    await userEvent.type(code, "012345");
     const form = screen
       .getByRole("button", { name: "Verify & download" })
       .closest("form")!;
@@ -1766,8 +1766,8 @@ describe("App", () => {
     await userEvent.click(
       screen.getByRole("button", { name: "Send verification code" }),
     );
-    const code = await screen.findByLabelText("8-digit verification code");
-    await userEvent.type(code, "01234567");
+    const code = await screen.findByLabelText("6-digit verification code");
+    await userEvent.type(code, "012345");
     const form = screen
       .getByRole("button", { name: "Verify & download" })
       .closest("form")!;

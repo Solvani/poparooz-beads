@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from "vitest";
 import {
   EMAIL_GATE_CHALLENGE_PATH,
   EMAIL_GATE_PRODUCTION_ORIGIN,
+  EMAIL_GATE_V2_CHALLENGE_PATH,
+  EMAIL_GATE_V2_VERIFICATION_PATH,
   EMAIL_GATE_VERIFICATION_PATH,
 } from "../../../src/contracts/email-gate/email-gate-contract";
 import { createEmailGateFetchHandler } from "../api";
@@ -10,9 +12,12 @@ import {
   createOtpKeyRegistry,
   decodeHexKey,
   deriveOtpV1,
+  deriveOtpV2,
   OtpDerivationError,
   OTP_REJECTION_THRESHOLD,
+  OTP_V2_REJECTION_THRESHOLD,
   timingSafeOtpEqual,
+  timingSafeOtpEqualV2,
   type HmacSigner,
 } from "../crypto/otp";
 import {
@@ -75,6 +80,37 @@ describe("OTP derivation", () => {
     expect(timingSafeOtpEqual("00000042", "00000042")).toBe(true);
     expect(timingSafeOtpEqual("00000043", "00000042")).toBe(false);
     expect(timingSafeOtpEqual("42", "00000042")).toBe(false);
+  });
+
+  it.each([
+    ["00000000-0000-4000-8000-000000000000", "622702"],
+    ["00000000-0000-4000-8000-000000000003", "089031"],
+    ["00000000-0000-4000-8000-000000000008", "123091"],
+    ["00000000-0000-4000-8000-000000000026", "458489"],
+  ])("reproduces the V2 six-digit vector for %s", async (challengeId, otp) => {
+    const bytes = decodeHexKey(TEST_KEY_HEX)!;
+    const key = await createOtpKeyRegistry(1, new Map([[1, bytes]])).getKey(1);
+    await expect(deriveOtpV2(key!, challengeId)).resolves.toBe(otp);
+    expect(otp).toMatch(/^[0-9]{6}$/);
+  });
+
+  it("uses V2 rejection sampling and six-byte timing-safe comparison", async () => {
+    const key = await createOtpKeyRegistry(
+      1,
+      new Map([[1, new Uint8Array(32)]]),
+    ).getKey(1);
+    const candidates = [OTP_V2_REJECTION_THRESHOLD, 42];
+    const signer: HmacSigner = async () => {
+      const digest = new Uint8Array(32);
+      new DataView(digest.buffer).setUint32(0, candidates.shift()!, false);
+      return digest.buffer;
+    };
+    await expect(
+      deriveOtpV2(key!, "00000000-0000-4000-8000-000000000000", signer),
+    ).resolves.toBe("000042");
+    expect(timingSafeOtpEqualV2("000042", "000042")).toBe(true);
+    expect(timingSafeOtpEqualV2("000043", "000042")).toBe(false);
+    expect(timingSafeOtpEqualV2("00000042", "000042")).toBe(false);
   });
 
   it("keeps key versions explicit and fails closed when a version is missing", async () => {
@@ -480,19 +516,20 @@ describe("API request and response boundary", () => {
   });
   const handler = createEmailGateFetchHandler(service);
 
-  function request(body: string, headers: Record<string, string> = {}) {
-    return new Request(
-      `https://generator.poparooz.com${EMAIL_GATE_CHALLENGE_PATH}`,
-      {
-        method: "POST",
-        headers: {
-          Origin: EMAIL_GATE_PRODUCTION_ORIGIN,
-          "Content-Type": "application/json",
-          ...headers,
-        },
-        body,
+  function request(
+    body: string,
+    headers: Record<string, string> = {},
+    path: string = EMAIL_GATE_CHALLENGE_PATH,
+  ) {
+    return new Request(`https://generator.poparooz.com${path}`, {
+      method: "POST",
+      headers: {
+        Origin: EMAIL_GATE_PRODUCTION_ORIGIN,
+        "Content-Type": "application/json",
+        ...headers,
       },
-    );
+      body,
+    });
   }
 
   it("accepts the exact challenge operation and owns safe headers", async () => {
@@ -516,6 +553,82 @@ describe("API request and response boundary", () => {
     );
     expect(response.headers.has("Access-Control-Allow-Origin")).toBe(false);
     expect(response.headers.has("Set-Cookie")).toBe(false);
+  });
+
+  it("keeps V1 exact while accepting the separate V2 routes", async () => {
+    vi.mocked(service.issue).mockClear();
+    vi.mocked(service.verify).mockClear();
+
+    const issueResponse = await handler(
+      request(
+        JSON.stringify({
+          schemaVersion: 2,
+          email: "a@example.com",
+          turnstileToken: "token",
+        }),
+        {},
+        EMAIL_GATE_V2_CHALLENGE_PATH,
+      ),
+    );
+    expect(issueResponse.status).toBe(201);
+    await expect(issueResponse.json()).resolves.toMatchObject({
+      schemaVersion: 2,
+      result: "challenge_issued",
+    });
+    expect(service.issue).toHaveBeenCalledWith({
+      schemaVersion: 2,
+      email: "a@example.com",
+      turnstileToken: "token",
+    });
+
+    const v2Verify = await handler(
+      request(
+        JSON.stringify({
+          schemaVersion: 2,
+          challengeId: "00000000-0000-4000-8000-000000000000",
+          code: "012345",
+        }),
+        {},
+        EMAIL_GATE_V2_VERIFICATION_PATH,
+      ),
+    );
+    expect(v2Verify.status).toBe(200);
+    await expect(v2Verify.json()).resolves.toEqual({
+      schemaVersion: 2,
+      result: "verification_succeeded",
+      verified: true,
+    });
+
+    expect(
+      (
+        await handler(
+          request(
+            JSON.stringify({
+              schemaVersion: 2,
+              challengeId: "00000000-0000-4000-8000-000000000000",
+              code: "01234567",
+            }),
+            {},
+            EMAIL_GATE_V2_VERIFICATION_PATH,
+          ),
+        )
+      ).status,
+    ).toBe(400);
+    expect(
+      (
+        await handler(
+          request(
+            JSON.stringify({
+              schemaVersion: 1,
+              challengeId: "00000000-0000-4000-8000-000000000000",
+              code: "012345",
+            }),
+            {},
+            EMAIL_GATE_VERIFICATION_PATH,
+          ),
+        )
+      ).status,
+    ).toBe(400);
   });
 
   it.each([

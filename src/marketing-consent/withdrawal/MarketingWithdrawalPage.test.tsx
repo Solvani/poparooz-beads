@@ -109,7 +109,7 @@ async function reachCodeEntry(capability: AvailableRouteCapability) {
   await user.click(
     screen.getByRole("button", { name: "Send verification code" }),
   );
-  await screen.findByRole("heading", { name: "Enter your 8-digit code." });
+  await screen.findByRole("heading", { name: "Enter your 6-digit code." });
   return user;
 }
 
@@ -224,7 +224,7 @@ describe("MarketingWithdrawalPage", () => {
       screen.getByLabelText("Verification code").closest("form")!,
     );
 
-    expect(screen.getByRole("alert")).toHaveTextContent("8-digit");
+    expect(screen.getByRole("alert")).toHaveTextContent("6-digit");
     expect(
       capability.verification.client.verifyChallenge,
     ).not.toHaveBeenCalled();
@@ -242,7 +242,7 @@ describe("MarketingWithdrawalPage", () => {
         ),
       });
       const user = await reachCodeEntry(capability);
-      await user.type(screen.getByLabelText("Verification code"), "01234567");
+      await user.type(screen.getByLabelText("Verification code"), "012345");
       await user.click(screen.getByRole("button", { name: "Verify email" }));
 
       await screen.findByRole("heading", {
@@ -259,7 +259,7 @@ describe("MarketingWithdrawalPage", () => {
       expect(
         capability.verification.client.verifyChallenge,
       ).toHaveBeenCalledWith(
-        { challengeId: CHALLENGE_A, code: "01234567" },
+        { challengeId: CHALLENGE_A, code: "012345" },
         expect.any(AbortSignal),
       );
       expect(capability.withdrawal.client.withdraw).toHaveBeenCalledWith(
@@ -271,7 +271,7 @@ describe("MarketingWithdrawalPage", () => {
   );
 
   it.each([
-    ["verification_invalid", "Enter the valid 8-digit verification code."],
+    ["verification_invalid", "Enter the valid 6-digit verification code."],
     ["retry_later", "Too many attempts."],
     ["service_unavailable", "Verification is temporarily unavailable."],
   ] as const)(
@@ -286,7 +286,7 @@ describe("MarketingWithdrawalPage", () => {
         ),
       });
       const user = await reachCodeEntry(capability);
-      await user.type(screen.getByLabelText("Verification code"), "01234567");
+      await user.type(screen.getByLabelText("Verification code"), "012345");
       await user.click(screen.getByRole("button", { name: "Verify email" }));
 
       expect(await screen.findByText(new RegExp(message))).toBeVisible();
@@ -311,7 +311,7 @@ describe("MarketingWithdrawalPage", () => {
         ),
       });
       const user = await reachCodeEntry(capability);
-      await user.type(screen.getByLabelText("Verification code"), "01234567");
+      await user.type(screen.getByLabelText("Verification code"), "012345");
       await user.click(screen.getByRole("button", { name: "Verify email" }));
       await screen.findByRole("button", { name: "Request new code" });
       expect(issueChallenge).toHaveBeenCalledOnce();
@@ -319,7 +319,7 @@ describe("MarketingWithdrawalPage", () => {
       await user.click(
         screen.getByRole("button", { name: "Request new code" }),
       );
-      await screen.findByRole("heading", { name: "Enter your 8-digit code." });
+      await screen.findByRole("heading", { name: "Enter your 6-digit code." });
       expect(issueChallenge).toHaveBeenCalledTimes(2);
       expect(
         capability.verification.issueProofProvider.getFreshIssueToken,
@@ -375,7 +375,7 @@ describe("MarketingWithdrawalPage", () => {
       ),
     });
     const user = await reachCodeEntry(capability);
-    await user.type(screen.getByLabelText("Verification code"), "01234567");
+    await user.type(screen.getByLabelText("Verification code"), "012345");
     await user.click(screen.getByRole("button", { name: "Verify email" }));
 
     expect(await screen.findByLabelText("Email address")).toHaveValue(
@@ -410,7 +410,7 @@ describe("MarketingWithdrawalPage", () => {
     );
     await user.type(
       await screen.findByLabelText("Verification code"),
-      "01234567",
+      "012345",
     );
     await user.click(screen.getByRole("button", { name: "Verify email" }));
     await screen.findByRole("button", { name: "Try update again" });
@@ -451,7 +451,7 @@ describe("MarketingWithdrawalPage", () => {
     );
     await user.type(
       await screen.findByLabelText("Verification code"),
-      "01234567",
+      "012345",
     );
     await user.click(screen.getByRole("button", { name: "Verify email" }));
     await screen.findByRole("button", { name: "Try update again" });
@@ -477,7 +477,7 @@ describe("MarketingWithdrawalPage", () => {
     );
     const capability = gate({ verifyChallenge });
     const user = await reachCodeEntry(capability);
-    await user.type(screen.getByLabelText("Verification code"), "01234567");
+    await user.type(screen.getByLabelText("Verification code"), "012345");
     fireEvent.submit(
       screen.getByLabelText("Verification code").closest("form")!,
     );
@@ -520,7 +520,7 @@ describe("MarketingWithdrawalPage", () => {
       ),
     });
     const user = await reachCodeEntry(capability);
-    await user.type(screen.getByLabelText("Verification code"), "01234567");
+    await user.type(screen.getByLabelText("Verification code"), "012345");
     fireEvent.submit(
       screen.getByLabelText("Verification code").closest("form")!,
     );

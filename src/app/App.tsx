@@ -264,12 +264,10 @@ export function App({
           state={patternActionState}
           onDownload={() => downloadLastSuccess()}
         />
-        <MobilePanelLaunchers onOpen={openSheet} />
       </div>
     ) : (
       <div className="compact-result-content">
         <ResultViewError />
-        <MobilePanelLaunchers onOpen={openSheet} />
         <PatternActions
           state={patternActionState}
           onDownload={() => downloadLastSuccess()}
@@ -345,6 +343,7 @@ export function App({
               <>
                 {generationStatus()}
                 <ResultRetentionStatus status={generator.state.status} />
+                <MobilePanelLaunchers onOpen={openSheet} />
               </>
             ) : undefined
           }

@@ -64,6 +64,55 @@ describe("BottomSheet", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
+  it("uses the selected native radio as the radio group's sequential tab stop", async () => {
+    const view = render(
+      <>
+        <main className="app-root">
+          <button type="button">Background action</button>
+        </main>
+        <BottomSheet
+          activePanel="settings"
+          onPanelChange={() => {}}
+          onClose={() => {}}
+        >
+          <fieldset>
+            <legend>Background</legend>
+            <label>
+              <input
+                type="radio"
+                name="pattern-background"
+                value="white"
+                checked
+                readOnly
+              />
+              Full Background
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="pattern-background"
+                value="transparent"
+                readOnly
+              />
+              Remove Background
+            </label>
+          </fieldset>
+        </BottomSheet>
+      </>,
+    );
+    const user = userEvent.setup();
+    const close = view.getByRole("button", { name: "Close" });
+    const selectedRadio = view.getByRole("radio", {
+      name: "Full Background",
+    });
+
+    expect(close).toHaveFocus();
+    await user.tab({ shift: true });
+    expect(selectedRadio).toHaveFocus();
+    await user.tab();
+    expect(close).toHaveFocus();
+  });
+
   it("isolates the background, locks scrolling, and restores exact prior state", () => {
     document.body.style.margin = "3px";
     Object.defineProperty(window, "scrollY", {

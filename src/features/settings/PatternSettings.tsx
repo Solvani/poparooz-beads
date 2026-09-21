@@ -81,8 +81,7 @@ export function PatternSettings({
           ))}
         </select>
         <p id="color-set-profile-help" className="form-help">
-          Try different Color Sets and regenerate to compare results. More
-          colors don't always mean a better pattern.
+          Regenerate to compare sets. More colors may not improve the pattern.
         </p>
         {errors.selectedColorSetProfileId ? (
           <p id="color-set-profile-error" className="form-error" role="alert">
@@ -93,7 +92,7 @@ export function PatternSettings({
       <NumberSetting
         id="maximum-colors"
         label="Maximum Colors"
-        help="Maximum number of colors used in the generated pattern. This does not change the selected Generation Color Set."
+        help="Limits colors in the pattern; it does not change the selected Color Set."
         value={value.maxColors}
         min={2}
         max={64}

@@ -1288,6 +1288,18 @@ describe("App", () => {
         button.textContent?.replace("›", ""),
       ),
     ).toEqual(["Settings", "Original"]);
+    const patternStatus = screen.getByRole("region", {
+      name: "Pattern status",
+    });
+    const patternCanvas = screen.getByRole("region", {
+      name: "Pattern Canvas",
+    });
+    expect(patternStatus).toContainElement(launchers);
+    expect(
+      launchers.compareDocumentPosition(patternCanvas) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(compactContent).not.toContainElement(launchers);
 
     expect(screen.getByText("A4")).toBeInTheDocument();
     const compactColorRow = screen.getByRole("button", {

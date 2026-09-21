@@ -48,12 +48,12 @@ describe("PatternSettings", () => {
     ]);
     expect(
       view.getByText(
-        "Try different Color Sets and regenerate to compare results. More colors don't always mean a better pattern.",
+        "Regenerate to compare sets. More colors may not improve the pattern.",
       ),
     ).toBeInTheDocument();
     expect(
       view.getByText(
-        "Maximum number of colors used in the generated pattern. This does not change the selected Generation Color Set.",
+        "Limits colors in the pattern; it does not change the selected Color Set.",
       ),
     ).toBeInTheDocument();
     expect(view.getByText("Bead Size")).toBeInTheDocument();

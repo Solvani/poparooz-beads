@@ -69,6 +69,7 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
       "grid-template-columns: auto minmax(0, 1fr) minmax(220px, auto)",
     );
     expect(workspace).toContain(".app-header__marketing-preferences");
+    expect(workspace).toContain("min-height: var(--minimum-touch-target)");
     expect(workspace).toContain("text-underline-offset: 3px");
   });
 
@@ -82,9 +83,8 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
     expect(workspace).toContain(
       "grid-template-columns: repeat(2, minmax(0, 1fr))",
     );
-    expect(workspace).toContain("grid-template-columns: minmax(0, 1fr)");
     expect(workspace).toMatch(
-      /@container poparooz-app \(max-width: 767px\)[\s\S]*?\.background-setting \{\s*grid-template-columns: minmax\(0, 1fr\);/,
+      /@container poparooz-app \(max-width: 767px\)[\s\S]*?\.background-setting \{\s*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/,
     );
     expect(workspace).toContain(
       "@container poparooz-app (min-width: 900px) and (max-width: 1384px)",
@@ -140,6 +140,9 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
     expect(workspace).toContain(
       "grid-template-rows: auto minmax(var(--desktop-workspace-height), auto)",
     );
+    expect(workspace).toContain(
+      "grid-template-rows: auto var(--desktop-workspace-height)",
+    );
     expect(workspace).toContain("align-items: stretch");
     expect(workspace).toContain(".workspace-shell > .panel");
     expect(workspace).toContain(".workspace-shell--has-results .color-list");
@@ -150,9 +153,10 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
     expect(workspace).not.toContain("flex: 1 1 160px");
     expect(workspace).toContain(".results-empty-state");
     expect(workspace).not.toContain("margin-top: auto");
-    expect(workspace).not.toContain(
-      ".workspace-shell--has-results .workspace-shell__settings > .panel__body",
+    expect(workspace).toMatch(
+      /\.workspace-shell--has-results\s+\.workspace-shell__settings\s*>\s*\.panel__body/,
     );
+    expect(workspace).toContain("grid-template-rows: auto minmax(0, 1fr)");
     expect(workspace).not.toContain(
       ".workspace-shell--has-results .pattern-settings .generation-status",
     );

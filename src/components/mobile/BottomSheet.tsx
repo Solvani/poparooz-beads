@@ -60,7 +60,7 @@ export function BottomSheet({
         return;
       }
       if (event.key !== "Tab") return;
-      const focusable = getFocusableElements(dialogRef.current);
+      const focusable = getSequentiallyFocusableElements(dialogRef.current);
       if (focusable.length === 0) {
         event.preventDefault();
         return;
@@ -204,11 +204,33 @@ export function BottomSheet({
   );
 }
 
-function getFocusableElements(root: HTMLElement | null): HTMLElement[] {
+function getSequentiallyFocusableElements(
+  root: HTMLElement | null,
+): HTMLElement[] {
   if (!root) return [];
-  return Array.from(
+  const candidates = Array.from(
     root.querySelectorAll<HTMLElement>(
-      'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+      'button, input:not([type="hidden"]), select, textarea, a[href], [tabindex]',
     ),
-  ).filter((element) => !element.hasAttribute("hidden"));
+  ).filter(
+    (element) =>
+      !element.matches(":disabled") &&
+      !element.hasAttribute("hidden") &&
+      element.tabIndex >= 0,
+  );
+
+  return candidates.filter((element) => {
+    if (!(element instanceof HTMLInputElement)) return true;
+    if (element.type !== "radio" || element.name === "") return true;
+
+    const group = candidates.filter(
+      (candidate): candidate is HTMLInputElement =>
+        candidate instanceof HTMLInputElement &&
+        candidate.type === "radio" &&
+        candidate.name === element.name &&
+        candidate.form === element.form,
+    );
+    const sequentialRadio = group.find((radio) => radio.checked) ?? group[0];
+    return element === sequentialRadio;
+  });
 }

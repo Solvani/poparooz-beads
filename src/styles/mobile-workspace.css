@@ -7,6 +7,15 @@
   gap: var(--space-2);
 }
 
+.workspace-shell__lifecycle .mobile-panel-launchers {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: var(--space-2);
+}
+
+.workspace-shell__lifecycle .mobile-panel-launcher {
+  padding-inline: var(--space-3);
+}
+
 .mobile-panel-launcher {
   display: flex;
   width: 100%;

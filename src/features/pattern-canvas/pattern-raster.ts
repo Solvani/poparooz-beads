@@ -1,5 +1,7 @@
-import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
 import type { PatternRaster } from "./pattern-canvas.types";
+import type { PatternDocumentView } from "../pattern-editor/pattern-document-view";
+
+type RasterPattern = PatternDocumentView;
 
 export const TRANSPARENT_CELL_LIGHT = "#F3F4F1";
 export const TRANSPARENT_CELL_DARK = "#E3E7E4";
@@ -21,7 +23,7 @@ export type PatternRasterSurfaceFactory = (
 ) => PatternRasterSurface | null;
 
 export function buildPatternRaster(
-  pattern: PublicPatternResult,
+  pattern: RasterPattern,
   createSurface: PatternRasterSurfaceFactory = createBrowserSurface,
 ): PatternRasterResult {
   const { width, height, colorIndices, transparentIndex } = pattern.matrix;
@@ -80,7 +82,7 @@ export function buildPatternRaster(
 }
 
 function createColorBytes(
-  pattern: PublicPatternResult,
+  pattern: RasterPattern,
 ): ReadonlyMap<number, Uint8ClampedArray> | null {
   const colors = new Map<number, Uint8ClampedArray>();
   for (const entry of pattern.colors) {

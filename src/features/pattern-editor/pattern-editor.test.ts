@@ -21,11 +21,92 @@ import {
   type PatternDocument,
 } from "./pattern-editor.types";
 import { projectPatternDocument } from "./pattern-result-projection";
+import {
+  applyDraftCells,
+  clientPointToPatternCell,
+  interpolatePatternCells,
+  strokeValue,
+} from "./pattern-editing";
+import { createPatternDocumentView } from "./pattern-document-view";
 
 const BOARD = adaptBoardProfileToGeneration(
   createApprovedBoardProfileProvider().getSnapshot(),
 );
 const PALETTE = getPatternEditorPalette();
+
+describe("direct cell editing primitives", () => {
+  it("maps client coordinates through pan and zoom with exclusive outer edges", () => {
+    const bounds = { left: 100, top: 50, width: 200, height: 100 };
+    const viewport = { scale: 10, offsetX: 20, offsetY: 10 };
+    const document = { width: 4, height: 3 };
+    expect(
+      clientPointToPatternCell(120, 60, bounds, viewport, document),
+    ).toEqual({ column: 0, row: 0 });
+    expect(
+      clientPointToPatternCell(159.9, 89.9, bounds, viewport, document),
+    ).toEqual({ column: 3, row: 2 });
+    expect(
+      clientPointToPatternCell(160, 90, bounds, viewport, document),
+    ).toBeNull();
+    expect(
+      clientPointToPatternCell(300, 60, bounds, viewport, document),
+    ).toBeNull();
+  });
+
+  it("interpolates fast horizontal, vertical, and diagonal pointer movement", () => {
+    expect(
+      interpolatePatternCells({ column: 0, row: 1 }, { column: 4, row: 1 }),
+    ).toHaveLength(5);
+    expect(
+      interpolatePatternCells({ column: 2, row: 0 }, { column: 2, row: 4 }),
+    ).toHaveLength(5);
+    expect(
+      interpolatePatternCells({ column: 0, row: 0 }, { column: 4, row: 2 }),
+    ).toEqual([
+      { column: 0, row: 0 },
+      { column: 1, row: 0 },
+      { column: 2, row: 1 },
+      { column: 3, row: 1 },
+      { column: 4, row: 2 },
+    ]);
+  });
+
+  it("keeps a stroke transient and commits all changed cells in one history entry", () => {
+    const source = generatedResult(5, 1, [0, 0, 0, 0, 0]);
+    const session = createPatternEditorSession(source);
+    const draft = new Map<number, number>();
+    for (const cell of interpolatePatternCells(
+      { column: 0, row: 0 },
+      { column: 4, row: 0 },
+    )) {
+      draft.set(cell.column, strokeValue("eraser", 0));
+    }
+    expect(session.history.past).toHaveLength(0);
+    const candidate = applyDraftCells(session.history.present, draft);
+    const committed = reducePatternEditorSession(session, {
+      type: "commit",
+      document: candidate,
+    });
+    expect(committed.history.past).toHaveLength(1);
+    expect([...committed.history.present.cells]).toEqual([
+      65_535, 65_535, 65_535, 65_535, 65_535,
+    ]);
+    expect(
+      createPatternDocumentView(committed.history.present).colors,
+    ).toHaveLength(0);
+    expect(
+      reducePatternEditorSession(committed, { type: "undo" }).history.present
+        .cells,
+    ).toEqual(session.history.present.cells);
+  });
+
+  it("does not mutate the base document when a draft is canceled", () => {
+    const base = createPatternDocument(generatedResult(2, 1, [0, 0]));
+    const before = base.cells.slice();
+    applyDraftCells(base, new Map([[0, PATTERN_DOCUMENT_EMPTY_CELL]]));
+    expect(base.cells).toEqual(before);
+  });
+});
 
 describe("generated result to PatternDocument", () => {
   it("maps dense local indices to versioned stable Poparooz palette ordinals", () => {

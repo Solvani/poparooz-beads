@@ -232,6 +232,81 @@
   gap: var(--space-2);
 }
 
+.pattern-editor {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-2);
+}
+
+.pattern-editor-toolbar {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.pattern-editor-toolbar__tools,
+.pattern-editor-toolbar__history {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.pattern-editor-toolbar .button {
+  min-height: 44px;
+}
+
+.pattern-editor-toolbar__tools .button[aria-pressed="true"] {
+  color: white;
+  border-color: var(--brand-600);
+  background: var(--brand-600);
+}
+
+.pattern-editor-toolbar__selection,
+.pattern-editor__status {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: 0.8125rem;
+}
+
+.pattern-editor-toolbar__selection {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+.pattern-editor-toolbar__color-select {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+}
+
+.pattern-editor-toolbar__color-select select {
+  min-height: 44px;
+  padding-inline: var(--space-2);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-small);
+  color: var(--text-primary);
+  background: var(--surface-primary);
+}
+
+.pattern-editor-toolbar__swatch {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: 0 0 auto;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+}
+
+.pattern-canvas__viewport--pen,
+.pattern-canvas__viewport--eraser,
+.pattern-canvas__viewport--eyedropper {
+  cursor: crosshair;
+}
+
 .pattern-canvas__topbar {
   display: grid;
   gap: var(--space-2);

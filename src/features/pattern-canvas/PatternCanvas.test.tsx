@@ -145,6 +145,61 @@ async function openMoreControls() {
 }
 
 describe("PatternCanvas", () => {
+  it("routes edit pointers to cells and cancels an active draft when tools switch", () => {
+    const setup = environment();
+    const callbacks = {
+      onBegin: vi.fn(),
+      onMove: vi.fn(),
+      onCommit: vi.fn(),
+      onCancel: vi.fn(),
+    };
+    const pattern = createPublicPattern();
+    const document = {
+      width: 2,
+      height: 2,
+      cells: new Uint16Array([0, 1, 65_535, 0]),
+      palette: {
+        paletteId: "poparooz-standard" as const,
+        paletteVersion: "1.0.0" as const,
+      },
+      boardProfile: {
+        id: "poparooz-board-104" as const,
+        version: "1.0.0" as const,
+      },
+    };
+    const { rerender } = render(
+      <PatternCanvas
+        pattern={pattern}
+        document={document}
+        editor={{ activeTool: "pen", ...callbacks }}
+        environment={setup.value}
+      />,
+    );
+    setup.flush();
+    const canvas = screen.getByRole("img") as HTMLCanvasElement;
+    canvas.setPointerCapture = vi.fn();
+    canvas.hasPointerCapture = vi.fn(() => true);
+    canvas.releasePointerCapture = vi.fn();
+    fireEvent.pointerDown(canvas, {
+      pointerId: 7,
+      isPrimary: true,
+      button: 0,
+      clientX: 300,
+      clientY: 210,
+    });
+    expect(callbacks.onBegin).toHaveBeenCalledOnce();
+
+    rerender(
+      <PatternCanvas
+        pattern={pattern}
+        document={document}
+        editor={{ activeTool: "eraser", ...callbacks }}
+        environment={setup.value}
+      />,
+    );
+    expect(callbacks.onCancel).toHaveBeenCalledOnce();
+  });
+
   it("renders one accessible Canvas and the complete toolbar", () => {
     const setup = environment();
     render(

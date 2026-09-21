@@ -41,6 +41,7 @@ interface DragState {
 export function useCanvasViewport(
   pattern: PatternDimensions,
   environment: CanvasViewportEnvironment = {},
+  panEnabled = true,
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [viewport, setViewport] = useState(createUnmeasuredViewport);
@@ -126,7 +127,7 @@ export function useCanvasViewport(
 
   const onPointerDown = useCallback(
     (event: ReactPointerEvent<HTMLCanvasElement>) => {
-      if (!event.isPrimary || event.button !== 0) return;
+      if (!panEnabled || !event.isPrimary || event.button !== 0) return;
       drag.current = {
         pointerId: event.pointerId,
         x: event.clientX,
@@ -135,8 +136,12 @@ export function useCanvasViewport(
       };
       event.currentTarget.setPointerCapture(event.pointerId);
     },
-    [],
+    [panEnabled],
   );
+
+  useEffect(() => {
+    if (!panEnabled) releaseActivePointer(drag);
+  }, [panEnabled]);
   const onPointerMove = useCallback(
     (event: ReactPointerEvent<HTMLCanvasElement>) => {
       const current = drag.current;

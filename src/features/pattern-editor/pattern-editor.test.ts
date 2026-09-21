@@ -1,0 +1,418 @@
+import { describe, expect, it } from "vitest";
+
+import { buildPatternBoardLayout } from "../../domain/pattern/board-layout";
+import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
+import { createApprovedBoardProfileProvider } from "../../runtime/board-profile/approved-board-profile";
+import { adaptBoardProfileToGeneration } from "../../runtime/generation-board-profile/board-profile-to-generation.adapter";
+import {
+  copyPatternDocument,
+  createPatternDocument,
+  getPatternEditorPalette,
+} from "./pattern-document";
+import {
+  createPatternEditorSession,
+  isPatternEditorDirty,
+  reducePatternEditorSession,
+} from "./pattern-editor-reducer";
+import {
+  PATTERN_DOCUMENT_EMPTY_CELL,
+  PATTERN_EDITOR_HISTORY_LIMIT,
+  PatternEditorError,
+  type PatternDocument,
+} from "./pattern-editor.types";
+import { projectPatternDocument } from "./pattern-result-projection";
+
+const BOARD = adaptBoardProfileToGeneration(
+  createApprovedBoardProfileProvider().getSnapshot(),
+);
+const PALETTE = getPatternEditorPalette();
+
+describe("generated result to PatternDocument", () => {
+  it("maps dense local indices to versioned stable Poparooz palette ordinals", () => {
+    const source = generatedResult(3, 2, [1, 1, 0, 65_535, 0, 1]);
+    const document = createPatternDocument(source);
+
+    expect(document).toMatchObject({
+      width: 3,
+      height: 2,
+      palette: { paletteId: "poparooz-standard", paletteVersion: "1.0.0" },
+      boardProfile: { id: "poparooz-board-104", version: "1.0.0" },
+    });
+    expect([...document.cells]).toEqual([1, 1, 0, 65_535, 0, 1]);
+    expect(document.cells.buffer).not.toBe(source.matrix.colorIndices.buffer);
+  });
+
+  it("owns all editable data independently from the generated result", () => {
+    const source = generatedResult(2, 2, [0, 1, 65_535, 0]);
+    const original = snapshotResult(source);
+    const document = createPatternDocument(source);
+
+    document.cells.fill(1);
+
+    expect(snapshotResult(source)).toEqual(original);
+    expect(source.colors[0]!.beadCount).toBe(2);
+    expect(source.materials[0]!.beadCount).toBe(2);
+    expect(source.totals.transparentPositions).toBe(1);
+    expect(source.boardLayout.usedBeadCount).toBe(3);
+  });
+
+  it("fails closed for unknown, mismatched, and impossible color references", () => {
+    const unknown = generatedResult(1, 1, [0]);
+    const invalidCode = {
+      ...unknown,
+      colors: [
+        {
+          ...unknown.colors[0]!,
+          color: { ...unknown.colors[0]!.color, code: "ZZ99" },
+        },
+      ],
+      materials: [
+        {
+          ...unknown.materials[0]!,
+          color: { ...unknown.materials[0]!.color, code: "ZZ99" },
+        },
+      ],
+    } as PublicPatternResult;
+    expectEditorError(
+      () => createPatternDocument(invalidCode),
+      "UNRESOLVABLE_PALETTE_COLOR",
+    );
+
+    const wrongHex = {
+      ...unknown,
+      colors: [
+        {
+          ...unknown.colors[0]!,
+          color: { ...unknown.colors[0]!.color, hex: "#000000" },
+        },
+      ],
+      materials: [
+        {
+          ...unknown.materials[0]!,
+          color: { ...unknown.materials[0]!.color, hex: "#000000" },
+        },
+      ],
+    } as PublicPatternResult;
+    expectEditorError(
+      () => createPatternDocument(wrongHex),
+      "UNRESOLVABLE_PALETTE_COLOR",
+    );
+
+    const impossible = generatedResult(1, 1, [0]);
+    impossible.matrix.colorIndices[0] = 4;
+    expectEditorError(
+      () => createPatternDocument(impossible),
+      "INVALID_GENERATED_RESULT",
+    );
+  });
+});
+
+describe("PatternDocument projection", () => {
+  it("projects one color with exact counts and independent output storage", () => {
+    const source = generatedResult(2, 2, [0, 0, 65_535, 0]);
+    const sourceBefore = snapshotResult(source);
+    const document = createPatternDocument(source);
+    const before = document.cells.slice();
+    const projected = projectPatternDocument(document);
+
+    expect(projected.colors).toHaveLength(1);
+    expect(projected.materials).toHaveLength(1);
+    expect(projected.colors[0]).toMatchObject({ index: 0, beadCount: 3 });
+    expect([...projected.matrix.colorIndices]).toEqual([0, 0, 65_535, 0]);
+    expect(projected.matrix.colorIndices.buffer).not.toBe(
+      document.cells.buffer,
+    );
+    expect(document.cells).toEqual(before);
+    expect(snapshotResult(source)).toEqual(sourceBefore);
+  });
+
+  it("densifies multiple colors in authoritative palette order", () => {
+    const source = generatedResult(3, 2, [1, 1, 0, 65_535, 0, 1]);
+    const document = createPatternDocument(source);
+    document.cells.set([5, 1, 5, 65_535, 1, 5]);
+    const projected = projectPatternDocument(document);
+
+    expect(projected.colors.map(({ color }) => color.code)).toEqual([
+      PALETTE.colors[1]!.code,
+      PALETTE.colors[5]!.code,
+    ]);
+    expect([...projected.matrix.colorIndices]).toEqual([1, 0, 1, 65_535, 0, 1]);
+    expect(projected.colors.map(({ beadCount }) => beadCount)).toEqual([2, 3]);
+    assertResultInvariants(projected);
+  });
+
+  it("is deterministic and does not mutate the document or generated result", () => {
+    const source = generatedResult(2, 2, [0, 1, 65_535, 0]);
+    const sourceBefore = snapshotResult(source);
+    const document = createPatternDocument(source);
+    const documentBefore = document.cells.slice();
+
+    const first = projectPatternDocument(document);
+    const second = projectPatternDocument(document);
+
+    expect(second).toEqual(first);
+    expect(second.matrix.colorIndices).toEqual(first.matrix.colorIndices);
+    expect(document.cells).toEqual(documentBefore);
+    expect(snapshotResult(source)).toEqual(sourceBefore);
+  });
+
+  it("keeps empty cells explicit and rejects a completely empty public projection", () => {
+    const document = createPatternDocument(generatedResult(2, 1, [0, 65_535]));
+    document.cells.fill(PATTERN_DOCUMENT_EMPTY_CELL);
+    expectEditorError(
+      () => projectPatternDocument(document),
+      "EMPTY_PATTERN_RESULT_UNSUPPORTED",
+    );
+  });
+
+  it("rejects document cells that do not resolve through the approved palette", () => {
+    const document = createPatternDocument(generatedResult(1, 1, [0]));
+    document.cells[0] = PALETTE.colors.length;
+    expectEditorError(
+      () => projectPatternDocument(document),
+      "INVALID_PATTERN_DOCUMENT",
+    );
+  });
+
+  it("projects a practical 104x104 document with exact aggregate invariants", () => {
+    const size = 104;
+    const indices = new Uint16Array(size * size);
+    indices.fill(0);
+    for (let position = 0; position < indices.length; position += 7) {
+      indices[position] = PATTERN_DOCUMENT_EMPTY_CELL;
+    }
+    const document = createPatternDocument(
+      generatedResult(size, size, indices),
+    );
+    const projected = projectPatternDocument(document);
+
+    expect(projected.matrix.colorIndices).toHaveLength(10_816);
+    expect(projected.boardLayout).toMatchObject({
+      boardColumns: 1,
+      boardRows: 1,
+      boardCount: 1,
+      boardWidthInBeads: 104,
+      boardHeightInBeads: 104,
+    });
+    assertResultInvariants(projected);
+  });
+});
+
+describe("editor session history", () => {
+  it("derives dirty from cell equality across commit, undo, reset, and redo", () => {
+    const session = createPatternEditorSession(generatedResult(2, 1, [0, 0]));
+    const edited = changed(session.history.present, 0, 1);
+    const committed = reducePatternEditorSession(session, {
+      type: "commit",
+      document: edited,
+    });
+    expect(isPatternEditorDirty(session)).toBe(false);
+    expect(isPatternEditorDirty(committed)).toBe(true);
+
+    const undone = reducePatternEditorSession(committed, { type: "undo" });
+    expect(isPatternEditorDirty(undone)).toBe(false);
+    const redone = reducePatternEditorSession(undone, { type: "redo" });
+    expect(isPatternEditorDirty(redone)).toBe(true);
+
+    const reset = reducePatternEditorSession(redone, { type: "reset" });
+    expect(isPatternEditorDirty(reset)).toBe(false);
+    const undoReset = reducePatternEditorSession(reset, { type: "undo" });
+    expect(isPatternEditorDirty(undoReset)).toBe(true);
+  });
+
+  it("treats no-op commit and baseline reset as exact no-ops", () => {
+    const session = createPatternEditorSession(generatedResult(1, 1, [0]));
+    expect(
+      reducePatternEditorSession(session, {
+        type: "commit",
+        document: copyPatternDocument(session.history.present),
+      }),
+    ).toBe(session);
+    expect(reducePatternEditorSession(session, { type: "reset" })).toBe(
+      session,
+    );
+    expect(reducePatternEditorSession(session, { type: "undo" })).toBe(session);
+    expect(reducePatternEditorSession(session, { type: "redo" })).toBe(session);
+  });
+
+  it("clears redo on a new committed edit", () => {
+    const initial = createPatternEditorSession(generatedResult(2, 1, [0, 0]));
+    const first = reducePatternEditorSession(initial, {
+      type: "commit",
+      document: changed(initial.history.present, 0, 1),
+    });
+    const undone = reducePatternEditorSession(first, { type: "undo" });
+    const replacement = reducePatternEditorSession(undone, {
+      type: "commit",
+      document: changed(undone.history.present, 1, 1),
+    });
+
+    expect(replacement.history.future).toEqual([]);
+    expect(reducePatternEditorSession(replacement, { type: "redo" })).toBe(
+      replacement,
+    );
+  });
+
+  it("bounds past history to the latest 100 committed states", () => {
+    let session = createPatternEditorSession(generatedResult(1, 1, [0]));
+    for (let revision = 0; revision < 105; revision += 1) {
+      session = reducePatternEditorSession(session, {
+        type: "commit",
+        document: changed(session.history.present, 0, (revision % 2) + 1),
+      });
+    }
+    expect(session.history.past).toHaveLength(PATTERN_EDITOR_HISTORY_LIMIT);
+    expect(session.revision).toBe(105);
+  });
+
+  it("copies incoming documents and every moved typed-array snapshot", () => {
+    const source = generatedResult(2, 1, [0, 0]);
+    const initial = createPatternEditorSession(source);
+    const candidate = changed(initial.history.present, 0, 1);
+    const committed = reducePatternEditorSession(initial, {
+      type: "commit",
+      document: candidate,
+    });
+    candidate.cells[0] = 9;
+    expect(committed.history.present.cells[0]).toBe(1);
+    expect(committed.history.past[0]!.cells.buffer).not.toBe(
+      committed.history.present.cells.buffer,
+    );
+
+    const undone = reducePatternEditorSession(committed, { type: "undo" });
+    expect(undone.history.present.cells.buffer).not.toBe(
+      undone.history.future[0]!.cells.buffer,
+    );
+    const redone = reducePatternEditorSession(undone, { type: "redo" });
+    expect(redone.history.present.cells[0]).toBe(1);
+    expect(redone.sourceResult).toBe(source);
+    expect(source.matrix.colorIndices).toEqual(new Uint16Array([0, 0]));
+  });
+});
+
+function generatedResult(
+  width: number,
+  height: number,
+  input: readonly number[] | Uint16Array,
+): PublicPatternResult {
+  const colorIndices = new Uint16Array(input);
+  const maxLocal = colorIndices.reduce(
+    (maximum, value) =>
+      value === PATTERN_DOCUMENT_EMPTY_CELL
+        ? maximum
+        : Math.max(maximum, value),
+    -1,
+  );
+  const colors = Object.freeze(
+    Array.from({ length: maxLocal + 1 }, (_, index) => {
+      const canonical = PALETTE.colors[index]!;
+      return Object.freeze({
+        index,
+        color: Object.freeze({
+          brand: "Poparooz" as const,
+          code: canonical.code,
+          hex: canonical.hex,
+        }),
+        beadCount: colorIndices.filter((value) => value === index).length,
+      });
+    }),
+  );
+  const materials = Object.freeze(
+    colors.map((entry) =>
+      Object.freeze({
+        patternColorIndex: entry.index,
+        color: entry.color,
+        beadCount: entry.beadCount,
+      }),
+    ),
+  );
+  const transparentPositions = colorIndices.filter(
+    (value) => value === PATTERN_DOCUMENT_EMPTY_CELL,
+  ).length;
+  const totals = Object.freeze({
+    width,
+    height,
+    totalPositions: width * height,
+    totalBeads: colorIndices.length - transparentPositions,
+    transparentPositions,
+    colorCount: colors.length,
+  });
+  const matrix = Object.freeze({
+    width,
+    height,
+    colorIndices,
+    transparentIndex: PATTERN_DOCUMENT_EMPTY_CELL,
+  });
+  const internalLayout = buildPatternBoardLayout(matrix, totals, BOARD);
+  const boardLayout = Object.freeze({
+    boardColumns: internalLayout.boardColumns,
+    boardRows: internalLayout.boardRows,
+    boardCount: internalLayout.boardCount,
+    boardWidthInBeads: internalLayout.boardWidthInBeads,
+    boardHeightInBeads: internalLayout.boardHeightInBeads,
+    totalPegCapacity: internalLayout.totalPegCapacity,
+    usedBeadCount: internalLayout.usedBeadCount,
+    transparentPatternPositions: internalLayout.transparentPatternPositions,
+    outsidePatternPegCount: internalLayout.outsidePatternPegCount,
+    unusedPegCount: internalLayout.unusedPegCount,
+    tiles: internalLayout.tiles,
+  });
+  return Object.freeze({ matrix, colors, materials, totals, boardLayout });
+}
+
+function changed(
+  document: PatternDocument,
+  position: number,
+  paletteOrdinal: number,
+): PatternDocument {
+  const copy = copyPatternDocument(document);
+  copy.cells[position] = paletteOrdinal;
+  return copy;
+}
+
+function assertResultInvariants(result: PublicPatternResult): void {
+  expect(result.colors.reduce((sum, color) => sum + color.beadCount, 0)).toBe(
+    result.totals.totalBeads,
+  );
+  expect(result.totals.totalBeads + result.totals.transparentPositions).toBe(
+    result.matrix.width * result.matrix.height,
+  );
+  expect(result.colors).toHaveLength(result.materials.length);
+  expect(result.colors).toHaveLength(result.totals.colorCount);
+  result.colors.forEach((color, index) => {
+    expect(result.materials[index]).toEqual({
+      patternColorIndex: index,
+      color: color.color,
+      beadCount: color.beadCount,
+    });
+  });
+  result.matrix.colorIndices.forEach((index) => {
+    if (index !== PATTERN_DOCUMENT_EMPTY_CELL) {
+      expect(result.colors[index]).toBeDefined();
+      expect(result.materials[index]).toBeDefined();
+    }
+  });
+}
+
+function snapshotResult(result: PublicPatternResult) {
+  return {
+    matrix: { ...result.matrix, colorIndices: [...result.matrix.colorIndices] },
+    colors: structuredClone(result.colors),
+    materials: structuredClone(result.materials),
+    totals: structuredClone(result.totals),
+    boardLayout: structuredClone(result.boardLayout),
+  };
+}
+
+function expectEditorError(
+  action: () => unknown,
+  code: PatternEditorError["code"],
+): void {
+  try {
+    action();
+    throw new Error("Expected PatternEditorError");
+  } catch (error) {
+    expect(error).toBeInstanceOf(PatternEditorError);
+    expect((error as PatternEditorError).code).toBe(code);
+  }
+}

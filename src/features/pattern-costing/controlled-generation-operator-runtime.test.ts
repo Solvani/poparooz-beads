@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import * as patternCostingPublicApi from "./index";
+import * as controlledGenerationSessionModule from "./controlled-generation-session";
 import {
   CONTROLLED_GENERATION_CONSUMPTION_SCOPE,
   ControlledGenerationOperatorRuntime,
@@ -15,6 +17,15 @@ const authorizedManifest = () =>
   });
 
 describe("ControlledGenerationOperatorRuntime", () => {
+  it("does not expose a direct session construction bypass", () => {
+    expect(patternCostingPublicApi).not.toHaveProperty(
+      "ControlledGenerationSession",
+    );
+    expect(controlledGenerationSessionModule).not.toHaveProperty(
+      "createRuntimeBackedControlledGenerationSession",
+    );
+  });
+
   it("documents and enforces one-shot consumption for its own lifetime", async () => {
     expect(CONTROLLED_GENERATION_CONSUMPTION_SCOPE).toBe(
       "one-shot within one live ControlledGenerationOperatorRuntime",

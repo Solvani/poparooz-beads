@@ -8,12 +8,14 @@ import type {
 } from "../generator/generation.types";
 import { useGeneratorController } from "../generator/use-generator-controller";
 import type { PatternSettingsDraft } from "../settings/settings.types";
-import { bindControlledGenerationManifest } from "./manifest";
-import { ControlledGenerationSession } from "./controlled-generation-session";
+import type { ControlledGenerationSession } from "./controlled-generation-session";
+import {
+  ControlledGenerationOperatorRuntime,
+  PATTERN_COSTING_SEMANTIC_AUTHORITY,
+} from "./controlled-generation-operator-runtime";
 import {
   ASSERTION_ID,
   ATTEMPT_ID,
-  IMPLEMENTATION_AUTHORITY,
   MANIFEST,
   RUNTIME_AUTHORITY,
   allA1Pattern,
@@ -70,14 +72,14 @@ async function controlledSession(
       },
     ],
   };
-  const authority = await bindControlledGenerationManifest(
-    manifestBytes(manifest),
-    {
-      assertionId,
-      acceptedGeneratorImplementationAuthorityId: IMPLEMENTATION_AUTHORITY,
-    },
+  return new ControlledGenerationOperatorRuntime().createSession(
+    manifestBytes({
+      ...manifest,
+      expectedGeneratorImplementationAuthorityId:
+        PATTERN_COSTING_SEMANTIC_AUTHORITY,
+    }),
+    assertionId,
   );
-  return new ControlledGenerationSession(authority);
 }
 
 async function evidenceTypes(session: ControlledGenerationSession) {
@@ -105,11 +107,7 @@ describe("controlled PatternCosting generation lifecycle", () => {
       colorSetProfiles: [{ profileId: "poparooz-set-221", size: 221 }],
       patternCostingRuntimeAuthorities: [RUNTIME_AUTHORITY],
     };
-    const authority = await bindControlledGenerationManifest(manifestBytes(), {
-      assertionId: ASSERTION_ID,
-      acceptedGeneratorImplementationAuthorityId: IMPLEMENTATION_AUTHORITY,
-    });
-    const session = new ControlledGenerationSession(authority);
+    const session = await controlledSession();
     const file = new File(["image"], "synthetic.png", {
       type: "image/png",
     });

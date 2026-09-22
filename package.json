@@ -9,7 +9,9 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:operator": "vite --config vite.operator.config.ts",
     "build": "vite build",
+    "build:operator": "vite build --config vite.operator.config.ts",
     "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.test.json && tsc --noEmit -p tsconfig.worker.json",
     "lint": "eslint .",
     "format": "prettier --write .",

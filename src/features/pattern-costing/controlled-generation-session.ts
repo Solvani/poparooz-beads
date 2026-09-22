@@ -20,8 +20,42 @@ export interface ControlledGenerationStart {
   readonly evidenceReady: Promise<void>;
 }
 
-export class ControlledGenerationSession {
+export interface ControlledGenerationSession {
   readonly authority: BoundControlledGenerationAuthority;
+  canStart(): boolean;
+  consumeAttempt(regeneration: boolean): ControlledGenerationStart;
+  recordSucceeded(artifact: PatternCostingArtifact): Promise<boolean>;
+  recordFailed(errorCode: ControlledGenerationFailureCode): Promise<void>;
+  recordAborted(): Promise<void>;
+  recordInputDirty(): Promise<void>;
+  recordStaleCallback(callback: "SUCCESS" | "FAILURE"): Promise<void>;
+  recordRegenerationIdle(): Promise<void>;
+  getSuccessfulArtifact(): PatternCostingArtifact | null;
+  exportEvidence(): Promise<ControlledGenerationEvidenceSnapshot>;
+  flushEvidence(): Promise<void>;
+}
+
+export interface ControlledGenerationAttemptConsumptionRegistry {
+  isConsumed(attemptKey: string): boolean;
+  consume(attemptKey: string): boolean;
+}
+
+export function createRuntimeBackedControlledGenerationSession(
+  authority: BoundControlledGenerationAuthority,
+  consumptionRegistry: ControlledGenerationAttemptConsumptionRegistry,
+  options: ControlledGenerationSessionOptions = {},
+): ControlledGenerationSession {
+  return new RuntimeBackedControlledGenerationSession(
+    authority,
+    consumptionRegistry,
+    options,
+  );
+}
+
+class RuntimeBackedControlledGenerationSession implements ControlledGenerationSession {
+  readonly authority: BoundControlledGenerationAuthority;
+  readonly #attemptKey: string;
+  readonly #consumptionRegistry: ControlledGenerationAttemptConsumptionRegistry;
   readonly #journal = new ControlledGenerationEvidenceJournal();
   readonly #externalSink: ControlledGenerationEvidenceSink | undefined;
   readonly #now: () => string;
@@ -37,20 +71,28 @@ export class ControlledGenerationSession {
 
   constructor(
     authority: BoundControlledGenerationAuthority,
+    consumptionRegistry: ControlledGenerationAttemptConsumptionRegistry,
     options: ControlledGenerationSessionOptions = {},
   ) {
     this.authority = authority;
+    this.#attemptKey = controlledGenerationAttemptKey(authority);
+    this.#consumptionRegistry = consumptionRegistry;
     this.#externalSink = options.evidenceSink;
     this.#now = options.now ?? (() => new Date().toISOString());
     Object.freeze(this);
   }
 
   canStart(): boolean {
-    return !this.#consumed;
+    return (
+      !this.#consumed && !this.#consumptionRegistry.isConsumed(this.#attemptKey)
+    );
   }
 
   consumeAttempt(regeneration: boolean): ControlledGenerationStart {
-    if (this.#consumed) {
+    if (
+      this.#consumed ||
+      !this.#consumptionRegistry.consume(this.#attemptKey)
+    ) {
       return {
         accepted: false,
         evidenceReady: this.#recordRetryAuthorityRequired(),
@@ -210,4 +252,14 @@ export class ControlledGenerationSession {
       throw new Error("Controlled generation evidence timestamp is invalid.");
     return value;
   }
+}
+
+function controlledGenerationAttemptKey(
+  authority: BoundControlledGenerationAuthority,
+): string {
+  return [
+    authority.manifestDigest,
+    authority.assertion.assertionId,
+    authority.assertion.generationAttemptId,
+  ].join("|");
 }

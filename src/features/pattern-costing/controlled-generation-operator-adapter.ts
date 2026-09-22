@@ -1,21 +1,14 @@
-import { bindControlledGenerationManifest } from "./manifest";
-import {
-  ControlledGenerationSession,
-  type ControlledGenerationSessionOptions,
-} from "./controlled-generation-session";
+import type { ControlledGenerationSessionOptions } from "./controlled-generation-session";
+import type { ControlledGenerationOperatorRuntime } from "./controlled-generation-operator-runtime";
+import type { ControlledGenerationSession } from "./controlled-generation-session";
 
-export const PATTERN_COSTING_SEMANTIC_AUTHORITY =
-  "git:a0005ecf885db2d458679b20ec7c6006d7b12b79" as const;
+export { PATTERN_COSTING_SEMANTIC_AUTHORITY } from "./controlled-generation-operator-runtime";
 
 export async function createControlledGenerationSession(
+  runtime: ControlledGenerationOperatorRuntime,
   rawManifestBytes: Uint8Array,
   assertionId: string,
   options: ControlledGenerationSessionOptions = {},
 ): Promise<ControlledGenerationSession> {
-  const authority = await bindControlledGenerationManifest(rawManifestBytes, {
-    assertionId,
-    acceptedGeneratorImplementationAuthorityId:
-      PATTERN_COSTING_SEMANTIC_AUTHORITY,
-  });
-  return new ControlledGenerationSession(authority, options);
+  return runtime.createSession(rawManifestBytes, assertionId, options);
 }

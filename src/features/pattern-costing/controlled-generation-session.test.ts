@@ -1,13 +1,16 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { createControlledGenerationEvidenceEvent } from "./controlled-generation-evidence";
-import { ControlledGenerationSession } from "./controlled-generation-session";
-import { bindControlledGenerationManifest } from "./manifest";
+import type { ControlledGenerationSession } from "./controlled-generation-session";
+import {
+  ControlledGenerationOperatorRuntime,
+  PATTERN_COSTING_SEMANTIC_AUTHORITY,
+} from "./controlled-generation-operator-runtime";
 import { createPatternCostingExportV21 } from "./pattern-costing-export";
 import {
   ASSERTION_ID,
   ATTEMPT_ID,
-  IMPLEMENTATION_AUTHORITY,
+  MANIFEST,
   manifestBytes,
   successState,
 } from "./test-fixtures";
@@ -15,15 +18,19 @@ import {
 const FIXED_TIME = "2026-09-22T00:00:00Z";
 
 async function session() {
-  const authority = await bindControlledGenerationManifest(manifestBytes(), {
-    assertionId: ASSERTION_ID,
-    acceptedGeneratorImplementationAuthorityId: IMPLEMENTATION_AUTHORITY,
-  });
-  return {
-    authority,
-    session: new ControlledGenerationSession(authority, {
-      now: () => FIXED_TIME,
+  const runtime = new ControlledGenerationOperatorRuntime();
+  const controlled = await runtime.createSession(
+    manifestBytes({
+      ...MANIFEST,
+      expectedGeneratorImplementationAuthorityId:
+        PATTERN_COSTING_SEMANTIC_AUTHORITY,
     }),
+    ASSERTION_ID,
+    { now: () => FIXED_TIME },
+  );
+  return {
+    authority: controlled.authority,
+    session: controlled,
   };
 }
 
@@ -136,11 +143,16 @@ describe("ControlledGenerationSession", () => {
 
   it("returns immutable ordered evidence and deterministic SHA-256 checksums", async () => {
     const sink = { append: vi.fn() };
-    const { authority } = await session();
-    const controlled = new ControlledGenerationSession(authority, {
-      evidenceSink: sink,
-      now: () => FIXED_TIME,
-    });
+    const runtime = new ControlledGenerationOperatorRuntime();
+    const controlled = await runtime.createSession(
+      manifestBytes({
+        ...MANIFEST,
+        expectedGeneratorImplementationAuthorityId:
+          PATTERN_COSTING_SEMANTIC_AUTHORITY,
+      }),
+      ASSERTION_ID,
+      { evidenceSink: sink, now: () => FIXED_TIME },
+    );
     await controlled.consumeAttempt(false).evidenceReady;
     const first = await controlled.exportEvidence();
     const second = await controlled.exportEvidence();

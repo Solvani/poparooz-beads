@@ -5,6 +5,10 @@ export {
   PATTERN_COSTING_SEMANTIC_AUTHORITY,
 } from "./controlled-generation-operator-adapter";
 export {
+  CONTROLLED_GENERATION_CONSUMPTION_SCOPE,
+  ControlledGenerationOperatorRuntime,
+} from "./controlled-generation-operator-runtime";
+export {
   CONTROLLED_GENERATION_EVIDENCE_VERSION,
   ControlledGenerationEvidenceJournal,
 } from "./controlled-generation-evidence";
@@ -21,4 +25,7 @@ export type {
   ControlledGenerationEvidenceSink,
   ControlledGenerationEvidenceSnapshot,
 } from "./controlled-generation-evidence";
-export type { ControlledGenerationSessionOptions } from "./controlled-generation-session";
+export type {
+  ControlledGenerationSession,
+  ControlledGenerationSessionOptions,
+} from "./controlled-generation-session";

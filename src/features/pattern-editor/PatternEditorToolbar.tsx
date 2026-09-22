@@ -4,18 +4,19 @@ import type { PatternEditorTool } from "./pattern-editing";
 
 export interface PatternEditorToolbarProps {
   readonly activeTool: PatternEditorTool;
-  readonly selectedOrdinal: number;
+  readonly selectedPaintColorCode: string;
   readonly canUndo: boolean;
   readonly canRedo: boolean;
   readonly dirty: boolean;
   readonly onToolChange: (tool: PatternEditorTool) => void;
-  readonly onSelectedOrdinalChange: (ordinal: number) => void;
   readonly onUndo: () => void;
   readonly onRedo: () => void;
 }
 
 export function PatternEditorToolbar(props: PatternEditorToolbarProps) {
-  const selected = getPatternEditorPalette().colors[props.selectedOrdinal]!;
+  const selected = getPatternEditorPalette().colors.find(
+    (color) => color.code === props.selectedPaintColorCode,
+  )!;
   return (
     <div
       className="pattern-editor-toolbar"
@@ -26,16 +27,19 @@ export function PatternEditorToolbar(props: PatternEditorToolbarProps) {
         role="toolbar"
         aria-label="Editing tools"
       >
-        {(["pan", "pen", "eraser", "eyedropper"] as const).map((tool) => (
-          <Button
-            key={tool}
-            variant="secondary"
-            aria-pressed={props.activeTool === tool}
-            onClick={() => props.onToolChange(tool)}
-          >
-            {tool[0]!.toUpperCase() + tool.slice(1)}
-          </Button>
-        ))}
+        {(["pan", "pen", "eraser", "eyedropper", "rectangle"] as const).map(
+          (tool) => (
+            <Button
+              key={tool}
+              data-editor-tool={tool}
+              variant="secondary"
+              aria-pressed={props.activeTool === tool}
+              onClick={() => props.onToolChange(tool)}
+            >
+              {tool[0]!.toUpperCase() + tool.slice(1)}
+            </Button>
+          ),
+        )}
       </div>
       <div
         className="pattern-editor-toolbar__history"
@@ -63,23 +67,9 @@ export function PatternEditorToolbar(props: PatternEditorToolbarProps) {
           style={{ backgroundColor: selected.hex }}
           aria-hidden="true"
         />
-        Paint {selected.code} · {props.dirty ? "Edited" : "Original"}
+        Paint {props.selectedPaintColorCode} ·{" "}
+        {props.dirty ? "Edited" : "Original"}
       </p>
-      <label className="pattern-editor-toolbar__color-select">
-        Paint color
-        <select
-          value={props.selectedOrdinal}
-          onChange={(event) =>
-            props.onSelectedOrdinalChange(Number(event.currentTarget.value))
-          }
-        >
-          {getPatternEditorPalette().colors.map((color) => (
-            <option key={color.code} value={color.sortOrder}>
-              {color.code}
-            </option>
-          ))}
-        </select>
-      </label>
     </div>
   );
 }

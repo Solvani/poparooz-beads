@@ -38,6 +38,13 @@ export interface PatternCanvasProps {
     readonly onMove: (cell: PatternCell) => void;
     readonly onCommit: () => void;
     readonly onCancel: () => void;
+    readonly virtualCursor?: PatternCell;
+    readonly onKeyCommand?: (command: {
+      readonly key: string;
+      readonly ctrlKey: boolean;
+      readonly metaKey: boolean;
+      readonly shiftKey: boolean;
+    }) => boolean;
   };
 }
 

@@ -209,6 +209,19 @@ export function PatternCanvas({
         setViewFailed(true);
         return;
       }
+      if (editor?.virtualCursor !== undefined) {
+        const cursor = editor.virtualCursor;
+        context.save();
+        context.strokeStyle = "#006B5C";
+        context.lineWidth = 2;
+        context.strokeRect(
+          viewport.offsetX + cursor.column * viewport.scale,
+          viewport.offsetY + cursor.row * viewport.scale,
+          viewport.scale,
+          viewport.scale,
+        );
+        context.restore();
+      }
       if (viewMode === "code") {
         const codeResult = renderPatternCodes({
           context,
@@ -236,6 +249,7 @@ export function PatternCanvas({
     viewMode,
     viewport,
     effectiveFocusedColorIndex,
+    editor?.virtualCursor,
   ]);
 
   if (!rasterResult.ok || viewFailed) {
@@ -275,7 +289,17 @@ export function PatternCanvas({
         <canvas
           ref={canvasRef}
           role="img"
-          aria-label={`Bead pattern preview, ${dimensions.width} columns by ${dimensions.height} rows.`}
+          aria-label={`Bead pattern preview, ${dimensions.width} columns by ${dimensions.height} rows.${editor === undefined ? "" : " Use arrow keys to move the editor cursor."}`}
+          tabIndex={editor === undefined ? undefined : 0}
+          onKeyDown={(event) => {
+            const handled = editor?.onKeyCommand?.({
+              key: event.key,
+              ctrlKey: event.ctrlKey,
+              metaKey: event.metaKey,
+              shiftKey: event.shiftKey,
+            });
+            if (handled) event.preventDefault();
+          }}
           {...editorPointerHandlers}
         />
       </div>

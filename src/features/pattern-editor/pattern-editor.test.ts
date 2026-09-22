@@ -28,11 +28,152 @@ import {
   strokeValue,
 } from "./pattern-editing";
 import { createPatternDocumentView } from "./pattern-document-view";
+import {
+  applyBatchDraft,
+  createRectangleDraft,
+  createReplaceDraft,
+  deriveUsedPatternColors,
+  normalizePatternRectangle,
+} from "./pattern-batch-operations";
 
 const BOARD = adaptBoardProfileToGeneration(
   createApprovedBoardProfileProvider().getSnapshot(),
 );
 const PALETTE = getPatternEditorPalette();
+
+describe("A03 palette and batch operations", () => {
+  it("derives current used colors and exact counts without a second count store", () => {
+    const document = createPatternDocument(
+      generatedResult(3, 2, [1, 1, 0, 65_535, 0, 1]),
+    );
+    expect(deriveUsedPatternColors(document)).toEqual([
+      expect.objectContaining({
+        code: PALETTE.colors[0]!.code,
+        ordinal: 0,
+        count: 2,
+      }),
+      expect.objectContaining({
+        code: PALETTE.colors[1]!.code,
+        ordinal: 1,
+        count: 3,
+      }),
+    ]);
+    document.cells.fill(PATTERN_DOCUMENT_EMPTY_CELL);
+    expect(deriveUsedPatternColors(document)).toEqual([]);
+  });
+
+  it("previews and applies exact replace-color cells without mutating the source", () => {
+    const document = createPatternDocument(
+      generatedResult(4, 1, [0, 1, 0, 65_535]),
+    );
+    const before = document.cells.slice();
+    const draft = createReplaceDraft(
+      document,
+      PALETTE.colors[0]!.code,
+      PALETTE.colors[2]!.code,
+    );
+    expect([...draft.entries()]).toEqual([
+      [0, 2],
+      [2, 2],
+    ]);
+    expect(document.cells).toEqual(before);
+    expect([...applyBatchDraft(document, draft).cells]).toEqual([
+      2, 1, 2, 65_535,
+    ]);
+    expect(
+      createReplaceDraft(
+        document,
+        PALETTE.colors[0]!.code,
+        PALETTE.colors[0]!.code,
+      ).size,
+    ).toBe(0);
+    expect(
+      createReplaceDraft(
+        document,
+        PALETTE.colors[8]!.code,
+        PALETTE.colors[0]!.code,
+      ).size,
+    ).toBe(0);
+    expect(
+      createReplaceDraft(document, "UNKNOWN", PALETTE.colors[0]!.code).size,
+    ).toBe(0);
+  });
+
+  it("fills inclusive reversed and single-cell rectangles, including empty cells", () => {
+    const document = createPatternDocument(
+      generatedResult(3, 2, [0, 1, 0, 65_535, 1, 0]),
+    );
+    expect(
+      normalizePatternRectangle({ column: 2, row: 1 }, { column: 0, row: 0 }),
+    ).toEqual({ left: 0, top: 0, right: 2, bottom: 1 });
+    const reverse = createRectangleDraft(
+      document,
+      { column: 2, row: 1 },
+      { column: 0, row: 0 },
+      2,
+    );
+    expect(reverse.size).toBe(6);
+    expect([...applyBatchDraft(document, reverse).cells]).toEqual([
+      2, 2, 2, 2, 2, 2,
+    ]);
+    expect(
+      createRectangleDraft(
+        document,
+        { column: 1, row: 0 },
+        { column: 1, row: 0 },
+        1,
+      ).size,
+    ).toBe(0);
+    expect(
+      createRectangleDraft(
+        document,
+        { column: 0, row: 1 },
+        { column: 0, row: 1 },
+        2,
+      ).size,
+    ).toBe(1);
+  });
+
+  it("commits each batch once and preserves exact undo, redo, and redo clearing", () => {
+    const initial = createPatternEditorSession(
+      generatedResult(3, 1, [0, 1, 0]),
+    );
+    const replace = applyBatchDraft(
+      initial.history.present,
+      createReplaceDraft(
+        initial.history.present,
+        PALETTE.colors[0]!.code,
+        PALETTE.colors[2]!.code,
+      ),
+    );
+    const committed = reducePatternEditorSession(initial, {
+      type: "commit",
+      document: replace,
+    });
+    expect(committed.history.past).toHaveLength(1);
+    const undone = reducePatternEditorSession(committed, { type: "undo" });
+    expect(undone.history.present.cells).toEqual(initial.history.present.cells);
+    const redone = reducePatternEditorSession(undone, { type: "redo" });
+    expect(redone.history.present.cells).toEqual(
+      committed.history.present.cells,
+    );
+    const rectangle = applyBatchDraft(
+      undone.history.present,
+      createRectangleDraft(
+        undone.history.present,
+        { column: 0, row: 0 },
+        { column: 1, row: 0 },
+        3,
+      ),
+    );
+    const replacement = reducePatternEditorSession(undone, {
+      type: "commit",
+      document: rectangle,
+    });
+    expect(replacement.history.past).toHaveLength(1);
+    expect(replacement.history.future).toEqual([]);
+  });
+});
 
 describe("direct cell editing primitives", () => {
   it("maps client coordinates through pan and zoom with exclusive outer edges", () => {

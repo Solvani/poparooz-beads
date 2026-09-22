@@ -4,7 +4,8 @@ import {
   type PatternDocument,
 } from "./pattern-editor.types";
 
-export type PatternEditorTool = "pan" | "pen" | "eraser" | "eyedropper";
+export type PatternEditorTool =
+  "pan" | "pen" | "eraser" | "eyedropper" | "rectangle";
 
 export interface PatternCell {
   readonly column: number;

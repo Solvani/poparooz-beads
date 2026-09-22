@@ -31,6 +31,7 @@ function context() {
     moveTo: vi.fn(),
     lineTo: vi.fn(),
     stroke: vi.fn(),
+    strokeRect: vi.fn(),
     save: vi.fn(),
     restore: vi.fn(),
     rect: vi.fn(),
@@ -145,6 +146,36 @@ async function openMoreControls() {
 }
 
 describe("PatternCanvas", () => {
+  it("forwards handled keyboard commands from the focused edit canvas", () => {
+    const setup = environment();
+    const onKeyCommand = vi.fn(() => true);
+    render(
+      <PatternCanvas
+        pattern={createPublicPattern()}
+        editor={{
+          activeTool: "rectangle",
+          onBegin: vi.fn(),
+          onMove: vi.fn(),
+          onCommit: vi.fn(),
+          onCancel: vi.fn(),
+          onKeyCommand,
+        }}
+        environment={setup.value}
+      />,
+    );
+    setup.flush();
+
+    const canvas = screen.getByRole("img");
+    expect(canvas).toHaveAttribute("tabindex", "0");
+    fireEvent.keyDown(canvas, { key: "ArrowRight", ctrlKey: true });
+    expect(onKeyCommand).toHaveBeenCalledWith({
+      key: "ArrowRight",
+      ctrlKey: true,
+      metaKey: false,
+      shiftKey: false,
+    });
+  });
+
   it("routes edit pointers to cells and cancels an active draft when tools switch", () => {
     const setup = environment();
     const callbacks = {

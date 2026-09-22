@@ -1,9 +1,11 @@
 import { fileURLToPath, URL } from "node:url";
-import { defineConfig, type ConfigEnv } from "vite";
+import { defineConfig, type ConfigEnv, type UserConfig } from "vite";
 
 import { createViteConfig } from "./vite.config";
 
-export async function createOperatorViteConfig(environment: ConfigEnv) {
+export async function createOperatorViteConfig(
+  environment: ConfigEnv,
+): Promise<UserConfig> {
   const base = await createViteConfig(environment);
   return {
     ...base,

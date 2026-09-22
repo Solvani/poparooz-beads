@@ -9,10 +9,12 @@ import type {
 import { useGeneratorController } from "../generator/use-generator-controller";
 import type { PatternSettingsDraft } from "../settings/settings.types";
 import { bindControlledGenerationManifest } from "./manifest";
+import { ControlledGenerationSession } from "./controlled-generation-session";
 import {
   ASSERTION_ID,
   ATTEMPT_ID,
   IMPLEMENTATION_AUTHORITY,
+  MANIFEST,
   RUNTIME_AUTHORITY,
   allA1Pattern,
   manifestBytes,
@@ -25,6 +27,64 @@ const SETTINGS: PatternSettingsDraft = {
   background: "white",
   selectedColorSetProfileId: "poparooz-set-221",
 };
+
+interface Deferred<T> {
+  readonly promise: Promise<T>;
+  readonly resolve: (value: T) => void;
+  readonly reject: (reason: unknown) => void;
+}
+
+function deferred<T>(): Deferred<T> {
+  let resolve!: (value: T) => void;
+  let reject!: (reason: unknown) => void;
+  const promise = new Promise<T>((accept, decline) => {
+    resolve = accept;
+    reject = decline;
+  });
+  return { promise, resolve, reject };
+}
+
+function queuedRuntime(tasks: readonly Deferred<PublicPatternResult>[]) {
+  let index = 0;
+  const generate = vi.fn(() => tasks[index++]!.promise);
+  const runtime: GenerationRuntime = {
+    availability: { available: true },
+    service: { generate },
+    colorSetProfiles: [{ profileId: "poparooz-set-221", size: 221 }],
+    patternCostingRuntimeAuthorities: [RUNTIME_AUTHORITY],
+  };
+  return { runtime, generate };
+}
+
+async function controlledSession(
+  assertionId = ASSERTION_ID,
+  generationAttemptId = ATTEMPT_ID,
+) {
+  const manifest = {
+    ...MANIFEST,
+    entries: [
+      {
+        ...MANIFEST.entries[0]!,
+        assertionId,
+        generationAttemptId,
+      },
+    ],
+  };
+  const authority = await bindControlledGenerationManifest(
+    manifestBytes(manifest),
+    {
+      assertionId,
+      acceptedGeneratorImplementationAuthorityId: IMPLEMENTATION_AUTHORITY,
+    },
+  );
+  return new ControlledGenerationSession(authority);
+}
+
+async function evidenceTypes(session: ControlledGenerationSession) {
+  return (await session.exportEvidence()).events.map(
+    (event) => event.eventType,
+  );
+}
 
 describe("controlled PatternCosting generation lifecycle", () => {
   it("binds immutable external attempt authority before STARTED and keeps jobId separate", async () => {
@@ -49,6 +109,7 @@ describe("controlled PatternCosting generation lifecycle", () => {
       assertionId: ASSERTION_ID,
       acceptedGeneratorImplementationAuthorityId: IMPLEMENTATION_AUTHORITY,
     });
+    const session = new ControlledGenerationSession(authority);
     const file = new File(["image"], "synthetic.png", {
       type: "image/png",
     });
@@ -58,12 +119,13 @@ describe("controlled PatternCosting generation lifecycle", () => {
         imageVersion: 1,
         settings: SETTINGS,
         runtime,
-        patternCosting: { mode: "controlled", authority },
+        patternCosting: { mode: "controlled", session },
       }),
     );
     await waitFor(() => expect(result.current.canGenerate).toBe(true));
     act(() => expect(result.current.generate()).toBe(true));
     expect(result.current.state.status).toBe("processing");
+    await waitFor(() => expect(generate).toHaveBeenCalledOnce());
     const snapshot = generate.mock.calls[0]![0];
     expect(
       snapshot.patternCosting?.authority.assertion.generationAttemptId,
@@ -83,6 +145,11 @@ describe("controlled PatternCosting generation lifecycle", () => {
           .assertion.generationAttemptId,
       ).toBe(ATTEMPT_ID);
     }
+    await waitFor(() => expect(session.getSuccessfulArtifact()).not.toBeNull());
+    expect(await evidenceTypes(session)).toEqual([
+      "GENERATION_STARTED",
+      "SUCCEEDED",
+    ]);
   });
 
   it("fails closed before service invocation when controlled authority is absent", async () => {
@@ -108,7 +175,7 @@ describe("controlled PatternCosting generation lifecycle", () => {
         runtime,
         patternCosting: {
           mode: "controlled",
-          authority: undefined as never,
+          session: undefined as never,
         },
       }),
     );
@@ -119,4 +186,196 @@ describe("controlled PatternCosting generation lifecycle", () => {
     expect(result.current.generate()).toBe(false);
     expect(generate).not.toHaveBeenCalled();
   });
+
+  it("blocks same-attempt retry after failure and emits safe lifecycle evidence", async () => {
+    const task = deferred<PublicPatternResult>();
+    const generation = queuedRuntime([task]);
+    const session = await controlledSession();
+    const file = new File(["image"], "synthetic.png");
+    const { result } = renderHook(() =>
+      useGeneratorController({
+        file,
+        imageVersion: 1,
+        settings: SETTINGS,
+        runtime: generation.runtime,
+        patternCosting: { mode: "controlled", session },
+      }),
+    );
+    await waitFor(() => expect(result.current.canGenerate).toBe(true));
+    act(() => expect(result.current.generate()).toBe(true));
+    await waitFor(() => expect(generation.generate).toHaveBeenCalledOnce());
+    await act(async () => task.reject(new Error("private raw failure")));
+    expect(result.current.state.status).toBe("error");
+    expect(result.current.generate()).toBe(false);
+    expect(generation.generate).toHaveBeenCalledOnce();
+    expect(await evidenceTypes(session)).toEqual([
+      "GENERATION_STARTED",
+      "FAILED",
+      "RETRY_AUTHORITY_REQUIRED",
+    ]);
+    expect((await session.exportEvidence()).serialized).not.toContain(
+      "private raw failure",
+    );
+  });
+
+  it("keeps an aborted controlled attempt consumed", async () => {
+    const task = deferred<PublicPatternResult>();
+    const generation = queuedRuntime([task]);
+    const session = await controlledSession();
+    const file = new File(["image"], "synthetic.png");
+    const { result } = renderHook(() =>
+      useGeneratorController({
+        file,
+        imageVersion: 1,
+        settings: SETTINGS,
+        runtime: generation.runtime,
+        patternCosting: { mode: "controlled", session },
+      }),
+    );
+    await waitFor(() => expect(result.current.canGenerate).toBe(true));
+    act(() => expect(result.current.generate()).toBe(true));
+    await waitFor(() => expect(generation.generate).toHaveBeenCalledOnce());
+    act(() => expect(result.current.abort()).toBe(true));
+    expect(result.current.state.status).toBe("aborted");
+    expect(result.current.generate()).toBe(false);
+    expect(await evidenceTypes(session)).toEqual([
+      "GENERATION_STARTED",
+      "ABORTED",
+      "RETRY_AUTHORITY_REQUIRED",
+    ]);
+  });
+
+  it("marks changed generation input dirty once and never hands off a false success", async () => {
+    const task = deferred<PublicPatternResult>();
+    const generation = queuedRuntime([task]);
+    const session = await controlledSession();
+    const file = new File(["image"], "synthetic.png");
+    const { result, rerender } = renderHook(
+      ({ settings }) =>
+        useGeneratorController({
+          file,
+          imageVersion: 1,
+          settings,
+          runtime: generation.runtime,
+          patternCosting: { mode: "controlled", session },
+        }),
+      { initialProps: { settings: SETTINGS } },
+    );
+    await waitFor(() => expect(result.current.canGenerate).toBe(true));
+    act(() => expect(result.current.generate()).toBe(true));
+    await waitFor(() => expect(generation.generate).toHaveBeenCalledOnce());
+    rerender({ settings: { ...SETTINGS, maxColors: "20" } });
+    await act(async () => task.resolve(allA1Pattern()));
+    await waitFor(() => expect(result.current.state.status).toBe("dirty"));
+    expect(session.getSuccessfulArtifact()).toBeNull();
+    expect(await evidenceTypes(session)).toEqual([
+      "GENERATION_STARTED",
+      "INPUT_DIRTY",
+      "RETRY_AUTHORITY_REQUIRED",
+    ]);
+  });
+
+  it("accepts a new COST authority as regeneration without calling it input dirtiness", async () => {
+    const first = deferred<PublicPatternResult>();
+    const second = deferred<PublicPatternResult>();
+    const generation = queuedRuntime([first, second]);
+    const oldSession = await controlledSession();
+    const newSession = await controlledSession(
+      "018f3b71-6f14-7d42-9e8a-3b2e179a8d11",
+      "018f3b71-6f14-7d42-9e8a-3b2e179a8d12",
+    );
+    const file = new File(["image"], "synthetic.png");
+    const { result, rerender } = renderHook(
+      ({ session }) =>
+        useGeneratorController({
+          file,
+          imageVersion: 1,
+          settings: SETTINGS,
+          runtime: generation.runtime,
+          patternCosting: { mode: "controlled", session },
+        }),
+      { initialProps: { session: oldSession } },
+    );
+    await waitFor(() => expect(result.current.canGenerate).toBe(true));
+    act(() => expect(result.current.generate()).toBe(true));
+    await waitFor(() => expect(generation.generate).toHaveBeenCalledTimes(1));
+    await act(async () => first.resolve(allA1Pattern()));
+    await waitFor(() =>
+      expect(oldSession.getSuccessfulArtifact()).not.toBeNull(),
+    );
+
+    rerender({ session: newSession });
+    await waitFor(() => expect(result.current.canRegenerate).toBe(true));
+    act(() => expect(result.current.generate()).toBe(true));
+    await waitFor(() => expect(generation.generate).toHaveBeenCalledTimes(2));
+    await act(async () => second.resolve(allA1Pattern()));
+    await waitFor(() =>
+      expect(newSession.getSuccessfulArtifact()).not.toBeNull(),
+    );
+    expect(await evidenceTypes(oldSession)).toEqual([
+      "GENERATION_STARTED",
+      "SUCCEEDED",
+    ]);
+    expect(await evidenceTypes(newSession)).toEqual([
+      "GENERATION_STARTED",
+      "REGENERATION_STARTED",
+      "SUCCEEDED",
+      "REGENERATION_IDLE",
+    ]);
+  });
+
+  it.each([
+    ["SUCCESS" as const, true],
+    ["FAILURE" as const, false],
+  ])(
+    "rejects a stale %s callback without disturbing the newer attempt",
+    async (kind, succeeds) => {
+      const first = deferred<PublicPatternResult>();
+      const second = deferred<PublicPatternResult>();
+      const generation = queuedRuntime([first, second]);
+      const oldSession = await controlledSession();
+      const newSession = await controlledSession(
+        "018f3b71-6f14-7d42-9e8a-3b2e179a8e11",
+        "018f3b71-6f14-7d42-9e8a-3b2e179a8e12",
+      );
+      const file = new File(["image"], "synthetic.png");
+      const { result, rerender } = renderHook(
+        ({ session }) =>
+          useGeneratorController({
+            file,
+            imageVersion: 1,
+            settings: SETTINGS,
+            runtime: generation.runtime,
+            patternCosting: { mode: "controlled", session },
+          }),
+        { initialProps: { session: oldSession } },
+      );
+      await waitFor(() => expect(result.current.canGenerate).toBe(true));
+      act(() => expect(result.current.generate()).toBe(true));
+      await waitFor(() => expect(generation.generate).toHaveBeenCalledTimes(1));
+      rerender({ session: newSession });
+      act(() => expect(result.current.generate()).toBe(true));
+      await waitFor(() => expect(generation.generate).toHaveBeenCalledTimes(2));
+
+      if (succeeds) await act(async () => first.resolve(allA1Pattern()));
+      else await act(async () => first.reject(new Error("stale failure")));
+      expect(result.current.state.status).toBe("processing");
+      await act(async () => second.resolve(allA1Pattern()));
+      await waitFor(() =>
+        expect(newSession.getSuccessfulArtifact()).not.toBeNull(),
+      );
+      expect(oldSession.getSuccessfulArtifact()).toBeNull();
+      const oldEvidence = await oldSession.exportEvidence();
+      expect(
+        oldEvidence.events.filter(
+          (event) => event.eventType === "STALE_CALLBACK_REJECTED",
+        ),
+      ).toHaveLength(1);
+      expect(
+        oldEvidence.events.find(
+          (event) => event.eventType === "STALE_CALLBACK_REJECTED",
+        )?.rejectedCallback,
+      ).toBe(kind);
+    },
+  );
 });

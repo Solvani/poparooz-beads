@@ -1,4 +1,5 @@
 import type { PublishedColorSetProfileId } from "../../runtime/color-set/color-set.types";
+import type { ControlledGenerationSession } from "./controlled-generation-session";
 
 export type Sha256Digest = `sha256:${string}`;
 export type GeneratorImplementationAuthorityId = `git:${string}`;
@@ -57,7 +58,7 @@ export type PatternCostingGenerationControl =
   | { readonly mode: "disabled" }
   | {
       readonly mode: "controlled";
-      readonly authority: BoundControlledGenerationAuthority;
+      readonly session: ControlledGenerationSession;
     };
 
 export interface PerColorBeadCount {

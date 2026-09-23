@@ -20,6 +20,10 @@ import { useWorkspaceMode } from "../components/responsive/use-workspace-mode";
 import { PatternActions } from "../features/actions/PatternActions";
 import { toPatternActionState } from "../features/actions/pattern-action-state";
 import { createPatternDownloader } from "../features/download/pattern-download";
+import {
+  EMPTY_EDITED_PATTERN_DOWNLOAD_MESSAGE,
+  selectPatternDownload,
+} from "../features/download/pattern-download-selection";
 import { GenerationStatus } from "../features/generator/GenerationStatus";
 import { getLastSuccess } from "../features/generator/generator-state";
 import {
@@ -101,16 +105,16 @@ export function App({
     useState<PatternEditorSession | null>(null);
   const [emailGateOpen, setEmailGateOpen] = useState(false);
   const [pendingDownloadIdentity, setPendingDownloadIdentity] = useState<
-    number | null
+    string | null
   >(null);
-  const committedLastSuccessIdentityRef = useRef<number | null>(null);
+  const committedDownloadIdentityRef = useRef<string | null>(null);
   const enabledEmailGate =
     "client" in emailGateCapability ? emailGateCapability : null;
   const downloadCoordinator = useMemo(
     () =>
       enabledEmailGate === null
         ? null
-        : createEmailGateDownloadCoordinator<number>(
+        : createEmailGateDownloadCoordinator<string>(
             enabledEmailGate.unlockStore,
           ),
     [enabledEmailGate],
@@ -199,12 +203,39 @@ export function App({
     );
     return selected ? `${selected.size}-Color Set` : null;
   }, [generationRuntime, lastSuccess]);
+  const downloadSelection = useMemo(
+    () =>
+      lastSuccess === undefined || selectedColorSetLabel === null
+        ? null
+        : selectPatternDownload({
+            generationIdentity: lastSuccess.snapshot.jobId,
+            originalPattern: lastSuccess.result,
+            customerResult,
+            selectedColorSetLabel,
+          }),
+    [customerResult, lastSuccess, selectedColorSetLabel],
+  );
   const patternBackground = lastSuccess?.snapshot.settings.background ?? null;
   const emailGatePatternReplaced =
     emailGateOpen &&
     pendingDownloadIdentity !== null &&
-    lastSuccess?.snapshot.jobId !== pendingDownloadIdentity;
-  const patternActionState = toPatternActionState(generator.state);
+    downloadSelection?.identity !== pendingDownloadIdentity;
+  const basePatternActionState = toPatternActionState(generator.state);
+  const patternActionState = useMemo(() => {
+    if (downloadSelection === null) return basePatternActionState;
+    if (downloadSelection.kind === "unavailable") {
+      return Object.freeze({
+        ...basePatternActionState,
+        resultIdentity: downloadSelection.identity,
+        downloadEnabled: false,
+        availabilityMessage: EMPTY_EDITED_PATTERN_DOWNLOAD_MESSAGE,
+      });
+    }
+    return Object.freeze({
+      ...basePatternActionState,
+      resultIdentity: downloadSelection.identity,
+    });
+  }, [basePatternActionState, downloadSelection]);
   const compactResultMode =
     workspaceMode === "compact" && visiblePattern !== undefined;
   const compactResult = compactResultMode ? customerResultView : null;
@@ -214,11 +245,11 @@ export function App({
   }, [closeSheet, compactResultMode]);
 
   useLayoutEffect(() => {
-    const committedIdentity = lastSuccess?.snapshot.jobId ?? null;
-    committedLastSuccessIdentityRef.current = committedIdentity;
+    const committedIdentity = downloadSelection?.identity ?? null;
+    committedDownloadIdentityRef.current = committedIdentity;
     if (!emailGateOpen || downloadCoordinator === null) return;
     downloadCoordinator.cancelUnless(committedIdentity);
-  }, [downloadCoordinator, emailGateOpen, lastSuccess]);
+  }, [downloadCoordinator, downloadSelection, emailGateOpen]);
 
   const removeImage = () => {
     downloadCoordinator?.cancel();
@@ -344,26 +375,28 @@ export function App({
     );
 
   function downloadLastSuccess() {
-    if (lastSuccess === undefined || selectedColorSetLabel === null) {
+    if (downloadSelection === null) {
       return Promise.resolve({
         ok: false as const,
         message: "We couldn’t prepare this pattern download.",
       });
     }
-    const input = {
-      pattern: lastSuccess.result,
-      selectedColorSetLabel,
-    };
+    if (downloadSelection.kind === "unavailable") {
+      return Promise.resolve({
+        ok: false as const,
+        message: downloadSelection.message,
+      });
+    }
     if (enabledEmailGate === null) {
-      return patternDownloader.download(input);
+      return patternDownloader.download(downloadSelection.input);
     }
     if (enabledEmailGate.unlockStore.isUnlocked()) {
-      return patternDownloader.download(input);
+      return patternDownloader.download(downloadSelection.input);
     }
-    downloadCoordinator?.begin(lastSuccess.snapshot.jobId, () =>
-      patternDownloader.download(input),
+    downloadCoordinator?.begin(downloadSelection.identity, () =>
+      patternDownloader.download(downloadSelection.input),
     );
-    setPendingDownloadIdentity(lastSuccess.snapshot.jobId);
+    setPendingDownloadIdentity(downloadSelection.identity);
     setEmailGateOpen(true);
     return Promise.resolve({ ok: true as const });
   }
@@ -382,7 +415,7 @@ export function App({
     }
     if (downloadCoordinator === null) return { outcome: "pattern-replaced" };
     const completion = downloadCoordinator.complete(
-      committedLastSuccessIdentityRef.current,
+      committedDownloadIdentityRef.current,
     );
     if (context.marketingConsent && "client" in marketingConsentCapability) {
       // Unlock and Download have already started. Marketing cannot gate either

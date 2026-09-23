@@ -383,7 +383,7 @@ export function PatternEditorCanvas({
         {batchPreview !== null
           ? "Preview only. Apply or cancel this batch edit."
           : isPatternEditorDirty(session)
-            ? "Results reflect local edits. Downloads still use the generated pattern."
+            ? "Results and downloads use your current local edits."
             : "Editing the generated pattern locally."}
       </p>
     </div>

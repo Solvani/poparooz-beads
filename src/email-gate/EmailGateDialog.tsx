@@ -716,7 +716,7 @@ function instructionsFor(
 ) {
   if (isEmailPhase(phase, challengeId))
     return "Enter your email and we’ll send a one-time verification code.";
-  if (phase === "success") return "Your original pattern download is ready.";
+  if (phase === "success") return "Your pattern download is ready.";
   if (phase === "persistence-warning")
     return "Your download started, but this browser may ask you to verify again.";
   if (phase === "pattern-replaced")

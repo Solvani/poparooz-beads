@@ -27,6 +27,9 @@ import { App } from "./App";
 
 const PUBLIC_RESULT = withColorCodes(createPublicPattern(), ["A4", "A10"]);
 const EDITOR_PUBLIC_RESULT = withEditorBoardAuthority(PUBLIC_RESULT);
+const SINGLE_BEAD_EDITOR_RESULT = withEditorBoardAuthority(
+  withColorCodes(createPublicPattern(1, 1, new Uint16Array([0])), ["A4"]),
+);
 const COLOR_SET_PROFILES = [
   { profileId: "poparooz-set-24", size: 24 },
   { profileId: "poparooz-set-48", size: 48 },
@@ -246,6 +249,75 @@ async function beginGateVerification() {
   await userEvent.click(
     screen.getByRole("button", { name: "Verify & download" }),
   );
+}
+
+function prepareDownloadRendering() {
+  Object.defineProperty(HTMLImageElement.prototype, "decode", {
+    configurable: true,
+    value: vi.fn(async () => {}),
+  });
+  vi.spyOn(HTMLImageElement.prototype, "naturalWidth", "get").mockReturnValue(
+    1154,
+  );
+  vi.spyOn(HTMLImageElement.prototype, "naturalHeight", "get").mockReturnValue(
+    428,
+  );
+  return vi
+    .spyOn(HTMLAnchorElement.prototype, "click")
+    .mockImplementation(() => {});
+}
+
+async function replaceEditorColor(source: string, target: string) {
+  await userEvent.selectOptions(screen.getByLabelText("Source color"), source);
+  await userEvent.selectOptions(screen.getByLabelText("Target color"), target);
+  await userEvent.click(
+    screen.getByRole("button", { name: "Preview Replace" }),
+  );
+  await userEvent.click(
+    within(screen.getByLabelText("Replace preview")).getByRole("button", {
+      name: "Apply",
+    }),
+  );
+}
+
+function replaceEditorColorBehindGate(source: string, target: string) {
+  const app = document.querySelector<HTMLElement>(".app-root")!;
+  const appQueries = within(app);
+  fireEvent.change(appQueries.getByLabelText("Source color"), {
+    target: { value: source },
+  });
+  fireEvent.change(appQueries.getByLabelText("Target color"), {
+    target: { value: target },
+  });
+  fireEvent.click(
+    appQueries.getByRole("button", {
+      name: "Preview Replace",
+      hidden: true,
+    }),
+  );
+  fireEvent.click(
+    within(appQueries.getByLabelText("Replace preview")).getByRole("button", {
+      name: "Apply",
+      hidden: true,
+    }),
+  );
+}
+
+function latestExportContext(): ReturnType<typeof canvasContext> {
+  const results = vi.mocked(HTMLCanvasElement.prototype.getContext).mock
+    .results;
+  for (let index = results.length - 1; index >= 0; index -= 1) {
+    const context = results[index]?.value as ReturnType<typeof canvasContext>;
+    if (
+      context &&
+      vi
+        .mocked(context.fillText)
+        .mock.calls.some(([text]) => text === "Color Code Pattern")
+    ) {
+      return context;
+    }
+  }
+  throw new Error("Expected an export canvas context.");
 }
 
 beforeEach(() => {
@@ -1242,6 +1314,107 @@ describe("App", () => {
     expect(document.querySelector("a[download]")).toBeNull();
   });
 
+  it("downloads the current edited result and returns to the exact original after Reset", async () => {
+    const anchorClickSpy = prepareDownloadRendering();
+    render(
+      <App
+        generationRuntime={availableRuntime([
+          Promise.resolve(EDITOR_PUBLIC_RESULT),
+        ])}
+        emailGateCapability={enabledEmailGate(true)}
+      />,
+    );
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await screen.findByRole("heading", { name: "Pattern Summary" });
+
+    await replaceEditorColor("A4", "A20");
+    expect(
+      screen.getByText("Results and downloads use your current local edits."),
+    ).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Save / Download Pattern" }),
+    );
+    await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledOnce());
+    const editedContext = latestExportContext();
+    expect(
+      vi
+        .mocked(editedContext.fillText)
+        .mock.calls.some(([text]) => text === "A20"),
+    ).toBe(true);
+    expect(
+      vi
+        .mocked(editedContext.fillText)
+        .mock.calls.some(([text]) => text === "A4"),
+    ).toBe(false);
+
+    await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Save / Download Pattern" }),
+    );
+    await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledTimes(2));
+    const resetContext = latestExportContext();
+    expect(
+      vi
+        .mocked(resetContext.fillText)
+        .mock.calls.some(([text]) => text === "A4"),
+    ).toBe(true);
+    expect(
+      vi
+        .mocked(resetContext.fillText)
+        .mock.calls.some(([text]) => text === "A20"),
+    ).toBe(false);
+  });
+
+  it("disables download and never opens Email Gate for an empty edited document", async () => {
+    const gate = enabledEmailGate(false);
+    const anchorClickSpy = prepareDownloadRendering();
+    render(
+      <App
+        generationRuntime={availableRuntime([
+          Promise.resolve(SINGLE_BEAD_EDITOR_RESULT),
+        ])}
+        emailGateCapability={gate}
+      />,
+    );
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await screen.findByRole("heading", { name: "Pattern Summary" });
+    await userEvent.click(screen.getByRole("button", { name: "Eraser" }));
+    const canvas = screen.getByRole("img", {
+      name: /Bead pattern preview, 1 columns by 1 rows/,
+    }) as HTMLCanvasElement;
+    canvas.setPointerCapture = vi.fn();
+    canvas.hasPointerCapture = vi.fn(() => true);
+    canvas.releasePointerCapture = vi.fn();
+    fireEvent.pointerDown(canvas, {
+      pointerId: 7,
+      isPrimary: true,
+      button: 0,
+      clientX: 300,
+      clientY: 210,
+    });
+    fireEvent.pointerUp(canvas, { pointerId: 7 });
+
+    const download = screen.getByRole("button", {
+      name: "Save / Download Pattern",
+    });
+    await waitFor(() => expect(download).toBeDisabled());
+    expect(
+      screen.getByText(
+        "Add at least one bead to download this edited pattern.",
+      ),
+    ).toBeInTheDocument();
+    fireEvent.click(download);
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(gate.client.issueChallenge).not.toHaveBeenCalled();
+    expect(anchorClickSpy).not.toHaveBeenCalled();
+  });
+
   it("keeps a valid Canvas and Generator success when only the results view is invalid", async () => {
     const result = createPublicPattern();
     const runtime = availableRuntime([
@@ -1666,6 +1839,97 @@ describe("App", () => {
 
     expect(gate.unlockStore.writeUnlocked).not.toHaveBeenCalled();
     expect(anchorClickSpy).not.toHaveBeenCalled();
+  });
+
+  it("invalidates a pending edited download after another edit and requires a fresh request", async () => {
+    let resolveVerification!: (value: {
+      ok: true;
+      response: {
+        schemaVersion: 1;
+        result: "verification_succeeded";
+        verified: true;
+      };
+    }) => void;
+    const verification = new Promise<Parameters<typeof resolveVerification>[0]>(
+      (resolve) => void (resolveVerification = resolve),
+    );
+    const gate = enabledEmailGate(false, {
+      issueChallenge: vi.fn(async () => ({
+        ok: true as const,
+        response: {
+          schemaVersion: 1 as const,
+          result: "challenge_issued" as const,
+          challengeId: "abcdefab-cdef-4abc-8def-abcdefabcdef",
+          expiresInSeconds: 580,
+          resendAfterSeconds: 0,
+        },
+      })),
+      verifyChallenge: vi.fn(() => verification),
+    });
+    const anchorClickSpy = prepareDownloadRendering();
+
+    await generatePatternAndOpenGate(gate, [
+      Promise.resolve(EDITOR_PUBLIC_RESULT),
+    ]);
+    await beginGateVerification();
+    replaceEditorColorBehindGate("A4", "A20");
+    await screen.findByRole("heading", { name: "Your pattern changed" });
+    await act(async () =>
+      resolveVerification({
+        ok: true,
+        response: {
+          schemaVersion: 1,
+          result: "verification_succeeded",
+          verified: true,
+        },
+      }),
+    );
+    expect(gate.unlockStore.writeUnlocked).not.toHaveBeenCalled();
+    expect(anchorClickSpy).not.toHaveBeenCalled();
+
+    await userEvent.click(screen.getByRole("button", { name: "Close" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Save / Download Pattern" }),
+    );
+    await screen.findByRole("dialog", { name: "Unlock your pattern download" });
+    await beginGateVerification();
+    await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledOnce());
+    const context = latestExportContext();
+    expect(
+      vi.mocked(context.fillText).mock.calls.some(([text]) => text === "A20"),
+    ).toBe(true);
+  });
+
+  it("invalidates an edited pending request when Reset restores the original", async () => {
+    const gate = enabledEmailGate(false);
+    render(
+      <App
+        generationRuntime={availableRuntime([
+          Promise.resolve(EDITOR_PUBLIC_RESULT),
+        ])}
+        emailGateCapability={gate}
+      />,
+    );
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await screen.findByRole("heading", { name: "Pattern Summary" });
+    await replaceEditorColor("A4", "A20");
+    await userEvent.click(
+      screen.getByRole("button", { name: "Save / Download Pattern" }),
+    );
+    await screen.findByRole("dialog", { name: "Unlock your pattern download" });
+
+    fireEvent.click(
+      within(document.querySelector<HTMLElement>(".app-root")!).getByRole(
+        "button",
+        { name: "Reset", hidden: true },
+      ),
+    );
+    await screen.findByRole("heading", { name: "Your pattern changed" });
+    expect(gate.unlockStore.writeUnlocked).not.toHaveBeenCalled();
+    expect(gate.client.issueChallenge).not.toHaveBeenCalled();
   });
 
   it("does not unlock or download when the image is removed during verification", async () => {

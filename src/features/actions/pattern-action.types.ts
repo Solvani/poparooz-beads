@@ -8,7 +8,7 @@ export type PatternActionResultScope =
 
 export interface PatternActionState {
   readonly hasResult: boolean;
-  readonly resultIdentity: number | null;
+  readonly resultIdentity: number | string | null;
   readonly resultScope: PatternActionResultScope;
   readonly downloadEnabled: boolean;
   readonly getBeadsEnabled: boolean;

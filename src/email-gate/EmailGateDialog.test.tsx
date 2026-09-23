@@ -1084,6 +1084,9 @@ describe("Email Gate dialog", () => {
     expect(
       await screen.findByText("Email verified. Your download has started."),
     ).toHaveAttribute("data-tone", "success");
+    expect(
+      screen.getByText("Your pattern download is ready."),
+    ).toBeInTheDocument();
     expect(enabled.client.verifyChallenge).toHaveBeenCalledWith(
       { challengeId: CHALLENGE_ID, code: "012345" },
       expect.any(AbortSignal),

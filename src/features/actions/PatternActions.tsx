@@ -11,7 +11,7 @@ export interface PatternActionsProps {
 
 export function PatternActions({ state, onDownload }: PatternActionsProps) {
   const [downloadFeedback, setDownloadFeedback] = useState<{
-    readonly resultIdentity: number | null;
+    readonly resultIdentity: PatternActionState["resultIdentity"];
     readonly message: string;
   } | null>(null);
   const [downloading, setDownloading] = useState(false);

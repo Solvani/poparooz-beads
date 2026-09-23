@@ -129,10 +129,18 @@ function withColorCodes(
   if (codes.length !== pattern.colors.length) {
     throw new TypeError("Color code fixtures must preserve Pattern colors.");
   }
+  const canonicalHex = new Map([
+    ["A4", "#FBED56"],
+    ["A10", "#F77C31"],
+  ]);
   const colors = pattern.colors.map((entry, index) =>
     Object.freeze({
       ...entry,
-      color: Object.freeze({ ...entry.color, code: codes[index]! }),
+      color: Object.freeze({
+        ...entry.color,
+        code: codes[index]!,
+        hex: canonicalHex.get(codes[index]!) ?? entry.color.hex,
+      }),
     }),
   );
   const colorsByIndex = new Map(colors.map((entry) => [entry.index, entry]));

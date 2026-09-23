@@ -1,4 +1,4 @@
-import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
+import type { PatternDocumentView } from "../pattern-editor/pattern-document-view";
 import type { CanvasViewportState } from "./pattern-canvas.types";
 import { calculateVisiblePatternRect } from "./pattern-renderer";
 
@@ -16,7 +16,7 @@ export function renderPatternCodes({
   focusedColorIndex = null,
 }: {
   readonly context: CanvasRenderingContext2D;
-  readonly pattern: PublicPatternResult;
+  readonly pattern: PatternDocumentView;
   readonly viewport: CanvasViewportState;
   readonly focusedColorIndex?: number | null;
 }): PatternCodeRenderResult {

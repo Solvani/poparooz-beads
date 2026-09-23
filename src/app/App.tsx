@@ -27,7 +27,7 @@ import {
   type GenerationRuntime,
 } from "../features/generator/generation.types";
 import { useGeneratorController } from "../features/generator/use-generator-controller";
-import { PatternCanvas } from "../features/pattern-canvas/PatternCanvas";
+import { PatternEditorCanvas } from "../features/pattern-editor/PatternEditorCanvas";
 import {
   PatternResults,
   ResultRetentionStatus,
@@ -360,9 +360,9 @@ export function App({
           }
           canvasContent={
             visiblePattern === undefined ? undefined : (
-              <PatternCanvas
+              <PatternEditorCanvas
                 key={lastSuccess?.snapshot.jobId}
-                pattern={visiblePattern}
+                sourceResult={visiblePattern}
                 focusedColorIndex={focusedColorIndex}
               />
             )

@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 
 import { CanvasToolbar } from "./CanvasToolbar";
 import type {
@@ -14,6 +21,8 @@ import {
   renderPatternCodes,
 } from "./pattern-code-renderer";
 import { renderPattern } from "./pattern-renderer";
+import { createPatternDocumentView } from "../pattern-editor/pattern-document-view";
+import { clientPointToPatternCell } from "../pattern-editor/pattern-editing";
 import {
   useCanvasViewport,
   type CanvasViewportEnvironment,
@@ -32,6 +41,9 @@ export interface PatternCanvasComponentProps extends PatternCanvasProps {
 export function PatternCanvas({
   pattern,
   focusedColorIndex = null,
+  document: patternDocument,
+  focusedDocumentColorIndex = null,
+  editor,
   environment = {},
 }: PatternCanvasComponentProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -41,9 +53,17 @@ export function PatternCanvas({
   const [codesVisible, setCodesVisible] = useState(false);
   const createRasterSurface = environment.createRasterSurface;
   const getDevicePixelRatio = environment.getDevicePixelRatio;
+  const canvasPattern = useMemo(
+    () =>
+      patternDocument === undefined
+        ? pattern
+        : createPatternDocumentView(patternDocument),
+    [patternDocument, pattern],
+  );
+  const dimensions = patternDocument ?? pattern.matrix;
   const rasterResult = useMemo(
-    () => buildPatternRaster(pattern, createRasterSurface),
-    [createRasterSurface, pattern],
+    () => buildPatternRaster(canvasPattern, createRasterSurface),
+    [canvasPattern, createRasterSurface],
   );
   const {
     containerRef,
@@ -58,13 +78,80 @@ export function PatternCanvas({
     zoomPercentage,
     wheelHandler,
     pointerHandlers,
-  } = useCanvasViewport(pattern.matrix, environment);
+  } = useCanvasViewport(
+    dimensions,
+    environment,
+    editor?.activeTool === "pan" || editor === undefined,
+  );
   const scheduler = environment.drawScheduler ?? browserDrawScheduler;
-  const effectiveFocusedColorIndex = pattern.colors.some(
-    (entry) => entry.index === focusedColorIndex,
-  )
-    ? focusedColorIndex
-    : null;
+  const effectiveFocusedColorIndex =
+    patternDocument === undefined
+      ? pattern.colors.some((entry) => entry.index === focusedColorIndex)
+        ? focusedColorIndex
+        : null
+      : canvasPattern.colors.some(
+            (entry) => entry.index === focusedDocumentColorIndex,
+          )
+        ? focusedDocumentColorIndex
+        : null;
+  const activeEditorTool = editor?.activeTool;
+  const cancelEditorDraft = editor?.onCancel;
+  const activeEditPointer = useRef<number | null>(null);
+  const editorPointerHandlers =
+    editor === undefined || editor.activeTool === "pan"
+      ? pointerHandlers
+      : {
+          onPointerDown(event: ReactPointerEvent<HTMLCanvasElement>) {
+            if (!event.isPrimary || event.button !== 0) return;
+            const cell = clientPointToPatternCell(
+              event.clientX,
+              event.clientY,
+              event.currentTarget.getBoundingClientRect(),
+              viewport,
+              dimensions,
+            );
+            if (cell === null) return;
+            activeEditPointer.current = event.pointerId;
+            event.currentTarget.setPointerCapture(event.pointerId);
+            editor.onBegin(cell);
+          },
+          onPointerMove(event: ReactPointerEvent<HTMLCanvasElement>) {
+            if (
+              activeEditPointer.current !== event.pointerId ||
+              editor.activeTool === "eyedropper"
+            )
+              return;
+            const cell = clientPointToPatternCell(
+              event.clientX,
+              event.clientY,
+              event.currentTarget.getBoundingClientRect(),
+              viewport,
+              dimensions,
+            );
+            if (cell !== null) editor.onMove(cell);
+          },
+          onPointerUp(event: ReactPointerEvent<HTMLCanvasElement>) {
+            if (activeEditPointer.current !== event.pointerId) return;
+            activeEditPointer.current = null;
+            if (event.currentTarget.hasPointerCapture(event.pointerId))
+              event.currentTarget.releasePointerCapture(event.pointerId);
+            editor.onCommit();
+          },
+          onPointerCancel(event: ReactPointerEvent<HTMLCanvasElement>) {
+            if (activeEditPointer.current !== event.pointerId) return;
+            activeEditPointer.current = null;
+            if (event.currentTarget.hasPointerCapture(event.pointerId))
+              event.currentTarget.releasePointerCapture(event.pointerId);
+            editor.onCancel();
+          },
+        };
+
+  useEffect(() => {
+    if (activeEditPointer.current !== null) {
+      activeEditPointer.current = null;
+      cancelEditorDraft?.();
+    }
+  }, [activeEditorTool, cancelEditorDraft]);
   const changeViewMode = useCallback(
     (mode: "color" | "code") => {
       setGridVisible(mode === "code");
@@ -114,18 +201,31 @@ export function PatternCanvas({
             ? undefined
             : {
                 colorIndex: effectiveFocusedColorIndex,
-                colorIndices: pattern.matrix.colorIndices,
-                transparentIndex: pattern.matrix.transparentIndex,
+                colorIndices: canvasPattern.matrix.colorIndices,
+                transparentIndex: canvasPattern.matrix.transparentIndex,
               },
       });
       if (!rendered) {
         setViewFailed(true);
         return;
       }
+      if (editor?.virtualCursor !== undefined) {
+        const cursor = editor.virtualCursor;
+        context.save();
+        context.strokeStyle = "#006B5C";
+        context.lineWidth = 2;
+        context.strokeRect(
+          viewport.offsetX + cursor.column * viewport.scale,
+          viewport.offsetY + cursor.row * viewport.scale,
+          viewport.scale,
+          viewport.scale,
+        );
+        context.restore();
+      }
       if (viewMode === "code") {
         const codeResult = renderPatternCodes({
           context,
-          pattern,
+          pattern: canvasPattern,
           viewport,
           focusedColorIndex: effectiveFocusedColorIndex,
         });
@@ -143,12 +243,13 @@ export function PatternCanvas({
     };
   }, [
     getDevicePixelRatio,
-    pattern,
+    canvasPattern,
     rasterResult,
     scheduler,
     viewMode,
     viewport,
     effectiveFocusedColorIndex,
+    editor?.virtualCursor,
   ]);
 
   if (!rasterResult.ok || viewFailed) {
@@ -163,9 +264,9 @@ export function PatternCanvas({
     <section className="pattern-canvas" aria-label="Pattern preview">
       <div className="pattern-canvas__topbar">
         <p className="pattern-canvas__meta">
-          {pattern.matrix.width} × {pattern.matrix.height} beads ·{" "}
-          {pattern.colors.length}{" "}
-          {pattern.colors.length === 1 ? "color" : "colors"}
+          {dimensions.width} × {dimensions.height} beads ·{" "}
+          {canvasPattern.colors.length}{" "}
+          {canvasPattern.colors.length === 1 ? "color" : "colors"}
         </p>
         <CanvasToolbar
           viewMode={viewMode}
@@ -182,14 +283,24 @@ export function PatternCanvas({
       <div
         className={`pattern-canvas__viewport${
           viewMode === "code" ? " pattern-canvas__viewport--code" : ""
-        }`}
+        }${editor === undefined ? "" : ` pattern-canvas__viewport--${editor.activeTool}`}`}
         ref={containerRef}
       >
         <canvas
           ref={canvasRef}
           role="img"
-          aria-label={`Bead pattern preview, ${pattern.matrix.width} columns by ${pattern.matrix.height} rows.`}
-          {...pointerHandlers}
+          aria-label={`Bead pattern preview, ${dimensions.width} columns by ${dimensions.height} rows.${editor === undefined ? "" : " Use arrow keys to move the editor cursor."}`}
+          tabIndex={editor === undefined ? undefined : 0}
+          onKeyDown={(event) => {
+            const handled = editor?.onKeyCommand?.({
+              key: event.key,
+              ctrlKey: event.ctrlKey,
+              metaKey: event.metaKey,
+              shiftKey: event.shiftKey,
+            });
+            if (handled) event.preventDefault();
+          }}
+          {...editorPointerHandlers}
         />
       </div>
       <p className="pattern-canvas__help">

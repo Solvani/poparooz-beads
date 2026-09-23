@@ -21,6 +21,9 @@ import {
   type PatternDocument,
 } from "./pattern-editor.types";
 import { projectPatternDocument } from "./pattern-result-projection";
+import { derivePatternEditorCustomerResult } from "./pattern-customer-result";
+import { toEmptyEditedPatternResultView } from "../results/pattern-result-view";
+import { findRequiredApprovedBeadSet } from "../results/required-bead-set";
 import {
   applyDraftCells,
   clientPointToPatternCell,
@@ -40,6 +43,185 @@ const BOARD = adaptBoardProfileToGeneration(
   createApprovedBoardProfileProvider().getSnapshot(),
 );
 const PALETTE = getPatternEditorPalette();
+
+describe("A04 derived customer Results", () => {
+  it("returns the exact generated result while unchanged and never mutates it", () => {
+    const source = generatedResult(3, 1, [0, 1, 0]);
+    const before = snapshotResult(source);
+    const session = createPatternEditorSession(source);
+
+    expect(derivePatternEditorCustomerResult(session)).toEqual({
+      kind: "original",
+      edited: false,
+      pattern: source,
+    });
+    expect(
+      (derivePatternEditorCustomerResult(session) as { pattern: unknown })
+        .pattern,
+    ).toBe(source);
+    expect(snapshotResult(source)).toEqual(before);
+  });
+
+  it("derives counts, materials, colors, and bead-set authority after pen and eraser commits", () => {
+    const source = generatedResult(4, 1, [0, 0, 1, 1]);
+    const sourceBefore = snapshotResult(source);
+    const initial = createPatternEditorSession(source);
+    const addedOrdinal = 24;
+    const painted = reducePatternEditorSession(initial, {
+      type: "commit",
+      document: changed(initial.history.present, 0, addedOrdinal),
+    });
+    const paintedResult = derivePatternEditorCustomerResult(painted);
+    expect(paintedResult.kind).toBe("edited");
+    if (paintedResult.kind !== "edited") throw new Error("Expected edit");
+    expect(paintedResult.pattern.totals).toMatchObject({
+      totalBeads: 4,
+      transparentPositions: 0,
+      colorCount: 3,
+    });
+    expect(
+      paintedResult.pattern.colors.map((entry) => entry.beadCount),
+    ).toEqual([1, 2, 1]);
+    expect(paintedResult.pattern.materials).toHaveLength(3);
+    expect(
+      findRequiredApprovedBeadSet(
+        paintedResult.pattern.colors.map((entry) => entry.color.code),
+      ),
+    ).toEqual(
+      findRequiredApprovedBeadSet([
+        PALETTE.colors[0]!.code,
+        PALETTE.colors[1]!.code,
+        PALETTE.colors[addedOrdinal]!.code,
+      ]),
+    );
+
+    const erased = reducePatternEditorSession(painted, {
+      type: "commit",
+      document: applyDraftCells(
+        painted.history.present,
+        new Map([
+          [2, PATTERN_DOCUMENT_EMPTY_CELL],
+          [3, PATTERN_DOCUMENT_EMPTY_CELL],
+        ]),
+      ),
+    });
+    const erasedResult = derivePatternEditorCustomerResult(erased);
+    expect(erasedResult.kind).toBe("edited");
+    if (erasedResult.kind !== "edited") throw new Error("Expected edit");
+    expect(erasedResult.pattern.totals).toMatchObject({
+      totalBeads: 2,
+      transparentPositions: 2,
+      colorCount: 2,
+    });
+    expect(
+      erasedResult.pattern.colors.some(
+        (entry) => entry.color.code === PALETTE.colors[1]!.code,
+      ),
+    ).toBe(false);
+    expect(snapshotResult(source)).toEqual(sourceBefore);
+  });
+
+  it("tracks replace, rectangle, undo, redo, and Reset from the current document", () => {
+    const initial = createPatternEditorSession(
+      generatedResult(3, 1, [0, 1, 0]),
+    );
+    const replaced = reducePatternEditorSession(initial, {
+      type: "commit",
+      document: applyBatchDraft(
+        initial.history.present,
+        createReplaceDraft(
+          initial.history.present,
+          PALETTE.colors[0]!.code,
+          PALETTE.colors[2]!.code,
+        ),
+      ),
+    });
+    const rectangle = reducePatternEditorSession(replaced, {
+      type: "commit",
+      document: applyBatchDraft(
+        replaced.history.present,
+        createRectangleDraft(
+          replaced.history.present,
+          { column: 0, row: 0 },
+          { column: 1, row: 0 },
+          3,
+        ),
+      ),
+    });
+    const rectangleResult = derivePatternEditorCustomerResult(rectangle);
+    expect(rectangleResult.kind).toBe("edited");
+    if (rectangleResult.kind !== "edited") throw new Error("Expected edit");
+    expect(
+      rectangleResult.pattern.colors.map((entry) => entry.color.code),
+    ).toEqual([PALETTE.colors[2]!.code, PALETTE.colors[3]!.code]);
+
+    const undone = reducePatternEditorSession(rectangle, { type: "undo" });
+    const redone = reducePatternEditorSession(undone, { type: "redo" });
+    expect(derivePatternEditorCustomerResult(redone)).toEqual(rectangleResult);
+    const reset = reducePatternEditorSession(redone, { type: "reset" });
+    const resetResult = derivePatternEditorCustomerResult(reset);
+    expect(resetResult.kind).toBe("original");
+    if (resetResult.kind !== "original") throw new Error("Expected original");
+    expect(resetResult.pattern).toBe(initial.sourceResult);
+  });
+
+  it("uses an explicit empty state with fixed dimensions and board authority, then repopulates", () => {
+    const initial = createPatternEditorSession(
+      generatedResult(2, 2, [0, 0, 0, 0]),
+    );
+    const emptyDocument = copyPatternDocument(initial.history.present);
+    emptyDocument.cells.fill(PATTERN_DOCUMENT_EMPTY_CELL);
+    const emptySession = reducePatternEditorSession(initial, {
+      type: "commit",
+      document: emptyDocument,
+    });
+    const emptyResult = derivePatternEditorCustomerResult(emptySession);
+    expect(emptyResult.kind).toBe("empty-edited");
+    if (emptyResult.kind !== "empty-edited") throw new Error("Expected empty");
+    expect(emptyResult.empty).toMatchObject({
+      width: 2,
+      height: 2,
+      totalPositions: 4,
+      totalBeads: 0,
+      transparentPositions: 4,
+      colorCount: 0,
+      colors: [],
+      materials: [],
+      boardLayout: {
+        usedBeadCount: 0,
+        transparentPatternPositions: 4,
+      },
+    });
+    const view = toEmptyEditedPatternResultView(emptyResult.empty);
+    expect(view).toEqual(
+      expect.objectContaining({
+        ok: true,
+        view: expect.objectContaining({
+          summary: expect.objectContaining({
+            patternSize: "2 × 2",
+            actualColors: 0,
+            totalBeads: 0,
+          }),
+          colors: [],
+          materials: [],
+        }),
+      }),
+    );
+
+    const repopulated = reducePatternEditorSession(emptySession, {
+      type: "commit",
+      document: changed(emptySession.history.present, 0, 5),
+    });
+    const repopulatedResult = derivePatternEditorCustomerResult(repopulated);
+    expect(repopulatedResult.kind).toBe("edited");
+    if (repopulatedResult.kind !== "edited") throw new Error("Expected edit");
+    expect(repopulatedResult.pattern.totals).toMatchObject({
+      totalBeads: 1,
+      transparentPositions: 3,
+      colorCount: 1,
+    });
+  });
+});
 
 describe("A03 palette and batch operations", () => {
   it("derives current used colors and exact counts without a second count store", () => {

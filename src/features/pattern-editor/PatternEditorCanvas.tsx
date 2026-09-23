@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
 import { PatternCanvas } from "../pattern-canvas/PatternCanvas";
 import {
   applyBatchDraft,
@@ -9,7 +8,6 @@ import {
 } from "./pattern-batch-operations";
 import { getPatternEditorPalette } from "./pattern-document";
 import {
-  createPatternEditorSession,
   isPatternEditorDirty,
   reducePatternEditorSession,
 } from "./pattern-editor-reducer";
@@ -41,49 +39,19 @@ interface RectangleBatch {
 type BatchPreview = ReplaceBatch | RectangleBatch;
 
 export function PatternEditorCanvas({
-  sourceResult,
-  focusedColorIndex = null,
+  session,
+  focusedColorCode = null,
+  onSessionChange,
 }: {
-  readonly sourceResult: PublicPatternResult;
-  readonly focusedColorIndex?: number | null;
+  readonly session: PatternEditorSession;
+  readonly focusedColorCode?: string | null;
+  readonly onSessionChange: (session: PatternEditorSession) => void;
 }) {
-  let initialSession: PatternEditorSession;
-  try {
-    initialSession = createPatternEditorSession(sourceResult);
-  } catch {
-    return (
-      <div className="pattern-editor">
-        <PatternCanvas
-          pattern={sourceResult}
-          focusedColorIndex={focusedColorIndex}
-        />
-        <p className="pattern-editor__status" role="status">
-          Local editing is unavailable for this pattern.
-        </p>
-      </div>
-    );
-  }
-  return (
-    <PatternEditorSessionCanvas
-      initialSession={initialSession}
-      focusedColorIndex={focusedColorIndex}
-    />
-  );
-}
-
-function PatternEditorSessionCanvas({
-  initialSession,
-  focusedColorIndex,
-}: {
-  readonly initialSession: PatternEditorSession;
-  readonly focusedColorIndex: number | null;
-}) {
-  const sourceResult = initialSession.sourceResult;
+  const sourceResult = session.sourceResult;
   const initialOrdinal =
-    initialSession.history.present.cells.find(
+    session.history.present.cells.find(
       (cell) => cell !== PATTERN_DOCUMENT_EMPTY_CELL,
     ) ?? 0;
-  const [session, setSession] = useState(initialSession);
   const [activeTool, setActiveTool] = useState<PatternEditorTool>("pan");
   const [selectedPaintColorCode, setSelectedPaintColorCode] = useState(
     getPatternEditorPalette().colors[initialOrdinal]!.code,
@@ -214,28 +182,28 @@ function PatternEditorSessionCanvas({
     const completed = strokeDraftRef.current;
     if (completed.size > 0) {
       const candidate = applyDraftCells(document, completed);
-      setSession((current) =>
-        reducePatternEditorSession(current, {
+      onSessionChange(
+        reducePatternEditorSession(session, {
           type: "commit",
           document: candidate,
         }),
       );
     }
     cancelStroke();
-  }, [activeTool, cancelStroke, document]);
+  }, [activeTool, cancelStroke, document, onSessionChange, session]);
   const applyBatch = useCallback(() => {
     const preview = batchPreviewRef.current;
     if (preview !== null && preview.draft.size > 0) {
       const candidate = applyBatchDraft(document, preview.draft);
-      setSession((current) =>
-        reducePatternEditorSession(current, {
+      onSessionChange(
+        reducePatternEditorSession(session, {
           type: "commit",
           document: candidate,
         }),
       );
     }
     cancelPreview();
-  }, [cancelPreview, document]);
+  }, [cancelPreview, document, onSessionChange, session]);
   const returnFocusToRectangleTool = useCallback(() => {
     window.requestAnimationFrame(() => {
       editorRootRef.current
@@ -258,16 +226,16 @@ function PatternEditorSessionCanvas({
   );
   const undo = useCallback(() => {
     cancelTransient();
-    setSession((current) =>
-      reducePatternEditorSession(current, { type: "undo" }),
-    );
-  }, [cancelTransient]);
+    onSessionChange(reducePatternEditorSession(session, { type: "undo" }));
+  }, [cancelTransient, onSessionChange, session]);
   const redo = useCallback(() => {
     cancelTransient();
-    setSession((current) =>
-      reducePatternEditorSession(current, { type: "redo" }),
-    );
-  }, [cancelTransient]);
+    onSessionChange(reducePatternEditorSession(session, { type: "redo" }));
+  }, [cancelTransient, onSessionChange, session]);
+  const reset = useCallback(() => {
+    cancelTransient();
+    onSessionChange(reducePatternEditorSession(session, { type: "reset" }));
+  }, [cancelTransient, onSessionChange, session]);
   const keyCommand = useCallback(
     (command: {
       key: string;
@@ -338,13 +306,8 @@ function PatternEditorSessionCanvas({
       ? stroked
       : applyBatchDraft(stroked, batchPreview.draft);
   }, [batchPreview, document, strokeDraft]);
-  const focusedCode =
-    focusedColorIndex === null
-      ? null
-      : (sourceResult.colors.find((entry) => entry.index === focusedColorIndex)
-          ?.color.code ?? null);
   const focusedOrdinal =
-    focusedCode === null ? null : resolvePaletteOrdinal(focusedCode);
+    focusedColorCode === null ? null : resolvePaletteOrdinal(focusedColorCode);
   const replacePreview = batchPreview?.type === "replace" ? batchPreview : null;
   return (
     <div className="pattern-editor" ref={editorRootRef}>
@@ -357,6 +320,7 @@ function PatternEditorSessionCanvas({
         onToolChange={changeTool}
         onUndo={undo}
         onRedo={redo}
+        onReset={reset}
       />
       <PatternPalette
         document={document}
@@ -419,7 +383,7 @@ function PatternEditorSessionCanvas({
         {batchPreview !== null
           ? "Preview only. Apply or cancel this batch edit."
           : isPatternEditorDirty(session)
-            ? "Local pattern edits are not included in downloads."
+            ? "Results reflect local edits. Downloads still use the generated pattern."
             : "Editing the generated pattern locally."}
       </p>
     </div>

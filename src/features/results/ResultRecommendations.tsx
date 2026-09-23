@@ -24,23 +24,27 @@ export function ResultRecommendations({
       >
         <span className="result-recommendation__badge">Bead Sets</span>
         <h3 id="bead-set-requirements-heading">Bead Set Requirements</h3>
-        {requiredBeadSet === null ? (
-          <p className="result-recommendation__unavailable">
-            No published set covers every color in this pattern.
-          </p>
-        ) : (
-          <div className="bead-set-requirements__items">
-            <div className="bead-set-requirements__item">
-              <h4>Required Bead Set</h4>
-              <p className="result-recommendation__value">
-                {requiredBeadSet.label}
+        <div className="bead-set-requirements__items">
+          <div className="bead-set-requirements__item">
+            <h4>Required Bead Set</h4>
+            {colors.length === 0 ? (
+              <p className="result-recommendation__value">No beads required</p>
+            ) : requiredBeadSet === null ? (
+              <p className="result-recommendation__unavailable">
+                No published set covers every color in this pattern.
               </p>
-              <p className="result-recommendation__support">
-                Smallest set that includes every color used in your pattern.
-              </p>
-            </div>
+            ) : (
+              <>
+                <p className="result-recommendation__value">
+                  {requiredBeadSet.label}
+                </p>
+                <p className="result-recommendation__support">
+                  Smallest set that includes every color used in your pattern.
+                </p>
+              </>
+            )}
           </div>
-        )}
+        </div>
       </section>
       <section
         className="result-recommendation"

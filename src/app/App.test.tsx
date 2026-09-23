@@ -26,6 +26,7 @@ import { createPublicPattern } from "../features/pattern-canvas/test/pattern-res
 import { App } from "./App";
 
 const PUBLIC_RESULT = withColorCodes(createPublicPattern(), ["A4", "A10"]);
+const EDITOR_PUBLIC_RESULT = withEditorBoardAuthority(PUBLIC_RESULT);
 const COLOR_SET_PROFILES = [
   { profileId: "poparooz-set-24", size: 24 },
   { profileId: "poparooz-set-48", size: 48 },
@@ -155,6 +156,44 @@ function withColorCodes(
         }),
       ),
     ),
+  });
+}
+
+function withEditorBoardAuthority(
+  pattern: PublicPatternResult,
+): PublicPatternResult {
+  const boardPegCapacity = 104 * 104;
+  const outsidePatternPegCount =
+    boardPegCapacity - pattern.totals.totalPositions;
+  return Object.freeze({
+    ...pattern,
+    boardLayout: Object.freeze({
+      boardColumns: 1,
+      boardRows: 1,
+      boardCount: 1,
+      boardWidthInBeads: 104,
+      boardHeightInBeads: 104,
+      totalPegCapacity: boardPegCapacity,
+      usedBeadCount: pattern.totals.totalBeads,
+      transparentPatternPositions: pattern.totals.transparentPositions,
+      outsidePatternPegCount,
+      unusedPegCount:
+        pattern.totals.transparentPositions + outsidePatternPegCount,
+      tiles: Object.freeze([
+        Object.freeze({
+          index: 0,
+          row: 0,
+          column: 0,
+          originX: 0,
+          originY: 0,
+          coveredWidth: pattern.matrix.width,
+          coveredHeight: pattern.matrix.height,
+          beadCount: pattern.totals.totalBeads,
+          transparentPatternPositions: pattern.totals.transparentPositions,
+          outsidePatternPegCount,
+        }),
+      ]),
+    }),
   });
 }
 
@@ -677,6 +716,68 @@ describe("App", () => {
     expect(
       screen.getByText("Pattern generation is not available in this preview."),
     ).toBeInTheDocument();
+  });
+
+  it("derives customer Results from replace edits, clears removed highlights, and resets", async () => {
+    render(
+      <App
+        generationRuntime={availableRuntime([
+          Promise.resolve(EDITOR_PUBLIC_RESULT),
+        ])}
+      />,
+    );
+    await completeInputs();
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Generate Pattern" }),
+    );
+    await screen.findByRole("heading", { name: "Pattern Summary" });
+
+    const requirements = screen
+      .getByRole("heading", { name: "Bead Requirements" })
+      .closest("section")!;
+    await userEvent.click(
+      within(requirements).getByRole("button", { name: "A4, 2 beads" }),
+    );
+    expect(
+      screen.getByRole("button", { name: "Clear Highlight" }),
+    ).toBeVisible();
+
+    await userEvent.selectOptions(screen.getByLabelText("Source color"), "A4");
+    await userEvent.selectOptions(screen.getByLabelText("Target color"), "A20");
+    await userEvent.click(
+      screen.getByRole("button", { name: "Preview Replace" }),
+    );
+    const preview = screen.getByLabelText("Replace preview");
+    expect(preview).toHaveTextContent("2 beads affected");
+    await userEvent.click(
+      within(preview).getByRole("button", { name: "Apply" }),
+    );
+
+    expect(
+      screen.getByText("Results updated from your local pattern edits."),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Clear Highlight" }),
+    ).toBeNull();
+    expect(
+      within(requirements).getByRole("button", { name: "A20, 2 beads" }),
+    ).toBeInTheDocument();
+    const requiredSet = screen
+      .getByRole("heading", { name: "Required Bead Set" })
+      .closest<HTMLElement>(".bead-set-requirements__item")!;
+    expect(within(requiredSet).getByText("221-Color Set")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+    expect(
+      screen.queryByText("Results updated from your local pattern edits."),
+    ).toBeNull();
+    expect(
+      within(requirements).getByRole("button", { name: "A4, 2 beads" }),
+    ).toBeInTheDocument();
+    expect(
+      within(requirements).queryByRole("button", { name: "A20, 2 beads" }),
+    ).toBeNull();
+    expect(screen.getByRole("button", { name: "Reset" })).toBeDisabled();
   });
 
   it("drives processing, success, dirty, regeneration, and abort through an injected service", async () => {

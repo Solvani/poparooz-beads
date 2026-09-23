@@ -11,6 +11,7 @@ export interface PatternEditorToolbarProps {
   readonly onToolChange: (tool: PatternEditorTool) => void;
   readonly onUndo: () => void;
   readonly onRedo: () => void;
+  readonly onReset: () => void;
 }
 
 export function PatternEditorToolbar(props: PatternEditorToolbarProps) {
@@ -59,6 +60,13 @@ export function PatternEditorToolbar(props: PatternEditorToolbarProps) {
           onClick={props.onRedo}
         >
           Redo
+        </Button>
+        <Button
+          variant="secondary"
+          disabled={!props.dirty}
+          onClick={props.onReset}
+        >
+          Reset
         </Button>
       </div>
       <p className="pattern-editor-toolbar__selection">

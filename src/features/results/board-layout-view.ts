@@ -9,7 +9,23 @@ const NUMBER_FORMATTER = new Intl.NumberFormat("en-US");
 export function toBoardLayoutView(
   pattern: PublicPatternResult,
 ): BoardLayoutView | null {
-  const layout = pattern.boardLayout;
+  return toBoardLayoutViewFromAuthority({
+    width: pattern.matrix.width,
+    height: pattern.matrix.height,
+    totalBeads: pattern.totals.totalBeads,
+    transparentPositions: pattern.totals.transparentPositions,
+    layout: pattern.boardLayout,
+  });
+}
+
+export function toBoardLayoutViewFromAuthority(input: {
+  readonly width: number;
+  readonly height: number;
+  readonly totalBeads: number;
+  readonly transparentPositions: number;
+  readonly layout: PublicPatternResult["boardLayout"];
+}): BoardLayoutView | null {
+  const layout = input.layout;
   if (
     !positiveInteger(layout.boardColumns) ||
     !positiveInteger(layout.boardRows) ||
@@ -22,9 +38,8 @@ export function toBoardLayoutView(
     !nonNegativeInteger(layout.transparentPatternPositions) ||
     !nonNegativeInteger(layout.outsidePatternPegCount) ||
     !nonNegativeInteger(layout.unusedPegCount) ||
-    layout.usedBeadCount !== pattern.totals.totalBeads ||
-    layout.transparentPatternPositions !==
-      pattern.totals.transparentPositions ||
+    layout.usedBeadCount !== input.totalBeads ||
+    layout.transparentPatternPositions !== input.transparentPositions ||
     layout.totalPegCapacity !==
       layout.boardCount *
         layout.boardWidthInBeads *
@@ -54,8 +69,8 @@ export function toBoardLayoutView(
       !positiveInteger(tile.coveredHeight) ||
       tile.coveredWidth > layout.boardWidthInBeads ||
       tile.coveredHeight > layout.boardHeightInBeads ||
-      tile.originX + tile.coveredWidth > pattern.matrix.width ||
-      tile.originY + tile.coveredHeight > pattern.matrix.height ||
+      tile.originX + tile.coveredWidth > input.width ||
+      tile.originY + tile.coveredHeight > input.height ||
       !nonNegativeInteger(tile.beadCount) ||
       !nonNegativeInteger(tile.transparentPatternPositions) ||
       !nonNegativeInteger(tile.outsidePatternPegCount)

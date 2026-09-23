@@ -15,6 +15,19 @@ import {
   type PatternDocument,
 } from "./pattern-editor.types";
 
+export interface EmptyPatternDocumentProjection {
+  readonly kind: "empty-edited-pattern";
+  readonly width: number;
+  readonly height: number;
+  readonly totalPositions: number;
+  readonly totalBeads: 0;
+  readonly transparentPositions: number;
+  readonly colorCount: 0;
+  readonly colors: readonly never[];
+  readonly materials: readonly never[];
+  readonly boardLayout: PublicPatternBoardLayout;
+}
+
 export function projectPatternDocument(
   document: PatternDocument,
 ): PublicPatternResult {
@@ -88,6 +101,47 @@ export function projectPatternDocument(
   );
 
   return Object.freeze({ matrix, colors, materials, totals, boardLayout });
+}
+
+export function projectEmptyPatternDocument(
+  document: PatternDocument,
+): EmptyPatternDocumentProjection {
+  validatePatternDocument(document);
+  if (document.cells.some((cell) => cell !== PATTERN_DOCUMENT_EMPTY_CELL)) {
+    throw new PatternEditorError(
+      "INVALID_PATTERN_DOCUMENT",
+      "An empty edited-pattern projection requires every cell to be empty.",
+    );
+  }
+  const totalPositions = document.cells.length;
+  const totals = Object.freeze({
+    width: document.width,
+    height: document.height,
+    totalPositions,
+    totalBeads: 0,
+    transparentPositions: totalPositions,
+    colorCount: 0,
+  });
+  const matrix = Object.freeze({
+    width: document.width,
+    height: document.height,
+    colorIndices: document.cells.slice(),
+    transparentIndex: PATTERN_DOCUMENT_EMPTY_CELL,
+  });
+  return Object.freeze({
+    kind: "empty-edited-pattern",
+    width: document.width,
+    height: document.height,
+    totalPositions,
+    totalBeads: 0,
+    transparentPositions: totalPositions,
+    colorCount: 0,
+    colors: Object.freeze([]),
+    materials: Object.freeze([]),
+    boardLayout: toPublicBoardLayout(
+      buildPatternBoardLayout(matrix, totals, getPatternEditorBoardProfile()),
+    ),
+  });
 }
 
 function publicColor(code: string, hex: string): PublicPatternPaletteColor {

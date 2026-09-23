@@ -2,7 +2,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { PatternResults } from "./PatternResults";
+import { PatternResultDetails, PatternResults } from "./PatternResults";
 import { createManyColors, createResultFixture } from "./test/result-fixture";
 
 afterEach(cleanup);
@@ -15,6 +15,51 @@ const focusProps = {
 } as const;
 
 describe("PatternResults", () => {
+  it("renders an explicit no-beads state without manufacturing a public result", () => {
+    render(
+      <PatternResultDetails
+        {...focusProps}
+        edited
+        view={{
+          summary: {
+            width: 2,
+            height: 2,
+            patternSize: "2 × 2",
+            actualColors: 0,
+            actualColorsLabel: "0",
+            totalBeads: 0,
+            totalBeadsLabel: "0",
+            boardsLabel: "1 board",
+            transparentPositions: 4,
+            transparentPositionsLabel: "4 empty positions",
+          },
+          colors: [],
+          materials: [],
+          boardLayout: {
+            boardCount: 1,
+            boardCountLabel: "1 board",
+            boardColumns: 1,
+            boardRows: 1,
+            dimensionsLabel: "1 column × 1 row",
+            accessibilityLabel: "Board layout, 1 board.",
+            previewKind: "tiles",
+            previewColumns: 1,
+            previewRows: 1,
+            tiles: [],
+          },
+        }}
+        status="success"
+        selectedColorSetLabel="24-Color Set"
+      />,
+    );
+    expect(screen.getByText("No beads required")).toBeInTheDocument();
+    expect(screen.getByText("0 colors")).toBeInTheDocument();
+    expect(screen.getByText("None needed")).toBeInTheDocument();
+    expect(
+      screen.getByText("Results updated from your local pattern edits."),
+    ).toBeInTheDocument();
+  });
+
   it("renders the frozen result hierarchy from one public result", () => {
     render(
       <PatternResults

@@ -3,8 +3,12 @@ import {
   deriveMaterialRequirementsV1,
   type DerivedMaterialRequirementV1,
 } from "../materials/derived-material-requirements";
-import { toBoardLayoutView } from "./board-layout-view";
+import {
+  toBoardLayoutView,
+  toBoardLayoutViewFromAuthority,
+} from "./board-layout-view";
 import type { ColorRowView, PatternResultViewResult } from "./result.types";
+import type { EmptyPatternDocumentProjection } from "../pattern-editor/pattern-result-projection";
 
 export const MAX_RESULT_COLORS = 512;
 
@@ -77,6 +81,41 @@ export function toPatternResultView(
       }),
       colors,
       materials,
+      boardLayout,
+    }),
+  };
+}
+
+export function toEmptyEditedPatternResultView(
+  empty: EmptyPatternDocumentProjection,
+): PatternResultViewResult {
+  const boardLayout = toBoardLayoutViewFromAuthority({
+    width: empty.width,
+    height: empty.height,
+    totalBeads: 0,
+    transparentPositions: empty.transparentPositions,
+    layout: empty.boardLayout,
+  });
+  if (boardLayout === null) return { ok: false };
+  return {
+    ok: true,
+    view: Object.freeze({
+      summary: Object.freeze({
+        width: empty.width,
+        height: empty.height,
+        patternSize: `${formatNumber(empty.width)} × ${formatNumber(empty.height)}`,
+        actualColors: 0,
+        actualColorsLabel: "0",
+        totalBeads: 0,
+        totalBeadsLabel: "0",
+        boardsLabel: boardLayout.boardCountLabel,
+        transparentPositions: empty.transparentPositions,
+        transparentPositionsLabel: `${formatNumber(empty.transparentPositions)} empty ${
+          empty.transparentPositions === 1 ? "position" : "positions"
+        }`,
+      }),
+      colors: Object.freeze([]),
+      materials: Object.freeze([]),
       boardLayout,
     }),
   };

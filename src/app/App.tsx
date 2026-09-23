@@ -28,14 +28,21 @@ import {
 } from "../features/generator/generation.types";
 import { useGeneratorController } from "../features/generator/use-generator-controller";
 import { PatternEditorCanvas } from "../features/pattern-editor/PatternEditorCanvas";
+import { PatternCanvas } from "../features/pattern-canvas/PatternCanvas";
+import { derivePatternEditorCustomerResult } from "../features/pattern-editor/pattern-customer-result";
+import { createPatternEditorSession } from "../features/pattern-editor/pattern-editor-reducer";
+import type { PatternEditorSession } from "../features/pattern-editor/pattern-editor.types";
 import {
-  PatternResults,
+  PatternResultDetails,
   ResultRetentionStatus,
 } from "../features/results/PatternResults";
 import { ColorList } from "../features/results/ColorList";
 import { PatternSummary } from "../features/results/PatternSummary";
 import { ResultRecommendations } from "../features/results/ResultRecommendations";
-import { toPatternResultView } from "../features/results/pattern-result-view";
+import {
+  toEmptyEditedPatternResultView,
+  toPatternResultView,
+} from "../features/results/pattern-result-view";
 import { PatternSettings } from "../features/settings/PatternSettings";
 import {
   EMPTY_PATTERN_SETTINGS,
@@ -89,9 +96,9 @@ export function App({
   const [settings, setSettings] = useState<PatternSettingsDraft>(
     EMPTY_PATTERN_SETTINGS,
   );
-  const [focusedColorIndex, setFocusedColorIndex] = useState<number | null>(
-    null,
-  );
+  const [focusedColorCode, setFocusedColorCode] = useState<string | null>(null);
+  const [editedSession, setEditedSession] =
+    useState<PatternEditorSession | null>(null);
   const [emailGateOpen, setEmailGateOpen] = useState(false);
   const [pendingDownloadIdentity, setPendingDownloadIdentity] = useState<
     number | null
@@ -116,6 +123,66 @@ export function App({
   });
   const lastSuccess = getLastSuccess(generator.state);
   const visiblePattern = lastSuccess?.result;
+  const pristineEditorSession = useMemo(() => {
+    if (visiblePattern === undefined) return null;
+    try {
+      return createPatternEditorSession(visiblePattern);
+    } catch {
+      return null;
+    }
+  }, [visiblePattern]);
+  const editorSession =
+    editedSession?.sourceResult === visiblePattern
+      ? editedSession
+      : pristineEditorSession;
+  const customerResult = useMemo(
+    () =>
+      editorSession === null
+        ? null
+        : derivePatternEditorCustomerResult(editorSession),
+    [editorSession],
+  );
+  const customerResultView = useMemo(() => {
+    if (customerResult === null) {
+      return visiblePattern === undefined
+        ? null
+        : toPatternResultView(visiblePattern);
+    }
+    return customerResult.kind === "empty-edited"
+      ? toEmptyEditedPatternResultView(customerResult.empty)
+      : toPatternResultView(customerResult.pattern);
+  }, [customerResult, visiblePattern]);
+  const focusedColorIndex =
+    focusedColorCode === null || !customerResultView?.ok
+      ? null
+      : (customerResultView.view.colors.find(
+          (color) => color.code === focusedColorCode,
+        )?.index ?? null);
+  const sourceFocusedColorIndex =
+    focusedColorCode === null
+      ? null
+      : (visiblePattern?.colors.find(
+          (color) => color.color.code === focusedColorCode,
+        )?.index ?? null);
+  const focusColor = (colorIndex: number) => {
+    if (!customerResultView?.ok) return;
+    setFocusedColorCode(
+      customerResultView.view.colors.find((color) => color.index === colorIndex)
+        ?.code ?? null,
+    );
+  };
+  const updateEditorSession = (nextSession: PatternEditorSession) => {
+    if (focusedColorCode !== null) {
+      const nextResult = derivePatternEditorCustomerResult(nextSession);
+      const retainsFocus =
+        nextResult.kind !== "empty-edited" &&
+        nextResult.pattern.colors.some(
+          (color) => color.color.code === focusedColorCode,
+        );
+      if (!retainsFocus) setFocusedColorCode(null);
+    }
+    setEditedSession(nextSession);
+  };
   const patternDownloader = useMemo(() => createPatternDownloader(), []);
   const selectedColorSetLabel = useMemo(() => {
     if (
@@ -140,13 +207,7 @@ export function App({
   const patternActionState = toPatternActionState(generator.state);
   const compactResultMode =
     workspaceMode === "compact" && visiblePattern !== undefined;
-  const compactResult = useMemo(
-    () =>
-      compactResultMode && visiblePattern
-        ? toPatternResultView(visiblePattern)
-        : null,
-    [compactResultMode, visiblePattern],
-  );
+  const compactResult = compactResultMode ? customerResultView : null;
 
   useEffect(() => {
     if (!compactResultMode) closeSheet();
@@ -164,7 +225,8 @@ export function App({
     setEmailGateOpen(false);
     setPendingDownloadIdentity(null);
     closeSheet();
-    setFocusedColorIndex(null);
+    setFocusedColorCode(null);
+    setEditedSession(null);
     generator.reset();
     image.removeImage();
   };
@@ -176,7 +238,8 @@ export function App({
       canGenerate={generator.canGenerate}
       canRegenerate={generator.canRegenerate}
       onGenerate={() => {
-        setFocusedColorIndex(null);
+        setFocusedColorCode(null);
+        setEditedSession(null);
         generator.generate();
         if (closeAfterGenerate) closeSheet();
       }}
@@ -243,6 +306,11 @@ export function App({
   const compactResults =
     compactResult?.ok && patternBackground !== null ? (
       <div className="compact-result-content">
+        {customerResult?.edited ? (
+          <p className="result-retention-status" role="status">
+            Results updated from your local pattern edits.
+          </p>
+        ) : null}
         <PatternSummary
           summary={compactResult.view.summary}
           selectedColorSetLabel={selectedColorSetLabel ?? "Unavailable"}
@@ -257,8 +325,8 @@ export function App({
           colors={compactResult.view.colors}
           materials={compactResult.view.materials}
           focusedColorIndex={focusedColorIndex}
-          onFocusColor={setFocusedColorIndex}
-          onClearHighlight={() => setFocusedColorIndex(null)}
+          onFocusColor={focusColor}
+          onClearHighlight={() => setFocusedColorCode(null)}
         />
         <PatternActions
           state={patternActionState}
@@ -359,11 +427,23 @@ export function App({
             )
           }
           canvasContent={
-            visiblePattern === undefined ? undefined : (
+            visiblePattern === undefined ? undefined : editorSession ===
+              null ? (
+              <div key={lastSuccess?.snapshot.jobId} className="pattern-editor">
+                <PatternCanvas
+                  pattern={visiblePattern}
+                  focusedColorIndex={sourceFocusedColorIndex}
+                />
+                <p className="pattern-editor__status" role="status">
+                  Local editing is unavailable for this pattern.
+                </p>
+              </div>
+            ) : (
               <PatternEditorCanvas
                 key={lastSuccess?.snapshot.jobId}
-                sourceResult={visiblePattern}
-                focusedColorIndex={focusedColorIndex}
+                session={editorSession}
+                focusedColorCode={focusedColorCode}
+                onSessionChange={updateEditorSession}
               />
             )
           }
@@ -371,17 +451,21 @@ export function App({
             compactResultMode ? (
               compactResults
             ) : visiblePattern === undefined ||
-              patternBackground === null ? undefined : (
-              <PatternResults
+              patternBackground ===
+                null ? undefined : customerResultView?.ok ? (
+              <PatternResultDetails
                 key={lastSuccess?.snapshot.jobId}
-                pattern={visiblePattern}
+                view={customerResultView.view}
                 status={generator.state.status}
                 selectedColorSetLabel={selectedColorSetLabel ?? "Unavailable"}
                 patternBackground={patternBackground}
                 focusedColorIndex={focusedColorIndex}
-                onFocusColor={setFocusedColorIndex}
-                onClearHighlight={() => setFocusedColorIndex(null)}
+                onFocusColor={focusColor}
+                onClearHighlight={() => setFocusedColorCode(null)}
+                edited={customerResult?.edited ?? false}
               />
+            ) : (
+              <ResultViewError />
             )
           }
           settingsContent={compactResultMode ? undefined : inlineSettings}

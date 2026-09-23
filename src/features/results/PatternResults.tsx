@@ -45,20 +45,48 @@ export function PatternResults({
     );
   }
   return (
+    <PatternResultDetails
+      view={result.view}
+      status={status}
+      selectedColorSetLabel={selectedColorSetLabel}
+      patternBackground={patternBackground}
+      focusedColorIndex={focusedColorIndex}
+      onFocusColor={onFocusColor}
+      onClearHighlight={onClearHighlight}
+    />
+  );
+}
+
+export function PatternResultDetails({
+  view,
+  status,
+  selectedColorSetLabel,
+  patternBackground,
+  focusedColorIndex,
+  onFocusColor,
+  onClearHighlight,
+  edited = false,
+}: Omit<PatternResultsProps, "pattern"> & {
+  readonly view: import("./result.types").PatternResultView;
+  readonly edited?: boolean;
+}) {
+  return (
     <div className="pattern-results">
       <ResultRetentionStatus status={status} />
+      {edited ? (
+        <p className="result-retention-status" role="status">
+          Results updated from your local pattern edits.
+        </p>
+      ) : null}
       <PatternSummary
-        summary={result.view.summary}
+        summary={view.summary}
         selectedColorSetLabel={selectedColorSetLabel}
         patternBackground={patternBackground}
       />
-      <ResultRecommendations
-        summary={result.view.summary}
-        colors={result.view.colors}
-      />
+      <ResultRecommendations summary={view.summary} colors={view.colors} />
       <ColorList
-        colors={result.view.colors}
-        materials={result.view.materials}
+        colors={view.colors}
+        materials={view.materials}
         focusedColorIndex={focusedColorIndex}
         onFocusColor={onFocusColor}
         onClearHighlight={onClearHighlight}

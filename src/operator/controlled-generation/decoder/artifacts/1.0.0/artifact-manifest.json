@@ -1,0 +1,59 @@
+{
+  "schema": "PoparoozControlledDecoderArtifactManifest/1.0.0",
+  "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+  "decoderImplementationVersion": "1.0.0",
+  "decoderArtifactSha256": "99b85622115fcd7b824c0f2008b7a489d03b72dcaa989d617d28a70be4f4e921",
+  "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0",
+  "rustToolchain": "rustc 1.88.0 (6b00bc388 2025-06-23)",
+  "cargoLockSha256": "bdaf0fc8c3e1c2c3b397adaa46c5c5ee268973cb5ffd62073ef13d319c5757da",
+  "codecAuthorities": {
+    "image": "0.25.10",
+    "zuneJpeg": "0.5.15",
+    "png": "0.18.1",
+    "imageWebp": "0.2.4",
+    "moxcms": "0.8.1",
+    "wasmBindgen": "0.2.129"
+  },
+  "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+  "colorManagementPolicy": "EXPLICIT_SRGB_V1",
+  "exifPolicy": "APPLY_1_TO_8_THEN_ORIENTATION_1",
+  "buildTarget": "wasm32-unknown-unknown",
+  "threadingMode": "single-thread",
+  "simdState": "disabled",
+  "supportedCodecs": [
+    "JPEG",
+    "PNG",
+    "WEBP"
+  ],
+  "resizeAuthority": {
+    "implementationId": "poparooz-controlled-rgba-resize",
+    "version": "1.0.0",
+    "digestAlgorithm": "sha256(path-lf-bytes-lf;lexical-path-order)",
+    "digest": "a75e1efdec46c8f2325909943977fef21e14e07acd7d205e334f7cc105896884"
+  },
+  "artifacts": [
+    {
+      "file": "poparooz-controlled-image-decoder-1_0_0_bg.wasm",
+      "sha256": "99b85622115fcd7b824c0f2008b7a489d03b72dcaa989d617d28a70be4f4e921",
+      "bytes": 858808,
+      "gzipBytes": 305683
+    },
+    {
+      "file": "poparooz-controlled-image-decoder-1_0_0.js",
+      "sha256": "4546093fb1258a0f425788da0064f20dd1946b7567719466eb0a9993f2134732",
+      "bytes": 17458
+    },
+    {
+      "file": "build-provenance.json",
+      "sha256": "873c644ffd06e0a472727af24d30ff3bae1d35f86ead0af971ea0a0b1883399d",
+      "bytes": 403
+    },
+    {
+      "file": "sbom.json",
+      "sha256": "1eed69040d2d9b23c3eabbbea82ec864a53b3aeb82f47ee15acc7a52e83008ab",
+      "bytes": 11824
+    }
+  ],
+  "buildProvenance": "build-provenance.json",
+  "dependencyInventory": "sbom.json"
+}

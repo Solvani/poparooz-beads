@@ -1,0 +1,36 @@
+[package]
+name = "poparooz-controlled-image-decoder-wasm"
+version = "1.0.0"
+edition = "2021"
+rust-version = "1.88.0"
+license = "PROPRIETARY"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+image = { version = "=0.25.10", default-features = false, features = ["jpeg", "png", "webp"] }
+image-webp = "=0.2.4"
+moxcms = { version = "=0.8.1", features = ["options"] }
+png = "=0.18.1"
+sha2 = "=0.10.9"
+wasm-bindgen = "=0.2.129"
+zune-jpeg = { version = "=0.5.15", default-features = false }
+
+[dev-dependencies]
+hex = "=0.4.3"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = "deny"
+pedantic = "deny"

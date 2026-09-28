@@ -7,7 +7,14 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["dist", "coverage", "node_modules", "*.tsbuildinfo"],
+    ignores: [
+      "dist",
+      "dist-operator",
+      "coverage",
+      "node_modules",
+      "*.tsbuildinfo",
+      "src/operator/controlled-generation/decoder/artifacts/**",
+    ],
   },
   {
     files: ["**/*.{js,mjs,cjs}"],

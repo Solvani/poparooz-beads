@@ -1,0 +1,12 @@
+{
+  "schema": "PoparoozControlledDecoderBuildProvenance/1.0.0",
+  "rustc": "rustc 1.88.0 (6b00bc388 2025-06-23)",
+  "cargo": "cargo 1.88.0 (873a06493 2025-05-10)",
+  "wasmBindgen": "wasm-bindgen 0.2.129",
+  "target": "wasm32-unknown-unknown",
+  "rustFlags": "-C target-feature=-simd128",
+  "threading": "single-thread",
+  "simd": "disabled",
+  "cargoLocked": true,
+  "releaseProfile": true
+}

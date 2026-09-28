@@ -16,3 +16,6 @@ docs/POPAROOZ_MARKETING_CONSENT_V1_MC_A02_RUNTIME_API_PERSISTENCE_CONTRACT.md
 docs/PROJECT_STATE.md
 docs/history/PROJECT_STATE_PRE_TOOLING_G01.md
 worker-configuration.d.ts
+dist-operator/
+tools/controlled-image-decoder/target/
+src/operator/controlled-generation/decoder/artifacts/

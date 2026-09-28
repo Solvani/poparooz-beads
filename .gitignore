@@ -1,5 +1,6 @@
 node_modules/
 dist/
+dist-operator/
 .quality-output/
 .env
 .env.*
@@ -13,5 +14,6 @@ coverage/
 .wrangler/
 *.log
 *.tsbuildinfo
+tools/controlled-image-decoder/target/
 data-source/incoming/*
 !data-source/incoming/.gitkeep

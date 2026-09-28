@@ -10,6 +10,13 @@ const here = dirname(fileURLToPath(import.meta.url));
 const browserName = process.argv[2] ?? "chromium";
 const browserType = { chromium, firefox }[browserName];
 if (!browserType) throw new Error(`Unsupported browser: ${browserName}`);
+const environmentId =
+  process.env.QUALIFICATION_ENVIRONMENT_ID ??
+  `${browserName}-${process.platform}`;
+const outputPath = resolve(
+  process.env.QUALIFICATION_RESULT ??
+    resolve(here, `results/${browserName}-local.json`),
+);
 
 const port = Number(process.env.QUALIFICATION_PORT ?? "4179");
 const viteCli = resolve(here, "../../../node_modules/vite/bin/vite.js");
@@ -41,27 +48,29 @@ try {
   browser = await browserType.launch({ headless: true, ...launchOptions });
   const page = await browser.newPage();
   const consoleErrors = [];
+  let rejectPageError;
+  const pageError = new Promise((_, reject) => {
+    rejectPageError = reject;
+  });
   page.on("console", (message) => {
     if (message.type() === "error") consoleErrors.push(message.text());
   });
+  page.on("pageerror", (reason) => rejectPageError(reason));
   await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "networkidle" });
-  await page.waitForFunction(
-    () => document.body.dataset.qualification !== "running",
-    null,
-    { timeout: 120_000 },
-  );
+  await Promise.race([
+    page.waitForFunction(
+      () => document.body.dataset.qualification !== "running",
+      null,
+      { timeout: 120_000 },
+    ),
+    pageError,
+  ]);
   const result = await page.evaluate(() => window.__qualificationResult);
   result.browserName = browserName;
-  result.environmentId =
-    process.env.QUALIFICATION_ENVIRONMENT_ID ??
-    `${browserName}-${process.platform}`;
+  result.environmentId = environmentId;
   result.browserVersion = browser.version();
   result.consoleErrors = consoleErrors;
   if (consoleErrors.length !== 0) result.failures += consoleErrors.length;
-  const outputPath = resolve(
-    process.env.QUALIFICATION_RESULT ??
-      resolve(here, `results/${browserName}-local.json`),
-  );
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(result, null, 2)}\n`);
   console.log(
@@ -77,10 +86,29 @@ try {
     ),
   );
   if (result.failures !== 0) process.exitCode = 1;
+} catch (reason) {
+  const result = {
+    schema: "PoparoozControlledDecoderQualificationResult/1.0.0",
+    runner: "browser-worker",
+    environmentId,
+    browserName,
+    browserVersion: browser?.version() ?? null,
+    wasmSha256: null,
+    fixtureCount: null,
+    failures: 1,
+    harnessError: safeError(reason),
+    cases: [],
+  };
+  await mkdir(dirname(outputPath), { recursive: true });
+  await writeFile(outputPath, `${JSON.stringify(result, null, 2)}\n`);
+  console.error(JSON.stringify({ outputPath, ...result }, null, 2));
+  process.exitCode = 1;
 } finally {
   await browser?.close();
-  server.kill();
-  await new Promise((resolveExit) => server.once("exit", resolveExit));
+  if (server.exitCode === null) {
+    server.kill();
+    await new Promise((resolveExit) => server.once("exit", resolveExit));
+  }
 }
 
 async function waitForServer(url) {
@@ -97,4 +125,11 @@ async function waitForServer(url) {
     await new Promise((resolveDelay) => setTimeout(resolveDelay, 100));
   }
   throw new Error(`Vite preview did not start:\n${serverLog}`);
+}
+
+function safeError(reason) {
+  if (reason instanceof Error) {
+    return { name: reason.name, message: reason.message };
+  }
+  return { name: "UnknownError", message: String(reason) };
 }

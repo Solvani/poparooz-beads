@@ -16,7 +16,7 @@ concurrency:
 jobs:
   native-linux:
     name: Linux native WASM
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -49,13 +49,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-latest
+          - os: windows-2025
             browser: chromium
             environment-id: chromium-windows
-          - os: ubuntu-latest
+          - os: ubuntu-24.04
             browser: chromium
             environment-id: chromium-linux
-          - os: ubuntu-latest
+          - os: ubuntu-24.04
             browser: firefox
             environment-id: firefox-linux
     runs-on: ${{ matrix.os }}
@@ -105,7 +105,7 @@ jobs:
     needs:
       - native-linux
       - browser
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2

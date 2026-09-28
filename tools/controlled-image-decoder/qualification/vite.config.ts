@@ -6,6 +6,7 @@ const csp = [
   "script-src 'self' 'wasm-unsafe-eval'",
   "worker-src 'self'",
   "connect-src 'self'",
+  "img-src 'self'",
   "style-src 'self'",
 ].join("; ");
 

@@ -8,5 +8,6 @@
   "threading": "single-thread",
   "simd": "disabled",
   "cargoLocked": true,
-  "releaseProfile": true
+  "releaseProfile": true,
+  "semanticRemediation": "GEN-COST-CONTROLLED-REGENERATION-V3-D02-R01"
 }

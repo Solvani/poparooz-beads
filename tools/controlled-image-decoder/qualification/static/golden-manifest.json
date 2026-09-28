@@ -1,0 +1,940 @@
+{
+  "schema": "PoparoozControlledDecoderGoldenManifest/1.0.0",
+  "wasmSha256": "dd932592ad60b70ca0766bf9e402861e751c25194fb3386c0389dd6ecca6eeed",
+  "cargoLockSha256": "bdaf0fc8c3e1c2c3b397adaa46c5c5ee268973cb5ffd62073ef13d319c5757da",
+  "fixtureCount": 54,
+  "cases": [
+    {
+      "fixtureId": "jpeg-rgb-baseline",
+      "sourceFilename": "fixtures/jpeg-rgb-baseline.jpg",
+      "sourceSha256": "32179df4922cc717733c15bd35a827fa6c3561614810582f2f533248c702b8a4",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "f0bd636b42607fca35d566cf241f522456a253a6f869e227b5296f5ed978505c",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-progressive",
+      "sourceFilename": "fixtures/jpeg-progressive.jpg",
+      "sourceSha256": "fd701c243fdbbe3545a759615a765e50fe643e3fe9ab3e78b9cfa008acec4284",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "f0bd636b42607fca35d566cf241f522456a253a6f869e227b5296f5ed978505c",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-grayscale",
+      "sourceFilename": "fixtures/jpeg-grayscale.jpg",
+      "sourceSha256": "b88abf7bbd444577a2262efa300141ae515b45f06ba2ac974330ed588e8e497e",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "d00c2e196824cb568b0182d84f943170fe54f7c83a9b5d77ed0f8cef10c409a7",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-exif-orientation-1",
+      "sourceFilename": "fixtures/jpeg-exif-orientation-1.jpg",
+      "sourceSha256": "2f92c189c66aeb5f6fb6e683454cfc39cb56cb16963ecef80b0382a287edbf43",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "f0bd636b42607fca35d566cf241f522456a253a6f869e227b5296f5ed978505c",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-exif-orientation-2",
+      "sourceFilename": "fixtures/jpeg-exif-orientation-2.jpg",
+      "sourceSha256": "c829a426e333184f8171c8f1928fb9a9e2d4321c79504d75210231709f1903ce",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 2,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "ee135f1067d85691e0dc01a922b107bfc3d5dbf24f08f752f9982a6a235515a3",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-exif-orientation-3",
+      "sourceFilename": "fixtures/jpeg-exif-orientation-3.jpg",
+      "sourceSha256": "4d80d04922d70cd24ac2379297b7212c8495d4ede771d4e61a98c6cf00cf5827",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 3,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "0d2e50cf7c708ed942ee81ce74580348bd963b5c63e9be19295c505961c854ac",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-exif-orientation-4",
+      "sourceFilename": "fixtures/jpeg-exif-orientation-4.jpg",
+      "sourceSha256": "7ff84085c4619b78a5c0b2dd3cfdf8d0bc82eca50ea796cb95769765dc507899",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 4,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "b11f3f61845ad136c5257428c45cdd992326308236792f1cba54efa2f6eb823e",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-exif-orientation-5",
+      "sourceFilename": "fixtures/jpeg-exif-orientation-5.jpg",
+      "sourceSha256": "23c85318ae3ffe3405f695ae78243714efc274abfe3187d95a5c3a340177c6e4",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 2,
+        "decodedHeight": 3,
+        "orientationObserved": 5,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "c69e745fc141402fe52e7c5bf9150ef0f4cb0adf707200ea8152ac0c92a9b25f",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-exif-orientation-6",
+      "sourceFilename": "fixtures/jpeg-exif-orientation-6.jpg",
+      "sourceSha256": "907d6c609fac0bc081665dac1e1ab4c25abe3f5fc44f63a2b137896bd78ea6dd",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 2,
+        "decodedHeight": 3,
+        "orientationObserved": 6,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "58c0714035685713db0a3b88f18bd25550e2421fe161858cb6b7ca770b7a11f1",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-exif-orientation-7",
+      "sourceFilename": "fixtures/jpeg-exif-orientation-7.jpg",
+      "sourceSha256": "f24f6432c25b93739c5d044b53b30f215979ba02705698de6882bbb3b1639c9a",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 2,
+        "decodedHeight": 3,
+        "orientationObserved": 7,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "f78c6ec491e2a22f8a40fea8b5e4e0fc995a4e4c463eb8c902f6ad391d9dbe18",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-exif-orientation-8",
+      "sourceFilename": "fixtures/jpeg-exif-orientation-8.jpg",
+      "sourceSha256": "270ad540e43df40d88e88c3f6976862c8113704ae6301743e50c841c10ffa8e7",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 2,
+        "decodedHeight": 3,
+        "orientationObserved": 8,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "a2fae74b13a9122146d9453e7b1bb5a22a8a7a2339cb3c8abc9508dbf08be2f0",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-icc-srgb",
+      "sourceFilename": "fixtures/jpeg-icc-srgb.jpg",
+      "sourceSha256": "51a3f5172f374d4066329a708046573554267b0a272aefc0397f995b4975a0aa",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "CONVERTED_TO_SRGB",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "f0bd636b42607fca35d566cf241f522456a253a6f869e227b5296f5ed978505c",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-icc-display-p3",
+      "sourceFilename": "fixtures/jpeg-icc-display-p3.jpg",
+      "sourceSha256": "6b789e004d82148eb896276286e28f1fad0af068fc672799fed79a228c53e9bd",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "CONVERTED_TO_SRGB",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "1221bd32c4cbeeb06c3b8908af5c59883f1114b97c96c9708f69f0560b293b79",
+        "rgbaByteLength": 24,
+        "actualCodec": "JPEG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "jpeg-truncated",
+      "sourceFilename": "fixtures/jpeg-truncated.jpg",
+      "sourceSha256": "7486cafbabd00f06100db8536d6997770f18c27161946412fd0675df737f7575",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "DECODE_FAILED",
+      "expected": {
+        "disposition": "DECODE_FAILED"
+      }
+    },
+    {
+      "fixtureId": "jpeg-malformed",
+      "sourceFilename": "fixtures/jpeg-malformed.jpg",
+      "sourceSha256": "936e85c884ba57c10379c88aabaeafeb38b7ec8ac59bd1300b0f3f66f8e4f634",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "DECODE_FAILED",
+      "expected": {
+        "disposition": "DECODE_FAILED"
+      }
+    },
+    {
+      "fixtureId": "jpeg-width-limit",
+      "sourceFilename": "fixtures/jpeg-width-limit.jpg",
+      "sourceSha256": "c3e570678387926077a3ebf4ecf885c1a1dc63620a592afef710ef28ea762ba0",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "ENCODED_DIMENSION_LIMIT_EXCEEDED",
+      "expected": {
+        "disposition": "ENCODED_DIMENSION_LIMIT_EXCEEDED"
+      }
+    },
+    {
+      "fixtureId": "jpeg-cmyk",
+      "sourceFilename": "fixtures/jpeg-cmyk.jpg",
+      "sourceSha256": "c099d748ea3d247f3d6d529852c0cb7c7d0ccb88d07e457f941b513677a12e33",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "UNSUPPORTED_CODEC_FEATURE",
+      "expected": {
+        "disposition": "UNSUPPORTED_CODEC_FEATURE"
+      }
+    },
+    {
+      "fixtureId": "jpeg-ycck-style",
+      "sourceFilename": "fixtures/jpeg-ycck-style.jpg",
+      "sourceSha256": "8e0527467a1e8f9a621185e4b70ae9b2e1f53abb61f2a04b35c1d82252dd32f2",
+      "actualCodec": "JPEG",
+      "expectedDisposition": "UNSUPPORTED_CODEC_FEATURE",
+      "expected": {
+        "disposition": "UNSUPPORTED_CODEC_FEATURE"
+      }
+    },
+    {
+      "fixtureId": "png-rgb",
+      "sourceFilename": "fixtures/png-rgb.png",
+      "sourceSha256": "7441087dc661cb28ee690632ca4386c89f3be5b10645422ea8f1f77bf44e0073",
+      "actualCodec": "PNG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "EXPLICIT_SRGB_METADATA",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "9ecab60d132a254c9d7f9af7c733b26c3d11845444062b7cbeec91c7239d4096",
+        "rgbaByteLength": 24,
+        "actualCodec": "PNG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "png-rgba",
+      "sourceFilename": "fixtures/png-rgba.png",
+      "sourceSha256": "73020d7a1d7e8ba14e2cab6dcf850b2abc30d842c2d746fcfe3a76a864f44163",
+      "actualCodec": "PNG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "EXPLICIT_SRGB_METADATA",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "c0ae0d2ecffb2575a7b0b4396c23a6fc82322833bbd3eb813a4dad04eba9eeab",
+        "rgbaByteLength": 24,
+        "actualCodec": "PNG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "png-grayscale",
+      "sourceFilename": "fixtures/png-grayscale.png",
+      "sourceSha256": "a9eca9ac94253fdd0294f0e482f58c286f96b2e3cfd4b2789527721d0a80aa62",
+      "actualCodec": "PNG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "EXPLICIT_SRGB_METADATA",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "d00c2e196824cb568b0182d84f943170fe54f7c83a9b5d77ed0f8cef10c409a7",
+        "rgbaByteLength": 24,
+        "actualCodec": "PNG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "png-grayscale-alpha",
+      "sourceFilename": "fixtures/png-grayscale-alpha.png",
+      "sourceSha256": "d167e315f9697afba917db48b653ac63e5511ad0c69e8fcf3558aba77d6f9824",
+      "actualCodec": "PNG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "EXPLICIT_SRGB_METADATA",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "fe72491274790a78f9c698f934f1df3e45c289af6e27091fe8250ec339da859a",
+        "rgbaByteLength": 24,
+        "actualCodec": "PNG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "png-palette",
+      "sourceFilename": "fixtures/png-palette.png",
+      "sourceSha256": "b1e90e52f34d42b18bc5504d45e44aee524e9dbcabb85ca09576a3565c22c327",
+      "actualCodec": "PNG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "EXPLICIT_SRGB_METADATA",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "131843405377bf89d3d4caf7086cc08deea06cf1adff89c8e22bf4bfcedd2103",
+        "rgbaByteLength": 24,
+        "actualCodec": "PNG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "png-adam7",
+      "sourceFilename": "fixtures/png-adam7.png",
+      "sourceSha256": "32ceb498041dbbc71a856649b5d74d230f56db0c42733dcd59a1b1676a6e48e4",
+      "actualCodec": "PNG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "EXPLICIT_SRGB_METADATA",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "c0ae0d2ecffb2575a7b0b4396c23a6fc82322833bbd3eb813a4dad04eba9eeab",
+        "rgbaByteLength": 24,
+        "actualCodec": "PNG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "png-partial-alpha",
+      "sourceFilename": "fixtures/png-partial-alpha.png",
+      "sourceSha256": "73020d7a1d7e8ba14e2cab6dcf850b2abc30d842c2d746fcfe3a76a864f44163",
+      "actualCodec": "PNG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "EXPLICIT_SRGB_METADATA",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "c0ae0d2ecffb2575a7b0b4396c23a6fc82322833bbd3eb813a4dad04eba9eeab",
+        "rgbaByteLength": 24,
+        "actualCodec": "PNG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "png-srgb-chunk",
+      "sourceFilename": "fixtures/png-srgb-chunk.png",
+      "sourceSha256": "7cb5d5c53fe830a520841f880e6fce01ce6856d46731c1d173fc1f91267bb25c",
+      "actualCodec": "PNG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "EXPLICIT_SRGB_METADATA",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "9ecab60d132a254c9d7f9af7c733b26c3d11845444062b7cbeec91c7239d4096",
+        "rgbaByteLength": 24,
+        "actualCodec": "PNG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "png-icc-srgb",
+      "sourceFilename": "fixtures/png-icc-srgb.png",
+      "sourceSha256": "30988abc49af8da793c75e79d6de90c5fd233fa99af5ac42d7006edfa15cfed1",
+      "actualCodec": "PNG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "CONVERTED_TO_SRGB",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "c0ae0d2ecffb2575a7b0b4396c23a6fc82322833bbd3eb813a4dad04eba9eeab",
+        "rgbaByteLength": 24,
+        "actualCodec": "PNG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "png-standard-gama-chrm",
+      "sourceFilename": "fixtures/png-standard-gama-chrm.png",
+      "sourceSha256": "d9b2d38fd1037a086aec4091071a6ef1747c569452091c9498ada1fd08ebf642",
+      "actualCodec": "PNG",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "EXPLICIT_SRGB_METADATA",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "9ecab60d132a254c9d7f9af7c733b26c3d11845444062b7cbeec91c7239d4096",
+        "rgbaByteLength": 24,
+        "actualCodec": "PNG",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "png-conflicting-color-metadata",
+      "sourceFilename": "fixtures/png-conflicting-color-metadata.png",
+      "sourceSha256": "235de05751d876cfcfad331b5fedfe43706a7a428868cb1f50e3048212ffa891",
+      "actualCodec": "PNG",
+      "expectedDisposition": "UNSUPPORTED_COLOR_PROFILE",
+      "expected": {
+        "disposition": "UNSUPPORTED_COLOR_PROFILE"
+      }
+    },
+    {
+      "fixtureId": "png-nonstandard-gama-chrm",
+      "sourceFilename": "fixtures/png-nonstandard-gama-chrm.png",
+      "sourceSha256": "dea58e62ff7061ed7feb032ef39dd4aeeb2407a86f07aa796a36aff175aaa0e7",
+      "actualCodec": "PNG",
+      "expectedDisposition": "UNSUPPORTED_COLOR_PROFILE",
+      "expected": {
+        "disposition": "UNSUPPORTED_COLOR_PROFILE"
+      }
+    },
+    {
+      "fixtureId": "png-16-bit",
+      "sourceFilename": "fixtures/png-16-bit.png",
+      "sourceSha256": "0965f4ee4f53129d4795ece9c9ffa889d303ebe0edf5f47c2a63cb0c98867c2e",
+      "actualCodec": "PNG",
+      "expectedDisposition": "UNSUPPORTED_CODEC_FEATURE",
+      "expected": {
+        "disposition": "UNSUPPORTED_CODEC_FEATURE"
+      }
+    },
+    {
+      "fixtureId": "png-apng",
+      "sourceFilename": "fixtures/png-apng.png",
+      "sourceSha256": "1c1b142c0a646e1a0445752f0ba0e734e982d8e4aef662dc46a1525080a2cf82",
+      "actualCodec": "PNG",
+      "expectedDisposition": "UNSUPPORTED_CODEC_FEATURE",
+      "expected": {
+        "disposition": "UNSUPPORTED_CODEC_FEATURE"
+      }
+    },
+    {
+      "fixtureId": "png-malformed",
+      "sourceFilename": "fixtures/png-malformed.png",
+      "sourceSha256": "159b79323acda3c708fa07b2fbee80cb91bf4de734553f0e0c561341f9934f0b",
+      "actualCodec": "PNG",
+      "expectedDisposition": "DECODE_FAILED",
+      "expected": {
+        "disposition": "DECODE_FAILED"
+      }
+    },
+    {
+      "fixtureId": "png-truncated",
+      "sourceFilename": "fixtures/png-truncated.png",
+      "sourceSha256": "b2e25854e4de479fb01f090ca9f6b20f6652490f94f44a38e2bdbb6dcb5f2f61",
+      "actualCodec": "PNG",
+      "expectedDisposition": "DECODE_FAILED",
+      "expected": {
+        "disposition": "DECODE_FAILED"
+      }
+    },
+    {
+      "fixtureId": "png-width-limit",
+      "sourceFilename": "fixtures/png-width-limit.png",
+      "sourceSha256": "16d01ca64d6246fa233c7811dd72f15e7a82546ea8608dacce6c8199d49dd96e",
+      "actualCodec": "PNG",
+      "expectedDisposition": "ENCODED_DIMENSION_LIMIT_EXCEEDED",
+      "expected": {
+        "disposition": "ENCODED_DIMENSION_LIMIT_EXCEEDED"
+      }
+    },
+    {
+      "fixtureId": "png-height-limit",
+      "sourceFilename": "fixtures/png-height-limit.png",
+      "sourceSha256": "52808856edd0a3ff1be389e93de1ee4d272675214e7a222e1c55e556d594918b",
+      "actualCodec": "PNG",
+      "expectedDisposition": "ENCODED_DIMENSION_LIMIT_EXCEEDED",
+      "expected": {
+        "disposition": "ENCODED_DIMENSION_LIMIT_EXCEEDED"
+      }
+    },
+    {
+      "fixtureId": "png-pixel-limit",
+      "sourceFilename": "fixtures/png-pixel-limit.png",
+      "sourceSha256": "9034478620f3420bb4dec5706dc265c88b14c2c6ae2887cd4793b28217949379",
+      "actualCodec": "PNG",
+      "expectedDisposition": "PIXEL_LIMIT_EXCEEDED",
+      "expected": {
+        "disposition": "PIXEL_LIMIT_EXCEEDED"
+      }
+    },
+    {
+      "fixtureId": "png-invalid-icc",
+      "sourceFilename": "fixtures/png-invalid-icc.png",
+      "sourceSha256": "4a4011cb7e826fafe7eb057e0f5f0020eac59891b23105c236b30186a36df13a",
+      "actualCodec": "PNG",
+      "expectedDisposition": "INVALID_ICC_PROFILE",
+      "expected": {
+        "disposition": "INVALID_ICC_PROFILE"
+      }
+    },
+    {
+      "fixtureId": "png-parse-invalid-icc",
+      "sourceFilename": "fixtures/png-parse-invalid-icc.png",
+      "sourceSha256": "f187ebd4d07fd559731808741920cbc5c50128a5102f0703873a28a0ca853f58",
+      "actualCodec": "PNG",
+      "expectedDisposition": "INVALID_ICC_PROFILE",
+      "expected": {
+        "disposition": "INVALID_ICC_PROFILE"
+      }
+    },
+    {
+      "fixtureId": "png-unsupported-icc-class",
+      "sourceFilename": "fixtures/png-unsupported-icc-class.png",
+      "sourceSha256": "7e98989dbdbfba8df62156bda3f6fbd9494ddb1a127d4aaf4ed2708799aadfe7",
+      "actualCodec": "PNG",
+      "expectedDisposition": "UNSUPPORTED_COLOR_PROFILE",
+      "expected": {
+        "disposition": "UNSUPPORTED_COLOR_PROFILE"
+      }
+    },
+    {
+      "fixtureId": "png-duplicate-icc",
+      "sourceFilename": "fixtures/png-duplicate-icc.png",
+      "sourceSha256": "228b8e71994783051da686a03ccff071ee8b5319accc8418b705a084f482d499",
+      "actualCodec": "PNG",
+      "expectedDisposition": "UNSUPPORTED_COLOR_PROFILE",
+      "expected": {
+        "disposition": "UNSUPPORTED_COLOR_PROFILE"
+      }
+    },
+    {
+      "fixtureId": "png-icc-limit",
+      "sourceFilename": "fixtures/png-icc-limit.png",
+      "sourceSha256": "0062f5fee34a5bcf35fafa3cd9e1d2f6d3eb731b2570484eaaee2f9a73ab2dd5",
+      "actualCodec": "PNG",
+      "expectedDisposition": "METADATA_LIMIT_EXCEEDED",
+      "expected": {
+        "disposition": "METADATA_LIMIT_EXCEEDED"
+      }
+    },
+    {
+      "fixtureId": "png-exif-limit",
+      "sourceFilename": "fixtures/png-exif-limit.png",
+      "sourceSha256": "7afaf9951aedbbab4f60382d0ea1d89d14e6be2171df224ca0d0dcca2e460ab4",
+      "actualCodec": "PNG",
+      "expectedDisposition": "METADATA_LIMIT_EXCEEDED",
+      "expected": {
+        "disposition": "METADATA_LIMIT_EXCEEDED"
+      }
+    },
+    {
+      "fixtureId": "png-ancillary-limit",
+      "sourceFilename": "fixtures/png-ancillary-limit.png",
+      "sourceSha256": "fab2b408f15da991ee9715fa78396737d52c8e061e43f0511ce50e8a365344da",
+      "actualCodec": "PNG",
+      "expectedDisposition": "METADATA_LIMIT_EXCEEDED",
+      "expected": {
+        "disposition": "METADATA_LIMIT_EXCEEDED"
+      }
+    },
+    {
+      "fixtureId": "webp-lossy",
+      "sourceFilename": "fixtures/webp-lossy.webp",
+      "sourceSha256": "050cd2759b3c79acf99df0961e95e44e88fa00da660e09de8008e8bc6f15a3f6",
+      "actualCodec": "WEBP",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "3fc9feeccf1afbc81f8751c8be656afc20c75adb0a88507b2999da6e412610ab",
+        "rgbaByteLength": 24,
+        "actualCodec": "WEBP",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "webp-lossless",
+      "sourceFilename": "fixtures/webp-lossless.webp",
+      "sourceSha256": "8e4b0ca892b13a8483229c01a25f1246d9dc34b2d5523bb85abc41dfd320eebb",
+      "actualCodec": "WEBP",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "9ecab60d132a254c9d7f9af7c733b26c3d11845444062b7cbeec91c7239d4096",
+        "rgbaByteLength": 24,
+        "actualCodec": "WEBP",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "webp-alpha",
+      "sourceFilename": "fixtures/webp-alpha.webp",
+      "sourceSha256": "0623ff9aa8df04a8430eed7955df091b682eeacc7cc3f43f1a74b7e2b59ed098",
+      "actualCodec": "WEBP",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "ASSUMED_SRGB_BY_POLICY",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "543745df1377b9d83d9e58c3242dac285b7ed469c773935b50b0f973fb5eb4a5",
+        "rgbaByteLength": 24,
+        "actualCodec": "WEBP",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "webp-icc-srgb",
+      "sourceFilename": "fixtures/webp-icc-srgb.webp",
+      "sourceSha256": "3ec78de5b3ac1bcdd6570b434eb08e926a503cd2c6b53f5a094829294d2233e4",
+      "actualCodec": "WEBP",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "CONVERTED_TO_SRGB",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "9ecab60d132a254c9d7f9af7c733b26c3d11845444062b7cbeec91c7239d4096",
+        "rgbaByteLength": 24,
+        "actualCodec": "WEBP",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "webp-exif-orientation-6",
+      "sourceFilename": "fixtures/webp-exif-orientation-6.webp",
+      "sourceSha256": "70b2186c609c19233ce883d56c329587da2efc41053f66a4c6b1f0d42ce01639",
+      "actualCodec": "WEBP",
+      "expectedDisposition": "PASS",
+      "expected": {
+        "disposition": "PASS",
+        "encodedWidth": 3,
+        "encodedHeight": 2,
+        "decodedWidth": 3,
+        "decodedHeight": 2,
+        "orientationObserved": 1,
+        "orientationState": "ORIENTATION_1",
+        "iccState": "CONVERTED_TO_SRGB",
+        "pixelFormat": "RGBA8_UNPREMULTIPLIED",
+        "decodedPixelSha256": "9ecab60d132a254c9d7f9af7c733b26c3d11845444062b7cbeec91c7239d4096",
+        "rgbaByteLength": 24,
+        "actualCodec": "WEBP",
+        "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
+        "decoderImplementationVersion": "1.0.0",
+        "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0"
+      }
+    },
+    {
+      "fixtureId": "webp-animated",
+      "sourceFilename": "fixtures/webp-animated.webp",
+      "sourceSha256": "0fb58e3ea6e75c5b8d81df53fc0dffdc7f1475b320105e09d96b2ce5072760e5",
+      "actualCodec": "WEBP",
+      "expectedDisposition": "UNSUPPORTED_CODEC_FEATURE",
+      "expected": {
+        "disposition": "UNSUPPORTED_CODEC_FEATURE"
+      }
+    },
+    {
+      "fixtureId": "webp-malformed",
+      "sourceFilename": "fixtures/webp-malformed.webp",
+      "sourceSha256": "3fe79651a92ea3850c3fc3dd9519a67c7f70b598fa238a3fd92042f6446e6452",
+      "actualCodec": "WEBP",
+      "expectedDisposition": "DECODE_FAILED",
+      "expected": {
+        "disposition": "DECODE_FAILED"
+      }
+    },
+    {
+      "fixtureId": "webp-truncated",
+      "sourceFilename": "fixtures/webp-truncated.webp",
+      "sourceSha256": "9d4ae1697b2b8e77ff517765f7a674d0c80839fa8d89e1bac3bafc6fafdb0f93",
+      "actualCodec": "WEBP",
+      "expectedDisposition": "DECODE_FAILED",
+      "expected": {
+        "disposition": "DECODE_FAILED"
+      }
+    },
+    {
+      "fixtureId": "webp-metadata-limit",
+      "sourceFilename": "fixtures/webp-metadata-limit.webp",
+      "sourceSha256": "381587cb38935a8a0ca8c2384d0e2c2ad8b0755009a159f2820a48b2d18f5f73",
+      "actualCodec": "WEBP",
+      "expectedDisposition": "METADATA_LIMIT_EXCEEDED",
+      "expected": {
+        "disposition": "METADATA_LIMIT_EXCEEDED"
+      }
+    },
+    {
+      "fixtureId": "runtime-source-byte-limit",
+      "sourceFilename": "fixtures/runtime-source-byte-limit.png",
+      "sourceSha256": "a24d371a4689d9cb7874e11f033ddf9bcc70da79b0217ecf8afa629d2d2e1617",
+      "actualCodec": "PNG",
+      "expectedDisposition": "SOURCE_TOO_LARGE",
+      "expected": {
+        "disposition": "SOURCE_TOO_LARGE"
+      }
+    }
+  ]
+}

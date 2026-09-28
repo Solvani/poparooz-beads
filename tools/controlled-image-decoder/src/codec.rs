@@ -5,7 +5,7 @@ use image::{
     DynamicImage, ExtendedColorType, ImageDecoder,
 };
 
-use crate::color::convert_rgba_to_srgb;
+use crate::color::{convert_rgba_to_srgb, validate_icc_profile};
 use crate::error::{DecoderError, ErrorCode};
 use crate::limits::DecodeLimits;
 use crate::orientation::{apply, to_exif};
@@ -71,16 +71,18 @@ pub fn decode_bytes(
                 limits,
                 false,
                 false,
+                false,
             )
         }
         Codec::Png => {
-            let png_has_explicit_srgb = inspect_png(source, limits)?;
+            let png_metadata = inspect_png(source, limits)?;
             decode(
                 PngDecoder::new(BufReader::new(Cursor::new(source)))
                     .map_err(|_| DecoderError::new(ErrorCode::DecodeFailed))?,
                 limits,
                 true,
-                png_has_explicit_srgb,
+                png_metadata.explicit_srgb,
+                png_metadata.declared_icc,
             )
         }
         Codec::Webp => {
@@ -89,6 +91,7 @@ pub fn decode_bytes(
                 WebPDecoder::new(BufReader::new(Cursor::new(source)))
                     .map_err(|_| DecoderError::new(ErrorCode::DecodeFailed))?,
                 limits,
+                false,
                 false,
                 false,
             )
@@ -101,6 +104,7 @@ fn decode<D: ImageDecoder>(
     limits: DecodeLimits,
     reject_sixteen_bit: bool,
     png_has_explicit_srgb: bool,
+    png_declared_icc: bool,
 ) -> Result<DecodedPixels, DecoderError> {
     let (encoded_width, encoded_height) = decoder.dimensions();
     limits.validate_dimensions(encoded_width, encoded_height)?;
@@ -136,6 +140,12 @@ fn decode<D: ImageDecoder>(
     let icc = decoder
         .icc_profile()
         .map_err(|_| DecoderError::new(ErrorCode::InvalidIccProfile))?;
+    if png_declared_icc && icc.is_none() {
+        return Err(DecoderError::new(ErrorCode::InvalidIccProfile));
+    }
+    if let Some(profile) = icc.as_deref() {
+        validate_icc_profile(profile, limits.maximum_icc_profile_bytes)?;
+    }
     let image = DynamicImage::from_decoder(decoder)
         .map_err(|_| DecoderError::new(ErrorCode::DecodeFailed))?;
     let mut image = image;
@@ -172,13 +182,19 @@ fn inspect_jpeg(source: &[u8], limits: DecodeLimits) -> Result<(), DecoderError>
     let mut offset = 2usize;
     let mut metadata = 0usize;
     let mut exif_segments = 0u8;
+    let mut found_sof = false;
     while offset + 1 < source.len() {
         if source[offset] != 0xff {
-            offset += 1;
-            continue;
+            return Err(DecoderError::new(ErrorCode::DecodeFailed));
         }
-        let marker = source[offset + 1];
-        offset += 2;
+        while offset < source.len() && source[offset] == 0xff {
+            offset += 1;
+        }
+        if offset >= source.len() {
+            return Err(DecoderError::new(ErrorCode::DecodeFailed));
+        }
+        let marker = source[offset];
+        offset += 1;
         if marker == 0xd9 || marker == 0xda {
             break;
         }
@@ -197,6 +213,29 @@ fn inspect_jpeg(source: &[u8], limits: DecodeLimits) -> Result<(), DecoderError>
             return Err(DecoderError::new(ErrorCode::DecodeFailed));
         }
         let payload = &source[offset + 2..offset + segment_length];
+        if is_start_of_frame(marker) && !found_sof {
+            if payload.len() < 6 {
+                return Err(DecoderError::new(ErrorCode::DecodeFailed));
+            }
+            let height = u32::from(u16::from_be_bytes([payload[1], payload[2]]));
+            let width = u32::from(u16::from_be_bytes([payload[3], payload[4]]));
+            limits.validate_dimensions(width, height)?;
+            let component_count = usize::from(payload[5]);
+            let required_length = 6usize
+                .checked_add(
+                    component_count
+                        .checked_mul(3)
+                        .ok_or_else(|| DecoderError::new(ErrorCode::DecodeFailed))?,
+                )
+                .ok_or_else(|| DecoderError::new(ErrorCode::DecodeFailed))?;
+            if payload.len() < required_length {
+                return Err(DecoderError::new(ErrorCode::DecodeFailed));
+            }
+            if !matches!(component_count, 1 | 3) {
+                return Err(DecoderError::new(ErrorCode::UnsupportedCodecFeature));
+            }
+            found_sof = true;
+        }
         if (0xe0..=0xef).contains(&marker) || marker == 0xfe {
             metadata = metadata
                 .checked_add(payload.len())
@@ -210,10 +249,26 @@ fn inspect_jpeg(source: &[u8], limits: DecodeLimits) -> Result<(), DecoderError>
         }
         offset += segment_length;
     }
+    if !found_sof {
+        return Err(DecoderError::new(ErrorCode::DecodeFailed));
+    }
     validate_metadata(metadata, exif_segments, limits)
 }
 
-fn inspect_png(source: &[u8], limits: DecodeLimits) -> Result<bool, DecoderError> {
+const fn is_start_of_frame(marker: u8) -> bool {
+    matches!(
+        marker,
+        0xc0..=0xc3 | 0xc5..=0xc7 | 0xc9..=0xcb | 0xcd..=0xcf
+    )
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct PngMetadata {
+    explicit_srgb: bool,
+    declared_icc: bool,
+}
+
+fn inspect_png(source: &[u8], limits: DecodeLimits) -> Result<PngMetadata, DecoderError> {
     const SRGB_CHRM: [u32; 8] = [
         31_270, 32_900, 64_000, 33_000, 30_000, 60_000, 15_000, 6_000,
     ];
@@ -224,6 +279,7 @@ fn inspect_png(source: &[u8], limits: DecodeLimits) -> Result<bool, DecoderError
     let mut iccp_chunks = 0u8;
     let mut gamma = None;
     let mut chromaticity = None;
+    let mut found_iend = false;
     while offset + 12 <= source.len() {
         let length = u32::from_be_bytes(
             source[offset..offset + 4]
@@ -256,7 +312,10 @@ fn inspect_png(source: &[u8], limits: DecodeLimits) -> Result<bool, DecoderError
                 }
             }
             b"sRGB" => srgb_chunks = srgb_chunks.saturating_add(1),
-            b"iCCP" => iccp_chunks = iccp_chunks.saturating_add(1),
+            b"iCCP" => {
+                iccp_chunks = iccp_chunks.saturating_add(1);
+                validate_iccp_declaration(data)?;
+            }
             b"gAMA" if data.len() == 4 => {
                 gamma = Some(u32::from_be_bytes(data.try_into().map_err(|_| {
                     DecoderError::new(ErrorCode::UnsupportedColorProfile)
@@ -278,8 +337,12 @@ fn inspect_png(source: &[u8], limits: DecodeLimits) -> Result<bool, DecoderError
         }
         offset = chunk_end;
         if kind == b"IEND" {
+            found_iend = true;
             break;
         }
+    }
+    if !found_iend {
+        return Err(DecoderError::new(ErrorCode::DecodeFailed));
     }
     validate_metadata(metadata, exif_chunks, limits)?;
     if srgb_chunks > 1 || iccp_chunks > 1 || (srgb_chunks > 0 && iccp_chunks > 0) {
@@ -292,7 +355,24 @@ fn inspect_png(source: &[u8], limits: DecodeLimits) -> Result<bool, DecoderError
     if iccp_chunks == 0 && srgb_chunks == 0 && !standard_equivalent {
         return Err(DecoderError::new(ErrorCode::UnsupportedColorProfile));
     }
-    Ok(srgb_chunks == 1 || standard_equivalent)
+    Ok(PngMetadata {
+        explicit_srgb: srgb_chunks == 1 || standard_equivalent,
+        declared_icc: iccp_chunks == 1,
+    })
+}
+
+fn validate_iccp_declaration(data: &[u8]) -> Result<(), DecoderError> {
+    let keyword_end = data
+        .iter()
+        .position(|value| *value == 0)
+        .ok_or_else(|| DecoderError::new(ErrorCode::InvalidIccProfile))?;
+    if !(1..=79).contains(&keyword_end)
+        || data.get(keyword_end + 1) != Some(&0)
+        || data.len() <= keyword_end + 2
+    {
+        return Err(DecoderError::new(ErrorCode::InvalidIccProfile));
+    }
+    Ok(())
 }
 
 fn inspect_webp(source: &[u8], limits: DecodeLimits) -> Result<(), DecoderError> {
@@ -350,6 +430,29 @@ fn validate_metadata(
 mod tests {
     use super::*;
 
+    fn minimal_jpeg(marker: u8, component_count: u8, adobe_transform: Option<u8>) -> Vec<u8> {
+        let mut bytes = vec![0xff, 0xd8];
+        if let Some(transform) = adobe_transform {
+            let mut payload = b"Adobe\0d\0\0\0\0\0".to_vec();
+            payload.push(transform);
+            bytes.extend_from_slice(&jpeg_segment(0xee, &payload));
+        }
+        let mut payload = vec![8, 0, 2, 0, 3, component_count];
+        for component in 0..component_count {
+            payload.extend_from_slice(&[component.saturating_add(1), 0x11, 0]);
+        }
+        bytes.extend_from_slice(&jpeg_segment(marker, &payload));
+        bytes.extend_from_slice(&[0xff, 0xda]);
+        bytes
+    }
+
+    fn jpeg_segment(marker: u8, payload: &[u8]) -> Vec<u8> {
+        let mut segment = vec![0xff, marker];
+        segment.extend_from_slice(&u16::try_from(payload.len() + 2).unwrap().to_be_bytes());
+        segment.extend_from_slice(payload);
+        segment
+    }
+
     #[allow(clippy::trivially_copy_pass_by_ref)]
     fn png_chunk(kind: &[u8; 4], data: &[u8]) -> Vec<u8> {
         let mut chunk = Vec::new();
@@ -395,9 +498,62 @@ mod tests {
     }
 
     #[test]
+    fn accepts_only_one_or_three_component_jpeg_sof() {
+        for source in [
+            minimal_jpeg(0xc0, 3, None),
+            minimal_jpeg(0xc2, 3, None),
+            minimal_jpeg(0xc0, 1, None),
+        ] {
+            inspect_jpeg(&source, DecodeLimits::qualification_defaults()).unwrap();
+        }
+        for source in [minimal_jpeg(0xc0, 4, None), minimal_jpeg(0xc0, 4, Some(2))] {
+            assert_eq!(
+                inspect_jpeg(&source, DecodeLimits::qualification_defaults())
+                    .unwrap_err()
+                    .code(),
+                ErrorCode::UnsupportedCodecFeature
+            );
+        }
+    }
+
+    #[test]
+    fn jpeg_preflight_fails_closed_on_malformed_sof_and_marker_stream() {
+        let malformed_sof = [0xff, 0xd8, 0xff, 0xc0, 0, 7, 8, 0, 2, 0, 3, 0xff, 0xda];
+        let truncated_marker = [0xff, 0xd8, 0xff, 0xc0, 0];
+        let stray_data = [0xff, 0xd8, 0x01, 0xff, 0xda];
+        for source in [&malformed_sof[..], &truncated_marker[..], &stray_data[..]] {
+            assert_eq!(
+                inspect_jpeg(source, DecodeLimits::qualification_defaults())
+                    .unwrap_err()
+                    .code(),
+                ErrorCode::DecodeFailed
+            );
+        }
+    }
+
+    #[test]
+    fn jpeg_dimension_limits_precede_component_policy() {
+        let mut source = minimal_jpeg(0xc0, 4, None);
+        let sof_width_offset = 2 + 2 + 2 + 1 + 2;
+        source[sof_width_offset..sof_width_offset + 2].copy_from_slice(&8193u16.to_be_bytes());
+        assert_eq!(
+            inspect_jpeg(&source, DecodeLimits::qualification_defaults())
+                .unwrap_err()
+                .code(),
+            ErrorCode::EncodedDimensionLimitExceeded
+        );
+    }
+
+    #[test]
     fn accepts_only_explicit_standard_png_srgb_metadata() {
         let explicit = minimal_png(&[png_chunk(b"sRGB", &[0])]);
-        assert!(inspect_png(&explicit, DecodeLimits::qualification_defaults()).unwrap());
+        assert_eq!(
+            inspect_png(&explicit, DecodeLimits::qualification_defaults()).unwrap(),
+            PngMetadata {
+                explicit_srgb: true,
+                declared_icc: false,
+            }
+        );
 
         let absent = minimal_png(&[]);
         assert_eq!(
@@ -405,6 +561,66 @@ mod tests {
                 .unwrap_err()
                 .code(),
             ErrorCode::UnsupportedColorProfile
+        );
+    }
+
+    #[test]
+    fn png_iccp_declaration_is_explicit_and_structurally_fail_closed() {
+        let declared = minimal_png(&[png_chunk(b"iCCP", b"profile\0\0compressed")]);
+        assert_eq!(
+            inspect_png(&declared, DecodeLimits::qualification_defaults()).unwrap(),
+            PngMetadata {
+                explicit_srgb: false,
+                declared_icc: true,
+            }
+        );
+
+        for invalid in [
+            minimal_png(&[png_chunk(b"iCCP", b"missing-null")]),
+            minimal_png(&[png_chunk(b"iCCP", b"\0\0compressed")]),
+            minimal_png(&[png_chunk(b"iCCP", b"profile\0\x01compressed")]),
+            minimal_png(&[png_chunk(b"iCCP", b"profile\0\0")]),
+        ] {
+            assert_eq!(
+                inspect_png(&invalid, DecodeLimits::qualification_defaults())
+                    .unwrap_err()
+                    .code(),
+                ErrorCode::InvalidIccProfile
+            );
+        }
+    }
+
+    #[test]
+    fn png_iccp_duplicate_truncation_and_metadata_limits_fail_closed() {
+        let duplicate = minimal_png(&[
+            png_chunk(b"iCCP", b"first\0\0compressed"),
+            png_chunk(b"iCCP", b"second\0\0compressed"),
+        ]);
+        assert_eq!(
+            inspect_png(&duplicate, DecodeLimits::qualification_defaults())
+                .unwrap_err()
+                .code(),
+            ErrorCode::UnsupportedColorProfile
+        );
+
+        let truncated = [
+            0x89, b'P', b'N', b'G', 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 10, b'i',
+        ];
+        assert_eq!(
+            inspect_png(&truncated, DecodeLimits::qualification_defaults())
+                .unwrap_err()
+                .code(),
+            ErrorCode::DecodeFailed
+        );
+
+        let mut over_limit_data = b"profile\0\0".to_vec();
+        over_limit_data.resize(2 * 1024 * 1024 + 1, 1);
+        let over_limit = minimal_png(&[png_chunk(b"iCCP", &over_limit_data)]);
+        assert_eq!(
+            inspect_png(&over_limit, DecodeLimits::qualification_defaults())
+                .unwrap_err()
+                .code(),
+            ErrorCode::MetadataLimitExceeded
         );
     }
 

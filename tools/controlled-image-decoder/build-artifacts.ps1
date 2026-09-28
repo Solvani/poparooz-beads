@@ -81,6 +81,7 @@ $provenance = [ordered]@{
     simd = 'disabled'
     cargoLocked = $true
     releaseProfile = $true
+    semanticRemediation = 'GEN-COST-CONTROLLED-REGENERATION-V3-D02-R01'
 }
 Write-DeterministicJson $provenancePath $provenance
 
@@ -141,6 +142,15 @@ $artifactManifest = [ordered]@{
     threadingMode = 'single-thread'
     simdState = 'disabled'
     supportedCodecs = @('JPEG', 'PNG', 'WEBP')
+    artifactTransition = [ordered]@{
+        previousProvisionalWasmSha256 = '99b85622115fcd7b824c0f2008b7a489d03b72dcaa989d617d28a70be4f4e921'
+        previousStatus = 'SUPERSEDED_PROVISIONAL_ARTIFACT'
+        reason = 'D02-R01 semantic remediation'
+        defects = @(
+            'JPEG 4-component source fail-open',
+            'invalid PNG iCCP fail-open'
+        )
+    }
     resizeAuthority = [ordered]@{
         implementationId = 'poparooz-controlled-rgba-resize'
         version = '1.0.0'

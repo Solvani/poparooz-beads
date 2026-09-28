@@ -1,0 +1,131 @@
+name: V3 D02 controlled decoder qualification
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/v3-d02-controlled-decoder
+
+permissions:
+  contents: read
+
+concurrency:
+  group: v3-d02-qualification-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  native-linux:
+    name: Linux native WASM
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24.18.0
+          cache: npm
+          cache-dependency-path: tools/controlled-image-decoder/qualification/package-lock.json
+      - name: Install isolated qualification dependencies
+        run: corepack npm@11.9.0 ci --prefix tools/controlled-image-decoder/qualification
+      - name: Run native WASM corpus
+        working-directory: tools/controlled-image-decoder/qualification
+        env:
+          QUALIFICATION_ENVIRONMENT_ID: linux-native
+          QUALIFICATION_RESULT: results/linux-native.json
+        run: node run-native.mjs
+      - name: Upload native result
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: v3-d02-linux-native
+          path: tools/controlled-image-decoder/qualification/results/linux-native.json
+          if-no-files-found: error
+          retention-days: 14
+
+  browser:
+    name: ${{ matrix.environment-id }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            browser: chromium
+            environment-id: chromium-windows
+          - os: ubuntu-latest
+            browser: chromium
+            environment-id: chromium-linux
+          - os: ubuntu-latest
+            browser: firefox
+            environment-id: firefox-linux
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24.18.0
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            tools/controlled-image-decoder/qualification/package-lock.json
+      - name: Install application build dependencies
+        run: corepack npm@11.9.0 ci
+      - name: Install isolated qualification dependencies
+        run: corepack npm@11.9.0 ci --prefix tools/controlled-image-decoder/qualification
+      - name: Install browser on Windows
+        if: runner.os == 'Windows'
+        working-directory: tools/controlled-image-decoder/qualification
+        run: .\node_modules\.bin\playwright.cmd install ${{ matrix.browser }}
+      - name: Install browser and Linux runtime dependencies
+        if: runner.os == 'Linux'
+        working-directory: tools/controlled-image-decoder/qualification
+        run: ./node_modules/.bin/playwright install --with-deps ${{ matrix.browser }}
+      - name: Build isolated browser harness
+        run: node node_modules/vite/bin/vite.js build --config tools/controlled-image-decoder/qualification/vite.config.ts
+      - name: Run browser Worker corpus
+        working-directory: tools/controlled-image-decoder/qualification
+        env:
+          QUALIFICATION_ENVIRONMENT_ID: ${{ matrix.environment-id }}
+          QUALIFICATION_RESULT: results/${{ matrix.environment-id }}.json
+        run: node run-browser.mjs ${{ matrix.browser }}
+      - name: Upload browser result
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: v3-d02-${{ matrix.environment-id }}
+          path: tools/controlled-image-decoder/qualification/results/${{ matrix.environment-id }}.json
+          if-no-files-found: error
+          retention-days: 14
+
+  aggregate:
+    name: Cross-platform exact equality
+    needs:
+      - native-linux
+      - browser
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24.18.0
+      - name: Download qualification results
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: v3-d02-*
+          path: tools/controlled-image-decoder/qualification/ci-results
+          merge-multiple: true
+      - name: Verify cross-platform exact equality
+        working-directory: tools/controlled-image-decoder/qualification
+        run: node aggregate-results.mjs ci-results
+      - name: Upload aggregate result
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: v3-d02-cross-platform-aggregate
+          path: tools/controlled-image-decoder/qualification/ci-results/aggregate.json
+          if-no-files-found: error
+          retention-days: 14

@@ -2,7 +2,7 @@
   "schema": "PoparoozControlledDecoderArtifactManifest/1.0.0",
   "decoderImplementationId": "poparooz-controlled-image-decoder-wasm",
   "decoderImplementationVersion": "1.0.0",
-  "decoderArtifactSha256": "99b85622115fcd7b824c0f2008b7a489d03b72dcaa989d617d28a70be4f4e921",
+  "decoderArtifactSha256": "dd932592ad60b70ca0766bf9e402861e751c25194fb3386c0389dd6ecca6eeed",
   "runtimeAbiVersion": "PoparoozControlledDecoderABI/1.0.0",
   "rustToolchain": "rustc 1.88.0 (6b00bc388 2025-06-23)",
   "cargoLockSha256": "bdaf0fc8c3e1c2c3b397adaa46c5c5ee268973cb5ffd62073ef13d319c5757da",
@@ -25,6 +25,15 @@
     "PNG",
     "WEBP"
   ],
+  "artifactTransition": {
+    "previousProvisionalWasmSha256": "99b85622115fcd7b824c0f2008b7a489d03b72dcaa989d617d28a70be4f4e921",
+    "previousStatus": "SUPERSEDED_PROVISIONAL_ARTIFACT",
+    "reason": "D02-R01 semantic remediation",
+    "defects": [
+      "JPEG 4-component source fail-open",
+      "invalid PNG iCCP fail-open"
+    ]
+  },
   "resizeAuthority": {
     "implementationId": "poparooz-controlled-rgba-resize",
     "version": "1.0.0",
@@ -34,9 +43,9 @@
   "artifacts": [
     {
       "file": "poparooz-controlled-image-decoder-1_0_0_bg.wasm",
-      "sha256": "99b85622115fcd7b824c0f2008b7a489d03b72dcaa989d617d28a70be4f4e921",
-      "bytes": 858808,
-      "gzipBytes": 305683
+      "sha256": "dd932592ad60b70ca0766bf9e402861e751c25194fb3386c0389dd6ecca6eeed",
+      "bytes": 859946,
+      "gzipBytes": 306339
     },
     {
       "file": "poparooz-controlled-image-decoder-1_0_0.js",
@@ -45,8 +54,8 @@
     },
     {
       "file": "build-provenance.json",
-      "sha256": "873c644ffd06e0a472727af24d30ff3bae1d35f86ead0af971ea0a0b1883399d",
-      "bytes": 403
+      "sha256": "7f8e01ac781517e9d413043ce4f60b442a52bae701997483780ae4efe495c1a5",
+      "bytes": 476
     },
     {
       "file": "sbom.json",

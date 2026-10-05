@@ -7,6 +7,23 @@ stop conditions, final resource/Git state, and lock release.
 
 ## 1. Read-only audit
 
+### G1 download / board coordinate qualification (candidate)
+
+Public 40/60/80/104 matrices remain untrimmed and untranslated. The existing
+board-layout algorithm partitions from logical origin (0, 0), with one 104×104
+board for each of those sizes; transparent cells do not reduce board capacity.
+52-cell boundaries inside the matrix are reading sections, not physical boards.
+The PNG uses 24 raster pixels per cell: centers are at `(column + 0.5) * 24`
+and `(row + 0.5) * 24` relative to its grid origin. Section edges are at `52 * 24`.
+This raster coordinate model establishes no printer calibration or board overlay.
+Frozen physical authority stays separate: outer body 280×280×2 mm; first-to-last
+pin-center span 278 mm across 103 intervals; exact pitch 278/103 mm; 2.70 mm is
+rounded display only. Do not infer board-edge offsets from PNG margins.
+Existing 52/78/104 purchase suggestions remain separate from required board
+layout, as specified in the P3-A03-SCOPE-A02 Board Governance decision.
+No calibrated Actual Size, 100% print, PDF/SVG, or tiled print subsystem is added.
+Customer images remain browser-local; edited cells/counts remain download authority.
+
 - Prerequisite: exact scope, baseline, and non-mutating evidence sources.
 - Lock: none.
 - Allowed: bounded reads and checks that cannot rewrite local or remote state.

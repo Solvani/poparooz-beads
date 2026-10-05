@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 
 import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
 import { createPublicPattern } from "../pattern-canvas/test/pattern-result";
+import { buildPatternBoardLayout } from "../../domain/pattern/board-layout";
+import { selectPatternDownload } from "./pattern-download-selection";
 import {
   PATTERN_EXPORT_CELL_SIZE,
   PATTERN_EXPORT_LEGEND_ROW_HEIGHT,
@@ -98,6 +100,90 @@ function createPatternWithColors(size: number, colorCount: number) {
 }
 
 describe("renderPatternExport", () => {
+  it.each([40, 60, 80, 104])(
+    "qualifies G1 cells, one board, edited codes and reading guides at %i",
+    (size) => {
+      const values = new Uint16Array(size * size);
+      values[1] = 1;
+      values[2] = 65535;
+      const base = createPublicPattern(size, size, values);
+      const boardLayout = buildPatternBoardLayout(base.matrix, base.totals, {
+        id: "poparooz-board-104",
+        version: "1.0.0",
+        shape: "square",
+        pegGrid: { columns: 104, rows: 104 },
+        tiling: { supported: true, sharedEdgePegs: false },
+      });
+      const pattern = { ...base, boardLayout };
+      expect(pattern.matrix.colorIndices).toHaveLength(size * size);
+      expect(boardLayout.boardCount).toBe(1);
+      expect(boardLayout.tiles[0]).toMatchObject({
+        originX: 0,
+        originY: 0,
+        coveredWidth: size,
+        coveredHeight: size,
+      });
+      expect(boardLayout.outsidePatternPegCount).toBe(104 * 104 - size * size);
+      const original = createPublicPattern(
+        size,
+        size,
+        new Uint16Array(size * size),
+      );
+      const selection = selectPatternDownload({
+        generationIdentity: 1,
+        originalPattern: original,
+        customerResult: { kind: "edited", edited: true, pattern },
+        selectedColorSetLabel: "72-Color Set",
+      });
+      expect(selection.kind).toBe("ready");
+      if (selection.kind !== "ready")
+        throw new Error("Expected edited download");
+      expect(selection.input.pattern).toBe(pattern);
+      const before = Array.from(values);
+      const { result, target } = render(selection.input.pattern);
+      expect(result.ok).toBe(true);
+      if (!result.ok) throw new Error("Export failed");
+      const g = result.geometry;
+      expect(g.gridWidth).toBe(size * 24);
+      expect(g.gridHeight).toBe(size * 24);
+      const fills = vi.mocked(target.context.fillRect).mock.calls;
+      expect(fills.filter(([, , w, h]) => w === 24 && h === 24)).toHaveLength(
+        size * size,
+      );
+      const labels = vi
+        .mocked(target.context.fillText)
+        .mock.calls.map(([text]) => text);
+      expect(labels.filter((label) => label === "A1")).toHaveLength(
+        size * size - 2 + 1,
+      );
+      expect(labels.filter((label) => label === "B1")).toHaveLength(2);
+      expect(labels).toContain("Board Layout: 1 × 104×104 board");
+      expect(labels).toContain(
+        "PNG reading pattern · Not an actual-size print",
+      );
+      expect(labels).not.toContain("65535");
+      const vertical = [g.gridX + 52 * 24 - 1.5, g.gridY, 3, g.gridHeight];
+      const horizontal = [g.gridX, g.gridY + 52 * 24 - 1.5, g.gridWidth, 3];
+      if (size > 52) {
+        expect(target.context.fillRect).toHaveBeenCalledWith(...vertical);
+        expect(target.context.fillRect).toHaveBeenCalledWith(...horizontal);
+      } else {
+        expect(fills).not.toContainEqual(vertical);
+        expect(fills).not.toContainEqual(horizontal);
+      }
+      expect(target.context.strokeRect).toHaveBeenCalledWith(
+        g.gridX + 2,
+        g.gridY + 2,
+        g.gridWidth - 4,
+        g.gridHeight - 4,
+      );
+      expect(Array.from(values)).toEqual(before);
+      expect(pattern.totals.totalBeads).toBe(size * size - 1);
+      expect(pattern.materials.reduce((sum, m) => sum + m.beadCount, 0)).toBe(
+        pattern.totals.totalBeads,
+      );
+    },
+  );
   it.each([
     [40, 3],
     [60, 4],
@@ -148,8 +234,8 @@ describe("renderPatternExport", () => {
           result.geometry.legendRows * PATTERN_EXPORT_LEGEND_ROW_HEIGHT +
           32,
       );
-      expect(result.geometry.height).toBeLessThanOrEqual(3420);
-      if (colorCount === 64) expect(result.geometry.height).toBe(3420);
+      expect(result.geometry.height).toBeLessThanOrEqual(3516);
+      if (colorCount === 64) expect(result.geometry.height).toBe(3516);
     },
   );
 

@@ -51,6 +51,41 @@ function raster(): PatternRaster {
 }
 
 describe("pattern renderer", () => {
+  it.each([40, 60, 80, 104])(
+    "draws reading guides only inside the %i grid",
+    (size) => {
+      const ctx = context();
+      expect(
+        renderPattern({
+          canvas: document.createElement("canvas"),
+          context: ctx,
+          raster: {
+            source: document.createElement("canvas"),
+            width: size,
+            height: size,
+          },
+          viewport: viewport({
+            viewportWidth: 1200,
+            viewportHeight: 1200,
+            gridVisible: true,
+          }),
+          gridColor: "#112233",
+          backgroundColor: "#FFFFFF",
+          devicePixelRatio: 2,
+        }),
+      ).toBe(true);
+      // Ordinary cell grid stroke, section stroke, then distinct outer border.
+      expect(ctx.stroke).toHaveBeenCalledTimes(3);
+      const moves = vi.mocked(ctx.moveTo).mock.calls;
+      expect(moves.filter(([x, y]) => x === 520 && y === 0)).toHaveLength(
+        size > 52 ? 2 : 0,
+      );
+      expect(moves.filter(([x, y]) => x === 0 && y === 520)).toHaveLength(
+        size > 52 ? 2 : 0,
+      );
+      expect(ctx.lineTo).toHaveBeenCalledWith(size * 10, size * 10);
+    },
+  );
   it("uses a visible source crop instead of drawing the entire zoomed raster", () => {
     const visible = calculateVisiblePatternRect(
       { width: 100, height: 100 },
@@ -116,7 +151,7 @@ describe("pattern renderer", () => {
       gridColor: "#123456",
       backgroundColor: "#EEEEEE",
     });
-    expect(selected.stroke).toHaveBeenCalledOnce();
+    expect(selected.stroke).toHaveBeenCalledTimes(3);
     expect(selected.strokeStyle).toBe("#123456");
   });
 

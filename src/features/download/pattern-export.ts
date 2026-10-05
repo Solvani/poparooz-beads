@@ -4,7 +4,10 @@ import {
   type DerivedMaterialRequirementV1,
 } from "../materials/derived-material-requirements";
 
+// Raster resolution only. Physical pitch remains 278 / 103 mm; PNG is not
+// a calibrated actual-size print or a physical board overlay.
 export const PATTERN_EXPORT_CELL_SIZE = 24;
+export const PATTERN_EXPORT_SECTION_SIZE = 52;
 export const PATTERN_EXPORT_LEFT_MARGIN = 32;
 export const PATTERN_EXPORT_RIGHT_MARGIN = 32;
 export const PATTERN_EXPORT_TOP_PADDING = 32;
@@ -14,7 +17,7 @@ export const PATTERN_EXPORT_LOGO_TITLE_GAP = 16;
 export const PATTERN_EXPORT_TITLE_LINE_HEIGHT = 48;
 export const PATTERN_EXPORT_TITLE_METADATA_GAP = 12;
 export const PATTERN_EXPORT_METADATA_LINE_HEIGHT = 32;
-export const PATTERN_EXPORT_METADATA_ROWS = 3;
+export const PATTERN_EXPORT_METADATA_ROWS = 6;
 export const PATTERN_EXPORT_HEADER_GRID_GAP = 24;
 export const PATTERN_EXPORT_GRID_LEGEND_GAP = 32;
 export const PATTERN_EXPORT_LEGEND_HEADING_LINE_HEIGHT = 36;
@@ -306,6 +309,24 @@ function drawExport(
     PATTERN_EXPORT_LEFT_MARGIN,
     metadataY + PATTERN_EXPORT_METADATA_LINE_HEIGHT * 2,
   );
+  context.fillText(
+    `Board Layout: ${pattern.boardLayout.boardCount} × ${pattern.boardLayout.boardWidthInBeads}×${pattern.boardLayout.boardHeightInBeads} board`,
+    PATTERN_EXPORT_LEFT_MARGIN,
+    metadataY + PATTERN_EXPORT_METADATA_LINE_HEIGHT * 3,
+    geometry.gridWidth,
+  );
+  context.fillText(
+    "52-bead guides mark reading sections, not physical boards.",
+    PATTERN_EXPORT_LEFT_MARGIN,
+    metadataY + PATTERN_EXPORT_METADATA_LINE_HEIGHT * 4,
+    geometry.gridWidth,
+  );
+  context.fillText(
+    "PNG reading pattern · Not an actual-size print",
+    PATTERN_EXPORT_LEFT_MARGIN,
+    metadataY + PATTERN_EXPORT_METADATA_LINE_HEIGHT * 5,
+    geometry.gridWidth,
+  );
 
   drawPatternGrid(context, pattern, geometry, materialsByIndex);
   drawLegend(context, pattern.colors, geometry, materialsByIndex);
@@ -358,6 +379,40 @@ function drawPatternGrid(
       }
     }
   }
+  // Presentation-only edges: never change the matrix, counts, or board layout.
+  context.fillStyle = "#17231E";
+  for (
+    let column = PATTERN_EXPORT_SECTION_SIZE;
+    column < pattern.matrix.width;
+    column += PATTERN_EXPORT_SECTION_SIZE
+  ) {
+    context.fillRect(
+      geometry.gridX + column * PATTERN_EXPORT_CELL_SIZE - 1.5,
+      geometry.gridY,
+      3,
+      geometry.gridHeight,
+    );
+  }
+  for (
+    let row = PATTERN_EXPORT_SECTION_SIZE;
+    row < pattern.matrix.height;
+    row += PATTERN_EXPORT_SECTION_SIZE
+  ) {
+    context.fillRect(
+      geometry.gridX,
+      geometry.gridY + row * PATTERN_EXPORT_CELL_SIZE - 1.5,
+      geometry.gridWidth,
+      3,
+    );
+  }
+  context.strokeStyle = "#17231E";
+  context.lineWidth = 4;
+  context.strokeRect(
+    geometry.gridX + 2,
+    geometry.gridY + 2,
+    geometry.gridWidth - 4,
+    geometry.gridHeight - 4,
+  );
 }
 
 function drawLegend(

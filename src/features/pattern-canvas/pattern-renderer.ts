@@ -85,6 +85,7 @@ export function renderPattern(options: RenderPatternOptions): boolean {
         visible,
         dpr,
       );
+      drawReadingSections(context, raster, viewport, options.gridColor);
     }
     return true;
   } catch {
@@ -168,6 +169,44 @@ export function effectiveDevicePixelRatio(value = globalThis.devicePixelRatio) {
   return Number.isFinite(value) && value > 0
     ? Math.min(value, MAX_EFFECTIVE_DPR)
     : 1;
+}
+
+// Screen/CSS-pixel overlay only; section boundaries are not board boundaries.
+function drawReadingSections(
+  context: CanvasRenderingContext2D,
+  raster: PatternRaster,
+  viewport: CanvasViewportState,
+  color: string,
+) {
+  context.save();
+  context.beginPath();
+  context.strokeStyle = color;
+  // Stay inside the cell-edge gutters even at fit zoom; codes are centered.
+  context.lineWidth = Math.min(3, viewport.scale * 0.15);
+  for (let column = 52; column < raster.width; column += 52) {
+    const x = viewport.offsetX + column * viewport.scale;
+    context.moveTo(x, viewport.offsetY);
+    context.lineTo(x, viewport.offsetY + raster.height * viewport.scale);
+  }
+  for (let row = 52; row < raster.height; row += 52) {
+    const y = viewport.offsetY + row * viewport.scale;
+    context.moveTo(viewport.offsetX, y);
+    context.lineTo(viewport.offsetX + raster.width * viewport.scale, y);
+  }
+  context.stroke();
+  context.beginPath();
+  context.lineWidth = Math.min(4, viewport.scale * 0.2);
+  const left = viewport.offsetX;
+  const top = viewport.offsetY;
+  const right = left + raster.width * viewport.scale;
+  const bottom = top + raster.height * viewport.scale;
+  context.moveTo(left, top);
+  context.lineTo(right, top);
+  context.lineTo(right, bottom);
+  context.lineTo(left, bottom);
+  context.lineTo(left, top);
+  context.stroke();
+  context.restore();
 }
 
 function drawVisibleGrid(

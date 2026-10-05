@@ -1469,6 +1469,66 @@ describe("App", () => {
     ).toBeNull();
   });
 
+  it.each(
+    [390, 1440].flatMap((width) =>
+      [40, 60, 80, 104].map((size) => [width, size] as const),
+    ),
+  )(
+    "renders required board authority at viewport %i for size %i",
+    async (width, size) => {
+      Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        value: width,
+      });
+      const pattern = withEditorBoardAuthority(
+        withColorCodes(
+          createPublicPattern(size, size, new Uint16Array(size * size)),
+          ["A4"],
+        ),
+      );
+      render(
+        <App
+          generationRuntime={availableRuntime([Promise.resolve(pattern)])}
+        />,
+      );
+      await completeInputs();
+      await userEvent.click(
+        screen.getByRole("button", { name: "Generate Pattern" }),
+      );
+      const required = await screen.findByRole("heading", {
+        name: "Board Layout",
+      });
+      expect(screen.getByText("1 board")).toBeVisible();
+      expect(
+        screen.getByText(/Required layout uses 104×104 pin boards/),
+      ).toHaveTextContent("poparooz-board-104");
+      expect(screen.getByText(/52-bead guides are reading/)).toHaveTextContent(
+        "not additional boards",
+      );
+      const recommendations = screen.getByRole("heading", {
+        name: "Recommended Board Setup",
+      });
+      expect(
+        required.compareDocumentPosition(recommendations) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+      expect(
+        screen.getByText(/Purchase options below are separate/),
+      ).toBeVisible();
+      expect(
+        screen.getAllByRole("heading", { name: "Board Layout" }),
+      ).toHaveLength(1);
+      expect(document.querySelector(".compact-result-content") !== null).toBe(
+        width === 390,
+      );
+      const requiredSection = required.closest("section")!;
+      expect(requiredSection).not.toHaveTextContent("4 × 52");
+      expect(
+        screen.getByRole("button", { name: "Save / Download Pattern" }),
+      ).toBeEnabled();
+    },
+  );
+
   it("runs the compact result-first flow with inline bead requirements and recovery sheets", async () => {
     Object.defineProperty(window, "innerWidth", {
       configurable: true,

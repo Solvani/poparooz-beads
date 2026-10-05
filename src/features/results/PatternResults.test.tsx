@@ -15,6 +15,39 @@ const focusProps = {
 } as const;
 
 describe("PatternResults", () => {
+  it.each([40, 60, 80, 104])(
+    "separates required Board Layout and purchase alternatives for %i",
+    (size) => {
+      render(
+        <PatternResults
+          {...focusProps}
+          pattern={createResultFixture({
+            width: size,
+            height: size,
+            transparentPositions: 0,
+            colors: [{ index: 0, beadCount: size * size, code: "A4" }],
+            boardColumns: 1,
+            boardRows: 1,
+          })}
+          status="success"
+          selectedColorSetLabel="72-Color Set"
+        />,
+      );
+      expect(
+        screen.getByRole("heading", { name: "Board Layout" }),
+      ).toBeVisible();
+      expect(screen.getByText("1 board")).toBeVisible();
+      expect(
+        screen.getByText(/Required layout uses 104×104 pin boards/),
+      ).toHaveTextContent("poparooz-board-104");
+      expect(
+        screen.getByText(/Purchase options below are separate/),
+      ).toBeVisible();
+      expect(
+        screen.getByText(/PNG download is a reading pattern/),
+      ).toBeVisible();
+    },
+  );
   it("renders an explicit no-beads state without manufacturing a public result", () => {
     render(
       <PatternResultDetails
@@ -93,7 +126,7 @@ describe("PatternResults", () => {
     expect(
       screen.getByRole("heading", { name: "Bead Requirements" }),
     ).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "Board Layout" })).toBeNull();
+    expect(screen.getByRole("heading", { name: "Board Layout" })).toBeVisible();
     expect(screen.getByText("48-Color Set")).toBeInTheDocument();
     expect(screen.getByText("Generation Color Set")).toBeInTheDocument();
     expect(screen.getByText("None needed")).toBeInTheDocument();

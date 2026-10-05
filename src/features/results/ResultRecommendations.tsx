@@ -51,6 +51,10 @@ export function ResultRecommendations({
         aria-labelledby="recommended-board-setup-heading"
       >
         <h3 id="recommended-board-setup-heading">Recommended Board Setup</h3>
+        <p className="result-recommendation__support">
+          Purchase options below are separate from the required Board Layout.
+          They do not change the generation board profile or reading sections.
+        </p>
         {boardSetup === null ? (
           <p className="result-recommendation__unavailable">
             No approved board setup is available for this pattern size.

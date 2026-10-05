@@ -40,9 +40,6 @@ import {
   PatternResultDetails,
   ResultRetentionStatus,
 } from "../features/results/PatternResults";
-import { ColorList } from "../features/results/ColorList";
-import { PatternSummary } from "../features/results/PatternSummary";
-import { ResultRecommendations } from "../features/results/ResultRecommendations";
 import {
   toEmptyEditedPatternResultView,
   toPatternResultView,
@@ -337,27 +334,16 @@ export function App({
   const compactResults =
     compactResult?.ok && patternBackground !== null ? (
       <div className="compact-result-content">
-        {customerResult?.edited ? (
-          <p className="result-retention-status" role="status">
-            Results updated from your local pattern edits.
-          </p>
-        ) : null}
-        <PatternSummary
-          summary={compactResult.view.summary}
+        <PatternResultDetails
+          key={lastSuccess?.snapshot.jobId}
+          view={compactResult.view}
+          status={generator.state.status}
           selectedColorSetLabel={selectedColorSetLabel ?? "Unavailable"}
           patternBackground={patternBackground}
-        />
-        <ResultRecommendations
-          summary={compactResult.view.summary}
-          colors={compactResult.view.colors}
-        />
-        <ColorList
-          key={lastSuccess?.snapshot.jobId}
-          colors={compactResult.view.colors}
-          materials={compactResult.view.materials}
           focusedColorIndex={focusedColorIndex}
           onFocusColor={focusColor}
           onClearHighlight={() => setFocusedColorCode(null)}
+          edited={customerResult?.edited ?? false}
         />
         <PatternActions
           state={patternActionState}

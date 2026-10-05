@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import type { ImageBackground } from "../../domain/image";
 import type { PublicPatternResult } from "../../domain/pattern/public-pattern.types";
 import { ColorList } from "./ColorList";
+import { BoardLayoutSummary } from "./BoardLayoutSummary";
 import { PatternSummary } from "./PatternSummary";
 import { ResultRecommendations } from "./ResultRecommendations";
 import { toPatternResultView } from "./pattern-result-view";
@@ -83,6 +84,15 @@ export function PatternResultDetails({
         selectedColorSetLabel={selectedColorSetLabel}
         patternBackground={patternBackground}
       />
+      <BoardLayoutSummary layout={view.boardLayout} />
+      <p className="result-secondary">
+        Required layout uses 104×104 pin boards (poparooz-board-104). Pattern
+        footprint: {view.summary.patternSize} beads. 52-bead guides are reading
+        sections within the board, not additional boards.
+      </p>
+      <p className="result-secondary">
+        PNG download is a reading pattern, not a calibrated actual-size print.
+      </p>
       <ResultRecommendations summary={view.summary} colors={view.colors} />
       <ColorList
         colors={view.colors}

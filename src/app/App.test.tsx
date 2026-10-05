@@ -234,7 +234,9 @@ async function generatePatternAndOpenGate(
   );
   await screen.findByRole("heading", { name: "Pattern Summary" });
   await userEvent.click(
-    screen.getByRole("button", { name: "Save / Download Pattern" }),
+    screen.getByRole("button", {
+      name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+    }),
   );
   await screen.findByRole("dialog", { name: "Unlock your pattern download" });
 }
@@ -312,7 +314,7 @@ function latestExportContext(): ReturnType<typeof canvasContext> {
       context &&
       vi
         .mocked(context.fillText)
-        .mock.calls.some(([text]) => text === "Color Code Pattern")
+        .mock.calls.some(([text]) => text === "Pattern Sheet · Section A1")
     ) {
       return context;
     }
@@ -529,7 +531,9 @@ describe("App Marketing Consent orchestration", () => {
     await userEvent.click(screen.getAllByRole("button", { name: "Close" })[0]!);
     expect(screen.queryByRole("dialog")).toBeNull();
     await userEvent.click(
-      screen.getByRole("button", { name: "Save / Download Pattern" }),
+      screen.getByRole("button", {
+        name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+      }),
     );
     await waitFor(() => expect(test.download).toHaveBeenCalledTimes(2));
     expect(grant).toHaveBeenCalledOnce();
@@ -706,7 +710,9 @@ describe("App", () => {
       screen.queryByRole("region", { name: "Save / Download" }),
     ).toBeNull();
     expect(
-      screen.queryByRole("button", { name: "Save / Download Pattern" }),
+      screen.queryByRole("button", {
+        name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+      }),
     ).toBeNull();
     expect(
       screen.queryByRole("button", { name: "Get Beads for This Pattern" }),
@@ -900,7 +906,7 @@ describe("App", () => {
     expect(screen.getByText("3")).toBeInTheDocument();
     expect(screen.getByText("1 × 52×52 Board")).toBeInTheDocument();
     expect(
-      screen.getByRole("region", { name: "Save / Download" }),
+      screen.getByRole("region", { name: "Pattern Sheets" }),
     ).toHaveTextContent("Download your color code pattern as a PNG.");
     const summarySection = screen
       .getByRole("heading", { name: "Pattern Summary" })
@@ -1196,7 +1202,9 @@ describe("App", () => {
       expect(visible).not.toContain(forbidden);
     }
     expect(
-      screen.getByRole("button", { name: "Save / Download Pattern" }),
+      screen.getByRole("button", {
+        name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+      }),
     ).toBeEnabled();
     expect(
       screen.queryByRole("button", { name: "Get Beads for This Pattern" }),
@@ -1262,7 +1270,9 @@ describe("App", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("72-Color Set")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Save / Download Pattern" }),
+      screen.getByRole("button", {
+        name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+      }),
     ).toBeEnabled();
   });
 
@@ -1299,7 +1309,9 @@ describe("App", () => {
     expect(focusedRow).toHaveAttribute("aria-pressed", "true");
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Save / Download Pattern" }),
+      screen.getByRole("button", {
+        name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+      }),
     );
     await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledOnce());
     expect(fetchSpy).not.toHaveBeenCalled();
@@ -1335,7 +1347,9 @@ describe("App", () => {
       screen.getByText("Results and downloads use your current local edits."),
     ).toBeInTheDocument();
     await userEvent.click(
-      screen.getByRole("button", { name: "Save / Download Pattern" }),
+      screen.getByRole("button", {
+        name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+      }),
     );
     await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledOnce());
     const editedContext = latestExportContext();
@@ -1352,7 +1366,9 @@ describe("App", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "Reset" }));
     await userEvent.click(
-      screen.getByRole("button", { name: "Save / Download Pattern" }),
+      screen.getByRole("button", {
+        name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+      }),
     );
     await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledTimes(2));
     const resetContext = latestExportContext();
@@ -1401,7 +1417,7 @@ describe("App", () => {
     fireEvent.pointerUp(canvas, { pointerId: 7 });
 
     const download = screen.getByRole("button", {
-      name: "Save / Download Pattern",
+      name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
     });
     await waitFor(() => expect(download).toBeDisabled());
     expect(
@@ -1524,7 +1540,9 @@ describe("App", () => {
       const requiredSection = required.closest("section")!;
       expect(requiredSection).not.toHaveTextContent("4 × 52");
       expect(
-        screen.getByRole("button", { name: "Save / Download Pattern" }),
+        screen.getByRole("button", {
+          name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+        }),
       ).toBeEnabled();
     },
   );
@@ -1595,7 +1613,7 @@ describe("App", () => {
       name: "Bead Requirements",
     });
     const compactDownload = within(compactContent).getByRole("button", {
-      name: "Save / Download Pattern",
+      name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
     });
     expect(
       compactSummary.compareDocumentPosition(compactRequirements) &
@@ -1803,7 +1821,9 @@ describe("App", () => {
     );
     await screen.findByRole("heading", { name: "Pattern Summary" });
     await userEvent.click(
-      screen.getByRole("button", { name: "Save / Download Pattern" }),
+      screen.getByRole("button", {
+        name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+      }),
     );
     await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledOnce());
     expect(screen.queryByRole("dialog")).toBeNull();
@@ -1825,7 +1845,9 @@ describe("App", () => {
     );
     await screen.findByRole("heading", { name: "Pattern Summary" });
     await userEvent.click(
-      screen.getByRole("button", { name: "Save / Download Pattern" }),
+      screen.getByRole("button", {
+        name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+      }),
     );
     expect(
       await screen.findByRole("dialog", {
@@ -1949,7 +1971,9 @@ describe("App", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "Close" }));
     await userEvent.click(
-      screen.getByRole("button", { name: "Save / Download Pattern" }),
+      screen.getByRole("button", {
+        name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+      }),
     );
     await screen.findByRole("dialog", { name: "Unlock your pattern download" });
     await beginGateVerification();
@@ -1977,7 +2001,9 @@ describe("App", () => {
     await screen.findByRole("heading", { name: "Pattern Summary" });
     await replaceEditorColor("A4", "A20");
     await userEvent.click(
-      screen.getByRole("button", { name: "Save / Download Pattern" }),
+      screen.getByRole("button", {
+        name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
+      }),
     );
     await screen.findByRole("dialog", { name: "Unlock your pattern download" });
 
@@ -2255,7 +2281,7 @@ describe("App", () => {
     );
     await screen.findByRole("heading", { name: "Pattern Summary" });
     const download = screen.getByRole("button", {
-      name: "Save / Download Pattern",
+      name: /^(?:Save \/ Download Pattern|Download Pattern Sheet|Overview)$/,
     });
     await userEvent.click(download);
     await waitFor(() => expect(anchorClickSpy).toHaveBeenCalledOnce());

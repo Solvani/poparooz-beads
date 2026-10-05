@@ -35,6 +35,7 @@ const LEGEND_CODE_QUANTITY_GAP = 12;
 export interface PatternExportInput {
   readonly pattern: PublicPatternResult;
   readonly selectedColorSetLabel: string;
+  readonly readingSheet?: string;
 }
 
 export interface PatternExportLogo {
@@ -175,7 +176,7 @@ function calculateLegendColumns(gridWidth: number, colorsUsed: number): number {
   );
 }
 
-function validateExportInput(input: PatternExportInput):
+export function validateExportInput(input: PatternExportInput):
   | {
       readonly ok: true;
       readonly materialsByIndex: ReadonlyMap<

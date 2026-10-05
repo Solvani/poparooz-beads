@@ -17,7 +17,7 @@ import { MobilePanelLaunchers } from "../components/mobile/MobilePanelLaunchers"
 import type { MobilePanel } from "../components/mobile/mobile-panel.types";
 import { useBottomSheet } from "../components/mobile/use-bottom-sheet";
 import { useWorkspaceMode } from "../components/responsive/use-workspace-mode";
-import { PatternActions } from "../features/actions/PatternActions";
+import { PatternSheetDownloads } from "../features/download/PatternSheetDownloads";
 import { toPatternActionState } from "../features/actions/pattern-action-state";
 import { createPatternDownloader } from "../features/download/pattern-download";
 import {
@@ -345,22 +345,32 @@ export function App({
           onClearHighlight={() => setFocusedColorCode(null)}
           edited={customerResult?.edited ?? false}
         />
-        <PatternActions
+        <PatternSheetDownloads
           state={patternActionState}
-          onDownload={() => downloadLastSuccess()}
+          input={
+            downloadSelection?.kind === "ready"
+              ? downloadSelection.input
+              : undefined
+          }
+          onDownload={downloadLastSuccess}
         />
       </div>
     ) : (
       <div className="compact-result-content">
         <ResultViewError />
-        <PatternActions
+        <PatternSheetDownloads
           state={patternActionState}
-          onDownload={() => downloadLastSuccess()}
+          input={
+            downloadSelection?.kind === "ready"
+              ? downloadSelection.input
+              : undefined
+          }
+          onDownload={downloadLastSuccess}
         />
       </div>
     );
 
-  function downloadLastSuccess() {
+  function downloadLastSuccess(readingSheet?: string) {
     if (downloadSelection === null) {
       return Promise.resolve({
         ok: false as const,
@@ -373,14 +383,15 @@ export function App({
         message: downloadSelection.message,
       });
     }
+    const input = { ...downloadSelection.input, readingSheet };
     if (enabledEmailGate === null) {
-      return patternDownloader.download(downloadSelection.input);
+      return patternDownloader.download(input);
     }
     if (enabledEmailGate.unlockStore.isUnlocked()) {
-      return patternDownloader.download(downloadSelection.input);
+      return patternDownloader.download(input);
     }
     downloadCoordinator?.begin(downloadSelection.identity, () =>
-      patternDownloader.download(downloadSelection.input),
+      patternDownloader.download(input),
     );
     setPendingDownloadIdentity(downloadSelection.identity);
     setEmailGateOpen(true);
@@ -439,9 +450,14 @@ export function App({
           }
           actionsContent={
             compactResultMode || visiblePattern === undefined ? undefined : (
-              <PatternActions
+              <PatternSheetDownloads
                 state={patternActionState}
-                onDownload={() => downloadLastSuccess()}
+                input={
+                  downloadSelection?.kind === "ready"
+                    ? downloadSelection.input
+                    : undefined
+                }
+                onDownload={downloadLastSuccess}
               />
             )
           }

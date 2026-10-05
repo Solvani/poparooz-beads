@@ -112,7 +112,7 @@ it("fails closed when the lazy Gate presentation cannot load", async () => {
   );
   await screen.findByRole("heading", { name: "Pattern Summary" });
   await userEvent.click(
-    screen.getByRole("button", { name: "Save / Download Pattern" }),
+    screen.getByRole("button", { name: "Download Pattern Sheet" }),
   );
 
   expect(

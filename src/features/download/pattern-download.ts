@@ -1,11 +1,11 @@
 import poparoozLogoUrl from "../../assets/branding/poparooz-logo.png";
 
 import {
-  renderPatternExport,
   type PatternExportInput,
   type PatternExportLogo,
   type PatternExportResult,
 } from "./pattern-export";
+import { renderReadingSheetExport } from "./reading-sheet-export";
 
 export type PatternDownloadResult =
   { readonly ok: true } | { readonly ok: false; readonly message: string };
@@ -97,7 +97,7 @@ function canvasToPngBlob(canvas: HTMLCanvasElement): Promise<Blob | null> {
 
 const browserEnvironment: PatternDownloadEnvironment = {
   loadLogo: createPatternExportLogoLoader(),
-  render: renderPatternExport,
+  render: renderReadingSheetExport,
   createObjectURL: (blob) => URL.createObjectURL(blob),
   revokeObjectURL: (url) => URL.revokeObjectURL(url),
   triggerDownload(url, filename) {

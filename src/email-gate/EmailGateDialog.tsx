@@ -390,6 +390,11 @@ export function EmailGateDialog({
       <div
         ref={dialogRef}
         className="email-gate-dialog"
+        data-step={
+          isEmailPhase(state.phase, state.challengeId)
+            ? "email"
+            : "verification"
+        }
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -547,7 +552,10 @@ export function EmailGateDialog({
             ) : null}
 
             {isCodePhase(state.phase, state.challengeId) ? (
-              <form className="email-gate-form" onSubmit={submitCode}>
+              <form
+                className="email-gate-form email-gate-form--code"
+                onSubmit={submitCode}
+              >
                 <label className="visually-hidden" htmlFor="email-gate-code">
                   6-digit verification code
                 </label>
@@ -569,7 +577,13 @@ export function EmailGateDialog({
                   />
                   <div className="email-gate-code-slots" aria-hidden="true">
                     {Array.from({ length: 6 }, (_, index) => (
-                      <span key={index}>{code[index] ?? ""}</span>
+                      <span
+                        key={index}
+                        data-filled={index < code.length}
+                        data-active={index === Math.min(code.length, 5)}
+                      >
+                        {code[index] ?? ""}
+                      </span>
                     ))}
                   </div>
                 </div>

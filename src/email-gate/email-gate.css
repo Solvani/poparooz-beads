@@ -377,6 +377,161 @@
   margin: 0;
 }
 
+.email-gate-dialog[data-step="verification"] {
+  grid-template-columns: minmax(0, 0.36fr) minmax(0, 0.64fr);
+  width: min(820px, 100%);
+  max-height: min(680px, calc(100dvh - 64px));
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-editorial {
+  min-height: 560px;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-editorial__copy {
+  gap: 10px;
+  padding: 32px 26px;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-editorial__logo {
+  width: 132px;
+  margin-bottom: 14px;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-editorial__headline {
+  font-size: 2rem;
+  line-height: 1.12;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-editorial__body {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-workflow__header {
+  padding: 16px 22px 0;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-workflow__content {
+  width: 100%;
+  margin: 0 auto;
+  padding: 18px 32px 22px;
+  align-self: center;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-step {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+  font-size: 0.6875rem;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-step span {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-workflow h2 {
+  font-size: 1.625rem;
+  line-height: 1.2;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-instructions {
+  margin-top: 8px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-status {
+  min-height: 20px;
+  margin-top: 6px;
+  font-size: 0.8125rem;
+}
+
+.email-gate-form--code {
+  gap: 0;
+  margin-top: 12px;
+}
+
+.email-gate-form--code .email-gate-code-field {
+  width: min(362px, 100%);
+  min-height: 60px;
+  justify-self: center;
+}
+
+.email-gate-form--code .email-gate-code-slots {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.email-gate-form--code .email-gate-code-slots span {
+  height: 60px;
+  min-height: 0;
+  aspect-ratio: auto;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 30px;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.email-gate-form--code .email-gate-code-slots [data-filled="true"] {
+  border-color: #cfc6b8;
+}
+
+.email-gate-form--code
+  .email-gate-code-field:focus-within
+  .email-gate-code-slots
+  span {
+  border-color: var(--brand-600);
+  box-shadow: none;
+}
+
+.email-gate-form--code
+  .email-gate-code-field:focus-within
+  .email-gate-code-slots
+  [data-active="true"] {
+  box-shadow: 0 0 0 2px rgb(5 90 67 / 14%);
+}
+
+.email-gate-form--code
+  .email-gate-code-field:has(input[aria-invalid="true"])
+  .email-gate-code-slots
+  span {
+  border-color: var(--danger);
+}
+
+.email-gate-form--code
+  .email-gate-code-field:has(input[aria-invalid="true"]):focus-within
+  .email-gate-code-slots
+  [data-active="true"] {
+  box-shadow: 0 0 0 2px rgb(179 62 42 / 14%);
+}
+
+.email-gate-form--code .email-gate-primary {
+  height: 50px;
+  margin-top: 18px;
+}
+
+.email-gate-form--code .email-gate-secondary {
+  color: #46534e;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.email-gate-form--code .email-gate-primary + .email-gate-secondary {
+  margin-top: 4px;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-footer {
+  gap: 8px;
+  padding: 14px 32px 18px;
+  font-size: 0.78125rem;
+}
+
+.email-gate-dialog[data-step="verification"] .email-gate-footer strong {
+  font-weight: 600;
+}
+
 @media (max-width: 720px) {
   .email-gate-backdrop {
     align-items: stretch;
@@ -476,6 +631,46 @@
     position: relative;
     z-index: 1;
     max-width: 25ch;
+  }
+
+  .email-gate-dialog[data-step="verification"] {
+    max-height: 100dvh;
+  }
+
+  .email-gate-dialog[data-step="verification"] .email-gate-workflow__header {
+    padding: max(18px, env(safe-area-inset-top)) 20px 12px;
+  }
+
+  .email-gate-dialog[data-step="verification"] .email-gate-workflow__content {
+    padding: 20px 20px 18px;
+    align-self: start;
+  }
+
+  .email-gate-form--code .email-gate-code-field {
+    width: min(299px, 100%);
+    min-height: 54px;
+  }
+
+  .email-gate-form--code .email-gate-code-slots {
+    gap: 7px;
+  }
+
+  .email-gate-form--code .email-gate-code-slots span {
+    height: 54px;
+    font-size: 28px;
+  }
+
+  .email-gate-dialog[data-step="verification"] .email-gate-footer {
+    min-height: 0;
+    padding: 16px 20px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  .email-gate-dialog[data-step="verification"] .email-gate-footer::after {
+    opacity: 0.18;
+  }
+
+  .email-gate-dialog[data-step="verification"] .email-gate-footer p {
+    max-width: 36ch;
   }
 }
 

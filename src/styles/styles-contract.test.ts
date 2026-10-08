@@ -140,7 +140,7 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
     expect(workspace).toContain(
       "grid-template-rows: auto minmax(var(--desktop-workspace-height), auto)",
     );
-    expect(workspace).toContain(
+    expect(workspace).not.toContain(
       "grid-template-rows: auto var(--desktop-workspace-height)",
     );
     expect(workspace).toContain("align-items: stretch");
@@ -160,5 +160,24 @@ describe("Poparooz Craft UI v1 CSS contract", () => {
     expect(workspace).not.toContain(
       ".workspace-shell--has-results .pattern-settings .generation-status",
     );
+  });
+
+  it("lets generated desktop content grow in both CSS paths so document scrolling can reach Download", () => {
+    const desktopResultRows = Array.from(
+      workspace.matchAll(/\.workspace-shell--has-results\s*\{([^}]+)\}/g),
+      (match) => match[1] ?? "",
+    ).filter((rule) => rule.includes("--desktop-workspace-height"));
+    expect(desktopResultRows).toHaveLength(2);
+    for (const rule of desktopResultRows) {
+      expect(rule).toContain(
+        "grid-template-rows: auto minmax(var(--desktop-workspace-height), auto)",
+      );
+      expect(rule).not.toMatch(/(?:max-)?height\s*:|overflow(?:-y)?\s*:/);
+    }
+    for (const [, rule] of foundations.matchAll(
+      /(?:^|\n)(?:html|body)\s*\{([^}]+)\}/g,
+    )) {
+      expect(rule).not.toMatch(/overflow(?:-y)?\s*:\s*hidden/);
+    }
   });
 });

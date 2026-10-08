@@ -100,7 +100,7 @@ function createPatternWithColors(size: number, colorCount: number) {
 }
 
 describe("renderPatternExport", () => {
-  it.each([40, 60, 80, 104])(
+  it.each([40, 52, 60, 80, 104])(
     "qualifies G1 cells, one board, edited codes and reading guides at %i",
     (size) => {
       const values = new Uint16Array(size * size);
@@ -157,19 +157,24 @@ describe("renderPatternExport", () => {
         size * size - 2 + 1,
       );
       expect(labels.filter((label) => label === "B1")).toHaveLength(2);
-      expect(labels).toContain("Board Layout: 1 × 104×104 board");
+      expect(labels).toContain("Required Board Layout: 1 × poparooz-board-104");
       expect(labels).toContain(
-        "PNG reading pattern · Not an actual-size print",
+        "PNG reading aid · Not a calibrated actual-size print",
       );
       expect(labels).not.toContain("65535");
-      const vertical = [g.gridX + 52 * 24 - 1.5, g.gridY, 3, g.gridHeight];
-      const horizontal = [g.gridX, g.gridY + 52 * 24 - 1.5, g.gridWidth, 3];
-      if (size > 52) {
-        expect(target.context.fillRect).toHaveBeenCalledWith(...vertical);
-        expect(target.context.fillRect).toHaveBeenCalledWith(...horizontal);
-      } else {
-        expect(fills).not.toContainEqual(vertical);
-        expect(fills).not.toContainEqual(horizontal);
+      for (let position = 10; position < size; position += 10) {
+        expect(target.context.fillRect).toHaveBeenCalledWith(
+          g.gridX + position * 24 - 1.5,
+          g.gridY,
+          3,
+          g.gridHeight,
+        );
+        expect(target.context.fillRect).toHaveBeenCalledWith(
+          g.gridX,
+          g.gridY + position * 24 - 1.5,
+          g.gridWidth,
+          3,
+        );
       }
       expect(target.context.strokeRect).toHaveBeenCalledWith(
         g.gridX + 2,
@@ -209,7 +214,7 @@ describe("renderPatternExport", () => {
         Math.ceil(15 / expectedColumns),
       );
       expect(first.result.filename).toBe(
-        `poparooz-pattern-${size}x${size}-code.png`,
+        `poparooz-pattern-${size}x${size}.png`,
       );
       expect(first.target.canvas.width).toBe(first.result.geometry.width);
       expect(first.target.canvas.height).toBe(first.result.geometry.height);
@@ -228,14 +233,14 @@ describe("renderPatternExport", () => {
       expect(result.geometry.height).toBe(
         result.geometry.gridY +
           result.geometry.gridHeight +
-          32 +
+          60 +
           36 +
           16 +
           result.geometry.legendRows * PATTERN_EXPORT_LEGEND_ROW_HEIGHT +
           32,
       );
-      expect(result.geometry.height).toBeLessThanOrEqual(3516);
-      if (colorCount === 64) expect(result.geometry.height).toBe(3516);
+      expect(result.geometry.height).toBeLessThanOrEqual(3572);
+      if (colorCount === 64) expect(result.geometry.height).toBe(3572);
     },
   );
 
@@ -249,7 +254,7 @@ describe("renderPatternExport", () => {
     );
     expect(target.context.drawImage).toHaveBeenCalledWith(
       logo.source,
-      32,
+      60,
       32,
       result.geometry.logoWidth,
       result.geometry.logoHeight,
@@ -405,7 +410,7 @@ describe("renderPatternExport", () => {
       );
     }
     expect(target.context.fillRect).toHaveBeenCalledTimes(
-      1 + 40 * 40 + pattern.materials.length,
+      1 + 40 * 40 + 2 * Math.floor((40 - 1) / 5) + pattern.materials.length,
     );
   });
 

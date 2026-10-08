@@ -14,9 +14,9 @@ const state: PatternActionState = {
   availabilityMessage: "Ready",
   scopeMessage: null,
 };
-describe("R05 individual reading-sheet downloads", () => {
-  it.each([40, 60, 80, 104])(
-    "separates physical boards from reading sheets for %i",
+describe("R06 one complete pattern-sheet download", () => {
+  it.each([40, 52, 60, 80, 104])(
+    "offers exactly one complete PNG action for %i",
     async (size) => {
       const download = vi.fn(async () => ({ ok: true as const })),
         pattern = createPublicPattern(size, size, new Uint16Array(size * size));
@@ -28,22 +28,18 @@ describe("R05 individual reading-sheet downloads", () => {
         />,
       );
       expect(
-        v.getByRole("heading", { name: "Pattern Sheets" }),
+        v.getByRole("heading", { name: "Pattern Sheet" }),
       ).toBeInTheDocument();
-      expect(v.getByText(/1 required physical board/)).toHaveTextContent(
-        size === 40 ? "1 reading sheet" : "4 reading sheets",
+      expect(
+        v.getByText(`One complete ${size} × ${size} color-code pattern PNG.`),
+      ).toBeVisible();
+      expect(v.queryByRole("button", { name: "Overview" })).toBeNull();
+      expect(v.queryByText(/Section [AB][12]/)).toBeNull();
+      expect(v.getAllByRole("button")).toHaveLength(1);
+      await userEvent.click(
+        v.getByRole("button", { name: "Download Pattern Sheet" }),
       );
-      if (size === 40) {
-        expect(v.queryByRole("button", { name: "Overview" })).toBeNull();
-        await userEvent.click(
-          v.getByRole("button", { name: "Download Pattern Sheet" }),
-        );
-        expect(download).toHaveBeenCalledExactlyOnceWith("A1");
-      } else {
-        expect(v.getAllByRole("button")).toHaveLength(5);
-        await userEvent.click(v.getByRole("button", { name: "Section B2" }));
-        expect(download).toHaveBeenCalledExactlyOnceWith("B2");
-      }
+      expect(download).toHaveBeenCalledExactlyOnceWith();
     },
   );
   it("announces a failed download without initiating another item", async () => {

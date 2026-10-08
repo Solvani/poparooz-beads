@@ -7,9 +7,9 @@ import {
 // Raster resolution only. Physical pitch remains 278 / 103 mm; PNG is not
 // a calibrated actual-size print or a physical board overlay.
 export const PATTERN_EXPORT_CELL_SIZE = 24;
-export const PATTERN_EXPORT_SECTION_SIZE = 52;
-export const PATTERN_EXPORT_LEFT_MARGIN = 32;
-export const PATTERN_EXPORT_RIGHT_MARGIN = 32;
+export const PATTERN_EXPORT_AXIS_SIZE = 28;
+export const PATTERN_EXPORT_LEFT_MARGIN = 60;
+export const PATTERN_EXPORT_RIGHT_MARGIN = 60;
 export const PATTERN_EXPORT_TOP_PADDING = 32;
 export const PATTERN_EXPORT_BOTTOM_PADDING = 32;
 export const PATTERN_EXPORT_LOGO_MAX_HEIGHT = 96;
@@ -19,7 +19,7 @@ export const PATTERN_EXPORT_TITLE_METADATA_GAP = 12;
 export const PATTERN_EXPORT_METADATA_LINE_HEIGHT = 32;
 export const PATTERN_EXPORT_METADATA_ROWS = 6;
 export const PATTERN_EXPORT_HEADER_GRID_GAP = 24;
-export const PATTERN_EXPORT_GRID_LEGEND_GAP = 32;
+export const PATTERN_EXPORT_GRID_LEGEND_GAP = PATTERN_EXPORT_AXIS_SIZE + 32;
 export const PATTERN_EXPORT_LEGEND_HEADING_LINE_HEIGHT = 36;
 export const PATTERN_EXPORT_HEADING_ENTRIES_GAP = 16;
 export const PATTERN_EXPORT_LEGEND_ROW_HEIGHT = 44;
@@ -35,7 +35,6 @@ const LEGEND_CODE_QUANTITY_GAP = 12;
 export interface PatternExportInput {
   readonly pattern: PublicPatternResult;
   readonly selectedColorSetLabel: string;
-  readonly readingSheet?: string;
 }
 
 export interface PatternExportLogo {
@@ -106,7 +105,7 @@ export function renderPatternExport(
     return {
       ok: true,
       canvas,
-      filename: `poparooz-pattern-${input.pattern.matrix.width}x${input.pattern.matrix.height}-code.png`,
+      filename: `poparooz-pattern-${input.pattern.matrix.width}x${input.pattern.matrix.height}.png`,
       geometry,
     };
   } catch {
@@ -142,7 +141,8 @@ function calculateGeometry(
     PATTERN_EXPORT_TITLE_LINE_HEIGHT +
     PATTERN_EXPORT_TITLE_METADATA_GAP +
     PATTERN_EXPORT_METADATA_ROWS * PATTERN_EXPORT_METADATA_LINE_HEIGHT +
-    PATTERN_EXPORT_HEADER_GRID_GAP;
+    PATTERN_EXPORT_HEADER_GRID_GAP +
+    PATTERN_EXPORT_AXIS_SIZE;
   return Object.freeze({
     width: PATTERN_EXPORT_LEFT_MARGIN + gridWidth + PATTERN_EXPORT_RIGHT_MARGIN,
     height:
@@ -221,6 +221,7 @@ export function validateExportInput(input: PatternExportInput):
     if (
       !Number.isSafeInteger(entry.index) ||
       entry.index < 0 ||
+      entry.index === matrix.transparentIndex ||
       patternColorsByIndex.has(entry.index) ||
       entry.color.brand !== "Poparooz" ||
       !/^#[0-9A-F]{6}$/.test(entry.color.hex) ||
@@ -251,6 +252,8 @@ export function validateExportInput(input: PatternExportInput):
     }
     materialsByIndex.set(material.patternColorIndex, material);
   }
+  const recount = new Map<number, number>();
+  let transparentPositions = 0;
   for (const colorIndex of matrix.colorIndices) {
     if (
       colorIndex !== matrix.transparentIndex &&
@@ -258,7 +261,19 @@ export function validateExportInput(input: PatternExportInput):
     ) {
       return { ok: false, message: SAFE_EXPORT_ERROR };
     }
+    if (colorIndex === matrix.transparentIndex) transparentPositions += 1;
+    else recount.set(colorIndex, (recount.get(colorIndex) ?? 0) + 1);
   }
+  if (
+    totals.totalPositions !== matrix.width * matrix.height ||
+    totals.transparentPositions !== transparentPositions ||
+    totals.totalBeads !== matrix.colorIndices.length - transparentPositions ||
+    materials.some(
+      (material) =>
+        recount.get(material.patternColorIndex) !== material.beadCount,
+    )
+  )
+    return { ok: false, message: SAFE_EXPORT_ERROR };
   return { ok: true, materialsByIndex, materials };
 }
 
@@ -311,19 +326,19 @@ function drawExport(
     metadataY + PATTERN_EXPORT_METADATA_LINE_HEIGHT * 2,
   );
   context.fillText(
-    `Board Layout: ${pattern.boardLayout.boardCount} × ${pattern.boardLayout.boardWidthInBeads}×${pattern.boardLayout.boardHeightInBeads} board`,
+    `Required Board Layout: ${pattern.boardLayout.boardCount} × poparooz-board-104`,
     PATTERN_EXPORT_LEFT_MARGIN,
     metadataY + PATTERN_EXPORT_METADATA_LINE_HEIGHT * 3,
     geometry.gridWidth,
   );
   context.fillText(
-    "52-bead guides mark reading sections, not physical boards.",
+    "5-cell helpers · 10-cell major guides · Not extra boards",
     PATTERN_EXPORT_LEFT_MARGIN,
     metadataY + PATTERN_EXPORT_METADATA_LINE_HEIGHT * 4,
     geometry.gridWidth,
   );
   context.fillText(
-    "PNG reading pattern · Not an actual-size print",
+    "PNG reading aid · Not a calibrated actual-size print",
     PATTERN_EXPORT_LEFT_MARGIN,
     metadataY + PATTERN_EXPORT_METADATA_LINE_HEIGHT * 5,
     geometry.gridWidth,
@@ -341,7 +356,7 @@ function drawPatternGrid(
 ) {
   context.textAlign = "center";
   context.textBaseline = "middle";
-  context.font = "700 8px system-ui, sans-serif";
+  context.font = "700 10px system-ui, sans-serif";
   for (let row = 0; row < pattern.matrix.height; row += 1) {
     for (let column = 0; column < pattern.matrix.width; column += 1) {
       const colorIndex =
@@ -381,29 +396,26 @@ function drawPatternGrid(
     }
   }
   // Presentation-only edges: never change the matrix, counts, or board layout.
-  context.fillStyle = "#17231E";
-  for (
-    let column = PATTERN_EXPORT_SECTION_SIZE;
-    column < pattern.matrix.width;
-    column += PATTERN_EXPORT_SECTION_SIZE
-  ) {
+  for (const guide of getPatternReadingGuides(pattern.matrix.width)) {
+    context.fillStyle = guide.kind === "major" ? "#17231E" : "#66776D";
     context.fillRect(
-      geometry.gridX + column * PATTERN_EXPORT_CELL_SIZE - 1.5,
+      geometry.gridX +
+        guide.position * PATTERN_EXPORT_CELL_SIZE -
+        guide.thickness / 2,
       geometry.gridY,
-      3,
+      guide.thickness,
       geometry.gridHeight,
     );
   }
-  for (
-    let row = PATTERN_EXPORT_SECTION_SIZE;
-    row < pattern.matrix.height;
-    row += PATTERN_EXPORT_SECTION_SIZE
-  ) {
+  for (const guide of getPatternReadingGuides(pattern.matrix.height)) {
+    context.fillStyle = guide.kind === "major" ? "#17231E" : "#66776D";
     context.fillRect(
       geometry.gridX,
-      geometry.gridY + row * PATTERN_EXPORT_CELL_SIZE - 1.5,
+      geometry.gridY +
+        guide.position * PATTERN_EXPORT_CELL_SIZE -
+        guide.thickness / 2,
       geometry.gridWidth,
-      3,
+      guide.thickness,
     );
   }
   context.strokeStyle = "#17231E";
@@ -414,6 +426,47 @@ function drawPatternGrid(
     geometry.gridWidth - 4,
     geometry.gridHeight - 4,
   );
+  drawCoordinates(context, pattern, geometry);
+}
+
+export function getPatternReadingGuides(span: number) {
+  return Object.freeze(
+    Array.from({ length: Math.ceil(span / 5) - 1 }, (_, i) => (i + 1) * 5).map(
+      (position) =>
+        Object.freeze({
+          position,
+          kind: position % 10 === 0 ? ("major" as const) : ("helper" as const),
+          thickness: position % 10 === 0 ? 3 : 2,
+        }),
+    ),
+  );
+}
+
+function drawCoordinates(
+  context: CanvasRenderingContext2D,
+  pattern: PublicPatternResult,
+  geometry: PatternExportGeometry,
+) {
+  context.fillStyle = "#17231E";
+  context.font = "500 10px system-ui, sans-serif";
+  for (let x = 0; x < pattern.matrix.width; x += 1) {
+    const center = geometry.gridX + (x + 0.5) * PATTERN_EXPORT_CELL_SIZE;
+    context.fillText(String(x + 1), center, geometry.gridY - 14);
+    context.fillText(
+      String(x + 1),
+      center,
+      geometry.gridY + geometry.gridHeight + 14,
+    );
+  }
+  for (let y = 0; y < pattern.matrix.height; y += 1) {
+    const center = geometry.gridY + (y + 0.5) * PATTERN_EXPORT_CELL_SIZE;
+    context.fillText(String(y + 1), geometry.gridX - 14, center);
+    context.fillText(
+      String(y + 1),
+      geometry.gridX + geometry.gridWidth + 14,
+      center,
+    );
+  }
 }
 
 function drawLegend(

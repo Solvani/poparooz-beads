@@ -370,7 +370,7 @@ export function App({
       </div>
     );
 
-  function downloadLastSuccess(readingSheet?: string) {
+  function downloadLastSuccess() {
     if (downloadSelection === null) {
       return Promise.resolve({
         ok: false as const,
@@ -383,7 +383,7 @@ export function App({
         message: downloadSelection.message,
       });
     }
-    const input = { ...downloadSelection.input, readingSheet };
+    const input = downloadSelection.input;
     if (enabledEmailGate === null) {
       return patternDownloader.download(input);
     }

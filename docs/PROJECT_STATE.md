@@ -1,9 +1,146 @@
 # Poparooz Generator — Current Accepted State
 
-This is the compact handoff snapshot for the next governed task. Verify mutable
-live state before action. Historical project evidence remains preserved in
+The Generator V1 disposition below is the current GEN Master-authorized state.
+Verify mutable live state before action. The retained P05/OTP candidate snapshot
+later in this file is historical, not current Generator production authority.
+Historical project evidence remains preserved in
 [`history/PROJECT_STATE_PRE_TOOLING_G01.md`](history/PROJECT_STATE_PRE_TOOLING_G01.md)
 and the linked frozen authority documents.
+
+## Generator V1 final disposition
+
+```text
+Project: Poparooz Generator
+Version: V1
+Lifecycle: FROZEN / PRODUCTION ACTIVE / MAINTENANCE ONLY
+Customer Generator V1 completion: COMPLETE
+Workstream: GEN-V1-FINALIZATION-R01
+G1: CLOSED / GEN MASTER ACCEPTED / DOWNLOAD + PHYSICAL BOARD ALIGNMENT PASS
+G2: CLOSED / GEN MASTER ACCEPTED / FINAL PRODUCTION REGRESSION PASS
+G3: FINAL GOVERNANCE FREEZE
+Return Master: GEN｜生成器总控
+```
+
+This disposition records the G3-A Master authorization. Until this docs-only
+snapshot is committed and published under that authorization, it is a CANDIDATE,
+not evidence of completed repository/Pages finalization. G3-B Feishu finalization
+requires separate authorization; this document does not assert G3-B completion,
+whole-workstream closure, or execution-window archive readiness.
+
+### Functional baseline versus final repository authority
+
+```text
+Repository: D:\Projects\poparooz-beads
+Remote: https://github.com/Solvani/poparooz-beads.git
+Production branch: main
+Accepted V1 Production functional baseline: 05f78168bd70ca60f56c77dd8ca481a052118738
+Accepted G2 Production deployment: 3a1bd45f-d2ef-4580-82ae-24540f66b7e8
+G3-A tracked scope: docs/PROJECT_STATE.md only
+```
+
+The exact final G3 docs-only repository/governance SHA and its verified Pages
+deployment are recorded externally in the G3-A result and, when authorized, the
+G3-B Feishu freeze. They are not embedded in the commit that creates this
+snapshot. Advancing documentation authority does not replace the accepted V1
+functional baseline or the separate Marketing/PatternCosting/V3 authorities.
+
+### Complete customer V1 scope
+
+- Upload and Generate; public Pattern Sizes 40 / 60 / 80 / 104.
+- Pattern Preview, Color Code View, Local Pattern Editor, Edited Preview, and
+  edited bead/color counts.
+- Required Board Layout and Download Pattern Sheet on desktop and mobile.
+- ONE pattern = ONE complete color-code PNG; 1 bead = 1 cell; Poparooz color
+  codes, 5-cell helper guides, 10-cell major guides, four-side coordinates, and
+  a whole-pattern legend.
+- Email Gate with exactly six-digit OTP for the accepted current customer flow;
+  email verification remains required for Download and Marketing remains optional.
+
+Final V1 has no Overview download, A1/A2/B1/B2 files, multi-sheet selector, or
+ZIP. For 104 × 104, the required physical board is `1 × poparooz-board-104`.
+The PNG is a RASTER READING AID, not a CALIBRATED ACTUAL-SIZE PRINT.
+
+### Preserved physical board authority
+
+```text
+Board profile: poparooz-board-104 v1.0.0
+Grid: 104 × 104
+Outer dimensions: 280 × 280 × 2 mm
+First-to-last pin-center span: 278 mm
+Pin intervals: 103
+Exact computational pitch: 278 / 103 mm
+2.70 mm: DISPLAY / ROUNDED ONLY
+```
+
+This records the accepted board authority without modifying its artifact or
+schema. Reading guides do not create additional physical boards.
+
+### Accepted G2 Production evidence
+
+The following is GEN Master-accepted G2 evidence, not a new G3-A OTP run.
+Download provenance is user-provided Production evidence; the delivered PNG's
+edited content was independently checked during G2.
+
+```text
+Production functional source: 05f78168bd70ca60f56c77dd8ca481a052118738
+Accepted deployment: 3a1bd45f-d2ef-4580-82ae-24540f66b7e8
+Turnstile: PASS
+Real OTP delivery: PASS
+OTP: exactly 6 digits
+OTP verification: PASS
+OTP literal logged: NO
+Final edited Production PNG: PASS
+Edited position: row 4, column 2
+Edit: F5 -> B12
+F5 count: 2704 -> 2703
+B12 count: 2704 -> 2705
+G1 count: 5408 -> 5408
+Total beads: 10816 -> 10816
+P0: 0
+P1: 0
+```
+
+G2 functional qualification remains authoritative for this docs-only closure.
+It does not establish unperformed hardware/browser/accessibility checks.
+
+### Separate PatternCosting and internal V3 authorities
+
+```text
+PatternCostingExportV2.1: CLOSED / FROZEN
+Freeze SHA-256: 3030f8ed06b786f914dda8dab5b39a879b806d691f672183584fed6df97079e1
+PatternCosting semantic authority: git:a0005ecf885db2d458679b20ec7c6006d7b12b79
+GEN->COST Controlled Generation V3: INTERNAL INTEGRATION
+V3 relationship: SEPARATE FROM CUSTOMER GENERATOR V1 COMPLETION
+Frozen V3 Generator implementation authority: git:691a5bad445f789b42f394a64fa11f22fc476784
+```
+
+PatternCosting V2.1 is not reopened as a V1 completion item. Later V3 COST
+consumer, validator, admission, durable attempt consumption, idempotency,
+persistence, and real-target execution do not affect the customer V1 frozen
+status. Internal V3 authority is not customer V1 Production authority.
+
+### Excluded backlog and maintenance-only policy
+
+GEN->COST V3 later internal work, Costing coverage completion, pure visual
+polish, optional UI beautification, new Marketing capability, new export
+formats, ZIP, calibrated Actual Size printing, additional automation,
+additional creative/editor functionality, Analytics expansion, and Command
+Center integration belong to BACKLOG / V1.x / V2 / INDEPENDENT WORKSTREAM.
+They are not incomplete customer V1 scope and may not prevent its freeze.
+
+After final governance freeze, V1 may reopen only under appropriate authority
+for a P0/P1 Production bug, security/privacy issue, incorrect pattern/download
+data, clear regression, or required compatibility maintenance. Spacing or
+typography preferences, "could look better", optional feature ideas, new export
+ideas, and Marketing experiments do not reopen V1.
+
+## Retained historical P05 / OTP candidate snapshot
+
+The sections below preserve earlier records without rewriting unrelated
+history. Their "current", "active", candidate, commit, and rollback-anchor
+labels are scoped to that earlier snapshot; they are not fresh G3-A verification
+of Worker, D1, routes, flags, or today's Generator Pages source. For current
+customer V1 disposition and accepted functional authority, use the section above.
 
 ## Repository and production authority
 
